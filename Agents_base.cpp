@@ -325,6 +325,7 @@ void Agents_base::manageAll( int tid ) {
 	  int range[2];
 	  Places_base *placesDllClass = MASS_base::placesMap[ placesHandle ];
 	  placesDllClass->getLocalRange(range, tid);
+
 	  /* for each neighbor
 	      int *offset = (*destinations)[j];
 	      int neighborCoord[dstPlaces->dimension];
