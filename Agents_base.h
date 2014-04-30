@@ -23,6 +23,11 @@ class Agents_base {
   void manageAll( int tid );
   int nLocalAgents( ) { return localPopulation; };
 
+ void getGlobalAgentArrayIndex( vector<int> src_index,
+				    int dst_size[], int dst_dimension,
+				    int dest_index[] );
+
+
  protected:
   const int handle;
   const string className;
@@ -31,6 +36,14 @@ class Agents_base {
   int initPopulation;
   int localPopulation;
   unsigned int currentAgentId; 
+
+  static void *processAgentMigrationRequest( void *param );
+
+  static void *sendMessageByChild( void *param );
+  struct MigrationSendMessage {
+    int rank;
+    void *message;
+  };
 };
 
 #endif

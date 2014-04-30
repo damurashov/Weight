@@ -5,6 +5,7 @@
 #include <string>
 #include <vector>
 #include "RemoteExchangeRequest.h"
+#include "AgentMigrationRequest.h"
 
 using namespace std;
 
@@ -25,7 +26,8 @@ class Message {
 		     AGENTS_INITIALIZE,                        // 10
 		     AGENTS_CALL_ALL_VOID_OBJECT,              // 11
 		     AGENTS_CALL_ALL_RETURN_OBJECT,            // 12
-		     AGENTS_MANAGE_ALL 
+     		     AGENTS_MANAGE_ALL,                        // 13
+		     AGENTS_MIGRATION_REMOTE_REQUEST           // 14
   };
 
   // PLACES_INITIALIZE
@@ -38,7 +40,8 @@ class Message {
     argument( argument ),  argument_size( arg_size ), return_size( 0 ),
     argument_in_heap( false ), hosts( hosts ), destinations( NULL ),
     dimension( 0 ), agent_population( -1 ), 
-    exchangeReqList( NULL ) { };
+    exchangeReqList( NULL ),
+    migrationReqList( NULL ) { };
 
   // PLACES_CALL_ALL_VOID_OBJECT,
   // PLACES_CALL_ALL_RETURN_OBJECT,
@@ -53,7 +56,7 @@ class Message {
     argument( argument ), argument_size( arg_size ), return_size( ret_size ),
     argument_in_heap( false ), hosts( NULL ), destinations( NULL ),
     dimension( 0 ), agent_population( -1 ), 
-    exchangeReqList( NULL ) { };
+    exchangeReqList( NULL ), migrationReqList( NULL ) { };
 
   // PLACES_EXCHANGE_ALL
   Message( ACTION_TYPE action,
@@ -65,7 +68,7 @@ class Message {
     argument( NULL ), argument_size( 0 ), return_size( 0 ),
     argument_in_heap( false ), hosts( NULL ), destinations( destinations ),
     dimension( dimension ), agent_population( -1 ),
-    exchangeReqList( NULL ) { };
+    exchangeReqList( NULL ), migrationReqList( NULL ) { };
 
   // PLACES_EXCHANGE_ALL_REMOTE_REQUEST
   Message( ACTION_TYPE action,  
@@ -77,7 +80,7 @@ class Message {
     argument( NULL ), argument_size( 0 ), return_size( 0 ),
     argument_in_heap( false ), hosts( NULL ), destinations( NULL ),
     dimension( 0 ), agent_population( -1 ), 
-    exchangeReqList( exchangeReqList ) { }
+    exchangeReqList( exchangeReqList ), migrationReqList( NULL ) { };
 
   // PLACES_EXCHANGE_ALL_REMOTE_RETURN_OBJECT
   Message( ACTION_TYPE action, char *retVals, int retValsSize ) :
@@ -87,7 +90,7 @@ class Message {
     argument( retVals ), argument_size( retValsSize ), return_size( 0 ),
     argument_in_heap( false ), hosts( NULL ), destinations( NULL ),
     dimension( 0 ), agent_population( -1 ), 
-    exchangeReqList( NULL ) { }
+    exchangeReqList( NULL ), migrationReqList( NULL ) { };
 
   // AGENTS_INITIALIZE
   Message( ACTION_TYPE action, int initPopulation, int handle,
@@ -99,7 +102,28 @@ class Message {
     argument( argument ), argument_size( argument_size ), return_size( 0 ),
     argument_in_heap( false ), hosts( NULL ), destinations( NULL ),
     dimension( 0 ), agent_population( initPopulation ),
-    exchangeReqList( NULL ) { };
+    exchangeReqList( NULL ), migrationReqList( NULL ) { };
+
+  // AGENTS_MANAGE_ALL
+  Message( ACTION_TYPE action, int handle, int dummy ) :
+    action( action ), size( 0 ), 
+    handle( handle ), dest_handle( handle ),
+    functionId( 0 ), classname( "" ),
+    argument( NULL ), argument_size( 0 ), return_size( 0 ),
+    argument_in_heap( false ), hosts( NULL ), destinations( NULL ),
+    dimension( 0 ), agent_population( -1 ),
+    exchangeReqList( NULL ), migrationReqList( NULL ) { };
+
+  // AGENTS_MIGRATION_REMOTE_REQUEST
+  Message( ACTION_TYPE action, int agentHandle, int placeHandle, 
+	     vector<AgentMigrationRequest*> *migrationReqList ) :
+    action( action ), size( 0 ),
+    handle( agentHandle ), dest_handle( placeHandle ),
+    functionId( 0), classname( "" ),
+    argument( NULL ), argument_size( 0 ), return_size( 0 ),
+    argument_in_heap( false ), hosts( NULL ), destinations( NULL ),
+    dimension( 0 ), agent_population( -1 ), 
+    exchangeReqList( NULL ), migrationReqList( migrationReqList ) { };
 
   // FINISH
   // ACK
@@ -110,7 +134,7 @@ class Message {
     argument( NULL ),  argument_size( 0 ),  return_size( 0 ),
     argument_in_heap( false ), hosts( NULL ), destinations( NULL ),
     dimension( 0 ), agent_population( -1 ),
-    exchangeReqList( NULL ) {  };
+    exchangeReqList( NULL ), migrationReqList( NULL ) {  };
 
   // ACK used for PLACES_CALL_ALL_RETURN_OBJECT
   Message( ACTION_TYPE action, void *argument, int arg_size ) :
@@ -120,9 +144,9 @@ class Message {
     argument( argument ), argument_size( arg_size ), return_size( 0 ),
     argument_in_heap( false ), hosts( NULL ), destinations( NULL ),
     dimension( 0 ), agent_population( -1 ),
-    exchangeReqList( NULL ) { };
+    exchangeReqList( NULL ), migrationReqList( NULL ) { };
 
-  // ACK used for AGENTS_INITIALIZE nad AGENTS_CALL_ALL_VOID_OBJECT
+  // ACK used for AGENTS_INITIALIZE and AGENTS_CALL_ALL_VOID_OBJECT
   Message( ACTION_TYPE action, int localPopulation ) :
     action( action ), size( NULL ), 
     handle( VOID_HANDLE ), dest_handle( VOID_HANDLE ),
@@ -130,7 +154,7 @@ class Message {
     argument( NULL ), argument_size( 0 ), return_size( 0 ),
     argument_in_heap( false ), hosts( NULL ), destinations( NULL ),
     dimension( 0 ), agent_population( localPopulation ),
-    exchangeReqList( NULL ) { };
+    exchangeReqList( NULL ), migrationReqList( NULL ) { };
 
   // EMPTY
   Message( ) : 
@@ -140,7 +164,7 @@ class Message {
     argument( NULL ),  argument_size( 0 ), return_size( 0 ),
     argument_in_heap( false ), hosts( NULL ) , destinations( NULL ),
     dimension( 0 ), agent_population( -1 ),
-    exchangeReqList( NULL ) {  };
+    exchangeReqList( NULL ), migrationReqList( NULL ) {  };
 
   ~Message( ); // delete argument and hosts.
 
@@ -162,6 +186,8 @@ class Message {
   vector<int*> *getDestinations( ) { return destinations; };
   vector<RemoteExchangeRequest*> *getExchangeReqList( ) 
     { return exchangeReqList; };
+  vector<AgentMigrationRequest*> *getMigrationReqList( ) 
+    { return migrationReqList; };
 
  protected:
   ACTION_TYPE action;
@@ -179,6 +205,7 @@ class Message {
   int dimension;
   int agent_population;
   vector<RemoteExchangeRequest*> *exchangeReqList;
+  vector<AgentMigrationRequest*> *migrationReqList;
 };
 
 #endif

@@ -17,6 +17,7 @@ map<int, Places_base*> MASS_base::placesMap;
 map<int, Agents_base*> MASS_base::agentsMap;
 map<int, DllClass*> MASS_base::dllMap;
 vector<vector<RemoteExchangeRequest*>* > MASS_base::remoteRequests;
+vector<vector<AgentMigrationRequest*>* > MASS_base::migrationRequests;
 int MASS_base::requestCounter;
 Places_base *MASS_base::currentPlaces;
 Places_base *MASS_base::destinationPlaces;

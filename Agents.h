@@ -19,6 +19,7 @@ class Agents : public Agents_base {
   void *callAll( int functionId, void *argument[], int arg_size, 
 		 int ret_size );
   void manageAll( );
+  void ma_setup( );
   int nAgents( );
   
   void init_master( void *argument, int argument_size );

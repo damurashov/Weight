@@ -1,5 +1,6 @@
 #include "Agents.h"
 #include "MASS.h"
+#include "Message.h"
 #include <iostream>
 #include <sstream> // for ostringstream
 
@@ -30,7 +31,7 @@ void Agents::init_master( void *argument, int argument_size ) {
     MASS::mNodes[i]->sendMessage( m );
     cerr << "AGENT_INITIALIZE sent to " << i << endl;
     //Chris ToDo: implement and incriment total
-    total+=1;
+    // total+=1;
   }
   delete m;
 
@@ -38,10 +39,13 @@ void Agents::init_master( void *argument, int argument_size ) {
   MASS::barrier_all_slaves( localAgents );
   localAgents[0] = localPopulation;
 
-  // for debug
-  for ( int i = 0; i < MASS_base::systemSize; i++ )
+  total = 0;
+  for ( int i = 0; i < MASS_base::systemSize; i++ ) {
+    total += localAgents[i];
+    // for debugging
     cerr << "rank[" << i << "]'s local agent population = " 
 	 << localAgents[i] << endl;
+  }
 
   // register this agents in the places hash map
   MASS_base::agentsMap.
@@ -59,8 +63,8 @@ void Agents::callAll( int functionId, void *argument, int arg_size ) {
 
 void *Agents::callAll( int functionId, void *argument[], int arg_size, 
 		       int ret_size ) {
-  return NULL; ca_setup( functionId, (void *)argument, arg_size, ret_size,
-			 Message::AGENTS_CALL_ALL_RETURN_OBJECT );
+  return ca_setup( functionId, (void *)argument, arg_size, ret_size,
+		   Message::AGENTS_CALL_ALL_RETURN_OBJECT );
 }
 
 void *Agents::ca_setup( int functionId, void *argument, int arg_size, 
@@ -141,6 +145,51 @@ void *Agents::ca_setup( int functionId, void *argument, int arg_size,
 //can migrate and spawn at the same time.
 //Iterate through all agents present.
 void Agents::manageAll( ) {
+  ma_setup( );
+}
+
+void Agents::ma_setup( ) {
+  // send an AGENTS_MANAGE_ALL message to each slave
+  Message *m = NULL;
+  for ( int i = 0; i < int( MASS::mNodes.size( ) ); i++ ) {
+    // create a message
+    m = new Message( Message::AGENTS_MANAGE_ALL, this->handle, 0 );
+    
+    //send it
+    MASS::mNodes[i]->sendMessage( m );
+
+    //Chris MThread Update
+    Mthread::agentBagSize = MASS_base::dllMap[handle]->agents->size();
+
+    // make sure to delete it
+    delete m;
+  }
+  
+  //Chris ToDo: Check for correct behavior post-Agents_base implementation
+  // retrieve the corresponding agents
+  MASS_base::currentAgents = this;
+  MASS_base::currentMsgType = Message::AGENTS_MANAGE_ALL;
+
+  // resume threads
+  Mthread::resumeThreads( Mthread::STATUS_MANAGEALL );
+
+  // callall implementatioin
+  Agents_base::manageAll( 0 ); // 0 = the main thread id
+
+  // confirm all threads are done with callAll.
+  Mthread::barrierThreads( 0 );
+
+  // Synchronized with all slave processes
+  MASS::barrier_all_slaves( localAgents );
+  localAgents[0] = localPopulation;
+
+  total = 0;
+  for ( int i = 0; i < MASS_base::systemSize; i++ ) {
+    total += localAgents[i];
+    // for debugging
+    cerr << "rank[" << i << "]'s local agent population = " 
+	 << localAgents[i] << endl;
+  }
 }
 
 int Agents::nAgents( ) {

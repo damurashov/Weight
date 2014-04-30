@@ -9,10 +9,12 @@ using namespace std;
 
 class Agent : MObject {
   friend class Agents_base;
+  friend class Message;
  public:
-  Agent( void *argument ) : alive( true ), newChildren( 0 ) { };
+  Agent( void *argument ) : alive( true ), newChildren( 0 ), 
+    migratableData( NULL ) { };
   virtual void *callMethod( int functionId, void *argument ) = 0;
-  virtual ~Agent( ) { };
+  ~Agent( ) { if ( migratableData != NULL ) free( migratableData ); };
   int map( int initPopulation, vector<int> size, vector<int> index ) {
     // compute the total # places
     int placeTotal = 1;
@@ -54,6 +56,8 @@ class Agent : MObject {
   bool alive;
   int newChildren;
   vector<void*> arguments;
+  void *migratableData;    // to be cast to a user-defined data type 
+  int migratableDataSize;
 };
 
 #endif

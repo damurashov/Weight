@@ -155,10 +155,9 @@ void **Places_base::callAll( int functionId, void *argument,
   char *return_values = MASS_base::currentReturns + range[0] * ret_size;
   if ( range[0] >= 0 && range[1] >= 0 ) {
     for ( int i = range[0]; i <= range[1]; i++ ) {
-      bcopy( dllclass->places[i]->callMethod( functionId, 
+      memcpy( (void *)return_values, dllclass->places[i]->callMethod( functionId, 
 					      (char *)argument + arg_size * i
-					      ),
-	     (void *)return_values, ret_size );
+					      ), ret_size );
       return_values += ret_size;
     }
   }
@@ -489,7 +488,7 @@ void *Places_base::processRemoteExchangeRequest( void *param ) {
       // call the destination function
       void *inMessage = dstPlace->callMethod( functionId, 
 					      outMessage );
-      bcopy( inMessage, retValPos, (*receivedRequest)[i]->inMessageSize );
+      memcpy(  retValPos, inMessage, (*receivedRequest)[i]->inMessageSize );
       retValPos += (*receivedRequest)[i]->inMessageSize;
     }
   }
@@ -535,7 +534,7 @@ void *Places_base::processRemoteExchangeRequest( void *param ) {
     
     // store a return value to it
     char *inMessage = new char[srcPlace->inMessage_size];
-    bcopy( argument + pos, inMessage, srcPlace->inMessage_size );
+    memcpy( inMessage, argument + pos, srcPlace->inMessage_size );
     pos += srcPlace->inMessage_size;
     
     // insert an item at inMessageIndex or just append it.

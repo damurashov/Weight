@@ -206,10 +206,30 @@ void **Agents_base::callAll( int functionId, void *argument, int arg_size,
 	  return NULL;
 }
 
+void Agents_base::getGlobalAgentArrayIndex( vector<int> src_index,
+				    int dst_size[], int dest_dimension,
+				    int dest_index[] ){
+
+ for (int i = 0; i < dest_dimension; i++ ) {
+    dest_index[i] = src_index[i]; // calculate dest index
+
+    if ( dest_index[i] < 0 || dest_index[i] >= dst_size[i] ) {
+      // out of range
+      for ( int j = 0; j < dest_dimension; j++ ) {
+	// all index must be set -1
+	dest_index[j] = -1;
+	return;
+      }
+    }
+  }
+
+}
+
 void Agents_base::manageAll( int tid ) {
   
   //Create the dllclass to access our agents from, out agentsDllClass for agent
   //instantiation, and our bag for Agent objects after they have finished processing
+  ostringstream convert;
   DllClass *dllclass = MASS_base::dllMap[handle];
   DllClass *agentsDllClass = new DllClass( className );
   vector<Agent*> retBag;
@@ -303,133 +323,251 @@ void Agents_base::manageAll( int tid ) {
     }
 
     //Migrate() check
-    //Create the place with which to compare data to
-    Place *evaluationPlace = evaluationAgent->place;
 
     //Iterate over all dimensions of the agent to check its location
     //against that of its place. If they are the same, returb back.
     int agentIndex = evaluationAgent->index.size();
 
-    for( int i = 0; i < agentIndex ; i++){
+    Places_base *placesDllClass = MASS_base::placesMap[ placesHandle ];
+    int destCoord[agentIndex];
 
-      //If they match, keep iterating. If they all match, then loop will eventually end
-      if(evaluationAgent->index[i] == evaluationPlace->index[i]){
-	continue;
-      }else{
+	// compute its coordinate
+    getGlobalAgentArrayIndex( evaluationAgent->index, placesDllClass->size,
+			      placesDllClass->dimension, destCoord );
+
+    convert.str( "" );
+    convert << "tid[" << tid << "]: calls from"
+	    << "[" << evaluationAgent->index[0]
+	    << "][" << evaluationAgent->index[1] << "]"
+	    << " (neighborCord[" << destCoord[0]
+	    << "][" << destCoord[1] << "]"
+	    << " placesDllClass->size[" << placesDllClass->size[0] 
+	    << "][" << placesDllClass->size[1] << "]";
+
+    if( destCoord[0] != -1 ) { 
+      // destination valid
+      int globalLinearIndex = 
+	placesDllClass->getGlobalLinearIndexFromGlobalArrayIndex( destCoord,
+						  placesDllClass->size,
+						  placesDllClass->dimension );
+
+      convert << " linear = " << globalLinearIndex
+	      << " lower = " << placesDllClass->lower_boundary
+	      << " upper = " << placesDllClass->upper_boundary << ")";
+
+      if ( globalLinearIndex >= placesDllClass->lower_boundary &&
+	   globalLinearIndex <= placesDllClass->upper_boundary ) {
+	// local destination
+	int destinationLocalLinearIndex 
+	  = globalLinearIndex - placesDllClass->lower_boundary;
+
+	evaluationAgent->place = dllclass->places[destinationLocalLinearIndex];
+	pthread_mutex_lock(&MASS_base::request_lock);
+	evaluationAgent->place->agents.push_back((MObject *)evaluationAgent);
+	pthread_mutex_unlock(&MASS_base::request_lock);
+
+	// CHRIS, WHAT DO THESE THREE STATEMENTS DO? 4-29-14
+	// *Should remove the pointer object in the place that points to the migrting Agent
+
+	// pthread_mutex_lock(&MASS_base::request_lock);
+	// evaluationPlace->agents.erase( evaluationPlace->agents.begin() + i );
+	// pthread_mutex_unlock(&MASS_base::request_lock);
+
+	// for debug
+	//	    convert << " inMessage = " 
+	//		    << *(int *)(evaluationPlace->inMessages.back( ));
+
+      } 
+      else {
+	// remote destination
+
+	// find the destination node
+	int destRank 
+	  = placesDllClass->getRankFromGlobalLinearIndex( globalLinearIndex );
+
+	// create a request
+	AgentMigrationRequest *request 
+	  = new AgentMigrationRequest( globalLinearIndex, evaluationAgent );
 	
-	//If a number does not match, then we know we will need to migrate the agent	
-	//Check if destination Place is within our current set of Places
-
-
+	// enqueue the request to this node.map
+	pthread_mutex_lock( &MASS_base::request_lock );
+	MASS_base::migrationRequests[destRank]->push_back( request );
 	
-	  int range[2];
-	  Places_base *placesDllClass = MASS_base::placesMap[ placesHandle ];
-	  placesDllClass->getLocalRange(range, tid);
-
-	  /* for each neighbor
-	      int *offset = (*destinations)[j];
-	      int neighborCoord[dstPlaces->dimension];
-
-	      // compute its coordinate
-	      getGlobalNeighborArrayIndex( srcPlace->index, offset, dstPlaces->size,
-					   dstPlaces->dimension, neighborCoord );
-
-	      convert.str( "" );
-	      convert << "tid[" << tid << "]: calls from"
-		      << "[" << srcPlace->index[0]
-		      << "][" << srcPlace->index[1] << "]"
-		      << " (neighborCord[" << neighborCoord[0]
-		      << "][" << neighborCoord[1] << "]"
-		      << " dstPlaces->size[" << dstPlaces->size[0] 
-		      << "][" << dstPlaces->size[1] << "]";
-
-	      if ( neighborCoord[0] != -1 ) { 
-		// destination valid
-		int globalLinearIndex = 
-		  getGlobalLinearIndexFromGlobalArrayIndex( neighborCoord,
-							    dstPlaces->size,
-							    dstPlaces->dimension );
-
-		convert << " linear = " << globalLinearIndex
-			<< " lower = " << dstPlaces->lower_boundary
-			<< " upper = " << dstPlaces->upper_boundary << ")";
-
-		if ( globalLinearIndex >= dstPlaces->lower_boundary &&
-		     globalLinearIndex <= dstPlaces->upper_boundary ) {
-		  // local destination
-		  int destinationLocalLinearIndex 
-		    = globalLinearIndex - dstPlaces->lower_boundary;
-		  Place *dstPlace = 
-		    (Place *)(dst_dllclass->places[destinationLocalLinearIndex]);
-
-		  convert << " to [" << dstPlace->index[0]
-			  << "][" << dstPlace->index[1] << "]";
-
-		  // call the destination function
-		  void *inMessage = dstPlace->callMethod( functionId, 
-							  srcPlace->outMessage );
-
-		  // store this inMessage: 
-		  // note that callMethod must return a dynamic memory space
-		  srcPlace->inMessages.push_back( inMessage );
-
-		  // for debug
-		  convert << " inMessage = " 
-			  << *(int *)(srcPlace->inMessages.back( ));
-
-		} else {
-		  // remote destination
-
-		  // find the destination node
-		  int destRank 
-		    = getRankFromGlobalLinearIndex( globalLinearIndex );
-
-		  // create a request
-		  int orgGlobalLinearIndex =
-		    getGlobalLinearIndexFromGlobalArrayIndex( &(srcPlace->index[0]), 
-							      size,
-							      dimension );
-		  RemoteExchangeRequest *request 
-		    = new RemoteExchangeRequest( globalLinearIndex,
-						 orgGlobalLinearIndex,
-						 j, // inMsgIndex
-						 srcPlace->inMessage_size,
-						 srcPlace->outMessage,
-						 srcPlace->outMessage_size,
-						 false );
-
-		  // enqueue the request to this node.map
-		  pthread_mutex_lock( &MASS_base::request_lock );
-		  MASS_base::remoteRequests[destRank]->push_back( request );
-
-		  convert.str( "" );
-		  convert << "remoteRequest[" << destRank << "]->push_back:"
-			  << " org = " << orgGlobalLinearIndex
-			  << " dst = " << globalLinearIndex
-			  << " size( ) = " 
-			  << MASS_base::remoteRequests[destRank]->size( );
-		  MASS_base::log( convert.str( ) );
-
-		  pthread_mutex_unlock( &MASS_base::request_lock );
-		}
-	      } else {
-		convert << " to destination invalid";
-	      }
-
-	      MASS_base::log( convert.str( ) );	
-	    }
-	  }
+	convert.str( "" );
+	convert << "remoteRequest[" << destRank << "]->push_back:"
+		<< " dst = " << globalLinearIndex;
+	MASS_base::log( convert.str( ) );
+	
+	pthread_mutex_unlock( &MASS_base::request_lock );
+      }
+    } else {
+      convert << " to destination invalid";
+    }
+    MASS_base::log( convert.str( ) );	
+    
+    // all threads must barrier synchronize here.
+    Mthread::barrierThreads( tid );
+    if ( tid == 0 ) {
+      
+      convert.str( "" );
+      convert << "tid[" << tid << "] now enters processAgentMigrationRequest";
+      MASS_base::log( convert.str( ) );
+      
+      // the main thread spawns as many communication threads as the number of
+      // remote computing nodes and let each invoke processAgentMigrationReq.
+      
+      // args to threads: rank, agentHandle, placeHandle, lower_boundary
+      int comThrArgs[MASS_base::systemSize][4];
+      pthread_t thread_ref[MASS_base::systemSize]; // communication thread id
+      for ( int rank = 0; rank < MASS_base::systemSize; rank++ ) {
+	
+	if ( rank == MASS_base::myPid ) // don't communicate with myself
+	  continue;
+	
+	// set arguments 
+	comThrArgs[rank][0] = rank;
+	comThrArgs[rank][1] = handle; // agents' handle
+	comThrArgs[rank][2] = placesDllClass->handle;
+	comThrArgs[rank][3] = placesDllClass->lower_boundary;
+	
+	// start a communication thread
+	if ( pthread_create( &thread_ref[rank], NULL, 
+			     Agents_base::processAgentMigrationRequest, 
+			     comThrArgs[rank] ) != 0 ) {
+	  MASS_base::log( "Agents_base.manageAll: failed in pthread_create" );
+	  exit( -1 );
 	}
-
-	// all threads must barrier synchronize here.
-	Mthread::barrierThreads( tid );
-      */
-
+      }
+      
+      // wait for all the communication threads to be terminated
+      for ( int rank = 0; rank < MASS_base::systemSize; rank++ ) {
+	if ( rank == MASS_base::myPid ) // don't communicate with myself
+	  continue;      
+	pthread_join( thread_ref[rank], NULL );
       }
     }
+    else {
+      
+      convert.str( "" );
+      convert << "tid[" << tid << "] skips processAgentMigrationRequest";
+      MASS_base::log( convert.str( ) );
+
+    return;
+  } // end of while( true ) 
+}
+
+  // CHRIS, WHAT DO THESE THREE STATEMENTS DO? 4-29-14
+  //If not killed or migrated, push Agent into the retBag  
+  // pthread_mutex_lock(&MASS_base::request_lock);
+  // retBag.push_back(evaluationAgent);
+  // pthread_mutex_unlock(&MASS_base::request_lock);
+
+  //Need to hook the bag back up when done
+}
+
+//Chris: Additional Code below:
+
+void *Agents_base::processAgentMigrationRequest( void *param ) {
+  int destRank = ( (int *)param )[0];
+  int agentHandle = ( (int *)param )[1];
+  int placeHandle = ( (int *)param )[2];
+  //  int my_lower_boundary = ( (int *)param )[3];
+
+  vector<AgentMigrationRequest*>* orgRequest = NULL;
+  ostringstream convert;
+
+  convert.str( "" );
+  convert << "rank[" << destRank << "]: starts processAgentMigrationRequest";
+  MASS_base::log( convert.str( ) );
+
+  // pick up the next rank to process
+  orgRequest = MASS_base::migrationRequests[destRank];
+
+  // for debugging
+  pthread_mutex_lock( &MASS_base::request_lock );
+  convert.str( "" );
+  convert << "tid[" << destRank << "] sends an exhange request to rank: " 
+	  << destRank << " size() = " << orgRequest->size( ) << endl;
+  for ( int i = 0; i < int( orgRequest->size( ) ); i++ ) {
+    convert << "send "
+	    << (*orgRequest)[i]->agent << " to "
+	    << (*orgRequest)[i]->destGlobalLinearIndex << endl;
+  }
+  MASS_base::log( convert.str( ) );
+  pthread_mutex_unlock( &MASS_base::request_lock );
+
+  // now compose and send a message by a child
+  Message *messageToDest 
+    = new Message( Message::AGENTS_MIGRATION_REMOTE_REQUEST,
+		   agentHandle, placeHandle, orgRequest );
+
+  struct MigrationSendMessage rankNmessage;
+  rankNmessage.rank = destRank;
+  rankNmessage.message = messageToDest;
+  pthread_t thread_ref;
+  pthread_create( &thread_ref, NULL, sendMessageByChild, &rankNmessage );
+
+  // receive a message by myself
+  Message *messageFromSrc = MASS_base::exchange.receiveMessage( destRank );
+ 
+  // at this point, the message must be exchanged.
+  pthread_join( thread_ref, NULL );
+  delete messageToDest;
+
+  ///////////////////////////////////////////////////////////////////////
+  // process a message
+  vector<AgentMigrationRequest*>* receivedRequest 
+    = messageFromSrc->getMigrationReqList( );
+
+  int agentsHandle = messageFromSrc->getHandle( );
+  //  Agents_base *dstAgents = MASS_base::agentsMap[ agentsHandle ];
+  int placesHandle = messageFromSrc->getDestHandle( );
+  Places_base *dstPlaces = MASS_base::placesMap[ placesHandle ];
+  DllClass *agents_dllclass = MASS_base::dllMap[ agentsHandle ];
+  DllClass *places_dllclass = MASS_base::dllMap[ placesHandle ];
+
+  convert.str( "" );
+  convert << "request from rank[" << destRank << "] = " << receivedRequest;
+  convert << " size( ) = " << receivedRequest->size( );
+
+  // retrieve agents from receiveRequest
+  while( receivedRequest->size( ) > 0 ) {
+    AgentMigrationRequest *request = receivedRequest->back( );
+    receivedRequest->pop_back( );
+    int globalLinearIndex = request->destGlobalLinearIndex;
+    Agent *agent = request->agent;
+
+    // local destination
+    int destinationLocalLinearIndex 
+      = globalLinearIndex - dstPlaces->lower_boundary;
+      
+    convert << " dstLocal = " << destinationLocalLinearIndex << endl;
+    
+    Place *dstPlace = 
+      (Place *)(places_dllclass->places[destinationLocalLinearIndex]);
+
+    // push this agent into the place and the entire agent bag.
+    agent->index = dstPlace->index;
+    dstPlace->agents.push_back( agent );
+    agents_dllclass->agents->push_back( agent );
+
+    delete request;
   }
 
+  MASS_base::log( convert.str( ) );
+  delete messageFromSrc;
+
+  return NULL;
 }
+
+void *Agents_base::sendMessageByChild( void *param ) {
+  int rank = ((struct MigrationSendMessage *)param)->rank;
+  Message *message = (Message *)((struct MigrationSendMessage *)param)->message;
+  MASS_base::exchange.sendMessage( rank, message );
+  return NULL;
+}
+
+
 
 
 

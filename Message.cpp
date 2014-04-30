@@ -15,6 +15,17 @@ Message::~Message( ) {
     }
     if ( argument_in_heap == true ) delete exchangeReqList;
   }
+  if ( migrationReqList != NULL ) {
+    while ( migrationReqList->size( ) > 0 ) {
+      AgentMigrationRequest *req = (*migrationReqList)[0];
+      migrationReqList->erase( migrationReqList->begin( ) );
+      if ( req->agent->migratableData != NULL )
+	free( req->agent->migratableData );
+      delete req->agent;
+      delete req;
+    }
+    if ( argument_in_heap == true ) delete exchangeReqList;
+  }
 }
 
 char *Message::serialize( int &msg_size ) {
@@ -189,12 +200,58 @@ char *Message::serialize( int &msg_size ) {
     }
 
     break;
+  case AGENTS_MIGRATION_REMOTE_REQUEST:
+    
+    msg_size += sizeof( int );   // Agent Handle
+    msg_size += sizeof( int );   // Place Handle
+    msg_size += sizeof( int );   // migrationReqList->size( );
+    
+    if  ( int( migrationReqList->size( ) ) > 0 ) {
+      for ( int i = 0; i < int( migrationReqList->size( ) ); i++ ) {
+	msg_size += sizeof( int ) * 6;
+	msg_size += (*migrationReqList)[i]->agent->migratableDataSize;
+      }
+    }
+
+    convert.str( "" );
+    convert << "AGENTS_MIGRATION_REMOTE_REQUEST to be sent";
+    MASS_base::log( convert.str( ) );
+    
+    //Compose message
+    pos = msg = new char[msg_size];
+    *(ACTION_TYPE *)pos = action;            pos += sizeof( ACTION_TYPE ); // action type
+    *(int *)pos = handle;                    pos += sizeof( int );         // agent handle
+    *(int *)pos = dest_handle;               pos += sizeof( int );         // place handle
+    *(int *)pos = migrationReqList->size();  pos += sizeof( int );         // MigrationReqListy->size
+    
+    convert.str( "" );
+    convert << "Agent handle: " << handle << " place handle: " << dest_handle;
+    MASS_base::log( convert.str() );
+    
+    for ( int i = 0; i < int( migrationReqList->size( ) ); i++ ) { // each migrationReq
+      *(int *)pos = (*migrationReqList)[i]->destGlobalLinearIndex;
+      pos += sizeof( int );
+      *(int *)pos = (*migrationReqList)[i]->agent->agentsHandle;
+      pos += sizeof( int );
+      *(int *)pos = (*migrationReqList)[i]->agent->placesHandle;
+      pos += sizeof( int );
+      *(int *)pos = (*migrationReqList)[i]->agent->agentId;
+      pos += sizeof( int );
+      *(int *)pos = (*migrationReqList)[i]->agent->parentId;
+      pos += sizeof( int );     
+      *(int *)pos = (*migrationReqList)[i]->agent->migratableDataSize;
+      pos += sizeof( int );
+      memcpy( (void*)pos, (*migrationReqList)[i]->agent->migratableData,
+	      (*migrationReqList)[i]->agent->migratableDataSize );
+      pos += (*migrationReqList)[i]->agent->migratableDataSize;
+    }
+    break;
     
   case PLACES_EXCHANGE_ALL_REMOTE_RETURN_OBJECT:
     // calculate msg_size
     msg_size += sizeof( int ); // int inMessageSizes a.k.a. argument_size
     msg_size += argument_size; // retVals a.k.a. argument
-
+    
     // compose a message
     pos = msg = new char[msg_size];
     *(ACTION_TYPE *)pos = action; pos += sizeof( ACTION_TYPE ); // action
@@ -202,7 +259,7 @@ char *Message::serialize( int &msg_size ) {
     memcpy( pos, argument, argument_size );                      // argument
     
     break;
-
+    
   case AGENTS_INITIALIZE:
     // calculate msg_size
     msg_size += sizeof( int );     // int agent_population
@@ -224,40 +281,45 @@ char *Message::serialize( int &msg_size ) {
     pos += classname.size( );
     *(int *)pos = argument_size;     pos += sizeof( int ); // argument_size
     memcpy( (void *)pos, argument, argument_size );      // argument
-
+    
     break;
-
-//Chris ToDo: Implement
+    
+    //Chris ToDo: Implement
   case AGENTS_CALL_ALL_VOID_OBJECT:
   case AGENTS_CALL_ALL_RETURN_OBJECT:
-	msg_size += sizeof(int);	//int handle
-	msg_size += sizeof(int);	//int functionId
-	msg_size += sizeof(int);	//argument_size
-	msg_size += sizeof(int);	//return_size
-	msg_size += argument_size;	//void *argument
-
-	pos = msg = new char[msg_size];
-	*(ACTION_TYPE *)pos = action;	pos += sizeof(ACTION_TYPE);	//action
-	*(int *)pos = handle;		pos += sizeof(int);		//handle
-	*(int *)pos = functionId;	pos += sizeof(int);		//functionId
-	*(int *)pos = argument_size;	pos += sizeof(int);		//arg_size
-	*(int *)pos = return_size;	pos += sizeof(int);		//return_size
-	memcpy((void *)pos, argument, argument_size);			//argument
-
- break;
+    msg_size += sizeof(int);	//int handle
+    msg_size += sizeof(int);	//int functionId
+    msg_size += sizeof(int);	//argument_size
+    msg_size += sizeof(int);	//return_size
+    msg_size += argument_size;	//void *argument
+    
+    pos = msg = new char[msg_size];
+    *(ACTION_TYPE *)pos = action;	pos += sizeof(ACTION_TYPE);	//action
+    *(int *)pos = handle;		pos += sizeof(int);		//handle
+    *(int *)pos = functionId;	pos += sizeof(int);		//functionId
+    *(int *)pos = argument_size;	pos += sizeof(int);		//arg_size
+    *(int *)pos = return_size;	pos += sizeof(int);		//return_size
+    memcpy((void *)pos, argument, argument_size);			//argument
+    
+    break;
   case AGENTS_MANAGE_ALL: 
-
-//Chris ToDo: implement serialize message
-
-   break;
-
+    // calculate msg_size
+    msg_size += sizeof( int );          // it handle;
+    
+    // compse a msg
+    pos = msg = new char[msg_size];
+    *(ACTION_TYPE *)pos = action;    pos += sizeof( ACTION_TYPE ); // action
+    *(int *)pos = handle;            pos += sizeof( int ); // handle
+    
+    break;
+    
   case FINISH:
     cerr << "serialize: FINISH started" << endl;
     msg = new char[msg_size];
     *(ACTION_TYPE *)msg = action;
     cerr << "serialize: FINISH ended" << endl;
     break;
-
+    
   default:
     msg_size = 0;
     break;
@@ -273,6 +335,11 @@ void Message::deserialize( char *msg, int msg_size ) {
   int hosts_size = 0;
   int destinations_size = 0;
   int exchangeReqListSize = 0;
+  int migrationReqListSize = 0;
+  DllClass *agentsDllClass = NULL;
+  Agent *agent = NULL;
+  AgentMigrationRequest *request = NULL;
+  int destIndex = 0;
 
   ostringstream convert;
   convert << "deserialize: action = " << *(ACTION_TYPE *)cur << endl;
@@ -418,6 +485,48 @@ void Message::deserialize( char *msg, int msg_size ) {
     }
     return;
 
+  case AGENTS_MIGRATION_REMOTE_REQUEST:
+
+    action = *(ACTION_TYPE *)cur;            cur += sizeof( ACTION_TYPE ); // action type
+    handle = *(int *)cur;                    cur += sizeof( int );         // agent handle
+    dest_handle = *(int *)cur;               cur += sizeof( int );         // place handle
+    migrationReqListSize = *(int *)cur;      cur += sizeof( int );         // MigrationReqListy->size
+    migrationReqList = new vector<AgentMigrationRequest*>;                 // list created
+    argument_in_heap = true;
+
+    convert.str( "" );
+    convert << "Agent handle: " << handle << " place handle: " << dest_handle;
+    MASS_base::log( convert.str() );
+
+    agentsDllClass = MASS_base::dllMap[handle];
+    for ( int i = 0; i < migrationReqListSize; i++ ) { // each migrationReq
+      destIndex = *(int *)cur;
+      cur += sizeof( int );      
+      agent = (Agent *)( agentsDllClass->instantiate( NULL ) );
+      agent->agentsHandle = *(int *)cur;
+      cur += sizeof( int );
+      agent->placesHandle = *(int *)cur;
+      cur += sizeof( int );
+      agent->agentId = *(int *)cur;
+      cur += sizeof( int );
+      agent->parentId = *(int *)cur;
+      cur += sizeof( int );     
+      agent->migratableDataSize = *(int *)cur;
+      cur += sizeof( int );
+      agent->alive = true;
+      agent->newChildren = 0;
+      if ( agent->migratableData != NULL )
+	free( agent->migratableData );
+      agent->migratableData = malloc( agent->migratableDataSize );
+      memcpy( (*migrationReqList)[i]->agent->migratableData, (void *)cur,
+	     (*migrationReqList)[i]->agent->migratableDataSize );
+      cur += (*migrationReqList)[i]->agent->migratableDataSize;
+      request = new AgentMigrationRequest( destIndex, agent );
+      migrationReqList->push_back( request );
+    }
+
+    return;
+
   case PLACES_EXCHANGE_ALL_REMOTE_RETURN_OBJECT: 
     action = *(ACTION_TYPE *)cur; cur += sizeof( ACTION_TYPE ); // action
     argument_size = *(int *)cur;  cur += sizeof( int );         // arg_size
@@ -467,15 +576,12 @@ void Message::deserialize( char *msg, int msg_size ) {
 	memcpy( argument, (void *)cur, argument_size);			//argument
 	return;
 
-   break;
+   return;
   case AGENTS_MANAGE_ALL:
-    /*
-//Chris ToDo: instantiate Message
-	action = *(ACTION_TYPE *)cur;	cur += sizeof( ACTION_TYPE );	//action
-	handle = *(int *)cur;		cur += sizeof( int );		//handle
-	return;
-    */
-    break;
+    action = *(ACTION_TYPE *)cur;	cur += sizeof( ACTION_TYPE );	//action
+    handle = *(int *)cur;		cur += sizeof( int );		//handle
+
+    return;
 
   case FINISH: 
     action = FINISH;

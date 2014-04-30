@@ -278,14 +278,18 @@ void MProcess::start( ) {
 	
 	break;
       case Message::AGENTS_MANAGE_ALL:
-	//Chris ToDo: Implement ManageAll code
-	/*
-	//Call the manage all on the current bag of agents, no arguments needed
-	MASS_base::currentAgents->manageAll( );
 
-	//Wait for all threads to return before moving on
+	MASS_base::log("AGENTS_MANAGE_ALL received");
+	MASS_base::currentAgents = MASS_base::agentsMap[m->getHandle()];
+
+	Mthread::agentBagSize = MASS_base::dllMap[m->getHandle()]->agents->size();
+	Mthread::resumeThreads(Mthread::STATUS_MANAGEALL);
+
+	MASS_base::currentAgents->manageAll( 0 ); // 0 = the main thread id
+
 	Mthread::barrierThreads( 0 );
-	*/
+	sendAck( MASS_base::currentAgents->localPopulation );
+
 	break;
 	
       }

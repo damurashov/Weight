@@ -21,6 +21,7 @@ class MASS_base {
   friend class MProcess;
   friend class Places_base;
   friend class Agents_base;
+  friend class Message;
  public:
   static void initMASS_base( char *name, int myPid, int nProc, int port );
   static bool initializeThreads( int nThr );
@@ -58,6 +59,7 @@ class MASS_base {
   static map<int, Agents_base*> agentsMap; // a collection of Agents
   static map<int, DllClass*> dllMap;       // a collection of DllClasses
   static vector<vector<RemoteExchangeRequest*>* > remoteRequests;
+  static vector<vector<AgentMigrationRequest*>* > migrationRequests;
   static int requestCounter;
   static Places_base* currentPlaces;
   static Places_base* destinationPlaces;
