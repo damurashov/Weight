@@ -292,6 +292,9 @@ void MProcess::start( ) {
 
 	break;
 	
+      case Message:: AGENTS_MIGRATION_REMOTE_REQUEST:
+	break;
+	
       }
       delete m;
     }

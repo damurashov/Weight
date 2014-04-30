@@ -232,6 +232,7 @@ void Agents_base::manageAll( int tid ) {
   ostringstream convert;
   DllClass *dllclass = MASS_base::dllMap[handle];
   DllClass *agentsDllClass = new DllClass( className );
+  Places_base *placesDllClass = MASS_base::placesMap[ placesHandle ];
   vector<Agent*> retBag;
 
   //Chris ToDo: Spawn, then Kill, then Migrate. Check in that order throughout the 
@@ -319,7 +320,7 @@ void Agents_base::manageAll( int tid ) {
       //Delete the agent and its pointer to complete the removal
       delete &evaluationAgent;
       delete evaluationAgent;
-      return;
+      continue;
     }
 
     //Migrate() check
@@ -328,10 +329,10 @@ void Agents_base::manageAll( int tid ) {
     //against that of its place. If they are the same, returb back.
     int agentIndex = evaluationAgent->index.size();
 
-    Places_base *placesDllClass = MASS_base::placesMap[ placesHandle ];
+
     int destCoord[agentIndex];
 
-	// compute its coordinate
+    // compute its coordinate
     getGlobalAgentArrayIndex( evaluationAgent->index, placesDllClass->size,
 			      placesDllClass->dimension, destCoord );
 
@@ -358,6 +359,22 @@ void Agents_base::manageAll( int tid ) {
       if ( globalLinearIndex >= placesDllClass->lower_boundary &&
 	   globalLinearIndex <= placesDllClass->upper_boundary ) {
 	// local destination
+	Place *oldPlace = evaluationAgent->place;
+	// *Should remove the pointer object in the place that points to the migrting Agent
+	pthread_mutex_lock(&MASS_base::request_lock);
+	// CHRIS: scan old_lace->agents to find this evaluationAgent's index.
+	int oldIndex = -1;
+	for(unsigned int i = 0; i < oldPlace->agents.size();i++){
+	  if(oldPlace->agents[i] == evaluationAgent){
+	    oldIndex = i;
+	    break;
+	  }	    
+	}
+	if(oldIndex != -1)
+	  oldPlace->agents.erase( oldPlace->agents.begin() + oldIndex ); // 1 for time being
+	pthread_mutex_unlock(&MASS_base::request_lock);
+
+	// insert the migration Agent to a local destination place
 	int destinationLocalLinearIndex 
 	  = globalLinearIndex - placesDllClass->lower_boundary;
 
@@ -366,13 +383,11 @@ void Agents_base::manageAll( int tid ) {
 	evaluationAgent->place->agents.push_back((MObject *)evaluationAgent);
 	pthread_mutex_unlock(&MASS_base::request_lock);
 
-	// CHRIS, WHAT DO THESE THREE STATEMENTS DO? 4-29-14
-	// *Should remove the pointer object in the place that points to the migrting Agent
-
-	// pthread_mutex_lock(&MASS_base::request_lock);
-	// evaluationPlace->agents.erase( evaluationPlace->agents.begin() + i );
-	// pthread_mutex_unlock(&MASS_base::request_lock);
-
+	//If not killed or migrated remotely, push Agent into the retBag  
+	pthread_mutex_lock(&MASS_base::request_lock);
+	retBag.push_back(evaluationAgent);
+	pthread_mutex_unlock(&MASS_base::request_lock);
+	
 	// for debug
 	//	    convert << " inMessage = " 
 	//		    << *(int *)(evaluationPlace->inMessages.back( ));
@@ -380,11 +395,11 @@ void Agents_base::manageAll( int tid ) {
       } 
       else {
 	// remote destination
-
+	
 	// find the destination node
 	int destRank 
 	  = placesDllClass->getRankFromGlobalLinearIndex( globalLinearIndex );
-
+	
 	// create a request
 	AgentMigrationRequest *request 
 	  = new AgentMigrationRequest( globalLinearIndex, evaluationAgent );
@@ -404,65 +419,60 @@ void Agents_base::manageAll( int tid ) {
       convert << " to destination invalid";
     }
     MASS_base::log( convert.str( ) );	
+  } // end of while( true )
+
+  //When while loop finishes, all Agents reside in retBag. Need to hook back up.
+  Mthread::barrierThreads( 0 );
+  MASS_base::dllMap[ handle ]->agents = &retBag;
+
+  // all threads must barrier synchronize here.
+  Mthread::barrierThreads( tid );
+  if ( tid == 0 ) {
     
-    // all threads must barrier synchronize here.
-    Mthread::barrierThreads( tid );
-    if ( tid == 0 ) {
+    convert.str( "" );
+    convert << "tid[" << tid << "] now enters processAgentMigrationRequest";
+    MASS_base::log( convert.str( ) );
+    
+    // the main thread spawns as many communication threads as the number of
+    // remote computing nodes and let each invoke processAgentMigrationReq.
+    
+    // args to threads: rank, agentHandle, placeHandle, lower_boundary
+    int comThrArgs[MASS_base::systemSize][4];
+    pthread_t thread_ref[MASS_base::systemSize]; // communication thread id
+    for ( int rank = 0; rank < MASS_base::systemSize; rank++ ) {
       
-      convert.str( "" );
-      convert << "tid[" << tid << "] now enters processAgentMigrationRequest";
-      MASS_base::log( convert.str( ) );
+      if ( rank == MASS_base::myPid ) // don't communicate with myself
+	continue;
       
-      // the main thread spawns as many communication threads as the number of
-      // remote computing nodes and let each invoke processAgentMigrationReq.
+      // set arguments 
+      comThrArgs[rank][0] = rank;
+      comThrArgs[rank][1] = handle; // agents' handle
+      comThrArgs[rank][2] = placesDllClass->handle;
+      comThrArgs[rank][3] = placesDllClass->lower_boundary;
       
-      // args to threads: rank, agentHandle, placeHandle, lower_boundary
-      int comThrArgs[MASS_base::systemSize][4];
-      pthread_t thread_ref[MASS_base::systemSize]; // communication thread id
-      for ( int rank = 0; rank < MASS_base::systemSize; rank++ ) {
-	
-	if ( rank == MASS_base::myPid ) // don't communicate with myself
-	  continue;
-	
-	// set arguments 
-	comThrArgs[rank][0] = rank;
-	comThrArgs[rank][1] = handle; // agents' handle
-	comThrArgs[rank][2] = placesDllClass->handle;
-	comThrArgs[rank][3] = placesDllClass->lower_boundary;
-	
-	// start a communication thread
-	if ( pthread_create( &thread_ref[rank], NULL, 
-			     Agents_base::processAgentMigrationRequest, 
-			     comThrArgs[rank] ) != 0 ) {
-	  MASS_base::log( "Agents_base.manageAll: failed in pthread_create" );
-	  exit( -1 );
-	}
-      }
-      
-      // wait for all the communication threads to be terminated
-      for ( int rank = 0; rank < MASS_base::systemSize; rank++ ) {
-	if ( rank == MASS_base::myPid ) // don't communicate with myself
-	  continue;      
-	pthread_join( thread_ref[rank], NULL );
+      // start a communication thread
+      if ( pthread_create( &thread_ref[rank], NULL, 
+			   Agents_base::processAgentMigrationRequest, 
+			   comThrArgs[rank] ) != 0 ) {
+	MASS_base::log( "Agents_base.manageAll: failed in pthread_create" );
+	exit( -1 );
       }
     }
-    else {
-      
-      convert.str( "" );
-      convert << "tid[" << tid << "] skips processAgentMigrationRequest";
-      MASS_base::log( convert.str( ) );
-
-    return;
-  } // end of while( true ) 
-}
-
-  // CHRIS, WHAT DO THESE THREE STATEMENTS DO? 4-29-14
-  //If not killed or migrated, push Agent into the retBag  
-  // pthread_mutex_lock(&MASS_base::request_lock);
-  // retBag.push_back(evaluationAgent);
-  // pthread_mutex_unlock(&MASS_base::request_lock);
-
-  //Need to hook the bag back up when done
+    
+    // wait for all the communication threads to be terminated
+    for ( int rank = 0; rank < MASS_base::systemSize; rank++ ) {
+      if ( rank == MASS_base::myPid ) // don't communicate with myself
+	continue;      
+      pthread_join( thread_ref[rank], NULL );
+    }
+  }
+  else {
+    
+    convert.str( "" );
+    convert << "tid[" << tid << "] skips processAgentMigrationRequest";
+    MASS_base::log( convert.str( ) );
+    
+  }
 }
 
 //Chris: Additional Code below:
