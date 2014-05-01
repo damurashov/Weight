@@ -44,7 +44,6 @@ class Agent : MObject {
   bool migrate( vector<int> index );
   void spawn( int nAgents, vector<void*> arguments, int arg_size );
 
-  //Chris ToDo: Add second spawn for all arguments
   //void spawn( int nAgents, void *arguments , int arg_size );
 
   int agentsHandle;

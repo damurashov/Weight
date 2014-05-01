@@ -90,7 +90,6 @@ Agents_base::~Agents_base( ) {
 
 void Agents_base::callAll( int functionId, void *argument, int tid ) {
 
-	//Chris ToDo: Implement
 	//Set up the bag of agents
 	DllClass *dllclass = MASS_base::dllMap[ handle ];
 
@@ -161,11 +160,6 @@ void Agents_base::callAll( int functionId, void *argument, int tid ) {
 void **Agents_base::callAll( int functionId, void *argument, int arg_size,
 			     int ret_size, int tid ) {
 
-	  // Chris ToDo: Replace old bag with new bag when threads terminate.
-	  // Chris ToDo: Check return values for accuracy
-	  // Chris ToDo: Confirm barrier threads work as intended
-	  // Chris Todo: make sure new vector is compatable with old one
-
 	  ostringstream convert;
 	  vector<Agent*> retBag;
 
@@ -235,8 +229,7 @@ void Agents_base::manageAll( int tid ) {
   Places_base *placesDllClass = MASS_base::placesMap[ placesHandle ];
   vector<Agent*> retBag;
 
-  //Chris ToDo: Spawn, then Kill, then Migrate. Check in that order throughout the 
-  //bag of agents sequentially.
+  // Spawn, Kill, Migrate. Check in that order throughout the bag of agents sequentially.
   while( true ){
 
     pthread_mutex_lock(&MASS_base::request_lock);
@@ -258,9 +251,7 @@ void Agents_base::manageAll( int tid ) {
     //we need to create newChildren's worth of Agents in the current location.
 
     //Spawn() Check
-    //    pthread_mutex_lock(&MASS_base::request_lock);
     int childrenCounter = evaluationAgent->newChildren;
-    //   pthread_mutex_unlock(&MASS_base::request_lock);
 
     while( childrenCounter > 0 ){
       Agent* addAgent = (Agent *)(agentsDllClass->instantiate(evaluationAgent->arguments[argumentcounter++]));
@@ -362,7 +353,7 @@ void Agents_base::manageAll( int tid ) {
 	Place *oldPlace = evaluationAgent->place;
 	// *Should remove the pointer object in the place that points to the migrting Agent
 	pthread_mutex_lock(&MASS_base::request_lock);
-	// CHRIS: scan old_lace->agents to find this evaluationAgent's index.
+	// Scan old_lace->agents to find this evaluationAgent's index.
 	int oldIndex = -1;
 	for(unsigned int i = 0; i < oldPlace->agents.size();i++){
 	  if(oldPlace->agents[i] == evaluationAgent){
@@ -475,8 +466,6 @@ void Agents_base::manageAll( int tid ) {
   }
 }
 
-//Chris: Additional Code below:
-
 void *Agents_base::processAgentMigrationRequest( void *param ) {
   int destRank = ( (int *)param )[0];
   int agentHandle = ( (int *)param )[1];
@@ -524,13 +513,11 @@ void *Agents_base::processAgentMigrationRequest( void *param ) {
   pthread_join( thread_ref, NULL );
   delete messageToDest;
 
-  ///////////////////////////////////////////////////////////////////////
   // process a message
   vector<AgentMigrationRequest*>* receivedRequest 
     = messageFromSrc->getMigrationReqList( );
 
   int agentsHandle = messageFromSrc->getHandle( );
-  //  Agents_base *dstAgents = MASS_base::agentsMap[ agentsHandle ];
   int placesHandle = messageFromSrc->getDestHandle( );
   Places_base *dstPlaces = MASS_base::placesMap[ placesHandle ];
   DllClass *agents_dllclass = MASS_base::dllMap[ agentsHandle ];

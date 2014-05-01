@@ -31,8 +31,6 @@ class MASS_base {
 
   static Places_base *getCurrentPlaces( ) { return currentPlaces; };
   static Places_base *getDestinationPlaces( ) { return destinationPlaces; };
-
-//Chris
   static Agents_base *getCurrentAgents( ) { return currentAgents; };
 
   static int getCurrentFunctionId( ) { return currentFunctionId; };
@@ -71,8 +69,6 @@ class MASS_base {
   static vector<int*> *currentDestinations;
   static Message::ACTION_TYPE currentMsgType;
   static ExchangeHelper exchange;
-
-  //Chris
   static Agents_base* currentAgents;
 
  private:

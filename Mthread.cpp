@@ -32,10 +32,7 @@ void *Mthread::run( void *param ) {
   // the followign variables are used to call callAll( )
   Places_base *places = NULL;
   Places_base *destinationPlaces = NULL;
-
-//Chris
   Agents_base *agents = NULL;
-
 
   int functionId = 0;
   void *argument = NULL;
@@ -134,7 +131,7 @@ void *Mthread::run( void *param ) {
 		agents->callAll(functionId, argument, arg_size, ret_size, tid);
 	}
 	break;
-     //Chris ToDo: handle Manageall switch statement
+
       case STATUS_MANAGEALL:
 		
 	//Get agents to be called with Manageall

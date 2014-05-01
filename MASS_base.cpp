@@ -21,8 +21,6 @@ vector<vector<AgentMigrationRequest*>* > MASS_base::migrationRequests;
 int MASS_base::requestCounter;
 Places_base *MASS_base::currentPlaces;
 Places_base *MASS_base::destinationPlaces;
-
-//Chris
 Agents_base *MASS_base::currentAgents;
 
 int MASS_base::currentFunctionId;
@@ -41,10 +39,7 @@ void MASS_base::initMASS_base( char *name, int myPid, int nProc, int port ) {
   MASS_base::systemSize = nProc;
   MASS_base::MASS_PORT = port;
   MASS_base::currentPlaces = NULL;
-
-//Chris
   MASS_base::currentAgents = NULL;
-
   MASS_base::requestCounter = 0;
   pthread_mutex_init( &MASS_base::log_lock, NULL );
   pthread_mutex_init( &MASS_base::request_lock, NULL );

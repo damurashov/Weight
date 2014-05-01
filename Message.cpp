@@ -284,7 +284,6 @@ char *Message::serialize( int &msg_size ) {
     
     break;
     
-    //Chris ToDo: Implement
   case AGENTS_CALL_ALL_VOID_OBJECT:
   case AGENTS_CALL_ALL_RETURN_OBJECT:
     msg_size += sizeof(int);	//int handle
@@ -563,10 +562,8 @@ void Message::deserialize( char *msg, int msg_size ) {
 
     return;
 
-//Chris ToDo: Implement
   case AGENTS_CALL_ALL_VOID_OBJECT:
   case AGENTS_CALL_ALL_RETURN_OBJECT: 
-	//Chris ToDo: Implement 
 	action = *(ACTION_TYPE *)cur;	cur += sizeof( ACTION_TYPE ); 	//action
 	handle = *(int *)cur;		cur += sizeof( int );		//handle
 	functionId = *(int *)cur;	cur += sizeof( int );		//functionId

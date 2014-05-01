@@ -219,7 +219,6 @@ void MProcess::start( ) {
 
       case Message::AGENTS_CALL_ALL_VOID_OBJECT:
 
-	//Chris ToDo: Implement
 	MASS_base::log("AGENTS_CALL_ALL_VOID_OBJECT received" );
 	MASS_base::currentAgents = MASS_base::agentsMap[m->getHandle() ];
 	MASS_base::currentFunctionId = m->getFunctionId();
@@ -240,8 +239,6 @@ void MProcess::start( ) {
 
       case Message::AGENTS_CALL_ALL_RETURN_OBJECT:
 
-	//Chris ToDo: Replace currentAgents->agents_size
-	
 	MASS_base::log("AGENTS_CALL_ALL_RETURN_OBJECT received");
 	MASS_base::currentAgents = MASS_base::agentsMap[m->getHandle()];
 	MASS_base::currentFunctionId = m->getFunctionId();

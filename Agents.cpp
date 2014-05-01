@@ -30,8 +30,6 @@ void Agents::init_master( void *argument, int argument_size ) {
   for ( int i = 0; i < int( MASS::mNodes.size( ) ); i++ ) {
     MASS::mNodes[i]->sendMessage( m );
     cerr << "AGENT_INITIALIZE sent to " << i << endl;
-    //Chris ToDo: implement and incriment total
-    // total+=1;
   }
   delete m;
 
@@ -101,14 +99,13 @@ void *Agents::ca_setup( int functionId, void *argument, int arg_size,
     
     cerr << "Bag Size is: " + MASS_base::dllMap[handle]->agents->size();
 
-    //Chris MThread Update
     Mthread::agentBagSize = MASS_base::dllMap[handle]->agents->size();
 
     // make sure to delete it
     delete m;
   };
 
-  //Chris ToDo: Check for correct behavior post-Agents_base implementation
+  //Check for correct behavior post-Agents_base implementation
   // retrieve the corresponding agents
   MASS_base::currentAgents = this;
   MASS_base::currentFunctionId = functionId;
@@ -139,8 +136,6 @@ void *Agents::ca_setup( int functionId, void *argument, int arg_size,
   return NULL;
 }
 
-
-//Chris ToDo: Implement Swawn(), Kill(), and Migrate() checks here
 //If statements to check for each condition. No else, as an Agent
 //can migrate and spawn at the same time.
 //Iterate through all agents present.
@@ -158,14 +153,13 @@ void Agents::ma_setup( ) {
     //send it
     MASS::mNodes[i]->sendMessage( m );
 
-    //Chris MThread Update
+    // MThread Update
     Mthread::agentBagSize = MASS_base::dllMap[handle]->agents->size();
 
     // make sure to delete it
     delete m;
   }
   
-  //Chris ToDo: Check for correct behavior post-Agents_base implementation
   // retrieve the corresponding agents
   MASS_base::currentAgents = this;
   MASS_base::currentMsgType = Message::AGENTS_MANAGE_ALL;

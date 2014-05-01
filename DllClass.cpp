@@ -13,7 +13,6 @@ DllClass::DllClass( string className ) {
   strncpy( dot_className, "./", 2 );
   strncat( dot_className, className.c_str( ), className.size( ) );
 
-  //Chris ToDo: instantiate vector
   agents = new vector<Agent*>;
 
   // load a given class
