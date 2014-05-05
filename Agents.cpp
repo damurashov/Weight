@@ -115,13 +115,13 @@ void *Agents::ca_setup( int functionId, void *argument, int arg_size,
   MASS_base::currentRetSize = ret_size;
   MASS_base::currentReturns = new
     char[total * MASS_base::currentRetSize]; // prepare an entire return space
-
   // resume threads
   ostringstream convert;
   convert << "MASS_base::currentgAgents = " << MASS_base::currentAgents << endl;
   convert << "MASS_base::getCurrentgAgents = " << MASS_base::getCurrentAgents( ) << endl;
   MASS_base::log( convert.str( ) );
 
+  MASS_base::dllMap[handle]->retBag = new vector<Agent*>;
   Mthread::resumeThreads( Mthread::STATUS_AGENTSCALLALL );
 
   // callall implementatioin
@@ -129,9 +129,6 @@ void *Agents::ca_setup( int functionId, void *argument, int arg_size,
     Agents_base::callAll( functionId, argument, 0 ); // 0 = the main thread id
   else
     Agents_base::callAll( functionId, (void *)argument, arg_size, ret_size, 0);
-
-  // confirm all threads are done with callAll.
-  Mthread::barrierThreads( 0 );
 
   return NULL;
 }

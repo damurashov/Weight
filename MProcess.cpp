@@ -227,12 +227,11 @@ void MProcess::start( ) {
 	MASS_base::currentMsgType = m->getAction();
 	
 	Mthread::agentBagSize = MASS_base::dllMap[m->getHandle()]->agents->size();
+	MASS_base::dllMap[m->getHandle()]->retBag = new vector<Agent*>;
 
 	Mthread::resumeThreads(Mthread::STATUS_AGENTSCALLALL );
 
 	MASS_base::currentAgents->callAll(m->getFunctionId(), (void *)argument, 0);
-
-	Mthread::barrierThreads(0);
 
 	sendAck();
 	break;
@@ -258,6 +257,7 @@ void MProcess::start( ) {
 	}
 
 	Mthread::agentBagSize = MASS_base::dllMap[m->getHandle()]->agents->size();
+	MASS_base::dllMap[m->getHandle()]->retBag = new vector<Agent*>;
 	Mthread::resumeThreads(Mthread::STATUS_AGENTSCALLALL);
 
 	MASS_base::currentAgents->callAll( MASS_base::currentFunctionId,
@@ -266,7 +266,6 @@ void MProcess::start( ) {
 						MASS_base::currentRetSize,
 						0 );
 
-	Mthread::barrierThreads( 0);
 	sendReturnValues( (void *)MASS_base::currentReturns,
 				MASS_base::currentAgents->localPopulation,
 				MASS_base::currentRetSize );

@@ -18,4 +18,12 @@ void *Nomad::agentInit( void *argument ) {
   return NULL;
 }
 
+void *Nomad::somethingFun( void *argument ) {
+  ostringstream convert;
+  convert << "somethingFun[" << agentId << "] called, argument = " << (char *)argument;
+  MASS_base::log( convert.str( ) );
+
+  return NULL;
+}
+
 

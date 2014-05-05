@@ -18,8 +18,8 @@ class Agents_base {
   ~Agents_base( );
   
   void callAll( int functionId, void *argument, int tid );
-  void **callAll( int functionId, void *argument, int arg_size,
-		  int ret_size, int tid );
+  void callAll( int functionId, void *argument, int arg_size,
+		int ret_size, int tid );
   void manageAll( int tid );
   int nLocalAgents( ) { return localPopulation; };
 

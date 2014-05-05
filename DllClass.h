@@ -15,6 +15,7 @@ class DllClass {
   destroy_t *destroy;
   Place **places;          // an array of places
   vector<Agent*> *agents;   // a bag of agents
+  vector<Agent*> *retBag;   // a temporary bag of agents
 
   DllClass( string className );
 };

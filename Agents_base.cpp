@@ -94,7 +94,7 @@ void Agents_base::callAll( int functionId, void *argument, int tid ) {
 	DllClass *dllclass = MASS_base::dllMap[ handle ];
 
 	//Create the bag for returning agents to be placed in
-	vector<Agent*> retBag;
+	vector<Agent*> *retBag = dllclass->retBag;
 	int numOfOriginalVectors = Mthread::agentBagSize;
 	ostringstream convert;
 
@@ -137,10 +137,13 @@ void Agents_base::callAll( int functionId, void *argument, int tid ) {
 			convert << "Thread [" << myIndex << "] has called its method; ";
 			
 			//Puth the now running thread into the return bag
-			retBag.push_back(tmpAgent);
+			pthread_mutex_lock(&MASS_base::request_lock);
+			retBag->push_back(tmpAgent);
 			convert << "Thread [" << myIndex << "] has been placed in the return bag; ";
 			convert << "Current Agent Bag Size is: " << Mthread::agentBagSize;
+			convert << " retBag.size = " << retBag->size( );
 			MASS_base::log(convert.str());
+			pthread_mutex_unlock(&MASS_base::request_lock);
 		}
 		//Otherwise, we are out of agents and should stop
 		//trying to assign any more
@@ -149,26 +152,37 @@ void Agents_base::callAll( int functionId, void *argument, int tid ) {
 		}
 	}
 	//Wait for the thread count to become zero
-	Mthread::barrierThreads( 0 );
+	Mthread::barrierThreads( tid );
 	
 	//Assign the new bag of finished agents to the old pointer for reuse
-	MASS_base::dllMap[ handle ]->agents = &retBag;
-	Mthread::agentBagSize = numOfOriginalVectors;
-
+	if ( tid == 0 ) {
+	  delete MASS_base::dllMap[ handle ]->agents;
+	  MASS_base::dllMap[ handle ]->agents = MASS_base::dllMap[ handle ]->retBag;
+	  Mthread::agentBagSize = numOfOriginalVectors;
+	  convert.str("");
+	  convert << "Agents_base:callAll: agents.size = " << MASS_base::dllMap[handle]->agents->size( ) << endl;
+	  convert << "Agents_base:callAll: agentsBagSize = " << Mthread::agentBagSize;
+	  MASS_base::log( convert.str( ) );
+	}
 }
 
-void **Agents_base::callAll( int functionId, void *argument, int arg_size,
+// need to revisit!
+void Agents_base::callAll( int functionId, void *argument, int arg_size,
 			     int ret_size, int tid ) {
 
-	  ostringstream convert;
-	  vector<Agent*> retBag;
+	//Set up the bag of agents
+	DllClass *dllclass = MASS_base::dllMap[ handle ];
 
-	  DllClass *dllclass = MASS_base::dllMap[ handle ];
-	  char *return_values = MASS_base::currentReturns + (Mthread::agentBagSize - 1) * ret_size;
+	//Create the bag for returning agents to be placed in
+	vector<Agent*> *retBag = dllclass->retBag;
+	int numOfOriginalVectors = Mthread::agentBagSize;
+	ostringstream convert;
+
 	  while(true){
 		  int myIndex;
 		  pthread_mutex_lock(&MASS_base::request_lock);
 		  myIndex=Mthread::agentBagSize--;
+		  char *return_values = MASS_base::currentReturns + myIndex * ret_size;
 		  pthread_mutex_unlock(&MASS_base::request_lock);			
 
 		  //While there are still indexes left, continue to grab and execute threads
@@ -180,24 +194,38 @@ void **Agents_base::callAll( int functionId, void *argument, int arg_size,
 			  pthread_mutex_unlock(&MASS_base::request_lock);
 			  convert << "Thread [" << myIndex << "] has been removed";
 
+			  void *retVal = tmpAgent->callMethod(functionId, (void *)return_values);
+			  memcpy( return_values, retVal, ret_size );
 
-			  tmpAgent->callMethod(functionId, (void *)return_values);
 			  convert << "Thread [" << myIndex << "] has been called";
 
-			  
-			  retBag.push_back(tmpAgent);
-			  convert << "Thread [" <<  myIndex << "] has been moved to new bag";
+			  //Puth the now running thread into the return bag
+			  pthread_mutex_lock(&MASS_base::request_lock);
+			  retBag->push_back(tmpAgent);
+			  convert << "Thread [" << myIndex << "] has been placed in the return bag; ";
+			  convert << "Current Agent Bag Size is: " << Mthread::agentBagSize;
+			  convert << " retBag.size = " << retBag->size( );
+			  MASS_base::log(convert.str());
+			  pthread_mutex_unlock(&MASS_base::request_lock);
 
 		  }else{
 			  break;
 		  }
 	  }
 	  //Confirm all threads have finished
-	  Mthread::barrierThreads( 0 );
+	  Mthread::barrierThreads( tid );
 
-	  //Reassign the bag after execution to be reused later
-	  MASS_base::dllMap[ handle ]->agents = &retBag;
-	  return NULL;
+	  //Assign the new bag of finished agents to the old pointer for reuse
+	  if ( tid == 0 ) {
+	    delete MASS_base::dllMap[ handle ]->agents;
+	    MASS_base::dllMap[ handle ]->agents = MASS_base::dllMap[ handle ]->retBag;
+	    Mthread::agentBagSize = numOfOriginalVectors;
+	    convert.str("");
+	    convert << "Agents_base:callAll: agents.size = " << MASS_base::dllMap[handle]->agents->size( ) << endl;
+	    convert << "Agents_base:callAll: agentsBagSize = " << Mthread::agentBagSize;
+	    MASS_base::log( convert.str( ) );
+	  }
+
 }
 
 void Agents_base::getGlobalAgentArrayIndex( vector<int> src_index,

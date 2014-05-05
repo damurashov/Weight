@@ -53,5 +53,20 @@ int main( int argc, char *args[] ) {
   Agents *nomad = new Agents( 2, "Nomad", msg, 7, wave2d, 5000 );
   nomad->callAll( Nomad::agentInit_, msg, 5 );
 
+  //Test callAll second time
+  msg = "Second attempt\0";
+  nomad->callAll( Nomad::somethingFun_, msg, 15 );
+
+    /*
+    //Test Spawn
+
+    //Test Kill
+
+    //Test Migrate
+
+    //Test multiple Migrates
+
+  */
+
   MASS::finish( );
 }
