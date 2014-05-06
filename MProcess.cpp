@@ -233,7 +233,7 @@ void MProcess::start( ) {
 
 	MASS_base::currentAgents->callAll(m->getFunctionId(), (void *)argument, 0);
 
-	sendAck();
+	sendAck( MASS_base::currentAgents->localPopulation );
 	break;
 
       case Message::AGENTS_CALL_ALL_RETURN_OBJECT:
@@ -279,11 +279,15 @@ void MProcess::start( ) {
 	MASS_base::currentAgents = MASS_base::agentsMap[m->getHandle()];
 
 	Mthread::agentBagSize = MASS_base::dllMap[m->getHandle()]->agents->size();
+	MASS_base::dllMap[m->getHandle( )]->retBag = new vector<Agent*>;
 	Mthread::resumeThreads(Mthread::STATUS_MANAGEALL);
 
 	MASS_base::currentAgents->manageAll( 0 ); // 0 = the main thread id
 
 	Mthread::barrierThreads( 0 );
+	convert.str( "" );
+	convert << "sendAck will send localPopulation = " << MASS_base::currentAgents->localPopulation;
+	MASS_base::log( convert.str( ) );
 	sendAck( MASS_base::currentAgents->localPopulation );
 
 	break;
@@ -306,6 +310,9 @@ void MProcess::sendAck( ) {
 
 void MProcess::sendAck( int localPopulation ) {
   Message *msg = new Message( Message::ACK, localPopulation );
+  ostringstream convert;
+  convert << "msg->getAgentPopulation = " << msg->getAgentPopulation( );
+  MASS_base::log( convert.str( ) );
   sendMessage( msg );
   delete msg;
 }
@@ -322,6 +329,7 @@ void MProcess::sendMessage( Message *msg ) {
   int msg_size = 0;
   char *byte_msg = msg->serialize( msg_size );
   ostringstream convert;
+  if ( msg_size > 4 ) convert << "population = " << *(int *)(byte_msg + 4);
   convert << "sendMessage size = " << msg_size << endl;
   MASS_base::log( convert.str( ) );
   write( 1, (void *)&msg_size, sizeof( int ) );  // send a message size

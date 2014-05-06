@@ -49,12 +49,20 @@ char *Message::serialize( int &msg_size ) {
     // compose a msg
     pos = msg = new char[msg_size];
     *(ACTION_TYPE *)msg = action; pos += sizeof( ACTION_TYPE );// action
-    *(int *)pos = agent_population; pos += sizeof( int ); // agent_population
+    *(int *)pos = agent_population; 
+    convert.str( "" );
+    convert << "agent_population = " << *(int *)pos;
+    MASS_base::log( convert.str( ) );
+    pos += sizeof( int ); // agent_population
 
     if ( argument != NULL && argument_size > 0 ) {
       *(int *)pos = argument_size;  pos += sizeof( int );      // argument_size
       memcpy((void *)pos, argument,  argument_size );
     }
+    convert.str( "" );
+    convert << "argument size is : " << argument_size << " and arguments are: " << argument;
+    convert << *(int *)msg << " " << *(int *)(msg + 4) << " ";
+    MASS_base::log( convert.str( ) );
     break;
 
   case PLACES_INITIALIZE:
@@ -349,8 +357,15 @@ void Message::deserialize( char *msg, int msg_size ) {
     action = EMPTY;
     return;
   case ACK:
+    convert.str( "" );
+    convert << *(int *)cur << " ";
     action = ACK; cur += sizeof( ACTION_TYPE );
+    convert << *(int *)cur << " ";
     agent_population = *(int *)cur; cur += sizeof( int ); // agent_population
+
+    convert << "coming agent_pouplation = " << agent_population;
+    MASS_base::log( convert.str( ) );
+
     if ( msg_size > int( sizeof( ACTION_TYPE ) + sizeof( int ) ) ) {
       argument_size = *(int *)cur; cur += sizeof( int ); // argument_size
       argument_in_heap = ( ( argument = new char[argument_size] ) != NULL ); 

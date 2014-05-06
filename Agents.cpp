@@ -160,6 +160,7 @@ void Agents::ma_setup( ) {
   // retrieve the corresponding agents
   MASS_base::currentAgents = this;
   MASS_base::currentMsgType = Message::AGENTS_MANAGE_ALL;
+  MASS_base::dllMap[handle]->retBag = new vector<Agent*>;
 
   // resume threads
   Mthread::resumeThreads( Mthread::STATUS_MANAGEALL );

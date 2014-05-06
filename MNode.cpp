@@ -29,6 +29,7 @@ Message *MNode::receiveMessage( ) {
     for ( nRead = 0; 
 	  ( nRead += connection->read(buf + nRead, size - nRead) ) < size; );
     cerr << "nRead = " << nRead << endl;
+    if ( size > 4 ) cerr << "*(int *)(buf + 4) = " << *(int *)(buf + 4) << endl;
     Message *m = new Message( );
     m->deserialize( buf, size );
     return m;

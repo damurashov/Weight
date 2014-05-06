@@ -125,8 +125,11 @@ void MASS_base::setHosts( vector<string> host_args ) {
   }
 
   // instantiate remoteRequests: vector< vector<RemoteExchangeReques*> >
-  for ( int i = 0; i < systemSize; i++ )
+  // as well as migrationRequests for the purpose of agent migration.
+  for ( int i = 0; i < systemSize; i++ ) {
     remoteRequests.push_back( new vector<RemoteExchangeRequest*> );
+    migrationRequests.push_back( new vector<AgentMigrationRequest*> );
+  }
 
   // establish inter-MASS connection
   exchange.establishConnection( systemSize, myPid, hosts, MASS_PORT );

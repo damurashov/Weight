@@ -249,29 +249,35 @@ void Agents_base::getGlobalAgentArrayIndex( vector<int> src_index,
 
 void Agents_base::manageAll( int tid ) {
   
-  //Create the dllclass to access our agents from, out agentsDllClass for agent
-  //instantiation, and our bag for Agent objects after they have finished processing
+  //Create the dllclass to access our agents from, out agentsDllClass for 
+  // agent instantiation, and our bag for Agent objects after they have 
+  // finished processing
   ostringstream convert;
   DllClass *dllclass = MASS_base::dllMap[handle];
   DllClass *agentsDllClass = new DllClass( className );
-  Places_base *placesDllClass = MASS_base::placesMap[ placesHandle ];
-  vector<Agent*> retBag;
+  Places_base *evaluatedPlaces = MASS_base::placesMap[ placesHandle ];
+  vector<Agent*> *retBag = dllclass->retBag;
 
-  // Spawn, Kill, Migrate. Check in that order throughout the bag of agents sequentially.
+  // Spawn, Kill, Migrate. Check in that order throughout the bag of agents 
+  // sequentially.
   while( true ){
 
     pthread_mutex_lock(&MASS_base::request_lock);
-    int agentSize;
-    agentSize = dllclass->agents->size();
-    pthread_mutex_unlock(&MASS_base::request_lock);
-
-    if(agentSize ==0){
+    int agentSize = dllclass->agents->size();
+    if ( agentSize == 0 ) {
+      pthread_mutex_unlock(&MASS_base::request_lock);
       break;
     }
-    //Grab the last agent and remove it for processing. Be sure to lock on removal
-    pthread_mutex_lock(&MASS_base::request_lock);
+    //Grab the last agent and remove it for processing. Be sure to lock on 
+    // removal
     Agent *evaluationAgent = dllclass->agents->back();
     dllclass->agents->pop_back();
+    
+    convert.str("");
+    convert << "Agents_base::manageALL: Thread " << tid << " picked up " 
+	    << evaluationAgent->agentId;
+    MASS_base::log(convert.str());
+
     pthread_mutex_unlock(&MASS_base::request_lock);
     int argumentcounter = 0;
 
@@ -281,45 +287,78 @@ void Agents_base::manageAll( int tid ) {
     //Spawn() Check
     int childrenCounter = evaluationAgent->newChildren;
 
+    convert.str("");
+    convert << "agent " << evaluationAgent->agentId
+	    << "'s childrenCounter = " << childrenCounter;
+    MASS_base::log(convert.str());
+
     while( childrenCounter > 0 ){
-      Agent* addAgent = (Agent *)(agentsDllClass->instantiate(evaluationAgent->arguments[argumentcounter++]));
-      
+
+      convert.str("");
+      convert << "Agent_base::manageALL: Thread " << tid 
+	      << " will spawn a child of agent " << evaluationAgent->agentId
+	      << "...arguments.size( ) = " 
+	      << evaluationAgent->arguments.size( )
+	      << ", argumentcounter = " << argumentcounter;
+      MASS_base::log(convert.str());
+
+      Agent* addAgent = 
+	// validate the correspondance of arguments and argumentcounter
+	( evaluationAgent->arguments.size( ) > argumentcounter ) ?
+	// yes: this child agent should recieve an argument.
+	(Agent *)(agentsDllClass->instantiate(evaluationAgent->
+					      arguments[argumentcounter++])) :
+	// no:  this child agent should not receive an argument.
+	(Agent *)(agentsDllClass->instantiate( NULL ) );
+
       //Push the created agent into our bag for returns and update the counter
       //needed to keep track of our agents.
-
+      
       //Lock here
-       pthread_mutex_lock(&MASS_base::request_lock);
-       retBag.push_back(addAgent);
-       Mthread::agentBagSize += 1;
-       pthread_mutex_unlock(&MASS_base::request_lock);
-
-       //Push the pointer copy into the current Agent's place location
-       evaluationAgent->place->agents.push_back((MObject*) addAgent);
-
-       //Copy the parent index to the child
-       addAgent->index = evaluationAgent->index;
-
-       //Set the new Agent's current Place to the parent's Place
-       addAgent->place = evaluationAgent->place;
-
-       //Copy the current Agent's parent to the new Agent
-       addAgent->parentId = evaluationAgent->agentId;
-
+      pthread_mutex_lock(&MASS_base::request_lock);
+      retBag->push_back(addAgent);
+      pthread_mutex_unlock(&MASS_base::request_lock);
+      
+      //Push the pointer copy into the current Agent's place location
+      pthread_mutex_lock(&MASS_base::request_lock);
+      evaluationAgent->place->agents.push_back((MObject*) addAgent);
+      pthread_mutex_unlock(&MASS_base::request_lock);
+      
+      // initialize this child agent's attributes: 
+      addAgent->agentsHandle = evaluationAgent->agentsHandle;
+      addAgent->placesHandle = evaluationAgent->placesHandle;
+      addAgent->agentId = currentAgentId++;
+      addAgent->index = evaluationAgent->index;
+      addAgent->place = evaluationAgent->place;
+      addAgent->parentId = evaluationAgent->agentId;
+      
       //Decrement the newChildren counter once an Agent has been spawned
-      evaluationAgent->newChildren -= 1;
-      childrenCounter -= 1;
+      evaluationAgent->newChildren--;
+      childrenCounter--;
+      
+      convert.str("");
+      convert << "Agent_base::manageALL: Thread " << tid 
+	      << " spawned a child of agent " << evaluationAgent->agentId
+	      << " and put the child " << addAgent->agentId
+	      << " child into retBag." ;
+      MASS_base::log(convert.str());
     }
 
     //Kill() Check
+    convert.str("");
+    convert << "Agent_base::manageALL: Thread " << tid 
+	    << " check " << evaluationAgent->agentId << "'s alive = " 
+	    << evaluationAgent->alive;
+    MASS_base::log(convert.str());
     if(evaluationAgent->alive == false){
       
       //Get the place in which evaluationAgent is 'stored' in
       Place *evaluationPlace = evaluationAgent->place;
       
-      //Move through the list of Agents to locate which to delete
+      // Move through the list of Agents to locate which to delete
+      // Do so non-interruptively.
       pthread_mutex_lock(&MASS_base::request_lock);
       int evalPlaceAgents = evaluationPlace->agents.size();
-      pthread_mutex_unlock(&MASS_base::request_lock);
 
       for( int i = 0; i < evalPlaceAgents; i++){
 	
@@ -327,61 +366,75 @@ void Agents_base::manageAll( int tid ) {
 	MObject *comparisonAgent = evaluationPlace->agents[i];
 	Agent *convertedAgent = static_cast<Agent*>(comparisonAgent);
 
-	//Check the Id against the ID of the agent to be removed. If it matches, remove it
-	//Lock
-	if((evaluationAgent->agentId == convertedAgent->agentId) && (evaluationAgent->agentsHandle == convertedAgent->agentsHandle)){
-	  pthread_mutex_lock(&MASS_base::request_lock);
+	// Check the Id against the ID of the agent to be removed. 
+	// If it matches, remove it Lock
+	if((evaluationAgent->agentId == convertedAgent->agentId) && 
+	   (evaluationAgent->agentsHandle == convertedAgent->agentsHandle)){
 	  evaluationPlace->agents.erase( evaluationPlace->agents.begin() + i );
-	  pthread_mutex_unlock(&MASS_base::request_lock);
+
+	  convert.str("");
+	  convert << "Agent_base::manageALL: Thread " << tid 
+		  << " deleted " << evaluationAgent->agentId 
+		  << " from place[" << evaluationPlace->index[0]
+		  << "][" << evaluationPlace->index[1] << "]";
+	  MASS_base::log(convert.str());
+
 	  break;
 	}
       }
+
+      pthread_mutex_unlock(&MASS_base::request_lock);
+
       //Delete the agent and its pointer to complete the removal
-      delete &evaluationAgent;
+      //delete &evaluationAgent;
       delete evaluationAgent;
       continue;
     }
-
+    
     //Migrate() check
 
     //Iterate over all dimensions of the agent to check its location
-    //against that of its place. If they are the same, returb back.
+    //against that of its place. If they are the same, return back.
     int agentIndex = evaluationAgent->index.size();
-
-
     int destCoord[agentIndex];
 
     // compute its coordinate
-    getGlobalAgentArrayIndex( evaluationAgent->index, placesDllClass->size,
-			      placesDllClass->dimension, destCoord );
+    getGlobalAgentArrayIndex( evaluationAgent->index, evaluatedPlaces->size,
+			      evaluatedPlaces->dimension, destCoord );
 
     convert.str( "" );
     convert << "tid[" << tid << "]: calls from"
 	    << "[" << evaluationAgent->index[0]
 	    << "][" << evaluationAgent->index[1] << "]"
-	    << " (neighborCord[" << destCoord[0]
+	    << " (destCoord[" << destCoord[0]
 	    << "][" << destCoord[1] << "]"
-	    << " placesDllClass->size[" << placesDllClass->size[0] 
-	    << "][" << placesDllClass->size[1] << "]";
+	    << " evaluatedPlaces->size[" << evaluatedPlaces->size[0] 
+	    << "][" << evaluatedPlaces->size[1] << "]";
+    MASS_base::log(convert.str());
 
     if( destCoord[0] != -1 ) { 
       // destination valid
       int globalLinearIndex = 
-	placesDllClass->getGlobalLinearIndexFromGlobalArrayIndex( destCoord,
-						  placesDllClass->size,
-						  placesDllClass->dimension );
+	evaluatedPlaces->getGlobalLinearIndexFromGlobalArrayIndex( destCoord,
+						  evaluatedPlaces->size,
+						  evaluatedPlaces->dimension );
 
+      convert.str( "" );
       convert << " linear = " << globalLinearIndex
-	      << " lower = " << placesDllClass->lower_boundary
-	      << " upper = " << placesDllClass->upper_boundary << ")";
+	      << " lower = " << evaluatedPlaces->lower_boundary
+	      << " upper = " << evaluatedPlaces->upper_boundary << ")";
+      MASS_base::log(convert.str());
 
-      if ( globalLinearIndex >= placesDllClass->lower_boundary &&
-	   globalLinearIndex <= placesDllClass->upper_boundary ) {
+
+      if ( globalLinearIndex >= evaluatedPlaces->lower_boundary &&
+	   globalLinearIndex <= evaluatedPlaces->upper_boundary ) {
 	// local destination
+
+	// Should remove the pointer object in the place that points to 
+	// the migrting Agent
 	Place *oldPlace = evaluationAgent->place;
-	// *Should remove the pointer object in the place that points to the migrting Agent
 	pthread_mutex_lock(&MASS_base::request_lock);
-	// Scan old_lace->agents to find this evaluationAgent's index.
+	// Scan old_place->agents to find this evaluationAgent's index.
 	int oldIndex = -1;
 	for(unsigned int i = 0; i < oldPlace->agents.size();i++){
 	  if(oldPlace->agents[i] == evaluationAgent){
@@ -389,22 +442,66 @@ void Agents_base::manageAll( int tid ) {
 	    break;
 	  }	    
 	}
-	if(oldIndex != -1)
-	  oldPlace->agents.erase( oldPlace->agents.begin() + oldIndex ); // 1 for time being
+	if(oldIndex != -1) {
+	  // 1 for time being
+	  oldPlace->agents.erase( oldPlace->agents.begin() + oldIndex ); 
+	}
+	else {
+	  // should happen
+	  convert.str( "" );
+	  convert << "evaluationAgent " << evaluationAgent->agentId 
+		  << " couldn't been found in the old place!";
+	  MASS_base::log(convert.str());
+	  exit( -1 );
+	}
+
+	convert.str( "" );
+	convert << "evaluationAgent " << evaluationAgent->agentId 
+		<< " was removed from the oldPlace["
+		<< oldPlace->index[0] << "]["
+		<< oldPlace->index[1] << "]";
+	MASS_base::log(convert.str());
 	pthread_mutex_unlock(&MASS_base::request_lock);
 
 	// insert the migration Agent to a local destination place
 	int destinationLocalLinearIndex 
-	  = globalLinearIndex - placesDllClass->lower_boundary;
+	  = globalLinearIndex - evaluatedPlaces->lower_boundary;
 
-	evaluationAgent->place = dllclass->places[destinationLocalLinearIndex];
+	convert.str( "" );
+	convert << "destinationLocalLinerIndex = " 
+		<< destinationLocalLinearIndex;
+	MASS_base::log(convert.str());
+
+	DllClass *places_dllclass = MASS_base::dllMap[ placesHandle ];
+	evaluationAgent->place 
+	  = places_dllclass->places[destinationLocalLinearIndex];
+
+	convert.str( "" );
+	convert << "evaluationAgent->place = " 
+		<< evaluationAgent->place;
+	MASS_base::log(convert.str());
+
 	pthread_mutex_lock(&MASS_base::request_lock);
 	evaluationAgent->place->agents.push_back((MObject *)evaluationAgent);
+
+	convert.str( "" );
+	convert << "evaluationAgent " << evaluationAgent->agentId 
+		<< " was inserted into the destPlace["
+		<< evaluationAgent->place->index[0] << "]["
+		<< evaluationAgent->place->index[1] << "]";
+	MASS_base::log(convert.str());
+
 	pthread_mutex_unlock(&MASS_base::request_lock);
 
 	//If not killed or migrated remotely, push Agent into the retBag  
 	pthread_mutex_lock(&MASS_base::request_lock);
-	retBag.push_back(evaluationAgent);
+	retBag->push_back(evaluationAgent);
+
+	convert.str( "" );
+	convert << "evaluationAgent " << evaluationAgent->agentId 
+		<< " was pushed back into retBag";
+	MASS_base::log(convert.str());
+
 	pthread_mutex_unlock(&MASS_base::request_lock);
 	
 	// for debug
@@ -417,7 +514,7 @@ void Agents_base::manageAll( int tid ) {
 	
 	// find the destination node
 	int destRank 
-	  = placesDllClass->getRankFromGlobalLinearIndex( globalLinearIndex );
+	  = evaluatedPlaces->getRankFromGlobalLinearIndex( globalLinearIndex );
 	
 	// create a request
 	AgentMigrationRequest *request 
@@ -440,9 +537,23 @@ void Agents_base::manageAll( int tid ) {
     MASS_base::log( convert.str( ) );	
   } // end of while( true )
 
-  //When while loop finishes, all Agents reside in retBag. Need to hook back up.
-  Mthread::barrierThreads( 0 );
-  MASS_base::dllMap[ handle ]->agents = &retBag;
+  //When while loop finishes, all Agents reside in retBag. 
+  // Need to hook back up.
+  Mthread::barrierThreads( tid );
+
+  //Assign the new bag of finished agents to the old pointer for reuse
+  if ( tid == 0 ) {
+    delete MASS_base::dllMap[ handle ]->agents;
+    MASS_base::dllMap[ handle ]->agents = MASS_base::dllMap[ handle ]->retBag;
+    Mthread::agentBagSize = MASS_base::dllMap[ handle ]->agents->size( );
+
+    convert.str("");
+    convert << "Agents_base:manageAll: agents.size = " 
+	    << MASS_base::dllMap[handle]->agents->size( ) << endl;
+    convert << "Agents_base:manageAll: agentsBagSize = " 
+	    << Mthread::agentBagSize;
+    MASS_base::log( convert.str( ) );
+  }
 
   // all threads must barrier synchronize here.
   Mthread::barrierThreads( tid );
@@ -466,8 +577,8 @@ void Agents_base::manageAll( int tid ) {
       // set arguments 
       comThrArgs[rank][0] = rank;
       comThrArgs[rank][1] = handle; // agents' handle
-      comThrArgs[rank][2] = placesDllClass->handle;
-      comThrArgs[rank][3] = placesDllClass->lower_boundary;
+      comThrArgs[rank][2] = evaluatedPlaces->handle;
+      comThrArgs[rank][3] = evaluatedPlaces->lower_boundary;
       
       // start a communication thread
       if ( pthread_create( &thread_ref[rank], NULL, 
@@ -484,6 +595,11 @@ void Agents_base::manageAll( int tid ) {
 	continue;      
       pthread_join( thread_ref[rank], NULL );
     }
+    localPopulation = MASS_base::dllMap[handle]->agents->size( );
+    convert.str( "" );
+    convert << "Agents_base.manageAll complated: localPopulation = "
+	    << localPopulation;
+    MASS_base::log( convert.str( ) );
   }
   else {
     
@@ -515,6 +631,9 @@ void *Agents_base::processAgentMigrationRequest( void *param ) {
   convert.str( "" );
   convert << "tid[" << destRank << "] sends an exhange request to rank: " 
 	  << destRank << " size() = " << orgRequest->size( ) << endl;
+  MASS_base::log( convert.str( ) );
+
+  convert.str( "" );
   for ( int i = 0; i < int( orgRequest->size( ) ); i++ ) {
     convert << "send "
 	    << (*orgRequest)[i]->agent << " to "

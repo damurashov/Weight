@@ -1,6 +1,7 @@
 #include "Agent.h"
 #include "MASS_base.h"
 #include <iostream>
+#include <sstream>     // ostringstream
 
 //Set number for spawning additional Agents
 void Agent::spawn( int numAgents, vector<void*> arguments, int arg_size){
@@ -8,7 +9,7 @@ void Agent::spawn( int numAgents, vector<void*> arguments, int arg_size){
 	//Only want to make changes if the number to be created is above zero
 	if(numAgents > 0){
 		newChildren = numAgents;
-		arguments = arguments;
+		this->arguments = arguments;
 	}
 }
 

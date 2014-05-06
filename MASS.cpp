@@ -150,6 +150,8 @@ void MASS::barrier_all_slaves( char *return_values, int stripe, int arg_size,
 	   << endl;
       exit( -1 );
     }
+    cerr << "localAgents[" << (i + 1) << "] = m->getAgentPopulation: "
+	 << m->getAgentPopulation( ) << endl;
     if ( localAgents != NULL ) localAgents[i + 1] = m->getAgentPopulation( );
     if ( return_values != NULL && arg_size > 0 ) {
       m->getArgument( return_values + arg_size * stripe * ( i + 1 ) );

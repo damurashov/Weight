@@ -36,9 +36,11 @@ int main( int argc, char *args[] ) {
     wave2d->callAll( Wave2D::callalltest_, (void **)callargs, sizeof( int ),
 		   sizeof( double ) );
 
+  /*
   for ( int i = 0; i < 100; i++ )
     for ( int j = 0; j < 100; j++ )
       cout << retvals[i * 100 + j] << endl;
+  */
 
   vector<int*> destinations;
   int north[2] = {0, 1};  destinations.push_back( north );
@@ -57,11 +59,12 @@ int main( int argc, char *args[] ) {
   msg = "Second attempt\0";
   nomad->callAll( Nomad::somethingFun_, msg, 15 );
 
+  //Test Spawn
+  nomad->callAll( Nomad::createChild_ );
+  nomad->callAll( Nomad::killMe_ );
+  nomad->manageAll( );
+
     /*
-    //Test Spawn
-
-    //Test Kill
-
     //Test Migrate
 
     //Test multiple Migrates
