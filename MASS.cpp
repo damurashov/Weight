@@ -143,6 +143,8 @@ void MASS::barrier_all_slaves( char *return_values, int stripe, int arg_size,
   for ( int i = 0; i < int( mNodes.size( ) ); i++ ) {
     cerr << "barrier waits for ack from " << mNodes[i]->getHostName( ) << endl;
     Message *m = mNodes[i]->receiveMessage( );
+    cerr << "barrier received a message from " << mNodes[i]->getHostName( ) 
+	 << "...message = " << m << endl;
     if ( m->getAction( ) != Message::ACK ) {
       cerr << "barrier didn't receive ack from rank " << ( i + 1 )
 	   << " at " << mNodes[i]->getHostName( ) 

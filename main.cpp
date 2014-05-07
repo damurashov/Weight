@@ -59,17 +59,11 @@ int main( int argc, char *args[] ) {
   msg = "Second attempt\0";
   nomad->callAll( Nomad::somethingFun_, msg, 15 );
 
-  //Test Spawn
+  //Test manageAll
   nomad->callAll( Nomad::createChild_ );
   nomad->callAll( Nomad::killMe_ );
+  nomad->callAll( Nomad::migrate_ );
   nomad->manageAll( );
-
-    /*
-    //Test Migrate
-
-    //Test multiple Migrates
-
-  */
 
   MASS::finish( );
 }

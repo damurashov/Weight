@@ -587,17 +587,42 @@ void Agents_base::manageAll( int tid ) {
 	MASS_base::log( "Agents_base.manageAll: failed in pthread_create" );
 	exit( -1 );
       }
+      convert.str( "" );
+      convert << "Agents_base.manageAll will start processAgentMigrationRequest thread["
+	      << rank << "] = " << thread_ref[rank];
+      MASS_base::log( convert.str( ) );
     }
+
+    convert.str( "" );
+    convert << "HELLO!! systemSize = " << MASS_base::systemSize;
+    MASS_base::log( convert.str( ) );
     
     // wait for all the communication threads to be terminated
     for ( int rank = 0; rank < MASS_base::systemSize; rank++ ) {
+
+      convert.str( "" );
+      convert << "Agents_base.manageAll will join processAgentMigrationRequest A thread["
+	      << rank << "] = " << thread_ref[rank] << " myPid = " << MASS_base::myPid;
+      MASS_base::log( convert.str( ) );
+
       if ( rank == MASS_base::myPid ) // don't communicate with myself
 	continue;      
-      pthread_join( thread_ref[rank], NULL );
+
+      convert.str( "" );
+      convert << "Agents_base.manageAll will join processAgentMigrationRequest B thread["
+	      << rank << "] = " << thread_ref[rank];
+      MASS_base::log( convert.str( ) );
+      if ( MASS_base::myPid == 0 )
+	pthread_join( thread_ref[rank], NULL );
+
+      convert.str( "" );
+      convert << "Agents_base.manageAll joined processAgentMigrationRequest C thread["
+	      << rank << "] = " << thread_ref[rank];
+      MASS_base::log( convert.str( ) );
     }
     localPopulation = MASS_base::dllMap[handle]->agents->size( );
     convert.str( "" );
-    convert << "Agents_base.manageAll complated: localPopulation = "
+    convert << "Agents_base.manageAll completed: localPopulation = "
 	    << localPopulation;
     MASS_base::log( convert.str( ) );
   }
@@ -643,13 +668,17 @@ void *Agents_base::processAgentMigrationRequest( void *param ) {
   pthread_mutex_unlock( &MASS_base::request_lock );
 
   // now compose and send a message by a child
-  Message *messageToDest 
-    = new Message( Message::AGENTS_MIGRATION_REMOTE_REQUEST,
-		   agentHandle, placeHandle, orgRequest );
+  Message messageToDest( Message::AGENTS_MIGRATION_REMOTE_REQUEST,
+			 agentHandle, placeHandle, orgRequest );
 
+  convert.str( "" );
+  convert << "tid[" << destRank << "] made messageToDest to rank: " 
+	  << destRank; 
+  MASS_base::log( convert.str( ) );
+  
   struct MigrationSendMessage rankNmessage;
   rankNmessage.rank = destRank;
-  rankNmessage.message = messageToDest;
+  rankNmessage.message = &messageToDest;
   pthread_t thread_ref;
   pthread_create( &thread_ref, NULL, sendMessageByChild, &rankNmessage );
 
@@ -658,7 +687,14 @@ void *Agents_base::processAgentMigrationRequest( void *param ) {
  
   // at this point, the message must be exchanged.
   pthread_join( thread_ref, NULL );
-  delete messageToDest;
+
+  convert.str( "" );
+  convert << "pthread_join completed for rank[" << destRank << "] and will delete messageToDest: " << &messageToDest;
+  MASS_base::log( convert.str( ) );
+
+  convert.str( "" );
+  convert << "Message Deleted";
+  MASS_base::log( convert.str( ) );
 
   // process a message
   vector<AgentMigrationRequest*>* receivedRequest 
@@ -673,6 +709,7 @@ void *Agents_base::processAgentMigrationRequest( void *param ) {
   convert.str( "" );
   convert << "request from rank[" << destRank << "] = " << receivedRequest;
   convert << " size( ) = " << receivedRequest->size( );
+  MASS_base::log( convert.str( ) );
 
   // retrieve agents from receiveRequest
   while( receivedRequest->size( ) > 0 ) {
@@ -698,16 +735,30 @@ void *Agents_base::processAgentMigrationRequest( void *param ) {
     delete request;
   }
 
+  convert.str( "" );
+  convert << "retreive agents from rank[" << destRank << "]complated";
   MASS_base::log( convert.str( ) );
-  delete messageFromSrc;
 
+  pthread_exit( NULL );
   return NULL;
 }
 
 void *Agents_base::sendMessageByChild( void *param ) {
   int rank = ((struct MigrationSendMessage *)param)->rank;
+
+  ostringstream convert;
+  convert << "sendMessageByChild to " << rank << " starts";
+  MASS_base::log( convert.str( ) );
+
+
   Message *message = (Message *)((struct MigrationSendMessage *)param)->message;
   MASS_base::exchange.sendMessage( rank, message );
+
+  convert.str( "" );
+  convert << "sendMessageByChild to " << rank << " finished";
+  MASS_base::log( convert.str( ) );
+
+  pthread_exit( NULL );
   return NULL;
 }
 

@@ -56,4 +56,19 @@ void *Nomad::killMe( void *argument ) {
   return NULL;
 }
 
+void *Nomad::move( void *argument ) {
+  if ( agentId % 5 == 0 ) {
+    vector<int> dest;
+    dest.push_back( 0 );
+    dest.push_back( 0 );
+    migrate( dest );
+  }
+
+  ostringstream convert;
+  convert << "migrate[" << agentId << "] called";
+  MASS_base::log( convert.str( ) );
+
+  return NULL;
+}
+
 

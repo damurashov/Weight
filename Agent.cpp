@@ -23,6 +23,6 @@ bool Agent::migrate( vector<int> index ){
 		else
 			return false;
 	}
-	index = index;
+	this->index = index;
 	return true;
 }

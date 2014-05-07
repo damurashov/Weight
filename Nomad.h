@@ -12,6 +12,7 @@ public:
   static const int somethingFun_ = 1;
   static const int createChild_ = 2;
   static const int killMe_ = 3;
+  static const int move_ = 4;
   
   Nomad( void *argument ) : Agent( argument ) {
   };
@@ -22,6 +23,7 @@ public:
     case somethingFun_: return somethingFun( argument );
     case createChild_: return createChild( argument );
     case killMe_: return killMe( argument );
+    case move_: return move( argument );
     }
     return NULL;
   };
@@ -31,6 +33,7 @@ private:
   void *somethingFun( void *argument );
   void *createChild( void *argument );
   void *killMe( void *argument );
+  void *move( void *argument );
 };
 
 #endif

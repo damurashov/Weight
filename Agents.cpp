@@ -130,6 +130,18 @@ void *Agents::ca_setup( int functionId, void *argument, int arg_size,
   else
     Agents_base::callAll( functionId, (void *)argument, arg_size, ret_size, 0);
 
+  // Synchronized with all slave processes
+  MASS::barrier_all_slaves( localAgents );
+  localAgents[0] = localPopulation;
+
+  total = 0;
+  for ( int i = 0; i < MASS_base::systemSize; i++ ) {
+    total += localAgents[i];
+    // for debugging
+    cerr << "rank[" << i << "]'s local agent population = " 
+	 << localAgents[i] << endl;
+  }
+
   return NULL;
 }
 
@@ -167,9 +179,6 @@ void Agents::ma_setup( ) {
 
   // callall implementatioin
   Agents_base::manageAll( 0 ); // 0 = the main thread id
-
-  // confirm all threads are done with callAll.
-  Mthread::barrierThreads( 0 );
 
   // Synchronized with all slave processes
   MASS::barrier_all_slaves( localAgents );

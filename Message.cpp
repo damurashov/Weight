@@ -50,19 +50,12 @@ char *Message::serialize( int &msg_size ) {
     pos = msg = new char[msg_size];
     *(ACTION_TYPE *)msg = action; pos += sizeof( ACTION_TYPE );// action
     *(int *)pos = agent_population; 
-    convert.str( "" );
-    convert << "agent_population = " << *(int *)pos;
-    MASS_base::log( convert.str( ) );
     pos += sizeof( int ); // agent_population
 
     if ( argument != NULL && argument_size > 0 ) {
       *(int *)pos = argument_size;  pos += sizeof( int );      // argument_size
       memcpy((void *)pos, argument,  argument_size );
     }
-    convert.str( "" );
-    convert << "argument size is : " << argument_size << " and arguments are: " << argument;
-    convert << *(int *)msg << " " << *(int *)(msg + 4) << " ";
-    MASS_base::log( convert.str( ) );
     break;
 
   case PLACES_INITIALIZE:
@@ -233,7 +226,8 @@ char *Message::serialize( int &msg_size ) {
     *(int *)pos = migrationReqList->size();  pos += sizeof( int );         // MigrationReqListy->size
     
     convert.str( "" );
-    convert << "Agent handle: " << handle << " place handle: " << dest_handle;
+    convert << "Agent handle: " << handle << " place handle: " << dest_handle << " size = "
+	    << migrationReqList->size();
     MASS_base::log( convert.str() );
     
     for ( int i = 0; i < int( migrationReqList->size( ) ); i++ ) { // each migrationReq
@@ -249,8 +243,9 @@ char *Message::serialize( int &msg_size ) {
       pos += sizeof( int );     
       *(int *)pos = (*migrationReqList)[i]->agent->migratableDataSize;
       pos += sizeof( int );
-      memcpy( (void*)pos, (*migrationReqList)[i]->agent->migratableData,
-	      (*migrationReqList)[i]->agent->migratableDataSize );
+      if ( (*migrationReqList)[i]->agent->migratableDataSize > 0 )
+	memcpy( (void*)pos, (*migrationReqList)[i]->agent->migratableData,
+		(*migrationReqList)[i]->agent->migratableDataSize );
       pos += (*migrationReqList)[i]->agent->migratableDataSize;
     }
     break;
@@ -391,7 +386,7 @@ void Message::deserialize( char *msg, int msg_size ) {
       /*
       convert.str( "" ); convert << *(int *)cur << endl;
       MASS_base::log( convert.str( ) );
-      */
+      */ 
       size->push_back( *(int *)cur ); cur += sizeof( int ); // size[i];
     }
     handle = *(int *)cur; cur += sizeof( int ); // handle
@@ -509,7 +504,7 @@ void Message::deserialize( char *msg, int msg_size ) {
     argument_in_heap = true;
 
     convert.str( "" );
-    convert << "Agent handle: " << handle << " place handle: " << dest_handle;
+    convert << "Deserialize: Agent handle: " << handle << " place handle: " << dest_handle;
     MASS_base::log( convert.str() );
 
     agentsDllClass = MASS_base::dllMap[handle];
@@ -529,12 +524,20 @@ void Message::deserialize( char *msg, int msg_size ) {
       cur += sizeof( int );
       agent->alive = true;
       agent->newChildren = 0;
-      if ( agent->migratableData != NULL )
-	free( agent->migratableData );
-      agent->migratableData = malloc( agent->migratableDataSize );
-      memcpy( (*migrationReqList)[i]->agent->migratableData, (void *)cur,
-	     (*migrationReqList)[i]->agent->migratableDataSize );
-      cur += (*migrationReqList)[i]->agent->migratableDataSize;
+
+      convert.str( "" );
+      convert << "Deserialize: agentId[" << agent->agentId << "] data size = "
+	      << agent->migratableDataSize;
+      MASS_base::log( convert.str() );
+
+      //if ( agent->migratableData != NULL )
+      //free( agent->migratableData );
+      if ( agent->migratableDataSize > 0 ) {
+	agent->migratableData = malloc( agent->migratableDataSize );
+	memcpy( (*migrationReqList)[i]->agent->migratableData, (void *)cur,
+		(*migrationReqList)[i]->agent->migratableDataSize );
+	cur += (*migrationReqList)[i]->agent->migratableDataSize;
+      }
       request = new AgentMigrationRequest( destIndex, agent );
       migrationReqList->push_back( request );
     }

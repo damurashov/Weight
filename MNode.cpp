@@ -34,7 +34,7 @@ Message *MNode::receiveMessage( ) {
     m->deserialize( buf, size );
     return m;
   }
-  else if ( nRead < 0 ) {
+  else if ( nRead <= 0 ) {
     ostringstream convert;
     convert << "receivMessage error from rank[" << pid << "] at " 
 	    << hostName;

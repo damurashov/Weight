@@ -12,7 +12,7 @@ class Agent : MObject {
   friend class Message;
  public:
   Agent( void *argument ) : alive( true ), newChildren( 0 ), 
-    migratableData( NULL ) { };
+    migratableData( NULL ), migratableDataSize( 0 ) { };
   virtual void *callMethod( int functionId, void *argument ) = 0;
   ~Agent( ) { if ( migratableData != NULL ) free( migratableData ); };
   int map( int initPopulation, vector<int> size, vector<int> index ) {

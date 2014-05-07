@@ -328,10 +328,7 @@ void MProcess::sendReturnValues( void *argument, int places_size,
 void MProcess::sendMessage( Message *msg ) {
   int msg_size = 0;
   char *byte_msg = msg->serialize( msg_size );
-  ostringstream convert;
-  if ( msg_size > 4 ) convert << "population = " << *(int *)(byte_msg + 4);
-  convert << "sendMessage size = " << msg_size << endl;
-  MASS_base::log( convert.str( ) );
+
   write( 1, (void *)&msg_size, sizeof( int ) );  // send a message size
   write( 1, byte_msg, msg_size );                // send a message body
   fsync( 1 );
