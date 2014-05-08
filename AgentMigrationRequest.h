@@ -12,8 +12,10 @@ class AgentMigrationRequest {
   };
 
   ~AgentMigrationRequest( ) {
+    if ( agent->migratableDataSize > 0 && agent->migratableData != NULL )
+      free( agent->migratableData );
     delete agent;
-    }
+  }
 
   int destGlobalLinearIndex;
   Agent *agent;

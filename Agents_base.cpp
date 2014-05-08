@@ -403,7 +403,8 @@ void Agents_base::manageAll( int tid ) {
 			      evaluatedPlaces->dimension, destCoord );
 
     convert.str( "" );
-    convert << "tid[" << tid << "]: calls from"
+    convert << "pthread_self[" << pthread_self( )
+	    << "tid[" << tid << "]: calls from"
 	    << "[" << evaluationAgent->index[0]
 	    << "][" << evaluationAgent->index[1] << "]"
 	    << " (destCoord[" << destCoord[0]
@@ -519,6 +520,10 @@ void Agents_base::manageAll( int tid ) {
 	// create a request
 	AgentMigrationRequest *request 
 	  = new AgentMigrationRequest( globalLinearIndex, evaluationAgent );
+
+	convert.str( "" );
+	convert << "AgentMigrationRequest *request = " << request;
+	MASS_base::log( convert.str( ) );
 	
 	// enqueue the request to this node.map
 	pthread_mutex_lock( &MASS_base::request_lock );
@@ -598,7 +603,7 @@ void Agents_base::manageAll( int tid ) {
     MASS_base::log( convert.str( ) );
     
     // wait for all the communication threads to be terminated
-    for ( int rank = 0; rank < MASS_base::systemSize; rank++ ) {
+    for ( int rank = MASS_base::systemSize - 1; rank >= 0; rank-- ) {
 
       convert.str( "" );
       convert << "Agents_base.manageAll will join processAgentMigrationRequest A thread["
@@ -612,8 +617,8 @@ void Agents_base::manageAll( int tid ) {
       convert << "Agents_base.manageAll will join processAgentMigrationRequest B thread["
 	      << rank << "] = " << thread_ref[rank];
       MASS_base::log( convert.str( ) );
-      if ( MASS_base::myPid == 0 )
-	pthread_join( thread_ref[rank], NULL );
+
+      pthread_join( thread_ref[rank], NULL );
 
       convert.str( "" );
       convert << "Agents_base.manageAll joined processAgentMigrationRequest C thread["
@@ -629,7 +634,8 @@ void Agents_base::manageAll( int tid ) {
   else {
     
     convert.str( "" );
-    convert << "tid[" << tid << "] skips processAgentMigrationRequest";
+    convert << "pthread_self[" << pthread_self( )
+	    << "] tid[" << tid << "] skips processAgentMigrationRequest";
     MASS_base::log( convert.str( ) );
     
   }
@@ -645,7 +651,8 @@ void *Agents_base::processAgentMigrationRequest( void *param ) {
   ostringstream convert;
 
   convert.str( "" );
-  convert << "rank[" << destRank << "]: starts processAgentMigrationRequest";
+  convert << "pthread_self[" << pthread_self( )
+	  << "] rank[" << destRank << "]: starts processAgentMigrationRequest";
   MASS_base::log( convert.str( ) );
 
   // pick up the next rank to process
@@ -689,7 +696,9 @@ void *Agents_base::processAgentMigrationRequest( void *param ) {
   pthread_join( thread_ref, NULL );
 
   convert.str( "" );
-  convert << "pthread_join completed for rank[" << destRank << "] and will delete messageToDest: " << &messageToDest;
+  convert << "pthread id = " << thread_ref
+	  << "pthread_join completed for rank[" 
+	  << destRank << "] and will delete messageToDest: " << &messageToDest;
   MASS_base::log( convert.str( ) );
 
   convert.str( "" );
@@ -736,7 +745,8 @@ void *Agents_base::processAgentMigrationRequest( void *param ) {
   }
 
   convert.str( "" );
-  convert << "retreive agents from rank[" << destRank << "]complated";
+  convert << "pthread_self[" << pthread_self( )
+	  << "] retreive agents from rank[" << destRank << "]complated";
   MASS_base::log( convert.str( ) );
 
   pthread_exit( NULL );
@@ -747,7 +757,8 @@ void *Agents_base::sendMessageByChild( void *param ) {
   int rank = ((struct MigrationSendMessage *)param)->rank;
 
   ostringstream convert;
-  convert << "sendMessageByChild to " << rank << " starts";
+  convert << "pthread_self[" << pthread_self( )
+	  << "] sendMessageByChild to " << rank << " starts";
   MASS_base::log( convert.str( ) );
 
 
@@ -755,7 +766,8 @@ void *Agents_base::sendMessageByChild( void *param ) {
   MASS_base::exchange.sendMessage( rank, message );
 
   convert.str( "" );
-  convert << "sendMessageByChild to " << rank << " finished";
+  convert << "pthread_self[" << pthread_self( )
+	  << "] sendMessageByChild to " << rank << " finished";
   MASS_base::log( convert.str( ) );
 
   pthread_exit( NULL );

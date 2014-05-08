@@ -10,6 +10,7 @@ using namespace std;
 class Agent : MObject {
   friend class Agents_base;
   friend class Message;
+  friend class AgentMigrationRequest;
  public:
   Agent( void *argument ) : alive( true ), newChildren( 0 ), 
     migratableData( NULL ), migratableDataSize( 0 ) { };

@@ -62,7 +62,7 @@ int main( int argc, char *args[] ) {
   //Test manageAll
   nomad->callAll( Nomad::createChild_ );
   nomad->callAll( Nomad::killMe_ );
-  nomad->callAll( Nomad::migrate_ );
+  nomad->callAll( Nomad::move_ );
   nomad->manageAll( );
 
   MASS::finish( );

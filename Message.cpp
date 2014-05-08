@@ -13,18 +13,18 @@ Message::~Message( ) {
       exchangeReqList->erase( exchangeReqList->begin( ) );
       delete req;
     }
-    if ( argument_in_heap == true ) delete exchangeReqList;
+    // exchangeReqList is MASS_base::remoteRequests[rank]
+    // this should not be deleted.
   }
   if ( migrationReqList != NULL ) {
     while ( migrationReqList->size( ) > 0 ) {
+
       AgentMigrationRequest *req = (*migrationReqList)[0];
       migrationReqList->erase( migrationReqList->begin( ) );
-      if ( req->agent->migratableData != NULL )
-	free( req->agent->migratableData );
-      delete req->agent;
       delete req;
     }
-    if ( argument_in_heap == true ) delete exchangeReqList;
+    // migrationReqList is MASS_base::migrationRequests[rank]
+    // this should not be deleted.
   }
 }
 
