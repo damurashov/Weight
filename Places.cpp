@@ -98,7 +98,7 @@ void *Places::ca_setup( int functionId, void *argument,
 			int arg_size, int ret_size,
 			Message::ACTION_TYPE type ) {
   // calculate the total argument size for return-objects
-  int total = 1;
+  int total = 1; // the total number of place elements
   for ( int i = 0; i < dimension; i++ )
     total *= size[i];
   int stripe = total / MASS_base::systemSize;

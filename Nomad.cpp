@@ -71,4 +71,19 @@ void *Nomad::move( void *argument ) {
   return NULL;
 }
 
+void *Nomad::callalltest( void *argument ) {
+  ostringstream convert;
+  convert << "callalltest: agent(" << agentId;
+  MASS_base::log( convert.str( ) );    
 
+  double *ret_val = new double;
+  *ret_val = *(int *)argument * 10.0;
+
+  convert.str( "" );
+  convert << "callalltest: agent(" << agentId << "): argument = "
+          << *(int  *)argument
+          << " *(double *)ret_val = " << *ret_val;
+  MASS_base::log( convert.str( ) );
+
+  return ret_val;
+}

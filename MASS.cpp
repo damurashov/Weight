@@ -139,12 +139,18 @@ void MASS::finish( ) {
 
 void MASS::barrier_all_slaves( char *return_values, int stripe, int arg_size,
 			       int localAgents[] ){
-  // Synchronize with all slave processes                                     
+
+  // counts the agent population from each Mprocess
+  int nAgentsSoFar = ( localAgents != NULL ) ? localAgents[0] : 0;
+
+  // Synchronize with all slave processes                       
   for ( int i = 0; i < int( mNodes.size( ) ); i++ ) {
     cerr << "barrier waits for ack from " << mNodes[i]->getHostName( ) << endl;
     Message *m = mNodes[i]->receiveMessage( );
     cerr << "barrier received a message from " << mNodes[i]->getHostName( ) 
 	 << "...message = " << m << endl;
+
+    // check this is an Ack
     if ( m->getAction( ) != Message::ACK ) {
       cerr << "barrier didn't receive ack from rank " << ( i + 1 )
 	   << " at " << mNodes[i]->getHostName( ) 
@@ -152,11 +158,25 @@ void MASS::barrier_all_slaves( char *return_values, int stripe, int arg_size,
 	   << endl;
       exit( -1 );
     }
+    
+    // retrieve arguments back from each Mprocess
+    if ( return_values != NULL && arg_size > 0) {
+      if ( stripe > 0 && localAgents == NULL ) {
+	// places.callAll( ) with return values
+	m->getArgument( return_values + arg_size * stripe * ( i + 1 ) );
+      }
+      if ( stripe == 0 && localAgents != NULL ) {
+	// agents.callAll( ) with return values
+	m->getArgument( return_values + arg_size * nAgentsSoFar );
+      }
+    }
+
+    // retrieve agent population from each Mprocess
     cerr << "localAgents[" << (i + 1) << "] = m->getAgentPopulation: "
 	 << m->getAgentPopulation( ) << endl;
-    if ( localAgents != NULL ) localAgents[i + 1] = m->getAgentPopulation( );
-    if ( return_values != NULL && arg_size > 0 ) {
-      m->getArgument( return_values + arg_size * stripe * ( i + 1 ) );
+    if ( localAgents != NULL ) {
+      localAgents[i + 1] = m->getAgentPopulation( );
+      nAgentsSoFar += localAgents[i + 1];
     }
 
     cerr << "message deleted" << endl;

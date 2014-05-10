@@ -47,7 +47,7 @@ Places.o: Places.h MObject.h Place.h Message.h
 Places_base.o: Places_base.h MObject.h Place.h Message.h
 Agent.o: Agent.h MObject.h Place.h
 Agents.o: Agents.h MObject.h Place.h Message.h
-Agents_base.o: Agents_base.h MObject.h Agent.h
+Agents_base.o: Agents_base.h MObject.h Agent.h Nomad.h
 DllClass.o: DllClass.h MObject.h Place.h
 ExchangeHelper.o: Socket.h Message.h
 Wave2D.o: MASS_base.h Place.h Wave2D.h

@@ -16,7 +16,7 @@ class Agents : public Agents_base {
 
   void callAll( int functionId );
   void callAll( int functionId, void *argument, int arg_size );
-  void *callAll( int functionId, void *argument[], int arg_size, 
+  void *callAll( int functionId, void *argument, int arg_size, 
 		 int ret_size );
   void manageAll( );
   void ma_setup( );
@@ -25,7 +25,7 @@ class Agents : public Agents_base {
   void init_master( void *argument, int argument_size );
   
  private:
-  int *localAgents;
+  int *localAgents; // localAgents[i] = # agents in rank[i]
   int total;
   void *ca_setup( int functionId, void *argument, int arg_size, int ret_size,
 		  Message::ACTION_TYPE type );

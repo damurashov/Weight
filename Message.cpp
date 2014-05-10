@@ -526,12 +526,12 @@ void Message::deserialize( char *msg, int msg_size ) {
       agent->newChildren = 0;
 
       convert.str( "" );
-      convert << "Deserialize: agentId[" << agent->agentId << "] data size = "
+      convert << "Deserialize: agentId(" << agent << ")[" << agent->agentId << "] data size = "
 	      << agent->migratableDataSize;
       MASS_base::log( convert.str() );
 
-      //if ( agent->migratableData != NULL )
-      //free( agent->migratableData );
+      if ( agent->migratableData != NULL )
+	free( agent->migratableData );
       if ( agent->migratableDataSize > 0 ) {
 	agent->migratableData = malloc( agent->migratableDataSize );
 	memcpy( (*migrationReqList)[i]->agent->migratableData, (void *)cur,

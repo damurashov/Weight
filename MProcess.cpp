@@ -67,6 +67,7 @@ void MProcess::start( ) {
 
       case Message::FINISH:
 	Mthread::resumeThreads( Mthread::STATUS_TERMINATE );
+	// confirm all threads are done with finish
 	Mthread::barrierThreads( 0 );
 	sendAck( );
 	alive = false;
@@ -107,12 +108,11 @@ void MProcess::start( ) {
 	// resume threads to work on call all.
 	Mthread::resumeThreads( Mthread::STATUS_CALLALL );
 
-	// TODO: call all implementation
 	// 3rd arg: 0 = the main thread id
 	MASS_base::
 	  currentPlaces->callAll( m->getFunctionId( ), (void *)argument, 0 );
 	
-	// resume threads to work on call all.
+	// confirm all threads are done with places.callAll
 	Mthread::barrierThreads( 0 );
 	
 	sendAck( );
@@ -132,8 +132,9 @@ void MProcess::start( ) {
 	  = new char[MASS_base::currentPlaces->places_size 
 		     * MASS_base::currentRetSize];
 
+	// Debugging code
 	data = (int *)argument;
-	for ( int i = 0; i < 2500; i++ ) {
+	for ( int i = 0; i < 2000; i++ ) {
 	  convert.str( "" );
 	  convert << *(data + i);
 	  MASS_base::log( convert.str( ) );
@@ -142,7 +143,6 @@ void MProcess::start( ) {
 	// resume threads to work on call all.
 	Mthread::resumeThreads( Mthread::STATUS_CALLALL );
 
-	// TODO: call all implementation
 	// 3rd arg: 0 = the main thread id
 
 	MASS_base::
@@ -152,8 +152,12 @@ void MProcess::start( ) {
 				  MASS_base::currentRetSize,
 				  0 );
 
-	// confirm all threads are done with exchangeall.
+	// confirm all threads are done with places.callAll with return objects
 	Mthread::barrierThreads( 0 );
+
+	convert.str( "" );
+	convert << "PLACES_CALL_ALL_RETURN_OBJECT checking currentReturns";
+
 	sendReturnValues( (void *)MASS_base::currentReturns, 
 			  MASS_base::currentPlaces->places_size,
 			  MASS_base::currentRetSize );
@@ -190,7 +194,7 @@ void MProcess::start( ) {
 				      MASS_base::currentFunctionId, 
 				      MASS_base::currentDestinations, 0 );
 
-	// confirm all threads are done with exchangeall.
+	// confirm all threads are done with places.exchangeall.
 	Mthread::barrierThreads( 0 );
 	MASS_base::log( "barrier done" );
 
@@ -229,9 +233,14 @@ void MProcess::start( ) {
 	Mthread::agentBagSize = MASS_base::dllMap[m->getHandle()]->agents->size();
 	MASS_base::dllMap[m->getHandle()]->retBag = new vector<Agent*>;
 
+	// resume threads to work on call all
 	Mthread::resumeThreads(Mthread::STATUS_AGENTSCALLALL );
 
 	MASS_base::currentAgents->callAll(m->getFunctionId(), (void *)argument, 0);
+
+	// confirm all threads are done with agents.callAll
+	Mthread::barrierThreads( 0 );
+	MASS_base::log( "barrier done" );
 
 	sendAck( MASS_base::currentAgents->localPopulation );
 	break;
@@ -250,7 +259,7 @@ void MProcess::start( ) {
 	
 	//Debugging code
 	data = (int *)argument;
-	for( int i = 0; i < 2500; i++){
+	for( int i = 0; i < MASS_base::currentAgents->localPopulation; i++){
 		convert.str("");
 		convert << *(data + i);
 		MASS_base::log(convert.str() );
@@ -258,6 +267,8 @@ void MProcess::start( ) {
 
 	Mthread::agentBagSize = MASS_base::dllMap[m->getHandle()]->agents->size();
 	MASS_base::dllMap[m->getHandle()]->retBag = new vector<Agent*>;
+
+	// resume threads to work on call all with return objects
 	Mthread::resumeThreads(Mthread::STATUS_AGENTSCALLALL);
 
 	MASS_base::currentAgents->callAll( MASS_base::currentFunctionId,
@@ -266,9 +277,14 @@ void MProcess::start( ) {
 						MASS_base::currentRetSize,
 						0 );
 
+	// confirm all threads are done with agnets.callAll with return objects
+	Mthread::barrierThreads( 0 );
+	MASS_base::log( "barrier done" );
+
 	sendReturnValues( (void *)MASS_base::currentReturns,
-				MASS_base::currentAgents->localPopulation,
-				MASS_base::currentRetSize );
+			  MASS_base::currentAgents->localPopulation,
+			  MASS_base::currentRetSize, 
+			  MASS_base::currentAgents->localPopulation );
 
 	delete MASS_base::currentReturns;
 	
@@ -284,6 +300,7 @@ void MProcess::start( ) {
 
 	MASS_base::currentAgents->manageAll( 0 ); // 0 = the main thread id
 
+	// confirm all threads are done with agents.manageAll.
 	Mthread::barrierThreads( 0 );
 	convert.str( "" );
 	convert << "sendAck will send localPopulation = " << MASS_base::currentAgents->localPopulation;
@@ -317,10 +334,18 @@ void MProcess::sendAck( int localPopulation ) {
   delete msg;
 }
 
-void MProcess::sendReturnValues( void *argument, int places_size, 
+void MProcess::sendReturnValues( void *argument, int nPlaces,
 				int return_size ) {
   Message *msg = new Message( Message::ACK, argument, 
-			      places_size * return_size );
+			      nPlaces * return_size );
+  sendMessage( msg );
+  delete msg;
+}
+
+void MProcess::sendReturnValues( void *argument, int nAgents,
+				 int return_size, int localPopulation ) {
+  Message *msg = new Message( Message::ACK, argument, 
+			      nAgents * return_size, localPopulation );
   sendMessage( msg );
   delete msg;
 }

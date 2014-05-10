@@ -170,18 +170,21 @@ void Mthread::resumeThreads( STATUS_TYPE new_status ) {
 }
 
 void Mthread::barrierThreads( int tid ) {
+  static int barrier_phases = 0;
+
   pthread_mutex_lock( &lock );
   if ( ++barrier_count < int( MASS_base::threads.size( ) ) ) {
     ostringstream convert;
-    convert << "tid[" << tid << "] waiting";
+    convert << "tid[" << tid << "] waiting: barrier = " << barrier_phases;
     MASS_base::log( convert.str( ) );
     pthread_cond_wait( &barrier_ready, &lock );
   } else {
     barrier_count = 0;
     status = STATUS_READY;
     ostringstream convert;
-    convert << "tid[" << tid << "] woke up all";
+    convert << "tid[" << tid << "] woke up all: barrier = " << barrier_phases;
     MASS_base::log( convert.str( ) );
+    barrier_phases++;
     pthread_cond_broadcast( &barrier_ready );
   }
   pthread_mutex_unlock( &lock );

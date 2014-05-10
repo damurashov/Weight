@@ -22,7 +22,7 @@ int main( int argc, char *args[] ) {
     
   MASS::init( arguments, nProc, nThr );
   char *msg = "hello\0"; // should not be char msg[]
-  Places *wave2d = new Places( 1, "Wave2D", msg, 7, 2, 10, 10 );
+  Places *wave2d = new Places( 1, "Wave2D", msg, 7, 2, 100, 100 );
 
   msg = "good\0";
   wave2d->callAll( Wave2D::init_, msg, 5 );
@@ -36,11 +36,11 @@ int main( int argc, char *args[] ) {
     wave2d->callAll( Wave2D::callalltest_, (void **)callargs, sizeof( int ),
 		   sizeof( double ) );
 
-  /*
   for ( int i = 0; i < 100; i++ )
     for ( int j = 0; j < 100; j++ )
       cout << retvals[i * 100 + j] << endl;
-  */
+
+  delete retvals;
 
   vector<int*> destinations;
   int north[2] = {0, 1};  destinations.push_back( north );
@@ -52,18 +52,41 @@ int main( int argc, char *args[] ) {
 
   wave2d->callAll( Wave2D::checkInMessage_ );
 
-  Agents *nomad = new Agents( 2, "Nomad", msg, 7, wave2d, 5000 );
+  Agents *nomad = new Agents( 2, "Nomad", msg, 7, wave2d, 10000 );
   nomad->callAll( Nomad::agentInit_, msg, 5 );
 
   //Test callAll second time
   msg = "Second attempt\0";
   nomad->callAll( Nomad::somethingFun_, msg, 15 );
 
+  //Test callAll with return values
+  int agent_callargs[10000];
+  for ( int i = 0; i < 10000; i++ )
+    agent_callargs[i] = i;
+  retvals = (double *)
+    nomad->callAll( Nomad::callalltest_, (void *)agent_callargs,
+		    sizeof( int ), sizeof( double ) );
+
+  for ( int i = 0; i < 10000; i++ )
+    cout << retvals[i] << endl;
+  delete retvals;
+
   //Test manageAll
   nomad->callAll( Nomad::createChild_ );
   nomad->callAll( Nomad::killMe_ );
   nomad->callAll( Nomad::move_ );
   nomad->manageAll( );
+
+  //Test callAll with return values
+  for ( int i = 0; i < 15000; i++ )
+    agent_callargs[i] = -i;
+  retvals = (double *)
+    nomad->callAll( Nomad::callalltest_, (void *)agent_callargs,
+		    sizeof( int ), sizeof( double ) );
+
+  for ( int i = 0; i < 15000; i++ )
+    cout << retvals[i] << endl;
+  delete retvals;
 
   MASS::finish( );
 }

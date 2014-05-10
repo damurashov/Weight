@@ -59,14 +59,19 @@ void Agents::callAll( int functionId, void *argument, int arg_size ) {
 	    Message::AGENTS_CALL_ALL_VOID_OBJECT );
 }
 
-void *Agents::callAll( int functionId, void *argument[], int arg_size, 
+void *Agents::callAll( int functionId, void *argument, int arg_size, 
 		       int ret_size ) {
-  return ca_setup( functionId, (void *)argument, arg_size, ret_size,
+  return ca_setup( functionId, argument, arg_size, ret_size,
 		   Message::AGENTS_CALL_ALL_RETURN_OBJECT );
 }
 
 void *Agents::ca_setup( int functionId, void *argument, int arg_size, 
 			int ret_size, Message::ACTION_TYPE type ) {
+  // calculate the total number of agents
+  total = 0;
+  for ( int i = 0; i < MASS_base::systemSize; i++ )
+    total += localAgents[i];
+
   // send a AGENTS_CALL_ALL message to each slave
   Message *m = NULL;
   for ( int i = 0; i < int( MASS::mNodes.size( ) ); i++ ) {
@@ -77,8 +82,11 @@ void *Agents::ca_setup( int functionId, void *argument, int arg_size,
     else {
       // calculate argument position
       int arg_pos = 0;
-      for ( int dest = 0; dest <= i; dest++ ) 
-	arg_pos += localAgents[i];
+      for ( int dest = 0; dest <= i; dest++ ) {
+	arg_pos += localAgents[dest];
+	cerr << "Agents.callAll: calc arg_pos = " << arg_pos << " localAgents[" << dest << "] = " 
+	     << localAgents[dest] << endl;
+      }
 
       m = new Message( type, this->handle, functionId,
 		       // argument body
@@ -90,7 +98,7 @@ void *Agents::ca_setup( int functionId, void *argument, int arg_size,
       cerr << "Agents.callAll: to rank[" << ( i+ 1 )
 	   << "] arg_size = " << arg_size
 	   << " arg_pos = " << arg_size * arg_pos 
-	   << " arg_size = " << arg_size * localAgents[i + 1];
+	   << " arg_size = " << arg_size * localAgents[i + 1] << endl;
     }
 
     // send it
@@ -130,9 +138,13 @@ void *Agents::ca_setup( int functionId, void *argument, int arg_size,
   else
     Agents_base::callAll( functionId, (void *)argument, arg_size, ret_size, 0);
 
-  // Synchronized with all slave processes
-  MASS::barrier_all_slaves( localAgents );
+  // confirm all threads are done with agents.callAll
+  Mthread::barrierThreads( 0 );
   localAgents[0] = localPopulation;
+
+  // Synchronized with all slave processes by main thread.
+  MASS::barrier_all_slaves( MASS_base::currentReturns, 0, MASS_base::currentRetSize,
+			    localAgents );
 
   total = 0;
   for ( int i = 0; i < MASS_base::systemSize; i++ ) {
@@ -142,7 +154,7 @@ void *Agents::ca_setup( int functionId, void *argument, int arg_size,
 	 << localAgents[i] << endl;
   }
 
-  return NULL;
+  return (void *)MASS_base::currentReturns;
 }
 
 //If statements to check for each condition. No else, as an Agent
@@ -179,6 +191,9 @@ void Agents::ma_setup( ) {
 
   // callall implementatioin
   Agents_base::manageAll( 0 ); // 0 = the main thread id
+
+  // confirm all threads are done with agents.callAll
+  Mthread::barrierThreads( 0 );
 
   // Synchronized with all slave processes
   MASS::barrier_all_slaves( localAgents );

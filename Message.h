@@ -146,6 +146,16 @@ class Message {
     dimension( 0 ), agent_population( -1 ),
     exchangeReqList( NULL ), migrationReqList( NULL ) { };
 
+  // ACK used for AGENTS_CALL_ALL_RETURN_OBJECT
+    Message( ACTION_TYPE action, void *argument, int arg_size, int localPopulation ) :
+    action( action ), size( NULL ), 
+    handle( VOID_HANDLE ), dest_handle( VOID_HANDLE ),
+    functionId( 0 ), classname( "" ), 
+    argument( argument ), argument_size( arg_size ), return_size( 0 ),
+    argument_in_heap( false ), hosts( NULL ), destinations( NULL ),
+    dimension( 0 ), agent_population( localPopulation ),
+    exchangeReqList( NULL ), migrationReqList( NULL ) { };
+
   // ACK used for AGENTS_INITIALIZE and AGENTS_CALL_ALL_VOID_OBJECT
   Message( ACTION_TYPE action, int localPopulation ) :
     action( action ), size( NULL ), 

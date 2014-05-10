@@ -21,7 +21,9 @@ class MProcess {
 
   void sendAck( );
   void sendAck( int localPopulation );
-  void sendReturnValues( void *argument, int places_size, int return_size );
+  void sendReturnValues( void *argument, int nPlaces, int return_size );
+  void sendReturnValues( void *argument, int nAgents, int return_size, 
+			 int localPopulation );
   void sendMessage( Message *msg );
   Message *receiveMessage( );
 };
