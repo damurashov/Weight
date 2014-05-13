@@ -17,6 +17,8 @@ class Nomad : public Agent {
   static const int killMe_ = 3;
   static const int move_ = 4;
   static const int callalltest_ = 5;
+  static const int addData_ = 6;
+  static const int move2_ = 7;
   
   Nomad( void *argument ) : Agent( argument ) {
     MASS_base::log( "BORN!!" );
@@ -30,6 +32,8 @@ class Nomad : public Agent {
     case killMe_: return killMe( argument );
     case move_: return move( argument );
     case callalltest_: return callalltest( argument );
+    case addData_: return addData( argument );
+    case move2_: return move2( argument );
     }
     return NULL;
   };
@@ -41,7 +45,8 @@ class Nomad : public Agent {
   void *killMe( void *argument );
   void *move( void *argument );
   void *callalltest( void *argument );
-
+  void *addData( void *argument );
+  void *move2( void *argument );
 };
 
 #endif

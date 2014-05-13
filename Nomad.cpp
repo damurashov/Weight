@@ -87,3 +87,36 @@ void *Nomad::callalltest( void *argument ) {
 
   return ret_val;
 }
+
+void *Nomad::addData( void *argument ) {
+  migratableDataSize = 24;
+  migratableData = (void *)(new char[migratableDataSize]);
+  bzero( migratableData, migratableDataSize );
+  
+  ostringstream convert;
+  convert << "my agent id = " << agentId;
+  memcpy( migratableData, (void *)( convert.str( ).c_str( ) ), 
+	  migratableDataSize );
+
+  convert << " dataSize = " << migratableDataSize;
+  MASS_base::log( convert.str( ) );
+
+  return NULL;
+}
+
+void *Nomad::move2( void *argument ) {
+
+  int x = ( place->index[0] + 20 ) % 100;
+  vector<int> dest;
+  dest.push_back( x );
+  dest.push_back( 0 );
+  migrate( dest );  
+
+  ostringstream convert;
+  convert << "my agent(" << agentId << ") will move from "
+	  << "[" << place->index[0] << "][" << place->index[1]
+	  << "] to [" << x << "][0]";
+  MASS_base::log( convert.str( ) );
+
+  return NULL;
+}

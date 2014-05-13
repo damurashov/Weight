@@ -458,6 +458,11 @@ void Agents_base::manageAll( int tid ) {
 
     if( destCoord[0] != -1 ) { 
       // destination valid
+      convert.str( "" );
+      convert << "getGlobalLinearIndexFromGlobalArrayIndex: evaluatedPlace = " << evaluatedPlaces
+	      << " destCoard = " << destCoord;
+      MASS_base::log(convert.str());
+
       int globalLinearIndex = 
 	evaluatedPlaces->getGlobalLinearIndexFromGlobalArrayIndex( destCoord,
 						  evaluatedPlaces->size,
@@ -776,7 +781,7 @@ void *Agents_base::processAgentMigrationRequest( void *param ) {
       (Place *)(places_dllclass->places[destinationLocalLinearIndex]);
 
     // push this agent into the place and the entire agent bag.
-    agent->index = dstPlace->index;
+    agent->place = dstPlace;
     pthread_mutex_lock(&MASS_base::request_lock);
     dstPlace->agents.push_back( agent );
     agents_dllclass->agents->push_back( agent );

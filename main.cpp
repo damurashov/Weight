@@ -88,5 +88,9 @@ int main( int argc, char *args[] ) {
     cout << retvals[i] << endl;
   delete retvals;
 
+  nomad->callAll( Nomad::addData_ );
+  nomad->callAll( Nomad::move2_ );
+  nomad->manageAll( );
+
   MASS::finish( );
 }

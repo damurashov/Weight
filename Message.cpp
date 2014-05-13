@@ -530,14 +530,34 @@ void Message::deserialize( char *msg, int msg_size ) {
 	      << agent->migratableDataSize;
       MASS_base::log( convert.str() );
 
-      if ( agent->migratableData != NULL )
-	free( agent->migratableData );
+      convert.str( "" );
+      convert << "Deserialize: agentId(" << agent << ")[" << agent->agentId << "] data = "
+	      << (char *)cur;
+      MASS_base::log( convert.str() );
+
       if ( agent->migratableDataSize > 0 ) {
-	agent->migratableData = malloc( agent->migratableDataSize );
-	memcpy( (*migrationReqList)[i]->agent->migratableData, (void *)cur,
-		(*migrationReqList)[i]->agent->migratableDataSize );
-	cur += (*migrationReqList)[i]->agent->migratableDataSize;
+	MASS_base::log( "A" );
+	// agent->migratableData = malloc( agent->migratableDataSize );
+	agent->migratableData = (void *)(new char[agent->migratableDataSize] );
+
+      convert.str( "" );
+      convert << "Deserialize: agentId(" << agent << ")[" << agent->agentId << "] malloc = "
+	      << agent->migratableData;
+      MASS_base::log( convert.str() );
+
+
+	memcpy( agent->migratableData, (void *)cur,
+		agent->migratableDataSize );
+	MASS_base::log( "C" );
+	cur += agent->migratableDataSize;
+	MASS_base::log( "D" );
       }
+
+      convert.str( "" );
+      convert << "Deserialize: agentId(" << agent << ")[" << agent->agentId << "] migratableData = "
+	      << agent->migratableData;
+      MASS_base::log( convert.str() );
+
       request = new AgentMigrationRequest( destIndex, agent );
       migrationReqList->push_back( request );
     }
