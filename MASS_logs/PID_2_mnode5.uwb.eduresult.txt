@@ -1,6 +1,0 @@
-Mthread[1] inovked
-Mthread[2] inovked
-Mthread[3] inovked
-Initialized threads - # 4
-started
-receiveMessage error
