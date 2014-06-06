@@ -278,6 +278,8 @@ void MProcess::start( ) {
 	MASS_base::currentArgument = (void *)argument;
 	MASS_base::currentArgSize = ( MASS_base::currentAgents->localPopulation> 0 ) ?
           argument_size / MASS_base::currentAgents->localPopulation : 0;
+	MASS_base::currentArgSize = argument_size / 
+	MASS_base::currentAgents->localPopulation;
 	MASS_base::currentRetSize = m->getReturnSize();
 	MASS_base::currentMsgType = m->getAction();
 	MASS_base::currentReturns = new char[MASS_base::currentAgents->localPopulation * MASS_base::currentRetSize];
