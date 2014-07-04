@@ -72,7 +72,8 @@ char *Message::serialize( int &msg_size ) {
     msg_size += classname.size( ); // classname
     msg_size += sizeof( int );     // argument_size;
     msg_size += argument_size;     // void *argument
-    msg_size += hosts->size( );     // hosts->size( );
+    msg_size += sizeof( int );     // int boundary_width;
+    msg_size += hosts->size( );    // hosts->size( );
     for ( int i = 0; i < (int )hosts->size( ); i++ ) {
       msg_size += sizeof( int ); msg_size += (*hosts)[i].size( ); // hosts[i]
     }
@@ -103,6 +104,8 @@ char *Message::serialize( int &msg_size ) {
     pos += sizeof( int ); // argument_size
     memcpy( (void *)pos, argument, argument_size );      // argument
     pos += argument_size;
+    *(int *)pos = boundary_width;                        // bounary_width
+    pos += sizeof( int );
     *(int *)pos = hosts->size( );  pos += sizeof( int ); // hosts->size( );
     for ( int i = 0; i < ( int )hosts->size( ); i++ ) {
       *(int *)pos 
@@ -265,6 +268,7 @@ char *Message::serialize( int &msg_size ) {
     break;
     
   case PLACES_EXCHANGE_ALL_REMOTE_RETURN_OBJECT:
+  case PLACES_EXCHANGE_BOUNDARY_REMOTE_REQUEST:
     // calculate msg_size
     msg_size += sizeof( int ); // int inMessageSizes a.k.a. argument_size
     msg_size += argument_size; // retVals a.k.a. argument
@@ -319,6 +323,7 @@ char *Message::serialize( int &msg_size ) {
     
     break;
   case AGENTS_MANAGE_ALL: 
+  case PLACES_EXCHANGE_BOUNDARY:
     // calculate msg_size
     msg_size += sizeof( int );          // it handle;
     
@@ -418,21 +423,22 @@ void Message::deserialize( char *msg, int msg_size ) {
       */ 
       size->push_back( *(int *)cur ); cur += sizeof( int ); // size[i];
     }
-    handle = *(int *)cur; cur += sizeof( int ); // handle
-    classname_size = *(int *)cur; cur += sizeof( int ); // classname_size
+    handle = *(int *)cur; cur += sizeof( int );          // handle
+    classname_size = *(int *)cur; cur += sizeof( int );  // classname_size
     classname = ""; classname.append( cur, classname_size ); // classname
     // MASS_base::log( classname.c_str( ) );
 
     cur += classname_size; 
-    argument_size = *(int *)cur; cur += sizeof( int ); // argument_size
+    argument_size = *(int *)cur; cur += sizeof( int );   // argument_size
     argument_in_heap = ( ( argument = new char[argument_size] ) != NULL ); 
     /*
     convert.str( "" ); convert << "argument_size = " << argument_size << endl;
     MASS_base::log( convert.str( ) );
     */
-    memcpy( argument, (void *)cur, argument_size );     // argument
+    memcpy( argument, (void *)cur, argument_size );      // argument
     cur += argument_size;
-    hosts_size = *(int *)cur; cur += sizeof( int ); // hosts.size( );
+    boundary_width = *(int *)cur; cur += sizeof( int );  // boundary_width
+    hosts_size = *(int *)cur; cur += sizeof( int );      // hosts.size( );
     /*
     convert.str( "" ); convert << "host_size = " << hosts_size << endl;
     MASS_base::log( convert.str( ) );
@@ -612,18 +618,25 @@ void Message::deserialize( char *msg, int msg_size ) {
     return;
 
   case PLACES_EXCHANGE_ALL_REMOTE_RETURN_OBJECT: 
-    action = *(ACTION_TYPE *)cur; cur += sizeof( ACTION_TYPE ); // action
-    argument_size = *(int *)cur;  cur += sizeof( int );         // arg_size
-    
+  case PLACES_EXCHANGE_BOUNDARY_REMOTE_REQUEST:
     if(printOutput == true){
         convert.str( "" );
-        convert << "PLACES_EXCHANGE_ALL_REMOTE_RETURN_OBJECT: deserialize"
+        convert << "PLACES_EXCHANGE_ALL_REMOTE_RETURN_OBJECT: will deserialize"
 	        << " argument_size = " << argument_size;
         MASS_base::log( convert.str( ) );
     }
-
+    action = *(ACTION_TYPE *)cur; cur += sizeof( ACTION_TYPE ); // action
+    argument_size = *(int *)cur;  cur += sizeof( int );         // arg_size
+    
     argument_in_heap = ( ( argument = new char[argument_size] ) != NULL ); 
     memcpy( argument, (void *)cur, argument_size );              // argument
+
+    if(printOutput == true){
+        convert.str( "" );
+        convert << "PLACES_EXCHANGE_ALL_REMOTE_RETURN_OBJECT: deserialization done"
+	        << " argument_size = " << argument_size;
+        MASS_base::log( convert.str( ) );
+    }
 
     return;
 
@@ -664,6 +677,7 @@ void Message::deserialize( char *msg, int msg_size ) {
 
    return;
   case AGENTS_MANAGE_ALL:
+  case PLACES_EXCHANGE_BOUNDARY:
     action = *(ACTION_TYPE *)cur;	cur += sizeof( ACTION_TYPE );	//action
     handle = *(int *)cur;		cur += sizeof( int );		//handle
 

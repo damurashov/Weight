@@ -150,12 +150,21 @@ Message *ExchangeHelper::receiveMessage( int rank ) {
     for ( nRead = 0;                                   // receive a msg body
 	  ( nRead += read( sockets[rank], buf + nRead, size - nRead ) ) 
 	    < size; );
+
     Message *m = new Message( );
-    m->deserialize( buf, size );
 
     if(printOutput == true){
         convert.str( "" );
         convert << "exchange.receiveMessage has received from rank: " << rank;
+        MASS_base::log( convert.str( ) );
+    }
+
+    m->deserialize( buf, size );
+
+    if(printOutput == true){
+        convert.str( "" );
+        convert << "exchange.receiveMessage has deserialized from rank: " 
+		<< rank;
         MASS_base::log( convert.str( ) );
     }
     return m;

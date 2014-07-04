@@ -10,9 +10,10 @@ using namespace std;
 class Places_base {
   friend class MProcess;
   friend class Agents_base;
+  friend class Place;
  public:
-  Places_base( int handle, string className, void *argument, int argument_size,
-	  int dim, int size[] );
+  Places_base( int handle, string className, int boundary_width, 
+	       void *argument, int argument_size, int dim, int size[] );
   ~Places_base( );
 
   void callAll( int functionId, void *argument, int tid );
@@ -20,6 +21,7 @@ class Places_base {
 		  int ret_size, int tid );
   void exchangeAll( Places_base *dstPlaces, int functionId, 
 		    vector<int*> *destinations, int tid );
+  void exchangeBoundary( );      // called from Places.exchangeBoundary( ) 
 
   int getHandle( ) { return handle; };
   int getPlacesSize( ) { return places_size; };
@@ -33,6 +35,8 @@ class Places_base {
   int upper_boundary;
   int places_size;
   int *size;
+  int shadow_size;
+  int boundary_width;
   
   void init_all( void *argument, int argument_size );
   vector<int> getGlobalArrayIndex( int singleIndex );
@@ -45,7 +49,7 @@ class Places_base {
 						int dest_size[],
 						int dest_dimension );
   int getRankFromGlobalLinearIndex( int globalLinearIndex );
-  
+  static void *exchangeBoundary_helper( void *param );  
   static void *sendMessageByChild( void *param );
   struct ExchangeSendMessage {
     int rank;

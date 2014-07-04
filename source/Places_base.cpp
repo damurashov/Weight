@@ -10,9 +10,23 @@ const bool printOutput = false;
 //const bool printOutput = true;
 
 
-Places_base::Places_base( int handle, string className, void *argument,
-		int argument_size, int dim, int size[] )
-  : handle( handle ), className( className ), dimension( dim ) {
+Places_base::Places_base( int handle, string className, int boundary_width,
+			  void *argument, int argument_size, 
+			  int dim, int size[] )
+  : handle( handle ), className( className ), dimension( dim ), 
+    boundary_width( boundary_width ) {
+
+  ostringstream convert;
+  if ( printOutput == true ) {
+      convert << "Places_base handle = " << handle 
+	      << ", class = " << className
+	      << ", argument_size = " << argument_size 
+	      << ", argument = " << (char *)argument
+	      << ", boundary_width = " << boundary_width
+	      << ", dim = " << dim
+	      << endl;
+    MASS_base::log( convert.str( ) );
+  }
 
   if ( size == NULL ) 
     // if given in "int dim, ..." format, init_all() must be called later 
@@ -29,6 +43,15 @@ Places_base::~Places_base( ) {
   DllClass *dllclass = MASS_base::dllMap[handle];
   for ( int i = 0; i < places_size; i++ )
     dllclass->destroy( dllclass->places[i] );
+
+  if ( dllclass->left_shadow != NULL )
+    for ( int i = 0; i < shadow_size; i++ )
+      dllclass->destroy( dllclass->left_shadow[i] );
+
+  if ( dllclass->right_shadow != NULL )
+    for ( int i = 0; i < shadow_size; i++ )
+      dllclass->destroy( dllclass->right_shadow[i] );
+
   dlclose( dllclass->stub );
 }
 
@@ -36,7 +59,7 @@ void Places_base::init_all( void *argument, int argument_size ) {
   // For debugging
   ostringstream convert;
   if(printOutput == true){
-      convert << "handle = " << handle 
+      convert << "init_all handle = " << handle 
 	      << ", class = " << className
 	      << ", argument_size = " << argument_size 
 	      << ", argument = " << (char *)argument
@@ -81,6 +104,7 @@ void Places_base::init_all( void *argument, int argument_size ) {
   vector<int> index;
   index.reserve( dimension );
 
+  // initialize all Places objects
   for ( int i = 0; i < places_size; i++ ) {
     // instanitate a new place
     dllclass->places[i] = (Place *)( dllclass->instantiate( argument ) );  
@@ -90,6 +114,64 @@ void Places_base::init_all( void *argument, int argument_size ) {
       dllclass->places[i]->size.push_back( size[j] ); 
     dllclass->places[i]->index 
       = getGlobalArrayIndex( lower_boundary + i );
+  }
+
+  // allocate the left/right shadows
+
+  if ( boundary_width <= 0 ) {
+    // no shadow space.
+    shadow_size = 0;
+    dllclass->left_shadow = NULL;
+    dllclass->right_shadow = NULL;
+    return;
+  }
+
+  shadow_size 
+    = ( dimension == 1 ) ? boundary_width : total / size[0] * boundary_width;
+  if ( printOutput == true ) {
+    ostringstream convert;
+    convert << "Places_base.shadow_size = " << shadow_size;
+    MASS_base::log( convert.str( ) );
+  }
+  dllclass->left_shadow = ( MASS_base::myPid == 0 ) ? 
+    NULL : new Place*[ shadow_size ];
+  dllclass->right_shadow = ( MASS_base::myPid == MASS_base::systemSize - 1 ) ? 
+    NULL : new Place*[ shadow_size ];    
+
+  // initialize the left/right shadows
+  for ( int i = 0; i < shadow_size; i++ ) {
+
+    // left shadow initialization
+    if ( dllclass->left_shadow != NULL ) {
+      // instanitate a new place
+      dllclass->left_shadow[i] 
+	= (Place *)( dllclass->instantiate( argument ) );  
+      dllclass->left_shadow[i]->size.reserve( dimension );
+      for ( int j = 0; j < dimension; j++ )
+	// define size[] and index[]
+	dllclass->left_shadow[i]->size.push_back( size[j] ); 
+      dllclass->left_shadow[i]->index 
+	= getGlobalArrayIndex( lower_boundary - shadow_size + i );
+      dllclass->left_shadow[i]->outMessage = NULL;
+      dllclass->left_shadow[i]->outMessage_size = 0;
+      dllclass->left_shadow[i]->inMessage_size = 0;
+    }
+
+    // right shadow initialization
+    if ( dllclass->right_shadow != NULL ) {
+      // instanitate a new place
+      dllclass->right_shadow[i] 
+	= (Place *)( dllclass->instantiate( argument ) );  
+      dllclass->right_shadow[i]->size.reserve( dimension );
+      for ( int j = 0; j < dimension; j++ )
+	// define size[] and index[]
+	dllclass->right_shadow[i]->size.push_back( size[j] ); 
+      dllclass->right_shadow[i]->index 
+	= getGlobalArrayIndex( upper_boundary + i );
+      dllclass->right_shadow[i]->outMessage = NULL;
+      dllclass->right_shadow[i]->outMessage_size = 0;
+      dllclass->right_shadow[i]->inMessage_size = 0;
+    }    
   }
 }
 
@@ -587,7 +669,7 @@ void *Places_base::processRemoteExchangeRequest( void *param ) {
     }
     
   }
-  delete messageToDest; // messageToDest->orgReuqest is not more used. delete it.
+  delete messageToDest; // messageToDest->orgReuqest is no longer used. delete it.
   delete messageFromDest;
 
   return NULL;
@@ -597,6 +679,199 @@ void *Places_base::sendMessageByChild( void *param ) {
   int rank = ((struct ExchangeSendMessage *)param)->rank;
   Message *message = (Message *)((struct ExchangeSendMessage *)param)->message;
   MASS_base::exchange.sendMessage( rank, message );
+  return NULL;
+}
+
+void Places_base::exchangeBoundary( ) {
+  if ( shadow_size == 0 ) { // no boundary, no exchange
+    ostringstream convert;
+    convert << "places (handle = " << handle 
+	    << ") has NO boundary, and thus invokes NO exchange boundary";
+    MASS_base::log( convert.str( ) );
+    return;
+  }
+
+  pthread_t thread_ref = 0l;
+
+  if ( printOutput == true ) {
+    MASS_base::log( "exchangeBoundary starts" );
+  }
+
+  if ( MASS_base::myPid < MASS_base::systemSize - 1 ) {
+    // create a child in charge of handling the right shadow.
+    int param[2];
+    param[0] = 'R';
+    param[1] = handle;
+    param[2] = places_size;
+    param[3] = shadow_size;
+    if ( printOutput == true ) {
+      MASS_base::log( "exchangeBoundary: pthread_create( helper, R )" );
+    }
+    pthread_create( &thread_ref, NULL, exchangeBoundary_helper, param );
+  }
+
+  if ( MASS_base::myPid > 0 ) {
+    // the main takes charge of handling the left shadow.
+    int param[2];
+    param[0] = 'L';
+    param[1] = handle;    
+    param[2] = places_size;
+    param[3] = shadow_size;
+    if ( printOutput == true ) {
+      MASS_base::log( "exchangeBoundary: main thread( helper, L )" );
+    }
+    exchangeBoundary_helper( param );
+  }
+
+  if ( thread_ref != 0l ) {
+    // we are done with exchangeBoundary
+    int error_code = pthread_join( thread_ref, NULL ); 
+    if ( error_code != 0 ) { // if we remove this if-clause, we will get a segmentation fault! Why?
+      ostringstream convert;
+      convert << "exchangeBoundary: the main performs pthread_join with the child...error_code = " 
+	      << error_code;
+      MASS_base::log( convert.str( ) );
+    }
+  }
+}
+
+void *Places_base::exchangeBoundary_helper( void *param ) {
+  // identifiy the boundary space;
+  char direction = ( (int *)param )[0];
+  int handle = ( (int *)param )[1];
+  int places_size = ( (int *)param )[2];
+  int shadow_size = ( (int *)param )[3];
+  DllClass *dllclass = MASS_base::dllMap[handle];
+
+  ostringstream convert;
+  if ( printOutput == true ) {
+      convert << "Places_base.exchangeBoundary_helper direction = " 
+	      << direction
+	      << ", handle = " << handle
+	      << ", places_size = " << places_size 
+	      << ", shadow_size = " << shadow_size
+	//<< ", outMessage_size = " << outMessage_size
+	      << endl;
+    MASS_base::log( convert.str( ) );
+  }
+
+  Place **boundary = ( direction == 'L' ) ? 
+    dllclass->places : 
+    dllclass->places + ( places_size - shadow_size );
+
+  // allocate a buffer to contain all outMessages in this boundary
+  int outMessage_size = boundary[0]->outMessage_size;
+  int buffer_size = shadow_size * outMessage_size;
+  char *buffer = (char *)( malloc( buffer_size ) );
+  
+  // copy all the outMessages into the buffer
+  char *pos = buffer; // we shouldn't change the buffer pointer.
+  for ( int i = 0; i < shadow_size; i++ ) {
+    memcpy( pos, boundary[i]->outMessage, outMessage_size );
+    pos += outMessage_size;
+  }
+
+  if ( printOutput == true ) {
+    convert.str( "" );
+    convert << "Places_base.exchangeBoundary_helper direction = " 
+	    << direction
+	    << ", outMessage_size = " << outMessage_size
+	    << endl;
+    pos = buffer;
+    for ( int i = 0; i < shadow_size; i++ ) {
+      convert << *(int *)pos << endl;
+      pos += outMessage_size;
+    }
+    MASS_base::log( convert.str( ) );
+  }
+
+  // create a PLACES_EXCHANGE_BOUNDARY_REMOTE_REQUEST message
+  Message *messageToDest = 
+    new Message( Message::PLACES_EXCHANGE_BOUNDARY_REMOTE_REQUEST,
+		 buffer, buffer_size );
+
+  // compose a PLACES_EXCHANGE_BOUNDARY_REMOTE_REQUEST message
+  int destRank 
+    = ( direction == 'L' ) ? MASS_base::myPid - 1 : MASS_base::myPid + 1;
+  struct ExchangeSendMessage rankNmessage;
+  rankNmessage.rank = destRank;
+  rankNmessage.message = messageToDest;
+
+  if ( printOutput == true ) {
+    convert.str( "" );
+    convert << "Places_base.exchangeBoundary_helper direction = " 
+	    << direction
+	    << ", rankNmessage.rank = " << rankNmessage.rank
+	    << endl;
+    MASS_base::log( convert.str( ) );
+  }
+
+  // send it to my neighbor with a child
+  pthread_t thread_ref = 0l;
+  pthread_create( &thread_ref, NULL, sendMessageByChild, &rankNmessage );
+
+  // receive a PLACES_EXCHANGE_BOUNDARY_REMOTE_REQUEST message from my neighbor
+  Message *messageFromDest = MASS_base::exchange.receiveMessage( destRank );
+
+  if ( printOutput == true ) {
+    convert.str( "" );
+    convert << "Places_base.exchangeBoundary_helper direction = " 
+	    << direction
+	    << ", messageFromDest = " << messageFromDest
+	    << endl;
+    MASS_base::log( convert.str( ) );
+  }
+
+  // wait for the child termination
+  if ( thread_ref != 0l ) {
+    if ( pthread_join( thread_ref, NULL ) == 0 ) {
+      if ( printOutput == true ) {
+	convert.str( "" );
+	convert << "Places_base.exchangeBoundary_helper direction = " 
+		<< direction
+		<< ", sendMessageByChild terminated"
+		<< endl;
+	MASS_base::log( convert.str( ) );
+      }
+    }
+  }
+
+  // delete the message sent
+  free( buffer ); // this is because messageToDest->argument_in_heap is false
+  buffer = 0;
+  delete messageToDest;
+  messageToDest = 0;
+
+  // extract the message reeived and copy it to the corresponding shadow.
+  Place **shadow = ( direction == 'L' ) ? 
+    dllclass->left_shadow : dllclass->right_shadow;
+  buffer = (char *)( messageFromDest->getArgumentPointer( ) );
+
+  // copy the buffer contents into the corresponding shadow
+  for ( int i = 0; i < shadow_size; i++ ) {
+    if ( shadow[i]->outMessage_size == 0 ) {
+      // first allocate a space
+      shadow[i]->outMessage_size = outMessage_size;
+      shadow[i]->outMessage = malloc( outMessage_size );
+    }
+    memcpy( shadow[i]->outMessage, buffer, outMessage_size );
+    if ( printOutput == true ) {
+      convert.str( "" );
+      convert << "Places_base.exchangeBoundary_helper direction = " 
+	      << direction
+	      << ", shadow[" << i << "]->outMessage = " 
+	      << shadow[i]->outMessage
+	      << ", buffer = " << *(int *)buffer
+	      << endl;
+      MASS_base::log( convert.str( ) );
+    }
+    buffer += outMessage_size;
+  }  
+
+  // delete the message received
+  // note that messageFromDest->argument is deleted automatically.
+  delete messageFromDest;
+
   return NULL;
 }
 

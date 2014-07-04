@@ -23,24 +23,26 @@ class Message {
 		     PLACES_EXCHANGE_ALL,                      // 7
 		     PLACES_EXCHANGE_ALL_REMOTE_REQUEST,       // 8
 		     PLACES_EXCHANGE_ALL_REMOTE_RETURN_OBJECT, // 9
+		     PLACES_EXCHANGE_BOUNDARY,                 // 10
+		     PLACES_EXCHANGE_BOUNDARY_REMOTE_REQUEST,  // 11
 		     
-		     AGENTS_INITIALIZE,                        // 10
-		     AGENTS_CALL_ALL_VOID_OBJECT,              // 11
-		     AGENTS_CALL_ALL_RETURN_OBJECT,            // 12
-     		     AGENTS_MANAGE_ALL,                        // 13
-		     AGENTS_MIGRATION_REMOTE_REQUEST           // 14
+		     AGENTS_INITIALIZE,                        // 12
+		     AGENTS_CALL_ALL_VOID_OBJECT,              // 13
+		     AGENTS_CALL_ALL_RETURN_OBJECT,            // 14
+     		     AGENTS_MANAGE_ALL,                        // 15
+		     AGENTS_MIGRATION_REMOTE_REQUEST           // 16
   };
 
   // PLACES_INITIALIZE
   Message( ACTION_TYPE action,
 	   vector<int> *size, int handle,  string classname, void *argument, 
-	   int arg_size, vector<string> *hosts ) :
+	   int arg_size, int boundary_width, vector<string> *hosts ) :
     action( action ), size( size ), 
     handle( handle ), dest_handle( VOID_HANDLE ), 
     functionId( 0 ), classname( classname ), 
     argument( argument ),  argument_size( arg_size ), return_size( 0 ),
     argument_in_heap( false ), hosts( hosts ), destinations( NULL ),
-    dimension( 0 ), agent_population( -1 ), 
+    dimension( 0 ), agent_population( -1 ), boundary_width( boundary_width ),
     exchangeReqList( NULL ),
     migrationReqList( NULL ) { };
 
@@ -56,7 +58,7 @@ class Message {
     functionId( functionId ), classname( "" ), 
     argument( argument ), argument_size( arg_size ), return_size( ret_size ),
     argument_in_heap( false ), hosts( NULL ), destinations( NULL ),
-    dimension( 0 ), agent_population( -1 ), 
+    dimension( 0 ), agent_population( -1 ), boundary_width( 0 ),
     exchangeReqList( NULL ), migrationReqList( NULL ) { };
 
   // PLACES_EXCHANGE_ALL
@@ -68,7 +70,7 @@ class Message {
     functionId( functionId ), classname( "" ),
     argument( NULL ), argument_size( 0 ), return_size( 0 ),
     argument_in_heap( false ), hosts( NULL ), destinations( destinations ),
-    dimension( dimension ), agent_population( -1 ),
+    dimension( dimension ), agent_population( -1 ), boundary_width( 0 ),
     exchangeReqList( NULL ), migrationReqList( NULL ) { };
 
   // PLACES_EXCHANGE_ALL_REMOTE_REQUEST
@@ -80,17 +82,18 @@ class Message {
     functionId( functionId ), classname( "" ),
     argument( NULL ), argument_size( 0 ), return_size( 0 ),
     argument_in_heap( false ), hosts( NULL ), destinations( NULL ),
-    dimension( 0 ), agent_population( -1 ), 
+    dimension( 0 ), agent_population( -1 ), boundary_width( 0 ),
     exchangeReqList( exchangeReqList ), migrationReqList( NULL ) { };
 
-  // PLACES_EXCHANGE_ALL_REMOTE_RETURN_OBJECT
+  // PLACES_EXCHANGE_ALL_REMOTE_RETURN_OBJECT and 
+  // PLACES_EXCHANGE_BOUNDARY_REMOTE_REQUEST
   Message( ACTION_TYPE action, char *retVals, int retValsSize ) :
     action( action ), size( 0 ),
     handle( VOID_HANDLE ), dest_handle( VOID_HANDLE ),
     functionId( 0 ), classname( "" ),
     argument( retVals ), argument_size( retValsSize ), return_size( 0 ),
     argument_in_heap( false ), hosts( NULL ), destinations( NULL ),
-    dimension( 0 ), agent_population( -1 ), 
+    dimension( 0 ), agent_population( -1 ), boundary_width( 0 ),
     exchangeReqList( NULL ), migrationReqList( NULL ) { };
 
   // AGENTS_INITIALIZE
@@ -102,17 +105,17 @@ class Message {
     functionId( 0 ), classname( className ),
     argument( argument ), argument_size( argument_size ), return_size( 0 ),
     argument_in_heap( false ), hosts( NULL ), destinations( NULL ),
-    dimension( 0 ), agent_population( initPopulation ),
+    dimension( 0 ), agent_population( initPopulation ), boundary_width( 0 ),
     exchangeReqList( NULL ), migrationReqList( NULL ) { };
 
-  // AGENTS_MANAGE_ALL
+  // AGENTS_MANAGE_ALL and PLACES_EXCHANGE_BOUNDARY
   Message( ACTION_TYPE action, int handle, int dummy ) :
     action( action ), size( 0 ), 
     handle( handle ), dest_handle( handle ),
     functionId( 0 ), classname( "" ),
     argument( NULL ), argument_size( 0 ), return_size( 0 ),
     argument_in_heap( false ), hosts( NULL ), destinations( NULL ),
-    dimension( 0 ), agent_population( -1 ),
+    dimension( 0 ), agent_population( -1 ), boundary_width( 0 ),
     exchangeReqList( NULL ), migrationReqList( NULL ) { };
 
   // AGENTS_MIGRATION_REMOTE_REQUEST
@@ -123,7 +126,7 @@ class Message {
     functionId( 0), classname( "" ),
     argument( NULL ), argument_size( 0 ), return_size( 0 ),
     argument_in_heap( false ), hosts( NULL ), destinations( NULL ),
-    dimension( 0 ), agent_population( -1 ), 
+    dimension( 0 ), agent_population( -1 ), boundary_width( 0 ),
     exchangeReqList( NULL ), migrationReqList( migrationReqList ) { };
 
   // FINISH
@@ -134,7 +137,7 @@ class Message {
     functionId( 0 ), classname( "" ), 
     argument( NULL ),  argument_size( 0 ),  return_size( 0 ),
     argument_in_heap( false ), hosts( NULL ), destinations( NULL ),
-    dimension( 0 ), agent_population( -1 ),
+    dimension( 0 ), agent_population( -1 ), boundary_width( 0 ),
     exchangeReqList( NULL ), migrationReqList( NULL ) {  };
 
   // ACK used for PLACES_CALL_ALL_RETURN_OBJECT
@@ -144,7 +147,7 @@ class Message {
     functionId( 0 ), classname( "" ), 
     argument( argument ), argument_size( arg_size ), return_size( 0 ),
     argument_in_heap( false ), hosts( NULL ), destinations( NULL ),
-    dimension( 0 ), agent_population( -1 ),
+    dimension( 0 ), agent_population( -1 ), boundary_width( 0 ),
     exchangeReqList( NULL ), migrationReqList( NULL ) { };
 
   // ACK used for AGENTS_CALL_ALL_RETURN_OBJECT
@@ -154,7 +157,7 @@ class Message {
     functionId( 0 ), classname( "" ), 
     argument( argument ), argument_size( arg_size ), return_size( 0 ),
     argument_in_heap( false ), hosts( NULL ), destinations( NULL ),
-    dimension( 0 ), agent_population( localPopulation ),
+    dimension( 0 ), agent_population( localPopulation ), boundary_width( 0 ),
     exchangeReqList( NULL ), migrationReqList( NULL ) { };
 
   // ACK used for AGENTS_INITIALIZE and AGENTS_CALL_ALL_VOID_OBJECT
@@ -164,7 +167,7 @@ class Message {
     functionId( 0 ), classname( "" ), 
     argument( NULL ), argument_size( 0 ), return_size( 0 ),
     argument_in_heap( false ), hosts( NULL ), destinations( NULL ),
-    dimension( 0 ), agent_population( localPopulation ),
+    dimension( 0 ), agent_population( localPopulation ), boundary_width( 0 ),
     exchangeReqList( NULL ), migrationReqList( NULL ) { };
 
   // EMPTY
@@ -174,7 +177,7 @@ class Message {
     functionId( 0 ), classname( "" ), 
     argument( NULL ),  argument_size( 0 ), return_size( 0 ),
     argument_in_heap( false ), hosts( NULL ) , destinations( NULL ),
-    dimension( 0 ), agent_population( -1 ),
+    dimension( 0 ), agent_population( -1 ), boundary_width( 0 ),
     exchangeReqList( NULL ), migrationReqList( NULL ) {  };
 
   ~Message( ); // delete argument and hosts.
@@ -190,8 +193,10 @@ class Message {
   string getClassname( ) { return classname; };
   bool isArgumentValid( ) { return ( argument != NULL ); };
   void getArgument( void *arg ) { memcpy( arg, argument, argument_size ); };
+  void *getArgumentPointer( ) { return argument; };
   int getArgumentSize( ) { return argument_size; };
   int getReturnSize( ) { return return_size; };
+  int getBoundaryWidth( ) { return boundary_width; };
   int getAgentPopulation( ) { return agent_population; };
   vector<string> getHosts( ) { return *hosts; };
   vector<int*> *getDestinations( ) { return destinations; };
@@ -215,6 +220,7 @@ class Message {
   vector<int*> *destinations; // all destinations of exchangeAll
   int dimension;
   int agent_population;
+  int boundary_width;
   vector<RemoteExchangeRequest*> *exchangeReqList;
   vector<AgentMigrationRequest*> *migrationReqList;
 };

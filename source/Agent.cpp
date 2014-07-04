@@ -17,7 +17,7 @@ void Agent::spawn( int numAgents, vector<void*> arguments, int arg_size){
 bool Agent::migrate( vector<int> index ){
 	vector<int> sizeVectors;
 	sizeVectors = place->getSizeVect();
-	for(int i = 0; (unsigned)i < sizeVectors.size() - 1; i++){
+	for(int i = 0; (unsigned)i < sizeVectors.size(); i++){
 		if(index[i] >= 0 && index[i] < sizeVectors[i])
 			continue;
 		else

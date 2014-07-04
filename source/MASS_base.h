@@ -22,8 +22,9 @@ class MASS_base {
   friend class Places_base;
   friend class Agents_base;
   friend class Message;
+  friend class Place;
  public:
-  static void initMASS_base( char *name, int myPid, int nProc, int port );
+  static void initMASS_base( const char *name, int myPid, int nProc, int port );
   static bool initializeThreads( int nThr );
   static void log( string msg );
   static int getCores( );

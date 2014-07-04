@@ -36,7 +36,7 @@ vector<int*> *MASS_base::currentDestinations;
 Message::ACTION_TYPE MASS_base::currentMsgType;
 ExchangeHelper MASS_base::exchange;
 
-void MASS_base::initMASS_base( char *name, int myPid, int nProc, int port ) {
+void MASS_base::initMASS_base( const char *name, int myPid, int nProc, int port ) {
   // Initialize constants
   MASS_base::hostName = name;
   MASS_base::myPid = myPid;

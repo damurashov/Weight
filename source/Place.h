@@ -26,6 +26,13 @@ class Place : MObject {
   int outMessage_size;
   int inMessage_size;
   vector<MObject*> agents;
+
+ protected:
+  void *getOutMessage( int handle, int index[] );
+  void putInMessage( int handle, int index[], int position, void *value );
+
+ private:
+  Place *findDstPlace( int handle, int index[] );
 };
 
 #endif

@@ -398,7 +398,7 @@ void Agents_base::manageAll( int tid ) {
 
       Agent* addAgent = 
 	// validate the correspondance of arguments and argumentcounter
-	( evaluationAgent->arguments.size( ) > argumentcounter ) ?
+	( int( evaluationAgent->arguments.size( ) ) > argumentcounter ) ?
 	// yes: this child agent should recieve an argument.
 	(Agent *)(agentsDllClass->instantiate(evaluationAgent->
 					      arguments[argumentcounter++])) :

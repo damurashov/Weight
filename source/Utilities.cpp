@@ -9,7 +9,8 @@ static void kbd_callback( const char *name, int name_len,
 			  const LIBSSH2_USERAUTH_KBDINT_PROMPT *prompts,
 			  LIBSSH2_USERAUTH_KBDINT_RESPONSE *responses,
 			  void **abstract ) {
-  char *password = "password";
+  string password_cpp = "password";
+  const char *password = password_cpp.c_str( );
   (void)name;
   (void)name_len;
   (void)instruction;

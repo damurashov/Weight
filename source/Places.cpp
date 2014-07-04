@@ -11,8 +11,7 @@ const bool printOutput = false;
 
 Places::Places( int handle, string className, void *argument, 
 		int argument_size, int dim, ... )
-  : Places_base( handle, className, argument, argument_size, dim, 
-		 NULL ) {
+  : Places_base( handle, className, 0, argument, argument_size, dim, NULL ) {
 
   size = new int[dim];
   // Extract each dimension's length
@@ -25,18 +24,47 @@ Places::Places( int handle, string className, void *argument,
   va_end( list );
 
   init_all( argument, argument_size ); // explicitly call Places_base.init_all
-  init_master( argument, argument_size );
+  init_master( argument, argument_size, 0 );
 }
 
 Places::Places( int handle, string className, void *argument,
 		int argument_size, int dim, int size[] )
-  : Places_base( handle, className, argument, argument_size, dim, size ) {
+  : Places_base( handle, className, 0, argument, argument_size, dim, size ) {
 
   // init_all called within Places_base
-  init_master( argument, argument_size );
+  init_master( argument, argument_size, 0 );
 }
 
-void Places::init_master( void *argument, int argument_size ) {
+Places::Places( int handle, string className, int boundary_width, 
+		void *argument, int argument_size,  int dim, ... )
+  : Places_base( handle, className, boundary_width, argument, argument_size, 
+		 dim, NULL ) {
+  
+  size = new int[dim];
+  // Extract each dimension's length
+  va_list list;
+  va_start( list, dim );
+
+  for ( int i = 0; i < dim; i++ ) {
+    size[i] = va_arg( list, int );
+  }
+  va_end( list );
+
+  init_all( argument, argument_size ); // explicitly call Places_base.init_all
+  init_master( argument, argument_size, boundary_width );
+}
+
+Places::Places( int handle, string className, int boundary_width,
+		void *argument,	int argument_size, int dim, int size[] )
+  : Places_base( handle, className, boundary_width, argument, argument_size, 
+		 dim, size ) {
+
+  // init_all called within Places_base
+  init_master( argument, argument_size, boundary_width );
+}
+
+void Places::init_master( void *argument, int argument_size, 
+			  int boundary_width ) {
 
   // convert size[dimension] to vector<int>
   vector<int> *size_vector = new vector<int>(dimension);
@@ -61,7 +89,8 @@ void Places::init_master( void *argument, int argument_size ) {
 
   Message *m = new Message( Message::PLACES_INITIALIZE, size_vector,
 			    handle, className,
-			    argument, argument_size, tmp_hosts );
+			    argument, argument_size, boundary_width, 
+			    tmp_hosts );
   
   // send a PLACES_INITIALIZE message to each slave
   for ( int i = 0; i < int( MASS::mNodes.size( ) ); i++ ) {
@@ -225,6 +254,30 @@ void Places::exchangeAll( int dest_handle, int functionId,
 
   // confirm all threads are done with exchangeAll.
   Mthread::barrierThreads( 0 );
+
+  // Synchronized with all slave processes
+  MASS::barrier_all_slaves( );
+}
+
+void Places::exchangeBoundary( ) {
+
+  // send a PLACES_EXCHANGE_BOUNDARY message to each slave
+  Message *m = new Message( Message::PLACES_EXCHANGE_BOUNDARY, this->handle, 
+			    0 ); // 0 is dummy
+
+  for ( int i =0; i < int ( MASS::mNodes.size( ) ); i++ ) {
+    MASS::mNodes[i]->sendMessage( m );
+  }
+  delete m;
+ 
+  // retrieve the corresponding places
+  MASS_base::currentPlaces = this;
+
+  // for debug
+  MASS_base::showHosts( );
+
+  // exchange boundary implementation
+  Places_base::exchangeBoundary( );
 
   // Synchronized with all slave processes
   MASS::barrier_all_slaves( );

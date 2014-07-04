@@ -45,7 +45,6 @@ void MProcess::start( ) {
         convert << "A new message received: action = " << m->getAction( ) << endl;
         MASS_base::log( convert.str( ) );
     }
-    int *data; // debug
 
     // get prepared for the following arguments for PLACES_INITIALIZE
     vector<int> size;            // size[]
@@ -89,7 +88,8 @@ void MProcess::start( ) {
 	size = m->getSize( );
 
 	places = new Places_base( m->getHandle( ), m->getClassname( ),
-				  argument, argument_size, 
+				  m->getBoundaryWidth( ),
+				  argument, argument_size,
 				  size.size( ), &size[0] );
 
 	for ( int i = 0; i < int( m->getHosts( ).size( ) ); i++ )
@@ -136,25 +136,24 @@ void MProcess::start( ) {
 	MASS_base::currentPlaces = MASS_base::placesMap[ m->getHandle( ) ];
 	MASS_base::currentFunctionId = m->getFunctionId( );
 	MASS_base::currentArgument = (void *)argument;
+
+	if(printOutput == true) {
+	  ostringstream convert;
+	  convert << "check 1 places_size = " << MASS_base::currentPlaces->places_size;
+	  MASS_base::log( convert.str( ) );
+	}
+
 	MASS_base::currentArgSize 
 	  = argument_size / MASS_base::currentPlaces->places_size;
+
+	if(printOutput == true)
+	    MASS_base::log( "check 2" );
+
 	MASS_base::currentRetSize = m->getReturnSize( );
 	MASS_base::currentMsgType = m->getAction( );
 	MASS_base::currentReturns 
 	  = new char[MASS_base::currentPlaces->places_size 
 		     * MASS_base::currentRetSize];
-
-	// Debugging code
-	/*
-	data = (int *)argument;
-	for ( int i = 0; i < 2000; i++ ) {
-	  if(printOutput == true){
-	      convert.str( "" );
-	      convert << *(data + i);
-	      MASS_base::log( convert.str( ) );
-	  }
-	}
-	*/
 
 	// resume threads to work on call all.
 	Mthread::resumeThreads( Mthread::STATUS_CALLALL );
@@ -224,8 +223,32 @@ void MProcess::start( ) {
 	    MASS_base::log( "PLACES_EXCHANGE_ALL completed and ACK sent" );
 	break;
 
+      case Message::PLACES_EXCHANGE_BOUNDARY:
+	if(printOutput == true){
+	    convert.str( "" );
+	    convert << "PLACES_EXCHANGE_BOUNDARY received handle = " 
+		    << m->getHandle( );
+	    MASS_base::log( convert.str( ) );
+	}
+
+	// retrieve the corresponding places
+	MASS_base::currentPlaces = MASS_base::placesMap[ m->getHandle( ) ];
+
+	// for debug
+	MASS_base::showHosts( );
+
+	// exchange boundary implementation
+	MASS_base::
+	  currentPlaces->exchangeBoundary( );
+
+	sendAck( );
+	if(printOutput == true)
+	    MASS_base::log( "PLACES_EXCHANGE_BOUNDARY completed and ACK sent");
+	break;
+
       case Message::PLACES_EXCHANGE_ALL_REMOTE_REQUEST:
       case Message::PLACES_EXCHANGE_ALL_REMOTE_RETURN_OBJECT:
+      case Message::PLACES_EXCHANGE_BOUNDARY_REMOTE_REQUEST:
 	break;
 
       case Message::AGENTS_INITIALIZE:
@@ -281,18 +304,6 @@ void MProcess::start( ) {
 	MASS_base::currentRetSize = m->getReturnSize();
 	MASS_base::currentMsgType = m->getAction();
 	MASS_base::currentReturns = new char[MASS_base::currentAgents->localPopulation * MASS_base::currentRetSize];
-	
-	//Debugging code
-	/*
-	data = (int *)argument;
-	for( int i = 0; i < MASS_base::currentAgents->localPopulation; i++){
-	  if(printOutput == true){
-		convert.str("");
-		convert << *(data + i);
-		MASS_base::log(convert.str() );
-	  }
-	}
-	*/
 
 	Mthread::agentBagSize = MASS_base::dllMap[m->getHandle()]->agents->size();
 	MASS_base::dllMap[m->getHandle()]->retBag = new vector<Agent*>;
