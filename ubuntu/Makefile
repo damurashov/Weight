@@ -15,7 +15,7 @@ includedir=$(prefix)/include
 SOURCE=../source
 
 all:  $(TARGET) $(LIBMASS) $(MPROCESS) $(WAVE2D) $(NOMAD)
-	rm *.o
+	rm -f *.o
 
 $(TARGET): main.o $(LIBMASS) 
 	$(CC) main.o -L. -lmass -L$(libdir) -lssh2 -o $@ # main
@@ -33,7 +33,7 @@ $(NOMAD): Nomad.o
 	$(CC) -shared Nomad.o -fPIC -o $@ # Nomad
 
 clean: 
-	rm *.o $(TARGET) $(LIBMASS) $(MPROCESS) $(WAVE2D) $(NOMAD)
+	rm -f *.o $(TARGET) $(LIBMASS) $(MPROCESS) $(WAVE2D) $(NOMAD)
 
 %.o : $(SOURCE)/%.cpp
 	$(CC) -Wall -I$(includedir) -fPIC -c $< 
