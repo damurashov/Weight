@@ -3,8 +3,8 @@
 #include <sstream> // ostringstream
 
 //Used to toggle output for DllClass
-const bool printOutput = false;
-//const bool printOutput = true;
+//const bool printOutput = false;
+const bool printOutput = true;
 
 DllClass::DllClass( string className ) {
   // For debugging

@@ -1,6 +1,8 @@
 #include "Place.h"
 #include "MASS_base.h"
+#include "limits.h"
 #include <iostream>
+#include <sstream> // ostringstream
 
 vector<int> Place::getSizeVect(  ){
 	return size;
@@ -16,6 +18,14 @@ Place *Place::findDstPlace( int handle, int offset[] ) {
     = places->getGlobalLinearIndexFromGlobalArrayIndex( neighborCoord,
 							places->size,
 							places->dimension );
+  /*
+  ostringstream convert;
+  convert << "globalLinearIndex = " << globalLinearIndex << endl;
+  MASS_base::log( convert.str( ) );
+  */
+
+  if ( globalLinearIndex == INT_MIN )
+    return NULL;
 
   // identify the destination place
   DllClass *dllclass = MASS_base::dllMap[ handle ];
@@ -35,6 +45,8 @@ Place *Place::findDstPlace( int handle, int offset[] ) {
 	    >= 0
 	    && shadow_index < places->shadow_size )
     dstPlace = dllclass->right_shadow[ shadow_index ];
+
+
 
   return dstPlace;
 }

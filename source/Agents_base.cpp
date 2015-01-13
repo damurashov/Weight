@@ -329,8 +329,8 @@ void Agents_base::getGlobalAgentArrayIndex( vector<int> src_index,
       for ( int j = 0; j < dest_dimension; j++ ) {
 	// all index must be set -1
 	dest_index[j] = -1;
-	return;
       }
+      return;
     }
   }
 
@@ -534,45 +534,44 @@ void Agents_base::manageAll( int tid ) {
           MASS_base::log(convert.str());
       }
 
+      // Should remove the pointer object in the place that points to 
+      // the migrting Agent
+      Place *oldPlace = evaluationAgent->place;
+      pthread_mutex_lock(&MASS_base::request_lock);
+      // Scan old_place->agents to find this evaluationAgent's index.
+      int oldIndex = -1;
+      for(unsigned int i = 0; i < oldPlace->agents.size();i++){
+	if(oldPlace->agents[i] == evaluationAgent){
+	  oldIndex = i;
+	  break;
+	}	    
+      }
+      if(oldIndex != -1) {
+	oldPlace->agents.erase( oldPlace->agents.begin() + oldIndex ); 
+      }
+      else {
+	// should happen
+	if(printOutput == true){
+	  convert.str( "" );
+	  convert << "evaluationAgent " << evaluationAgent->agentId 
+		  << " couldn't been found in the old place!";
+	  MASS_base::log(convert.str());
+	}
+	exit( -1 );
+      }
+      if(printOutput == true){
+	convert.str( "" );
+	convert << "evaluationAgent " << evaluationAgent->agentId 
+		<< " was removed from the oldPlace["
+		<< oldPlace->index[0] << "]["
+		<< oldPlace->index[1] << "]";
+	MASS_base::log(convert.str());
+      }
+      pthread_mutex_unlock(&MASS_base::request_lock);
+
       if ( globalLinearIndex >= evaluatedPlaces->lower_boundary &&
 	   globalLinearIndex <= evaluatedPlaces->upper_boundary ) {
 	// local destination
-
-	// Should remove the pointer object in the place that points to 
-	// the migrting Agent
-	Place *oldPlace = evaluationAgent->place;
-	pthread_mutex_lock(&MASS_base::request_lock);
-	// Scan old_place->agents to find this evaluationAgent's index.
-	int oldIndex = -1;
-	for(unsigned int i = 0; i < oldPlace->agents.size();i++){
-	  if(oldPlace->agents[i] == evaluationAgent){
-	    oldIndex = i;
-	    break;
-	  }	    
-	}
-	if(oldIndex != -1) {
-	  // 1 for time being
-	  oldPlace->agents.erase( oldPlace->agents.begin() + oldIndex ); 
-	}
-	else {
-	  // should happen
-	  if(printOutput == true){
-	      convert.str( "" );
-	      convert << "evaluationAgent " << evaluationAgent->agentId 
-		      << " couldn't been found in the old place!";
-	      MASS_base::log(convert.str());
-	  }
-	  exit( -1 );
-	}
-	if(printOutput == true){
-	    convert.str( "" );
-	    convert << "evaluationAgent " << evaluationAgent->agentId 
-		    << " was removed from the oldPlace["
-		    << oldPlace->index[0] << "]["
-		    << oldPlace->index[1] << "]";
-	    MASS_base::log(convert.str());
-	}
-	pthread_mutex_unlock(&MASS_base::request_lock);
 
 	// insert the migration Agent to a local destination place
 	int destinationLocalLinearIndex 
@@ -622,10 +621,6 @@ void Agents_base::manageAll( int tid ) {
 	}
 
 	pthread_mutex_unlock(&MASS_base::request_lock);
-	
-	// for debug
-	//	    convert << " inMessage = " 
-	//		    << *(int *)(evaluationPlace->inMessages.back( ));
 
       } 
       else {

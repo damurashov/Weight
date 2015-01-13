@@ -2,6 +2,7 @@
 #include "MASS_base.h"
 #include "Message.h"
 #include "DllClass.h"
+#include "limits.h"
 #include <iostream>
 #include <sstream> // ostringstream
 
@@ -214,10 +215,12 @@ void Places_base::callAll( int functionId, void *argument, int tid ) {
     for ( int i = range[0]; i <= range[1]; i++ ) {
       if ( printOutput == true ) {
 	convert.str( "" );
-	convert << "thread[" << tid << "]: places[i] = " << dllclass->places[i];
+	convert << "thread[" << tid << "]: places[" << i 
+		<< "] = " << dllclass->places[i] 
+		<< ", vptr = " << *(int**)(dllclass->places[i]);
 	MASS_base::log( convert.str( ) );
       }
-      dllclass->places[i]->callMethod( functionId, argument );
+      dllclass->places[i]->callMethod( functionId, argument ); // <-- seg fault
     }
   }
 }
@@ -697,30 +700,35 @@ void Places_base::exchangeBoundary( ) {
     MASS_base::log( "exchangeBoundary starts" );
   }
 
+  int param[2][4];
   if ( MASS_base::myPid < MASS_base::systemSize - 1 ) {
     // create a child in charge of handling the right shadow.
-    int param[2];
-    param[0] = 'R';
-    param[1] = handle;
-    param[2] = places_size;
-    param[3] = shadow_size;
+    param[0][0] = 'R';
+    param[0][1] = handle;
+    param[0][2] = places_size;
+    param[0][3] = shadow_size;
     if ( printOutput == true ) {
-      MASS_base::log( "exchangeBoundary: pthread_create( helper, R )" );
+      ostringstream convert;
+      convert << "exchangeBoundary: pthreacd_create( helper, R ) places_size=" 
+	      << places_size;
+      MASS_base::log( convert.str( ) );
     }
-    pthread_create( &thread_ref, NULL, exchangeBoundary_helper, param );
+    pthread_create( &thread_ref, NULL, exchangeBoundary_helper, param[0] );
   }
 
   if ( MASS_base::myPid > 0 ) {
     // the main takes charge of handling the left shadow.
-    int param[2];
-    param[0] = 'L';
-    param[1] = handle;    
-    param[2] = places_size;
-    param[3] = shadow_size;
+    param[1][0] = 'L';
+    param[1][1] = handle;    
+    param[1][2] = places_size;
+    param[1][3] = shadow_size;
     if ( printOutput == true ) {
-      MASS_base::log( "exchangeBoundary: main thread( helper, L )" );
+      ostringstream convert;
+      convert << "exchangeBoundary: main thread( helper, L ) places_size=" 
+	      << places_size;
+      MASS_base::log( convert.str( ) );
     }
-    exchangeBoundary_helper( param );
+    exchangeBoundary_helper( param[1] );
   }
 
   if ( thread_ref != 0l ) {
@@ -900,10 +908,14 @@ int Places_base::getGlobalLinearIndexFromGlobalArrayIndex( int index[],
   int retVal = 0;
 
   for ( int i = 0; i < dimension; i++ ) {
-    if ( index[i] >= 0 && size[i] > 0 && index[i] < size[i] ) {
+    if ( size[i] <= 0 )
+      continue;
+    if ( index[i] >= 0 && index[i] < size[i] ) {
       retVal = retVal * size[i];
       retVal += index[i];
     }
+    else
+      return INT_MIN; // out of space
   }
 
   return retVal;

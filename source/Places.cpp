@@ -6,8 +6,8 @@
 #include <dlfcn.h> // dlopen, dlsym, and dlclose
 
 //Used to toggle comments from Places.cpp
-const bool printOutput = false;
-// const bool printOutput = true;
+// const bool printOutput = false;
+const bool printOutput = true;
 
 Places::Places( int handle, string className, void *argument, 
 		int argument_size, int dim, ... )
@@ -105,12 +105,12 @@ void Places::init_master( void *argument, int argument_size,
   // establish all inter-node connections within setHosts( )
   MASS_base::setHosts( hosts );
 
-  // Synchronized with all slave processes
-  MASS::barrier_all_slaves( );
-
   // register this places in the places hash map
   MASS_base::placesMap.
     insert( map<int, Places_base*>::value_type( handle, this ) );
+
+  // Synchronized with all slave processes
+  MASS::barrier_all_slaves( );
 }
 
 void Places::callAll( int functionId ) {
@@ -193,8 +193,10 @@ void *Places::ca_setup( int functionId, void *argument,
   MASS_base::currentArgSize = arg_size;
   MASS_base::currentMsgType = type;
   MASS_base::currentRetSize = ret_size;
-  MASS_base::currentReturns = new 
-    char[total * MASS_base::currentRetSize]; // prepare an entire return space
+  MASS_base::currentReturns = 
+    ( type == Message::PLACES_CALL_ALL_VOID_OBJECT ) ?
+    NULL :
+    new char[total * MASS_base::currentRetSize]; // prepare an entire return space
 
   // resume threads
   Mthread::resumeThreads( Mthread::STATUS_CALLALL );
@@ -209,8 +211,11 @@ void *Places::ca_setup( int functionId, void *argument,
   Mthread::barrierThreads( 0 );
   
   // Synchronized with all slave processes
-  MASS::barrier_all_slaves( MASS_base::currentReturns, stripe, 
-			    MASS_base::currentRetSize );
+  if ( type == Message::PLACES_CALL_ALL_VOID_OBJECT )
+    MASS::barrier_all_slaves( MASS_base::currentReturns, stripe, 
+			      MASS_base::currentRetSize );
+  else
+    MASS::barrier_all_slaves( );    
 
   return (void *)MASS_base::currentReturns;
 }
