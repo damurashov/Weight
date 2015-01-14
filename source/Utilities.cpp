@@ -69,6 +69,13 @@ Ssh2Connection *Utilities::establishConnection( const char host[],
   LIBSSH2_SESSION *session = libssh2_session_init( );
   libssh2_session_set_timeout( session, 2000 );
   int return_code = 0;
+  if ( ( return_code = 
+	 libssh2_session_method_pref( session, LIBSSH2_METHOD_CRYPT_CS, "arcfour" ) )
+       != 0 ) {
+    cerr << "session method preference CS error" << endl;
+    exit( -1 );
+  }
+
   for ( int i = 0; i < 5; i++ ) {
     if ( ( return_code = libssh2_session_handshake( session, sock ) ) == 0 )
       break;
