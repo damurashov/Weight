@@ -1,0 +1,54 @@
+# Git Ignore for MASS C++
+# Updated January 15, 2015 by Jennifer Kowalsky
+# Modified from the C++ GitIgnore file provided by Github.
+
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Fortran module files
+*.mod
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+*.lib
+
+# Executables
+*.exe
+*.out
+*.app
+
+# Emacs backup files
+*~
+
+# mprocess daemon
+mprocess
+
+# Ubuntu libssh2 files
+ubuntu/libssh2-1.4.2/*
+
+# Doxygen Files that do not require source control
+source/Doxyfile
+source/Doxygen
+source/html
+source/latex
+
+# Netbeans Project Settings
+source/nbproject
+
+# work_directories
+work_ubuntu/*
+work_source/*
