@@ -41,10 +41,8 @@ mprocess
 ubuntu/libssh2-1.4.2/*
 
 # Doxygen Files that do not require source control
-source/Doxyfile
 source/Doxygen
-source/html
-source/latex
+source/docs
 
 # Netbeans Project Settings
 source/nbproject
