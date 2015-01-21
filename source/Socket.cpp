@@ -19,10 +19,10 @@ Socket::~Socket( ) {
 }
 
 int Socket::getDescriptor( ) {
-  ostringstream convert;
-  convert << "getDescriptor: clientFd = " << clientFd 
-	  << " serverFd = " << serverFd;
-  MASS_base::log( convert.str( ) );
+  //ostringstream convert;
+  //convert << "getDescriptor: clientFd = " << clientFd 
+  //	  << " serverFd = " << serverFd;
+  //MASS_base::log( convert.str( ) );
   if ( clientFd != NULL_FD )
     return clientFd;
   if ( serverFd != NULL_FD )
@@ -49,6 +49,14 @@ int Socket::getClientSocket( const char ipName[] ) {
   // Open a TCP socket (an Internet strem socket).
   if( ( clientFd = socket( AF_INET, SOCK_STREAM, 0 ) ) < 0 ) {
     perror( "Cannot open a client TCP socket." );
+    return NULL_FD;
+  }
+
+  // Set the nodely option
+  const int on = 1;
+  if ( setsockopt( clientFd, IPPROTO_TCP, TCP_NODELAY,
+		   ( char * )&on, sizeof( int ) ) < 0 ) {
+    perror( "setsockopt TCP_NODELAY failed" );
     return NULL_FD;
   }
     
@@ -81,6 +89,12 @@ int Socket::getServerSocket( ) {
     if ( setsockopt( serverFd, SOL_SOCKET, SO_REUSEADDR,
                      ( char * )&on, sizeof( on ) ) < 0 ) {
       perror( "setsockopt SO_REUSEADDR failed" );
+      return NULL_FD;
+    }
+
+    if ( setsockopt( serverFd, IPPROTO_TCP, TCP_NODELAY,
+		     ( char * )&on, sizeof( on ) ) < 0 ) {
+      perror( "setsockopt TCP_NODELAY failed" );
       return NULL_FD;
     }
     

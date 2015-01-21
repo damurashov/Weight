@@ -102,8 +102,18 @@ void MASS::init( char *args[], int nProc, int nThr ) {
 	util.shutdown( ssh2connection, "abnormal" );
 	exit( -1 );
       }
-      // A new remote process launched. The corresponding MNode created
-      mNodes.push_back( new MNode( currHostName, pid, ssh2connection ) );
+      // A new remote process launched. 
+      char localhost[100];
+      bzero( localhost, 100 );
+      gethostname( localhost, 100 );
+      int localhost_size = strlen( localhost );
+      ssh2connection->write( (char *)&localhost_size, int( sizeof( int ) ) );
+      ssh2connection->write( localhost, localhost_size );
+
+      Socket socket( port );
+      int sd = socket.getServerSocket( );
+      // The corresponding MNode created
+      mNodes.push_back( new MNode( currHostName, pid, ssh2connection, sd ) );
     }
   }
 

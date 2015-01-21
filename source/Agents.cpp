@@ -126,11 +126,10 @@ void *Agents::ca_setup( int functionId, void *argument, int arg_size,
     
         cerr << "Bag Size is: " + MASS_base::dllMap[handle]->agents->size();
     }
-    Mthread::agentBagSize = MASS_base::dllMap[handle]->agents->size();
-
     // make sure to delete it
     delete m;
   };
+  Mthread::agentBagSize = MASS_base::dllMap[handle]->agents->size();
 
   //Check for correct behavior post-Agents_base implementation
   // retrieve the corresponding agents

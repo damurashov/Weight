@@ -17,6 +17,7 @@ MProcess::MProcess( char *name, int myPid, int nProc, int nThr, int port ) {
   this->myPid = myPid;
   this->nProc = nProc;
   this->nThr = nThr;
+  this->port = port;
   MASS_base::initMASS_base( name, myPid, nProc, port );
   
   // Create a logger
@@ -31,6 +32,17 @@ MProcess::MProcess( char *name, int myPid, int nProc, int nThr, int port ) {
 
 void MProcess::start( ) {
   MASS_base::log( "MProcess started" );
+
+  // retrieve the client socket ipaddress
+  int master_ip_size = 0;
+  read( 0, &master_ip_size, sizeof( int ) );
+  char master_ip[master_ip_size + 1];
+  bzero( master_ip, master_ip_size + 1 );
+  read( 0, &master_ip, master_ip_size );
+
+  // Create a bare socket to the master
+  Socket socket( port );
+  this->sd = socket.getClientSocket( master_ip );
 
   // Synchronize with the master node first.
   sendAck( );
@@ -400,15 +412,14 @@ void MProcess::sendMessage( Message *msg ) {
   int msg_size = 0;
   char *byte_msg = msg->serialize( msg_size );
 
-  write( 1, (void *)&msg_size, sizeof( int ) );  // send a message size
-  write( 1, byte_msg, msg_size );                // send a message body
-  fsync( 1 );
+  write( sd, (void *)&msg_size, sizeof( int ) );  // send a message size
+  write( sd, byte_msg, msg_size );                // send a message body
 }
 
 Message *MProcess::receiveMessage( ) {
   int size = -1;
   int nRead = 0;
-  if ( read( 0, (void *)&size, sizeof( int ) ) > 0 ) {// receive a message size
+  if ( read( sd, (void *)&size, sizeof( int ) ) > 0 ) {// receive a message size
 
     ostringstream convert;
     if(printOutput == true){
@@ -418,7 +429,7 @@ Message *MProcess::receiveMessage( ) {
 
     char *buf = new char[size];
     for ( nRead = 0;
-	  ( nRead += read( 0, buf + nRead, size - nRead) ) < size; );
+	  ( nRead += read( sd, buf + nRead, size - nRead) ) < size; );
     Message *m = new Message( );
     m->deserialize( buf, size );
     return m;

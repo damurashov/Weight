@@ -17,6 +17,8 @@ class MProcess {
   int myPid;        // my pid or rank
   int nProc;        // # processes
   int nThr;         // # threads
+  int port;         // TCP port
+  int sd;           // bare TCP socket to the master
   vector<string> hosts;  // all hosts participated in computation
 
   void sendAck( );
