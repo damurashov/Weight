@@ -396,10 +396,15 @@ void Agents_base::manageAll( int tid ) {
           MASS_base::log(convert.str());
       }
 
+      // Beginning mutex lock when spawning a new agent.  If multiple threads
+      // try to spawn agents at the same time, it will result in concurrent
+      // access to Agents_base class variables.
+      pthread_mutex_lock(&MASS_base::request_lock);
+      
       Agent* addAgent = 
-	// validate the correspondance of arguments and argumentcounter
+	// validate the correspondence of arguments and argumentcounter
 	( int( evaluationAgent->arguments.size( ) ) > argumentcounter ) ?
-	// yes: this child agent should recieve an argument.
+	// yes: this child agent should receive an argument.
 	(Agent *)(agentsDllClass->instantiate(evaluationAgent->
 					      arguments[argumentcounter++])) :
 	// no:  this child agent should not receive an argument.
@@ -407,9 +412,7 @@ void Agents_base::manageAll( int tid ) {
 
       //Push the created agent into our bag for returns and update the counter
       //needed to keep track of our agents.
-      
-      //Lock here
-      pthread_mutex_lock(&MASS_base::request_lock);
+
       retBag->push_back(addAgent);
       pthread_mutex_unlock(&MASS_base::request_lock);
       
@@ -419,16 +422,17 @@ void Agents_base::manageAll( int tid ) {
       pthread_mutex_unlock(&MASS_base::request_lock);
       
       // initialize this child agent's attributes: 
+      pthread_mutex_lock(&MASS_base::request_lock);
       addAgent->agentsHandle = evaluationAgent->agentsHandle;
       addAgent->placesHandle = evaluationAgent->placesHandle;
       addAgent->agentId = currentAgentId++;
       addAgent->index = evaluationAgent->index;
       addAgent->place = evaluationAgent->place;
       addAgent->parentId = evaluationAgent->agentId;
-      
       //Decrement the newChildren counter once an Agent has been spawned
       evaluationAgent->newChildren--;
       childrenCounter--;
+      pthread_mutex_unlock(&MASS_base::request_lock);
       
       if(printOutput == true){
           convert.str("");
