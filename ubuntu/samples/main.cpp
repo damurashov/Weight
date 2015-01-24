@@ -6,8 +6,8 @@
 #include <vector>
 
 //Used to toggle output for Main
-const bool printOutput = false;
-//const bool printOutput = true;
+//const bool printOutput = false;
+const bool printOutput = true;
 
 int main( int argc, char *args[] ) {
 
@@ -25,10 +25,10 @@ int main( int argc, char *args[] ) {
   int nThr = atoi( args[6] );
     
   MASS::init( arguments, nProc, nThr );
-  char *msg = "hello\0"; // should not be char msg[]
-  Places *land = new Places( 1, "Land", msg, 7, 2, 100, 100 );
+  char *msg = (char *)("hello\0"); // should not be char msg[]
+  Places *land = new Places( 1, "Land", 1, msg, 7, 2, 100, 100 );
 
-  msg = "good\0";
+  msg = (char *)("good\0");
   land->callAll( Land::init_, msg, 5 );
 
   int callargs[100][100];
@@ -61,7 +61,7 @@ int main( int argc, char *args[] ) {
   nomad->callAll( Nomad::agentInit_, msg, 5 );
 
   //Test callAll second time
-  msg = "Second attempt\0";
+  msg = (char *)("Second attempt\0");
   nomad->callAll( Nomad::somethingFun_, msg, 15 );
 
   //Test callAll with return values
@@ -107,6 +107,11 @@ int main( int argc, char *args[] ) {
   nomad->callAll( Nomad::addData_ );
   nomad->callAll( Nomad::move2_ );
   nomad->manageAll( );
+
+  //Test exchangeBoundary
+  land->callAll( Land::printOutMessage_ );
+  land->exchangeBoundary( );
+  land->callAll( Land::printShadow_ );
 
   MASS::finish( );
 }
