@@ -62,7 +62,7 @@ Agents_base::Agents_base( int handle, string className, void *argument,
     }
     // create as many new agents as nColonists
     for ( int nColonists = 
-	    protoAgent->map( initPopulation, curPlace->size, curPlace->index );
+	    protoAgent->map( initPopulation, curPlace->size, curPlace->index, curPlace );
 	  nColonists > 0; nColonists--, localPopulation++ ) {
       
       // agent instanstantiation and initialization

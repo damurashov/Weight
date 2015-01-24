@@ -17,7 +17,8 @@ class Agent : MObject {
     migratableData( NULL ), migratableDataSize( 0 ) { };
   virtual void *callMethod( int functionId, void *argument ) = 0;
   ~Agent( ) { if ( migratableData != NULL ) free( migratableData ); };
-  int map( int initPopulation, vector<int> size, vector<int> index ) {
+  int map( int initPopulation, vector<int> size, vector<int> index, 
+	   Place* curPlace) {
     // compute the total # places
     int placeTotal = 1;
     for ( int x = 0; x < int( size.size( ) ); x++ ) 
