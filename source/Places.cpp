@@ -241,7 +241,6 @@ void Places::exchangeAll( int dest_handle, int functionId,
   MASS_base::currentPlaces = this;
   MASS_base::destinationPlaces = MASS_base::placesMap[dest_handle];
   MASS_base::currentFunctionId = functionId;
-  MASS_base::currentDestinations = destinations;
 
   // reset requestCounter by the main thread
   MASS_base::requestCounter = 0;
@@ -254,8 +253,7 @@ void Places::exchangeAll( int dest_handle, int functionId,
 
   // exchangeall implementation
   Places_base::exchangeAll( MASS_base::destinationPlaces,
-			    functionId, 
-			    MASS_base::currentDestinations, 0 );
+			    functionId, 0);
 
   // confirm all threads are done with exchangeAll.
   Mthread::barrierThreads( 0 );

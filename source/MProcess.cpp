@@ -208,7 +208,6 @@ void MProcess::start( ) {
 	MASS_base::currentPlaces = MASS_base::placesMap[ m->getHandle( ) ];
 	MASS_base::destinationPlaces =MASS_base::placesMap[m->getDestHandle()];
 	MASS_base::currentFunctionId = m->getFunctionId( );
-	MASS_base::currentDestinations = m->getDestinations( );
 
 	// reset requestCounter by the main thread
 	MASS_base::requestCounter = 0;
@@ -222,8 +221,7 @@ void MProcess::start( ) {
 	// exchangeall implementation
 	MASS_base::
 	  currentPlaces->exchangeAll( MASS_base::destinationPlaces,
-				      MASS_base::currentFunctionId, 
-				      MASS_base::currentDestinations, 0 );
+				      MASS_base::currentFunctionId, 0);
 
 	// confirm all threads are done with places.exchangeall.
 	Mthread::barrierThreads( 0 );

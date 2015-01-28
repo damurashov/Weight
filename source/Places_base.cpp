@@ -303,7 +303,7 @@ void Places_base::getLocalRange( int range[], int tid ) {
 }
 
 void Places_base::exchangeAll( Places_base *dstPlaces, int functionId, 
-			       vector<int*> *destinations, int tid ) {
+        int tid ) {
   int range[2];
   getLocalRange( range, tid );
   ostringstream convert;
@@ -317,7 +317,9 @@ void Places_base::exchangeAll( Places_base *dstPlaces, int functionId,
   DllClass *src_dllclass = MASS_base::dllMap[ handle ];
   DllClass *dst_dllclass = MASS_base::dllMap[ dstPlaces->handle ];
 
-  if(printOutput == true){
+  // TODO: Need to find a way to replace destinations 
+  // with same meaning code block
+/*  if(printOutput == true){
       convert.str( "" );
       convert << "tid[" << tid << "]: checks destinations:";
       for ( int i = 0; i < int( destinations->size( ) ); i++ ) {
@@ -326,7 +328,7 @@ void Places_base::exchangeAll( Places_base *dstPlaces, int functionId,
 	        << "][" << offset[1] << "]  ";    
       }
       MASS_base::log( convert.str( ) );
-  }
+  } */
   // now scan all places within range[0] ~ range[1]
   if ( range[0] >= 0 && range[1] >= 0 ) {
     for ( int i = range[0]; i <= range[1]; i++ ) {

@@ -113,7 +113,7 @@ void *Mthread::run( void *param ) {
       places = MASS_base::getCurrentPlaces( );
       functionId = MASS_base::getCurrentFunctionId( );
       destinationPlaces = MASS_base::getDestinationPlaces( );
-      destinations = MASS_base::getCurrentDestinations( );
+      //destinations = MASS_base::getCurrentDestinations( );
 
       places->exchangeAll( destinationPlaces, functionId, destinations, tid );
       break;

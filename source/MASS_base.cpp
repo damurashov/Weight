@@ -61,7 +61,7 @@ void MASS_base::initMASS_base( const char *name, int myPid, int nProc, int port 
 bool MASS_base::initializeThreads( int nThr ) {
   if ( INITIALIZED ) {
     if(printOutput == true)
-        cerr << "Error: the MASS.init is already initializecd" << endl;
+        cerr << "Error: the MASS.init is already initialized" << endl;
     return false;
   }
 
