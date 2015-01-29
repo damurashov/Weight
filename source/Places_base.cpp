@@ -329,6 +329,7 @@ void Places_base::exchangeAll( Places_base *dstPlaces, int functionId,
       }
       MASS_base::log( convert.str( ) );
   } */
+
   // now scan all places within range[0] ~ range[1]
   if ( range[0] >= 0 && range[1] >= 0 ) {
     for ( int i = range[0]; i <= range[1]; i++ ) {
@@ -336,10 +337,10 @@ void Places_base::exchangeAll( Places_base *dstPlaces, int functionId,
       Place *srcPlace = (Place *)(src_dllclass->places[i]);
 
       // check its neighbors
-      for ( int j = 0; j < int( destinations->size( ) ); j++ ) {
+      for ( int j = 0; j < int( (*srcPlace).neighbors.size( ) ); j++ ) {
 
 	// for each neighbor
-	int *offset = (*destinations)[j];
+	int *offset = (*srcPlace).neighbors[j];
 	int neighborCoord[dstPlaces->dimension];
 
 	// compute its coordinate

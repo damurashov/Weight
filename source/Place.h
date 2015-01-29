@@ -26,7 +26,7 @@ class Place : MObject {
   int outMessage_size;
   int inMessage_size;
   vector<MObject*> agents;
-  vector<int[]> neighbors = NULL;
+  vector<int*> neighbors;
 
  protected:
   void *getOutMessage( int handle, int index[] );

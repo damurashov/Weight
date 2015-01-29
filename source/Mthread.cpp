@@ -45,7 +45,7 @@ void *Mthread::run( void *param ) {
   int arg_size = 0;
   int ret_size = 0;
   Message::ACTION_TYPE msgType = Message::EMPTY;
-  vector<int*> *destinations = NULL;
+  // vector<int*> *destinations = NULL;
 
   bool running = true;
   while ( running ) {
@@ -115,7 +115,7 @@ void *Mthread::run( void *param ) {
       destinationPlaces = MASS_base::getDestinationPlaces( );
       //destinations = MASS_base::getCurrentDestinations( );
 
-      places->exchangeAll( destinationPlaces, functionId, destinations, tid );
+      places->exchangeAll( destinationPlaces, functionId, tid );
       break;
 
     case STATUS_AGENTSCALLALL:
