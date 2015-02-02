@@ -41,6 +41,17 @@ class Agent : MObject {
   };
   void kill( ) { alive = false; };
 
+  // get the debug data of the agent
+  int getDebugData() { 
+    int id = agentId;
+    return id;
+  }
+
+  // modify debug data of the agent
+  void setDebugData(int argument) {
+    // currently empty
+  }
+
  protected:
   bool migrate( int index, ... ) { return true; };
   bool migrate( vector<int> index );
