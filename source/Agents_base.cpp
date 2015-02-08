@@ -8,6 +8,15 @@
 const bool printOutput = false;
 //const bool printOutput = true;
 
+/**
+ * 
+ * @param handle
+ * @param className
+ * @param argument
+ * @param argument_size
+ * @param placesHandle
+ * @param initPopulation
+ */
 Agents_base::Agents_base( int handle, string className, void *argument,
 			  int argument_size, int placesHandle, 
 			  int initPopulation ) 
@@ -94,9 +103,18 @@ Agents_base::Agents_base( int handle, string className, void *argument,
   delete protoAgent;
 }
 
+/**
+* 
+*/
 Agents_base::~Agents_base( ) {
 }
 
+/**
+ * 
+ * @param functionId
+ * @param argument
+ * @param tid
+ */
 void Agents_base::callAll( int functionId, void *argument, int tid ) {
 
 	//Set up the bag of agents
@@ -195,6 +213,14 @@ void Agents_base::callAll( int functionId, void *argument, int tid ) {
 	}
 }
 
+/**
+ * 
+ * @param functionId
+ * @param argument
+ * @param arg_size
+ * @param ret_size
+ * @param tid
+ */
 void Agents_base::callAll( int functionId, void *argument, int arg_size,
 			     int ret_size, int tid ) {
 
@@ -317,6 +343,13 @@ void Agents_base::callAll( int functionId, void *argument, int arg_size,
   
 }
 
+/**
+ * 
+ * @param src_index
+ * @param dst_size
+ * @param dest_dimension
+ * @param dest_index
+ */
 void Agents_base::getGlobalAgentArrayIndex( vector<int> src_index,
 				    int dst_size[], int dest_dimension,
 				    int dest_index[] ){
@@ -336,6 +369,10 @@ void Agents_base::getGlobalAgentArrayIndex( vector<int> src_index,
 
 }
 
+/**
+ * 
+ * @param tid
+ */
 void Agents_base::manageAll( int tid ) {
   
   //Create the dllclass to access our agents from, out agentsDllClass for 
@@ -777,6 +814,11 @@ void Agents_base::manageAll( int tid ) {
   }
 }
 
+/**
+ * 
+ * @param param
+ * @return 
+ */
 void *Agents_base::processAgentMigrationRequest( void *param ) {
   int destRank = ( (int *)param )[0];
   int agentHandle = ( (int *)param )[1];
@@ -904,6 +946,11 @@ void *Agents_base::processAgentMigrationRequest( void *param ) {
   return NULL;
 }
 
+/**
+ * 
+ * @param param
+ * @return 
+ */
 void *Agents_base::sendMessageByChild( void *param ) {
   int rank = ((struct MigrationSendMessage *)param)->rank;
 

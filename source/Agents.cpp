@@ -8,6 +8,23 @@
 const bool printOutput = false;
 //const bool printOutput = true;
 
+/**
+ * Instantiates a set of agents from the "className" class, passes the
+ * "argument" object to their constructor, associates them with a given
+ * "Places" matrix, and distributes them over these places, based the
+ * map( ) method that is defined within the Agent class. If a user does not
+ * overload it by him/herself, map( ) uniformly distributes an
+ * "initPopulation" number of agents. If a user-provided map( ) method is
+ * used, it must return the number of agents spawned at each place
+ * regardless of the initPopulation parameter. Each set of agents is
+ * associated with a user-given handle that must be unique over machines.
+ * @param handle
+ * @param className
+ * @param argument
+ * @param argument_size
+ * @param places
+ * @param initPopulation
+ */
 Agents::Agents( int handle, string className, void *argument, 
 		int argument_size, Places *places, int initPopulation ) 
   : Agents_base( handle, className, argument, argument_size,
@@ -16,6 +33,11 @@ Agents::Agents( int handle, string className, void *argument,
   init_master( argument, argument_size );
 }
 
+/**
+ * 
+ * @param argument
+ * @param argument_size
+ */
 void Agents::init_master( void *argument, int argument_size ) {
 
   // check if MASS_base::hosts is empty (i.e., Places not yet created)
@@ -63,21 +85,57 @@ void Agents::init_master( void *argument, int argument_size ) {
     insert( map<int, Agents_base*>::value_type( handle, this ) );
 }
 
+/**
+ * Calls the method specified with functionId of all agents. Done in
+ * parallel among multi-processes/threads
+ * @param functionId
+ */
 void Agents::callAll( int functionId ) {
   ca_setup( functionId, NULL, 0, 0, Message::AGENTS_CALL_ALL_VOID_OBJECT );
 }
 
+/**
+ * Calls the method specified with functionId of all agents as passing a
+ * (void *)argument to the method. Done in parallel among 
+ * multi-processes/threads.
+ * @param functionId
+ * @param argument
+ * @param arg_size
+ */
 void Agents::callAll( int functionId, void *argument, int arg_size ) {
   ca_setup( functionId, argument, arg_size, 0, // ret_size = 0
 	    Message::AGENTS_CALL_ALL_VOID_OBJECT );
 }
 
+/**
+ * Calls the method specified with functionId of all agents as passing
+ * arguments[i] to agent[i]’s method, and receives a return value from it
+ * into (void *)[i] whose element’s size is return_value. Done in parallel
+ * among multi-processes/threads. The order of agents depends on the
+ * index of a place where they resides, starts from the place[0][0]…[0],
+ * and gets increased with the right-most index first and the left-most
+ * index last.
+ * @param functionId
+ * @param argument
+ * @param arg_size
+ * @param ret_size
+ * @return 
+ */
 void *Agents::callAll( int functionId, void *argument, int arg_size, 
 		       int ret_size ) {
   return ca_setup( functionId, argument, arg_size, ret_size,
 		   Message::AGENTS_CALL_ALL_RETURN_OBJECT );
 }
 
+/**
+ * 
+ * @param functionId
+ * @param argument
+ * @param arg_size
+ * @param ret_size
+ * @param type
+ * @return 
+ */
 void *Agents::ca_setup( int functionId, void *argument, int arg_size, 
 			int ret_size, Message::ACTION_TYPE type ) {
   // calculate the total number of agents
@@ -180,13 +238,23 @@ void *Agents::ca_setup( int functionId, void *argument, int arg_size,
   return (void *)MASS_base::currentReturns;
 }
 
-//If statements to check for each condition. No else, as an Agent
-//can migrate and spawn at the same time.
-//Iterate through all agents present.
-void Agents::manageAll( ) {
+
+/**
+ * Updates each agent’s status, based on each of its latest migrate( ),
+ * spawn( ), and kill( ) calls. These methods are defined in the Agent base
+ * class and may be invoked from other functions through callAll and
+ * exchangeAll. Done in parallel among multi-processes/threads 
+ */
+void Agents::manageAll( ) {   
+  // If statements to check for each condition. No else, as an Agent
+  // can migrate and spawn at the same time.
+  // Iterate through all agents present.
   ma_setup( );
 }
 
+/**
+* 
+*/
 void Agents::ma_setup( ) {
   // send an AGENTS_MANAGE_ALL message to each slave
   Message *m = NULL;
@@ -233,6 +301,10 @@ void Agents::ma_setup( ) {
   }
 }
 
+/**
+ * 
+ * @return 
+ */
 int Agents::nAgents( ) {
   int nAgents = 0;
   for ( int i = 0; i < MASS_base::systemSize; i++ )

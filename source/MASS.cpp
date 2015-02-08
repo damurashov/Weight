@@ -16,6 +16,13 @@ using namespace std;
 Utilities MASS::util;
 vector<MNode*> MASS::mNodes;
 
+/**
+ * Involves nProc processes in the same computation and has each 
+ * process spawn nThr threads.
+ * @param args
+ * @param nProc
+ * @param nThr
+ */
 void MASS::init( char *args[], int nProc, int nThr ) {
   vector<string> hosts;
 
@@ -136,6 +143,9 @@ void MASS::init( char *args[], int nProc, int nThr ) {
   cerr << "MASS::init: done" << endl;
 }
 
+/**
+ * Finishes computation.
+ */
 void MASS::finish( ) {
   Mthread::resumeThreads( Mthread::STATUS_TERMINATE );
   Mthread::barrierThreads( 0 );
@@ -155,6 +165,13 @@ void MASS::finish( ) {
   cerr << "MASS::finish: done" << endl;
 }
 
+/**
+ * 
+ * @param return_values
+ * @param stripe
+ * @param arg_size
+ * @param localAgents
+ */
 void MASS::barrier_all_slaves( char *return_values, int stripe, int arg_size,
 			       int localAgents[] ){
 

@@ -8,6 +8,9 @@
 
 using namespace std;
 
+/**
+ *
+ */
 class ExchangeHelper {
  public:
   void establishConnection( int size, int rank, 

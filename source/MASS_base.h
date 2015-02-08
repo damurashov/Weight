@@ -17,6 +17,9 @@
 
 using namespace std;
 
+/**
+ * 
+ */
 class MASS_base {
   friend class MProcess;
   friend class Places_base;

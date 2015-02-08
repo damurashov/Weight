@@ -2,10 +2,17 @@
 #include "MASS_base.h" // MASS_base::log()
 #include <sstream>     // ostringstream
 
+/**
+ * Open a new socket on a given port.
+ * @param port
+ */
 Socket::Socket( const int port )
   : port( port ), clientFd( NULL_FD ), serverFd( NULL_FD ) {
 }
 
+/**
+ * Close the socket.
+ */
 Socket::~Socket( ) {
   ostringstream convert;
   convert << "~Socket called: clientFd = " << clientFd
@@ -18,6 +25,10 @@ Socket::~Socket( ) {
     close( serverFd );
 }
 
+/**
+ * Get the file descriptor
+ * @return clientFd or serverFd or NULL_FD
+ */
 int Socket::getDescriptor( ) {
   //ostringstream convert;
   //convert << "getDescriptor: clientFd = " << clientFd 
@@ -30,6 +41,11 @@ int Socket::getDescriptor( ) {
   return NULL_FD;
 }
 
+/**
+ * Get the client socket
+ * @param ipName
+ * @return clientFd
+ */
 int Socket::getClientSocket( const char ipName[] ) {
   // Get the host entry corresponding to ipName
   struct hostent* host = gethostbyname( ipName );
@@ -74,6 +90,10 @@ int Socket::getClientSocket( const char ipName[] ) {
   return clientFd;
 }
 
+/**
+ * Return a server socket
+ * @return newFd
+ */
 int Socket::getServerSocket( ) {
   if ( serverFd == NULL_FD ) { // Server not ready
     sockaddr_in acceptSockAddr;

@@ -11,6 +11,9 @@
 
 #define LIBSSH2_PORT 22
 
+/**
+ * 
+ */
 class MASS : public MASS_base {
   friend class Places;
   friend class Agents;

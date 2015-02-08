@@ -7,7 +7,15 @@
 #include "Message.h"
 
 using namespace std;
-
+/**
+ * Agents class
+ * @param handle
+ * @param className
+ * @param argument
+ * @param argument_size
+ * @param places
+ * @param initPopulation
+ */
 class Agents : public Agents_base {
  public:
   Agents( int handle, string className, void *argument, int argument_size,

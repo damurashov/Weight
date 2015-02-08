@@ -7,6 +7,9 @@
 const bool printOutput = false;
 //const bool printOutput = true;
 
+/**
+ * 
+ */
 Message::~Message( ) {
   if ( argument_in_heap == true && argument != NULL ) delete (char *)argument;
   if ( hosts != NULL ) delete hosts;
@@ -32,6 +35,11 @@ Message::~Message( ) {
   }
 }
 
+/**
+ * 
+ * @param msg_size
+ * @return 
+ */
 char *Message::serialize( int &msg_size ) {
   ostringstream convert;
 
@@ -352,6 +360,11 @@ char *Message::serialize( int &msg_size ) {
   return msg;
 }
 
+/**
+ * 
+ * @param msg
+ * @param msg_size
+ */
 void Message::deserialize( char *msg, int msg_size ) {
   char *cur = msg;
   int size_size = 0;

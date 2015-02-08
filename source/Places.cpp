@@ -9,6 +9,19 @@
 // const bool printOutput = false;
 const bool printOutput = true;
 
+/**
+ * Instantiates a shared array with "size[]" from the "className" class as
+ * passing an argument to the "className" constructor. This array is
+ * associated with a user-given handle that must be unique over
+ * machines.
+ * dimensions are numerated in the "..." format.
+ * @param handle
+ * @param className
+ * @param argument
+ * @param argument_size
+ * @param dim
+ * @param ...
+ */
 Places::Places( int handle, string className, void *argument, 
 		int argument_size, int dim, ... )
   : Places_base( handle, className, 0, argument, argument_size, dim, NULL ) {
@@ -27,6 +40,18 @@ Places::Places( int handle, string className, void *argument,
   init_master( argument, argument_size, 0 );
 }
 
+/**
+ * Instantiates a shared array with "size[]" from the "className" class as
+ * passing an argument to the "className" constructor. This array is
+ * associated with a user-given handle that must be unique over
+ * machines.
+ * @param handle
+ * @param className
+ * @param argument
+ * @param argument_size
+ * @param dim
+ * @param size
+ */
 Places::Places( int handle, string className, void *argument,
 		int argument_size, int dim, int size[] )
   : Places_base( handle, className, 0, argument, argument_size, dim, size ) {
@@ -35,6 +60,16 @@ Places::Places( int handle, string className, void *argument,
   init_master( argument, argument_size, 0 );
 }
 
+/**
+ * 
+ * @param handle
+ * @param className
+ * @param boundary_width
+ * @param argument
+ * @param argument_size
+ * @param dim
+ * @param ...
+ */
 Places::Places( int handle, string className, int boundary_width, 
 		void *argument, int argument_size,  int dim, ... )
   : Places_base( handle, className, boundary_width, argument, argument_size, 
@@ -54,6 +89,16 @@ Places::Places( int handle, string className, int boundary_width,
   init_master( argument, argument_size, boundary_width );
 }
 
+/**
+ * 
+ * @param handle
+ * @param className
+ * @param boundary_width
+ * @param argument
+ * @param argument_size
+ * @param dim
+ * @param size
+ */
 Places::Places( int handle, string className, int boundary_width,
 		void *argument,	int argument_size, int dim, int size[] )
   : Places_base( handle, className, boundary_width, argument, argument_size, 
@@ -63,6 +108,12 @@ Places::Places( int handle, string className, int boundary_width,
   init_master( argument, argument_size, boundary_width );
 }
 
+/**
+ * 
+ * @param argument
+ * @param argument_size
+ * @param boundary_width
+ */
 void Places::init_master( void *argument, int argument_size, 
 			  int boundary_width ) {
 
@@ -113,10 +164,23 @@ void Places::init_master( void *argument, int argument_size,
   MASS::barrier_all_slaves( );
 }
 
+/**
+ * Calls the method specified with functionId of all array elements. Done
+ * in parallel among multi-processes/threads.
+ * @param functionId
+ */
 void Places::callAll( int functionId ) {
   ca_setup( functionId, NULL, 0, 0, Message::PLACES_CALL_ALL_VOID_OBJECT );
 }
 
+/**
+ * Calls the method specified with functionId of all array elements as
+ * passing an argument to the method. Done in parallel among multi-
+ * processes/threads.
+ * @param functionId
+ * @param argument
+ * @param arg_size
+ */
 void Places::callAll( int functionId, void *argument, int arg_size ) {
 
   if(printOutput == true){
@@ -127,6 +191,19 @@ void Places::callAll( int functionId, void *argument, int arg_size ) {
 	    Message::PLACES_CALL_ALL_VOID_OBJECT );
 }
 
+/**
+ * Calls the method specified with functionId of all array elements as
+ * passing arguments[i] to element[i]’s method, and receives a return
+ * value from it into (void *)[i] whose element’s size is return_size. Done 
+ * in parallel among multi-processes/threads. In case of a multi-
+ * dimensional array, "i" is considered as the index when the array is
+ * flattened to a single dimension.
+ * @param functionId
+ * @param argument
+ * @param arg_size
+ * @param ret_size
+ * @return 
+ */
 void *Places::callAll( int functionId, void *argument[], int arg_size,
 		       int ret_size ) {
 
@@ -138,6 +215,15 @@ void *Places::callAll( int functionId, void *argument[], int arg_size,
 		   Message::PLACES_CALL_ALL_RETURN_OBJECT );
 }
 
+/**
+ * 
+ * @param functionId
+ * @param argument
+ * @param arg_size
+ * @param ret_size
+ * @param type
+ * @return 
+ */
 void *Places::ca_setup( int functionId, void *argument,
 			int arg_size, int ret_size,
 			Message::ACTION_TYPE type ) {
@@ -220,6 +306,20 @@ void *Places::ca_setup( int functionId, void *argument,
   return (void *)MASS_base::currentReturns;
 }
 
+/**
+ * Calls from each of all cells to the method specified with functionId of
+ * all destination cells, each indexed with a different Vector element.
+ * Each vector element, say destination[] is an array of integers where
+ * destination[i] includes a relative index (or a distance) on the coordinate
+ * i from the current caller to the callee cell. The caller cell’s outMessage
+ * is a continuous set of arguments passed to the callee’s method. The
+ * caller’s inMessages[] stores values returned from all callees. More
+ * specifically, inMessages[i] maintains a set of return values from the i th
+ * callee.
+ * @param dest_handle
+ * @param functionId
+ * @param destinations
+ */
 void Places::exchangeAll( int dest_handle, int functionId, 
 			  vector<int*> *destinations ) {
 
@@ -264,6 +364,9 @@ void Places::exchangeAll( int dest_handle, int functionId,
   MASS::barrier_all_slaves( );
 }
 
+/**
+ * 
+ */
 void Places::exchangeBoundary( ) {
 
   // send a PLACES_EXCHANGE_BOUNDARY message to each slave

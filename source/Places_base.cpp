@@ -10,7 +10,16 @@
 const bool printOutput = false;
 //const bool printOutput = true;
 
-
+/**
+ * 
+ * @param handle
+ * @param className
+ * @param boundary_width
+ * @param argument
+ * @param argument_size
+ * @param dim
+ * @param size
+ */
 Places_base::Places_base( int handle, string className, int boundary_width,
 			  void *argument, int argument_size, 
 			  int dim, int size[] )
@@ -39,6 +48,9 @@ Places_base::Places_base( int handle, string className, int boundary_width,
   init_all( argument, argument_size );
 }
 
+/**
+ * 
+ */
 Places_base::~Places_base( ) {
   // destroy( places ); to be debugged
   DllClass *dllclass = MASS_base::dllMap[handle];
@@ -56,6 +68,11 @@ Places_base::~Places_base( ) {
   dlclose( dllclass->stub );
 }
 
+/**
+ * 
+ * @param argument
+ * @param argument_size
+ */
 void Places_base::init_all( void *argument, int argument_size ) {
   // For debugging
   ostringstream convert;
@@ -176,11 +193,10 @@ void Places_base::init_all( void *argument, int argument_size ) {
   }
 }
 
-/*! @brief Converts a given plain single index into a multi-dimensional index.
-
-    @param[in] singleIndex an index in a plain single dimesion that will be
-                           converted in a multi-dimensional index.
-    @return a multi-dimensional index			   
+/** @brief Converts a given plain single index into a multi-dimensional index.
+  *  @param[in] singleIndex an index in a plain single dimesion that will be
+   *                        converted in a multi-dimensional index.
+   * @return a multi-dimensional index			   
  */
 vector<int> Places_base::getGlobalArrayIndex( int singleIndex ) {
   vector<int> index;            // a multi-dimensional index
@@ -196,6 +212,12 @@ vector<int> Places_base::getGlobalArrayIndex( int singleIndex ) {
   return index;
 }
 
+/**
+ * 
+ * @param functionId
+ * @param argument
+ * @param tid
+ */
 void Places_base::callAll( int functionId, void *argument, int tid ) {
   int range[2];
   getLocalRange( range, tid );
@@ -225,6 +247,15 @@ void Places_base::callAll( int functionId, void *argument, int tid ) {
   }
 }
 
+/**
+ * 
+ * @param functionId
+ * @param argument
+ * @param arg_size
+ * @param ret_size
+ * @param tid
+ * @return 
+ */
 void **Places_base::callAll( int functionId, void *argument, 
 			     int arg_size, int ret_size, int tid ) {
   int range[2];
@@ -259,12 +290,12 @@ void **Places_base::callAll( int functionId, void *argument,
   return NULL;
 }
 
-/*! @brief Returns the first and last of the range that should be allocated
-           to a given thread
-
-     @param[i] tid an id of the thread that calls this function.
-     @return an array of two integers: element 0 = the first and 
-             element 1 = the last
+/** @brief Returns the first and last of the range that should be allocated
+  *        to a given thread
+  *
+  *  @param[i] tid an id of the thread that calls this function.
+  *  @return an array of two integers: element 0 = the first and 
+  *           element 1 = the last
 */
 void Places_base::getLocalRange( int range[], int tid ) {
 
@@ -302,6 +333,13 @@ void Places_base::getLocalRange( int range[], int tid ) {
   }
 }
 
+/**
+ * 
+ * @param dstPlaces
+ * @param functionId
+ * @param destinations
+ * @param tid
+ */
 void Places_base::exchangeAll( Places_base *dstPlaces, int functionId, 
 			       vector<int*> *destinations, int tid ) {
   int range[2];
@@ -490,6 +528,11 @@ void Places_base::exchangeAll( Places_base *dstPlaces, int functionId,
 
 }
 
+/**
+ * 
+ * @param param
+ * @return 
+ */
 void *Places_base::processRemoteExchangeRequest( void *param ) {
   int destRank = ( (int *)param )[0];
   int srcHandle = ( (int *)param )[1];
@@ -678,6 +721,11 @@ void *Places_base::processRemoteExchangeRequest( void *param ) {
   return NULL;
 }
 
+/**
+ * 
+ * @param param
+ * @return NULL
+ */
 void *Places_base::sendMessageByChild( void *param ) {
   int rank = ((struct ExchangeSendMessage *)param)->rank;
   Message *message = (Message *)((struct ExchangeSendMessage *)param)->message;
@@ -685,6 +733,9 @@ void *Places_base::sendMessageByChild( void *param ) {
   return NULL;
 }
 
+/**
+ * 
+ */
 void Places_base::exchangeBoundary( ) {
   if ( shadow_size == 0 ) { // no boundary, no exchange
     ostringstream convert;
@@ -743,6 +794,11 @@ void Places_base::exchangeBoundary( ) {
   }
 }
 
+/**
+ * 
+ * @param param
+ * @return 
+ */
 void *Places_base::exchangeBoundary_helper( void *param ) {
   // identifiy the boundary space;
   char direction = ( (int *)param )[0];
@@ -883,6 +939,14 @@ void *Places_base::exchangeBoundary_helper( void *param ) {
   return NULL;
 }
 
+/**
+ * 
+ * @param src_index
+ * @param offset
+ * @param dst_size
+ * @param dest_dimension
+ * @param dest_index
+ */
 void Places_base::getGlobalNeighborArrayIndex( vector<int>src_index, 
 					       int offset[],
 					       int dst_size[], 
@@ -902,6 +966,13 @@ void Places_base::getGlobalNeighborArrayIndex( vector<int>src_index,
   }
 }
 
+/**
+ * 
+ * @param index
+ * @param size
+ * @param dimension
+ * @return 
+ */
 int Places_base::getGlobalLinearIndexFromGlobalArrayIndex( int index[], 
 							   int size[],
 							   int dimension ) {
@@ -921,6 +992,11 @@ int Places_base::getGlobalLinearIndexFromGlobalArrayIndex( int index[],
   return retVal;
 }
 
+/**
+ * 
+ * @param globalLinearIndex
+ * @return 
+ */
 int Places_base::getRankFromGlobalLinearIndex( int globalLinearIndex ) {
   static int total = 0;
   static int stripe = 0;

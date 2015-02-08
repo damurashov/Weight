@@ -3,6 +3,11 @@
 
 #include "Agent.h"
 
+/**
+ * 
+ * @param destIndex
+ * @param agent
+ */
 class AgentMigrationRequest {
  friend class Agents_base;
  friend class Message;

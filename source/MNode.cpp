@@ -8,9 +8,16 @@ const bool printOutput = false;
 
 using namespace std;
 
+/**
+* 
+*/
 void MNode::closeMainConnection( ) {
 }
 
+/**
+ * 
+ * @param m
+ */
 void MNode::sendMessage( Message *m ) {
   int size;
   char *buf = m->serialize( size );
@@ -25,6 +32,10 @@ void MNode::sendMessage( Message *m ) {
   exit( -1 );
 }
 
+/**
+ * 
+ * @return 
+ */
 Message *MNode::receiveMessage( ) {
   int size = -1;
   int nRead = 0;

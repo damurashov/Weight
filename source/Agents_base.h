@@ -11,6 +11,9 @@
 
 using namespace std;
 
+/**
+ * 
+ */
 class Agents_base {
   friend class MProcess;
  public:

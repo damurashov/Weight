@@ -10,6 +10,13 @@ const bool printOutput = false;
 Socket *ExchangeHelper::socket;
 int *ExchangeHelper::sockets;
 
+/**
+ * 
+ * @param size
+ * @param rank
+ * @param hosts
+ * @param port
+ */
 void ExchangeHelper::establishConnection( int size, int rank, 
 					  vector<string> hosts, int port ) {
   ostringstream convert;
@@ -63,7 +70,7 @@ void ExchangeHelper::establishConnection( int size, int rank,
         MASS_base::log( convert.str( ) );
     }
 
-    // idenfity the rank of this connection from h_name
+    // identify the rank of this connection from h_name
     for ( int j = rank + 1; j < size; j++ ) {
       if(printOutput == true){
           convert.str( "" );
@@ -98,6 +105,11 @@ void ExchangeHelper::establishConnection( int size, int rank,
   
 }
 
+/**
+ * 
+ * @param rank
+ * @param exchangeReq
+ */
 void ExchangeHelper::sendMessage( int rank, Message *exchangeReq ) {
 
   ostringstream convert;
@@ -126,6 +138,11 @@ void ExchangeHelper::sendMessage( int rank, Message *exchangeReq ) {
   }
 }
 
+/**
+ * 
+ * @param rank
+ * @return 
+ */
 Message *ExchangeHelper::receiveMessage( int rank ) {
   int size = -1;
   int nRead = 0;

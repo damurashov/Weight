@@ -4,10 +4,22 @@
 #include <iostream>
 #include <sstream> // ostringstream
 
+/**
+ * Returns the size of the matrix that consists of application-specific
+ * places. Intuitively, size[0], size[1], and size[2] correspond to the size
+ * of x, y, and z, or that of i, j, and k.
+ * @return 
+ */
 vector<int> Place::getSizeVect(  ){
 	return size;
 }
 
+/**
+ * 
+ * @param handle
+ * @param offset
+ * @return 
+ */
 Place *Place::findDstPlace( int handle, int offset[] ) {
   // compute the global linear index from offset[]
   Places_base *places = MASS_base::placesMap[ handle ];
@@ -51,6 +63,12 @@ Place *Place::findDstPlace( int handle, int offset[] ) {
   return dstPlace;
 }
 
+/**
+ * 
+ * @param handle
+ * @param offset
+ * @return 
+ */
 void *Place::getOutMessage( int handle, int offset[] ) {
 
   Place *dstPlace = findDstPlace( handle, offset );
@@ -60,6 +78,13 @@ void *Place::getOutMessage( int handle, int offset[] ) {
 
 }
 
+/**
+ * 
+ * @param handle
+ * @param offset
+ * @param position
+ * @param value
+ */
 void Place::putInMessage( int handle, int offset[], int position, 
 			  void *value ){
 

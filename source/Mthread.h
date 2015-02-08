@@ -6,6 +6,11 @@
 
 class Mthread {
  public:
+     
+/**
+  * Status Type
+  * A list of possible statuses
+  */
   enum STATUS_TYPE { STATUS_READY,          // 0
                      STATUS_TERMINATE,      // 1
                      STATUS_CALLALL,        // 2

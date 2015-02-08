@@ -3,6 +3,17 @@
 #include "Socket.h"
 #include "Ssh2Connection.h"
 
+/**
+ * 
+ * @param name
+ * @param name_len
+ * @param instruction
+ * @param instruction_len
+ * @param num_prompts
+ * @param prompts
+ * @param responses
+ * @param abstract
+ */
 static void kbd_callback( const char *name, int name_len,
 			  const char *instruction, int instruction_len,
 			  int num_prompts,
@@ -23,6 +34,12 @@ static void kbd_callback( const char *name, int name_len,
   (void)abstract;
 } /* kbd_callback */
 
+/**
+ * 
+ * @param socket_fd
+ * @param session
+ * @return 
+ */
 int Utilities::waitsocket(int socket_fd, LIBSSH2_SESSION *session) {
   struct timeval timeout;
   int rc;
@@ -52,6 +69,14 @@ int Utilities::waitsocket(int socket_fd, LIBSSH2_SESSION *session) {
   return rc;
 }
 
+/**
+ * 
+ * @param host
+ * @param port
+ * @param username
+ * @param password
+ * @return 
+ */
 Ssh2Connection *Utilities::establishConnection( const char host[], 
 						const int port, 
 						const char username[], 
@@ -151,6 +176,12 @@ Ssh2Connection *Utilities::establishConnection( const char host[],
   return ssh2connection;
 }
 
+/**
+ * 
+ * @param ssh2connection
+ * @param cmd
+ * @return 
+ */
 bool Utilities::launchRemoteProcess( const Ssh2Connection *ssh2connection,
 				     const char cmd[] ) {
 
@@ -170,6 +201,11 @@ bool Utilities::launchRemoteProcess( const Ssh2Connection *ssh2connection,
   return true;
 }
 
+/**
+ * 
+ * @param ssh2connection
+ * @param msg
+ */
 void Utilities::shutdown( const Ssh2Connection *ssh2connection, 
 			  const char msg[] ) {
   shutdown( ssh2connection->socket, ssh2connection->session,
@@ -177,6 +213,13 @@ void Utilities::shutdown( const Ssh2Connection *ssh2connection,
   delete ssh2connection;
 }
 
+/**
+ * 
+ * @param socket
+ * @param session
+ * @param channel
+ * @param msg
+ */
 void Utilities::shutdown( Socket *socket, 
 			  LIBSSH2_SESSION *session,
 			  LIBSSH2_CHANNEL *channel,

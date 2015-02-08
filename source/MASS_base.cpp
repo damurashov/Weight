@@ -36,6 +36,13 @@ vector<int*> *MASS_base::currentDestinations;
 Message::ACTION_TYPE MASS_base::currentMsgType;
 ExchangeHelper MASS_base::exchange;
 
+/**
+ * 
+ * @param name
+ * @param myPid
+ * @param nProc
+ * @param port
+ */
 void MASS_base::initMASS_base( const char *name, int myPid, int nProc, int port ) {
   // Initialize constants
   MASS_base::hostName = name;
@@ -58,6 +65,11 @@ void MASS_base::initMASS_base( const char *name, int myPid, int nProc, int port 
   }
 }
 
+/**
+ * 
+ * @param nThr
+ * @return 
+ */
 bool MASS_base::initializeThreads( int nThr ) {
   if ( INITIALIZED ) {
     if(printOutput == true)
@@ -98,6 +110,10 @@ bool MASS_base::initializeThreads( int nThr ) {
   return true;
 }
 
+/**
+ * 
+ * @param msg
+ */
 void MASS_base::log( string msg ) {
   pthread_mutex_lock( &log_lock );
   if ( myPid == 0 ) {
@@ -119,7 +135,10 @@ void MASS_base::log( string msg ) {
   pthread_mutex_unlock( &log_lock );
 }
 
-
+/**
+ * 
+ * @param host_args
+ */
 void MASS_base::setHosts( vector<string> host_args ) {
   if ( !hosts.empty( ) ) {
     // already initialized
@@ -144,6 +163,9 @@ void MASS_base::setHosts( vector<string> host_args ) {
   exchange.establishConnection( systemSize, myPid, hosts, MASS_PORT );
 }
 
+/**
+* 
+*/
 void MASS_base::showHosts( ) {
   ostringstream convert;
   if(printOutput == true){
@@ -155,6 +177,9 @@ void MASS_base::showHosts( ) {
   }
 }
 
+/**
+* 
+*/
 int MASS_base::getCores( ) {
   // TODO: to be implemented
   return 2;

@@ -12,6 +12,14 @@
 const bool printOutput = false;
 //const bool printOutput = true;
 
+/**
+ * 
+ * @param name
+ * @param myPid
+ * @param nProc
+ * @param nThr
+ * @param port
+ */
 MProcess::MProcess( char *name, int myPid, int nProc, int nThr, int port ) {
   this->hostName = new string( name );
   this->myPid = myPid;
@@ -30,6 +38,9 @@ MProcess::MProcess( char *name, int myPid, int nProc, int nThr, int port ) {
   MASS_base::initializeThreads( nThr );
 }
 
+/**
+ * 
+ */
 void MProcess::start( ) {
   MASS_base::log( "MProcess started" );
 
@@ -375,12 +386,19 @@ void MProcess::start( ) {
   }
 }
 
+/**
+ * 
+ */
 void MProcess::sendAck( ) {
   Message *msg = new Message( Message::ACK );
   sendMessage( msg );
   delete msg;
 }
 
+/**
+ * 
+ * @param localPopulation
+ */
 void MProcess::sendAck( int localPopulation ) {
   Message *msg = new Message( Message::ACK, localPopulation );
   ostringstream convert;
@@ -392,6 +410,12 @@ void MProcess::sendAck( int localPopulation ) {
   delete msg;
 }
 
+/**
+ * 
+ * @param argument
+ * @param nPlaces
+ * @param return_size
+ */
 void MProcess::sendReturnValues( void *argument, int nPlaces,
 				int return_size ) {
   Message *msg = new Message( Message::ACK, argument, 
@@ -400,6 +424,13 @@ void MProcess::sendReturnValues( void *argument, int nPlaces,
   delete msg;
 }
 
+/**
+ * 
+ * @param argument
+ * @param nAgents
+ * @param return_size
+ * @param localPopulation
+ */
 void MProcess::sendReturnValues( void *argument, int nAgents,
 				 int return_size, int localPopulation ) {
   Message *msg = new Message( Message::ACK, argument, 
@@ -408,6 +439,10 @@ void MProcess::sendReturnValues( void *argument, int nAgents,
   delete msg;
 }
 
+/**
+ * 
+ * @param msg
+ */
 void MProcess::sendMessage( Message *msg ) {
   int msg_size = 0;
   char *byte_msg = msg->serialize( msg_size );
@@ -416,6 +451,10 @@ void MProcess::sendMessage( Message *msg ) {
   write( sd, byte_msg, msg_size );                // send a message body
 }
 
+/**
+ * 
+ * @return 
+ */
 Message *MProcess::receiveMessage( ) {
   int size = -1;
   int nRead = 0;
@@ -440,7 +479,12 @@ Message *MProcess::receiveMessage( ) {
   }
 }
 
-
+/**
+ * main MASS function that launches MProcess
+ * @param argc
+ * @param argv
+ * @return 
+ */
 int main( int argc, char* argv[] ) {
   // receive all arguments
   char *cur_dir = argv[1];

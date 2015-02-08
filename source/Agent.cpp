@@ -3,7 +3,14 @@
 #include <iostream>
 #include <sstream>     // ostringstream
 
-//Set number for spawning additional Agents
+/**
+ * Spawns a “numAgents’ of new agents, as passing arguments[i] (with arg_size) 
+ * to the i-th new agent upon a next call to Agents.manageAll( ).
+ * More specifically, spawn( ) changes the calling agent’s newChildren.
+ * @param numAgents
+ * @param arguments
+ * @param arg_size
+ */
 void Agent::spawn( int numAgents, vector<void*> arguments, int arg_size){
 
 	//Only want to make changes if the number to be created is above zero
@@ -13,7 +20,12 @@ void Agent::spawn( int numAgents, vector<void*> arguments, int arg_size){
 	}
 }
 
-//Set index for an Agent to migrate to
+/**
+ * Initiates an agent migration upon a next call to Agents.manageAll( ). More
+ * specifically, migrate( ) updates the calling agent’s index[].
+ * @param index
+ * @return 
+ */
 bool Agent::migrate( vector<int> index ){
 	vector<int> sizeVectors;
 	sizeVectors = place->getSizeVect();

@@ -6,6 +6,10 @@
 //const bool printOutput = false;
 const bool printOutput = true;
 
+/**
+ * 
+ * @param className
+ */
 DllClass::DllClass( string className ) {
   // For debugging
   ostringstream convert;

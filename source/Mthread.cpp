@@ -16,6 +16,9 @@ Mthread::STATUS_TYPE Mthread::status;
 int Mthread::threadCreated;
 int Mthread::agentBagSize;
 
+/**
+ * 
+ */
 void Mthread::init( ) {
   pthread_mutex_init( &lock, NULL ); 
   pthread_cond_init( &barrier_ready, NULL );
@@ -24,6 +27,11 @@ void Mthread::init( ) {
   barrier_count = 0;
 }
 
+/**
+ * 
+ * @param param
+ * @return 
+ */
 void *Mthread::run( void *param ) {
   int tid = *(int *)param;
   threadCreated = tid;
@@ -179,6 +187,10 @@ void *Mthread::run( void *param ) {
   return NULL;
 }
 
+/**
+ * 
+ * @param new_status
+ */
 void Mthread::resumeThreads( STATUS_TYPE new_status ) {
   pthread_mutex_lock( &lock );
   status = new_status;
@@ -186,6 +198,10 @@ void Mthread::resumeThreads( STATUS_TYPE new_status ) {
   pthread_mutex_unlock( &lock );
 }
 
+/**
+ * 
+ * @param tid
+ */
 void Mthread::barrierThreads( int tid ) {
   static int barrier_phases = 0;
 

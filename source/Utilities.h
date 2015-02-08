@@ -10,6 +10,10 @@
 
 using namespace std;
 
+/**
+ * Utilities for the MASS library.
+ * Includes use of sockets and ssh2
+ */
 class Utilities {
  public:
   Utilities( ) : keyfile1( "~/.ssh/id_rsa.pub" ),  keyfile2( "~/.ssh/id_rsa" )
