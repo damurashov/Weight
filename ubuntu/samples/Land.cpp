@@ -3,8 +3,8 @@
 #include <sstream>     // ostringstream
 
 //Used to toggle output for Wave2d
-const bool printOutput = false;
-// const bool printOutput = true;
+//const bool printOutput = false;
+ const bool printOutput = true;
 
 extern "C" Place* instantiate( void *argument ) {
   return new Land( argument );
@@ -62,6 +62,7 @@ void *Land::exchangetest( void *argument ) {
   
   return retVal;
 }
+
 void *Land::checkInMessage( void *argument ) {
 
   ostringstream convert;
@@ -81,3 +82,35 @@ void *Land::checkInMessage( void *argument ) {
   return NULL;
 }
 
+void *Land::printOutMessage( void *argument ) {
+  ostringstream convert;
+  convert << "printOutMessage Land[" << index[0] << "][" << index[1] 
+	  << "]'s outMessage = " << *(int *)outMessage;
+  MASS_base::log( convert.str( ) );
+
+  return NULL;
+}
+
+void *Land::printShadow( void *argument ) {
+  int shadow[4];
+  int north[2] = {0, 1}; 
+  int east[2] = {1, 0}; 
+  int south[2] = {0, -1};
+  int west[2] = {-1, 0};
+  int *ptr = (int *)getOutMessage( 1, north );
+  shadow[0] = ( ptr == NULL ) ? 0 : *ptr;
+  ptr = (int *)getOutMessage( 1, east );
+  shadow[1] = ( ptr == NULL ) ? 0 : *ptr;
+  ptr = (int *)getOutMessage( 1, south );
+  shadow[2] = ( ptr == NULL ) ? 0 : *ptr;
+  ptr = (int *)getOutMessage( 1, west );
+  shadow[3] = ( ptr == NULL ) ? 0 : *ptr;
+
+  ostringstream convert;
+  convert << "printShadow:  Land[" << index[0] << "][" << index[1] 
+	  << "]'s north = " << shadow[0] << ", east = " << shadow[1]
+	  << ", south = " << shadow[2] << ", west = " << shadow[3];
+  MASS_base::log( convert.str( ) );
+
+  return NULL;
+}

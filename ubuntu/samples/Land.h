@@ -12,6 +12,8 @@ public:
   static const int callalltest_ = 1;
   static const int exchangetest_ = 2;
   static const int checkInMessage_ = 3;
+  static const int printOutMessage_ = 4;
+  static const int printShadow_ = 5;
 
   Land( void *argument ) : Place( argument ) {
     bzero( arg, sizeof( arg ) );
@@ -24,6 +26,8 @@ public:
     case callalltest_: return callalltest( argument );
     case exchangetest_: return exchangetest( argument );
     case checkInMessage_: return checkInMessage( argument );
+    case printOutMessage_: return printOutMessage( argument );
+    case printShadow_: return printShadow( argument );
     }
     return NULL;
   };
@@ -34,6 +38,8 @@ private:
   void *callalltest( void *argument );
   void *exchangetest( void *argument );
   void *checkInMessage( void *argument );
+  void *printOutMessage( void *argument );
+  void *printShadow( void *argument );
 };
 
 #endif

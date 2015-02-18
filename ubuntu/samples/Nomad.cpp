@@ -3,8 +3,8 @@
 #include <sstream>     // ostringstream
 
 //Toggles output for user program
-const bool printOutput = false;
-// const bool printOutput = true;
+//const bool printOutput = false;
+const bool printOutput = true;
 
 extern "C" Agent* instantiate( void *argument ) {
   return new Nomad( argument );
