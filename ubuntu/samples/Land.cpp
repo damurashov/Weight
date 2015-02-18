@@ -14,6 +14,10 @@ extern "C" void destroy( Place *object ) {
   delete object;
 }
 
+
+/**
+ * Initializes a Land object.
+ */
 void *Land::init( void *argument ) {
 
   ostringstream convert;
@@ -24,14 +28,17 @@ void *Land::init( void *argument ) {
       MASS_base::log( convert.str( ) );
   }
 
-  inMessage_size = sizeof( int );
-  outMessage_size = sizeof( int );
+  inMessage_size = sizeof( int );  // defines the size of the inMessagge.
+  outMessage_size = sizeof( int ); // defines the size of the outMessage.
   outMessage = new int( );
   *(int *)outMessage = index[0] * 100 + index[1];
   
   return NULL;
 }
 
+/**
+ * callalltest causes all Land's to report their location and contents.
+ */
 void *Land::callalltest( void *argument ) {
   ostringstream convert;
   
@@ -48,6 +55,9 @@ void *Land::callalltest( void *argument ) {
   return ret_val;
 }
 
+/**
+ * exchangetest causes each place to exchange information with it's neighbors.
+ */
 void *Land::exchangetest( void *argument ) {
   ostringstream convert;
 

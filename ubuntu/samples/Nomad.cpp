@@ -14,6 +14,9 @@ extern "C" void destroy( Agent *object ) {
   delete object;
 }
 
+/**
+ * initialize a Nomad with the given argument.
+ */
 void *Nomad::agentInit( void *argument ) {
   ostringstream convert;
   if(printOutput == true){

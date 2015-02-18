@@ -13,7 +13,9 @@ using namespace std;
 
 class Nomad : public Agent {
 
+ 
  public:
+  // define functionId's that will 'point' to the functions they represent.
   static const int agentInit_ = 0;
   static const int somethingFun_ = 1;
   static const int createChild_ = 2;
@@ -23,11 +25,19 @@ class Nomad : public Agent {
   static const int addData_ = 6;
   static const int move2_ = 7;
   
+   /**
+   * Initialize a Nomad object
+   */
   Nomad( void *argument ) : Agent( argument ) {
     if(printOut == true)
         MASS_base::log( "BORN!!" );
   };
-
+  
+  /**
+   * the callMethod uses the function ID to determine which method to execute.
+   * It is assumed the arguments passed in contain everything those 
+   * methods need to run.
+   */
   virtual void *callMethod( int functionId, void *argument ) {
     switch( functionId ) {
     case agentInit_: return agentInit( argument );
