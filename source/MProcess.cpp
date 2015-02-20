@@ -9,8 +9,8 @@
 #include "Mthread.h"
 
 //Toggles output for MProcess
-const bool printOutput = false;
-//const bool printOutput = true;
+//const bool printOutput = false;
+const bool printOutput = true;
 
 MProcess::MProcess( char *name, int myPid, int nProc, int nThr, int port ) {
   this->hostName = new string( name );
