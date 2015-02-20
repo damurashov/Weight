@@ -104,13 +104,14 @@ int Socket::getServerSocket( ) {
     acceptSockAddr.sin_addr.s_addr = htonl( INADDR_ANY );
     acceptSockAddr.sin_port        = htons( port );
     
+    perror( "serverFd: " + serverFd );
+    perror( "acceptSockAddr.sin_family: " + acceptSockAddr.sin_family );
+    perror( "acceptSockAddr.sin_addr.s_addr: " + acceptSockAddr.sin_addr.s_addr );
+    perror( "acceptSockAddr.sin_port: " + acceptSockAddr.sin_port );
+
     if( bind( serverFd, (sockaddr*)&acceptSockAddr,
 	      sizeof( acceptSockAddr ) ) < 0 ) {
       perror( "Cannot bind the local address to the server socket." );
-      perror( "serverFd: " + serverFd );
-      perror( "acceptSockAddr.sin_family: " + acceptSockAddr.sin_family );
-      perror( "acceptSockAddr.sin_addr.s_addr: " + acceptSockAddr.sin_addr.s_addr );
-      perror( "acceptSockAddr.sin_port: " + acceptSockAddr.sin_port );
       return NULL_FD;
     }
     
