@@ -2,8 +2,8 @@
 #include "MASS_base.h"
 
 //Used to toggle output for MASS_base
-const bool printOutput = false;
-//const bool printOutput = true;
+//const bool printOutput = false;
+const bool printOutput = true;
 
 // Allocate static space
 int MASS_base::MASS_PORT = 0;
