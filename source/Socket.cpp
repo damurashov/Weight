@@ -86,13 +86,11 @@ int Socket::getServerSocket() {
 
     // Set the resuseaddr option
     const int on = 1;
-    /*
     if (setsockopt(serverFd, SOL_SOCKET, SO_REUSEADDR, (char *) &on, sizeof(on))
         < 0) {
       perror("setsockopt SO_REUSEADDR failed");
       return NULL_FD;
     }
-    */
 
     if (setsockopt(serverFd, IPPROTO_TCP, TCP_NODELAY, (char *) &on, sizeof(on))
         < 0) {
