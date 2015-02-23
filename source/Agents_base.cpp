@@ -629,6 +629,8 @@ void Agents_base::manageAll( int tid ) {
 	evaluationAgent->place 
 	  = places_dllclass->places[destinationLocalLinearIndex];
 
+	evaluationAgent->index = evaluationAgent->place->index;
+
 	if(printOutput == true){
 	    convert.str( "" );
 	    convert << "evaluationAgent->place = " 
@@ -928,6 +930,7 @@ void *Agents_base::processAgentMigrationRequest( void *param ) {
 
     // push this agent into the place and the entire agent bag.
     agent->place = dstPlace;
+    agent->index = dstPlace->index;
     pthread_mutex_lock(&MASS_base::request_lock);
     dstPlace->agents.push_back( agent );
     agents_dllclass->agents->push_back( agent );
