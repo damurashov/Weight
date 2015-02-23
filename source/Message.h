@@ -1,230 +1,451 @@
-#include <sstream>      // ostringstream
-#include "MASS_base.h"  // MASS_base::log( )
-#include "Places_base.h"
-#include "Agents_base.h"
-#include "Mthread.h"
+#ifndef MESSAGE_H
+#define MESSAGE_H
+#define VOID_HANDLE -1
 
-//Used to toggle output for Mthread
-const bool printOutput = false;
-//const bool printOutput = true;
+#include <string>
+#include <string.h>
+#include <vector>
+#include "RemoteExchangeRequest.h"
+#include "AgentMigrationRequest.h"
 
-pthread_mutex_t Mthread::lock;
-pthread_cond_t Mthread::barrier_ready;
-pthread_cond_t Mthread::barrier_finished;
-int Mthread::barrier_count;
-Mthread::STATUS_TYPE Mthread::status;
-int Mthread::threadCreated;
-int Mthread::agentBagSize;
+using namespace std;
 
-/**
- * 
- */
-void Mthread::init( ) {
-  pthread_mutex_init( &lock, NULL ); 
-  pthread_cond_init( &barrier_ready, NULL );
-  pthread_cond_init( &barrier_finished, NULL );
-  status = STATUS_READY;
-  barrier_count = 0;
-}
+class Message
+{
+public:
 
-/**
- * 
- * @param param
- * @return 
- */
-void *Mthread::run( void *param ) {
-  int tid = *(int *)param;
-  threadCreated = tid;
+  /**
+   * ACTION_TYPE
+   * A list of actions assigned to numbers.
+   */
+  enum ACTION_TYPE
+  {
+    EMPTY, // 0 
+    FINISH, // 1
+    ACK, // 2
 
-  // breath message
-  ostringstream convert;
-  if(printOutput == true){
-      convert << "Mthread[" << tid << "] inovked";
-      MASS_base::log( convert.str( ) );
-  }
+    PLACES_INITIALIZE, // 3
+    PLACES_CALL_ALL_VOID_OBJECT, // 4
+    PLACES_CALL_ALL_RETURN_OBJECT, // 5
+    PLACES_CALL_SOME_VOID_OBJECT,
+    PLACES_EXCHANGE_ALL, // 7
+    PLACES_EXCHANGE_ALL_REMOTE_REQUEST, // 8
+    PLACES_EXCHANGE_ALL_REMOTE_RETURN_OBJECT, // 9
+    PLACES_EXCHANGE_BOUNDARY, // 10
+    PLACES_EXCHANGE_BOUNDARY_REMOTE_REQUEST, // 11
 
-  // the followign variables are used to call callAll( )
-  Places_base *places = NULL;
-  Places_base *destinationPlaces = NULL;
-  Agents_base *agents = NULL;
+    AGENTS_INITIALIZE, // 12
+    AGENTS_CALL_ALL_VOID_OBJECT, // 13
+    AGENTS_CALL_ALL_RETURN_OBJECT, // 14
+    AGENTS_MANAGE_ALL, // 15
+    AGENTS_MIGRATION_REMOTE_REQUEST // 16
+  };
 
-  int functionId = 0;
-  void *argument = NULL;
-  int arg_size = 0;
-  int ret_size = 0;
-  Message::ACTION_TYPE msgType = Message::EMPTY;
-  vector<int*> *destinations = NULL;
+  /**
+   * PLACES_INITIALIZE
+   * @param action
+   * @param size
+   * @param handle
+   * @param classname
+   * @param argument
+   * @param arg_size
+   * @param boundary_width
+   * @param hosts
+   */
+  Message (ACTION_TYPE action,
+           vector<int> *size, int handle, string classname, void *argument,
+           int arg_size, int boundary_width, vector<string> *hosts) :
+  action (action), size (size),
+  handle (handle), dest_handle (VOID_HANDLE),
+  functionId (0), classname (classname),
+  argument (argument), argument_size (arg_size), return_size (0),
+  argument_in_heap (false), hosts (hosts), destinations (NULL),
+  dimension (0), agent_population (-1), boundary_width (boundary_width),
+  exchangeReqList (NULL),
+  migrationReqList (NULL) { };
 
-  bool running = true;
-  while ( running ) {
-    // wait for a new command
-    pthread_mutex_lock( &lock );
-    if ( status == STATUS_READY )
-      pthread_cond_wait( &barrier_ready, &lock );
+  /**
+   * PLACES_CALL_ALL_VOID_OBJECT,
+   * PLACES_CALL_ALL_RETURN_OBJECT,
+   * AGENTS_CALL_ALL_VOID_OBJECT,
+   * AGENTS_CALL_ALL_RETURN_OBJECT
+   * @param action
+   * @param handle
+   * @param functionId
+   * @param argument
+   * @param arg_size
+   * @param ret_size
+   */
+  Message (ACTION_TYPE action,
+           int handle, int functionId, void *argument, int arg_size,
+           int ret_size) :
+  action (action), size (0),
+  handle (handle), dest_handle (VOID_HANDLE),
+  functionId (functionId), classname (""),
+  argument (argument), argument_size (arg_size), return_size (ret_size),
+  argument_in_heap (false), hosts (NULL), destinations (NULL),
+  dimension (0), agent_population (-1), boundary_width (0),
+  exchangeReqList (NULL), migrationReqList (NULL) { };
 
-    // wake-up message
-    if(printOutput == true){
-        convert.str( "" );
-        convert << "Mthread[" << tid << "] woken up";
-        MASS_base::log( convert.str( ) );
-    }
+  /**
+   * PLACES_EXCHANGE_ALL
+   * @param action
+   * @param handle
+   * @param dest_handle
+   * @param functionId
+   * @param destinations
+   * @param dimension
+   */
+  Message (ACTION_TYPE action,
+           int handle, int dest_handle, int functionId,
+           vector<int*> *destinations, int dimension) :
+  action (action), size (0),
+  handle (handle), dest_handle (dest_handle),
+  functionId (functionId), classname (""),
+  argument (NULL), argument_size (0), return_size (0),
+  argument_in_heap (false), hosts (NULL), destinations (destinations),
+  dimension (dimension), agent_population (-1), boundary_width (0),
+  exchangeReqList (NULL), migrationReqList (NULL) { };
 
-    pthread_mutex_unlock( &lock );
+  /**
+   * PLACES_EXCHANGE_ALL_REMOTE_REQUEST
+   * @param action
+   * @param handle
+   * @param dest_handle
+   * @param functionId
+   * @param exchangeReqList
+   */
+  Message (ACTION_TYPE action,
+           int handle, int dest_handle, int functionId,
+           vector<RemoteExchangeRequest*> *exchangeReqList) :
+  action (action), size (0),
+  handle (handle), dest_handle (dest_handle),
+  functionId (functionId), classname (""),
+  argument (NULL), argument_size (0), return_size (0),
+  argument_in_heap (false), hosts (NULL), destinations (NULL),
+  dimension (0), agent_population (-1), boundary_width (0),
+  exchangeReqList (exchangeReqList), migrationReqList (NULL) { };
 
-    // perform each task
-    switch( status ) {
-    case STATUS_READY:
-      if(printOutput == true)
-          MASS_base::log( "Mthread reached STATUS_READY in switch" );
-      exit( -1 );
-      break;
-    case STATUS_TERMINATE:
-      running = false;
-      break;
-    case STATUS_CALLALL:
-      places = MASS_base::getCurrentPlaces( );
-      functionId = MASS_base::getCurrentFunctionId( );
-      argument = MASS_base::getCurrentArgument( );
-      arg_size = MASS_base::getCurrentArgSize( );
-      msgType = MASS_base::getCurrentMsgType( );
-      ret_size = MASS_base::getCurrentRetSize( );
+  /**
+   * PLACES_EXCHANGE_ALL_REMOTE_RETURN_OBJECT and 
+   * PLACES_EXCHANGE_BOUNDARY_REMOTE_REQUEST
+   * @param action
+   * @param retVals
+   * @param retValsSize
+   */
+  Message (ACTION_TYPE action, char *retVals, int retValsSize) :
+  action (action), size (0),
+  handle (VOID_HANDLE), dest_handle (VOID_HANDLE),
+  functionId (0), classname (""),
+  argument (retVals), argument_size (retValsSize), return_size (0),
+  argument_in_heap (false), hosts (NULL), destinations (NULL),
+  dimension (0), agent_population (-1), boundary_width (0),
+  exchangeReqList (NULL), migrationReqList (NULL) { };
 
-      if(printOutput == true){
-          convert.str( "" );
-          convert << "Mthread[" << tid << "] works on CALLALL:"
-	          << " placese = " << (void *)places
-	          << " functionId = " << functionId
-	          << " argument = " << argument
-	          << " arg_size = " << arg_size
-	          << " msgType = " << msgType
-	          << " ret_size = " << ret_size;
-          MASS_base::log( convert.str( ) );
-      }
+  /**
+   * AGENTS_INITIALIZE
+   * @param action
+   * @param initPopulation
+   * @param handle
+   * @param placeHandle
+   * @param className
+   * @param argument
+   * @param argument_size
+   */
+  Message (ACTION_TYPE action, int initPopulation, int handle,
+           int placeHandle, string className, void *argument,
+           int argument_size) :
+  action (action), size (0),
+  handle (handle), dest_handle (placeHandle),
+  functionId (0), classname (className),
+  argument (argument), argument_size (argument_size), return_size (0),
+  argument_in_heap (false), hosts (NULL), destinations (NULL),
+  dimension (0), agent_population (initPopulation), boundary_width (0),
+  exchangeReqList (NULL), migrationReqList (NULL) { };
 
-      if ( msgType == Message::PLACES_CALL_ALL_VOID_OBJECT ) {
-	//cerr << "Mthread[" << tid << "] call all void object" << endl;
-	places->callAll( functionId, argument, tid );
-      }
-      else {
-	//cerr << "Mthread[" << tid << "] call all return object" << endl;
-	places->callAll( functionId, argument, arg_size, ret_size, tid );
-      }
-      break;
+  /**
+   * AGENTS_MANAGE_ALL and PLACES_EXCHANGE_BOUNDARY
+   * @param action
+   * @param handle
+   * @param dummy
+   */
+  Message (ACTION_TYPE action, int handle, int dummy) :
+  action (action), size (0),
+  handle (handle), dest_handle (handle),
+  functionId (0), classname (""),
+  argument (NULL), argument_size (0), return_size (0),
+  argument_in_heap (false), hosts (NULL), destinations (NULL),
+  dimension (0), agent_population (-1), boundary_width (0),
+  exchangeReqList (NULL), migrationReqList (NULL) { };
 
-    case STATUS_EXCHANGEALL:
-      if(printOutput == true){
-          convert.str( "" );
-          convert << "Mthread[" << tid << "] works on EXCHANGEALL";
-          MASS_base::log( convert.str( ) );
-      }
+  /**
+   * AGENTS_MIGRATION_REMOTE_REQUEST
+   * @param action
+   * @param agentHandle
+   * @param placeHandle
+   * @param migrationReqList
+   */
+  Message (ACTION_TYPE action, int agentHandle, int placeHandle,
+           vector<AgentMigrationRequest*> *migrationReqList) :
+  action (action), size (0),
+  handle (agentHandle), dest_handle (placeHandle),
+  functionId (0), classname (""),
+  argument (NULL), argument_size (0), return_size (0),
+  argument_in_heap (false), hosts (NULL), destinations (NULL),
+  dimension (0), agent_population (-1), boundary_width (0),
+  exchangeReqList (NULL), migrationReqList (migrationReqList) { };
 
-      places = MASS_base::getCurrentPlaces( );
-      functionId = MASS_base::getCurrentFunctionId( );
-      destinationPlaces = MASS_base::getDestinationPlaces( );
-      destinations = MASS_base::getCurrentDestinations( );
+  /**
+   * FINISH
+   * ACK
+   * @param action
+   */
+  Message (ACTION_TYPE action) :
+  action (action), size (NULL),
+  handle (VOID_HANDLE), dest_handle (VOID_HANDLE),
+  functionId (0), classname (""),
+  argument (NULL), argument_size (0), return_size (0),
+  argument_in_heap (false), hosts (NULL), destinations (NULL),
+  dimension (0), agent_population (-1), boundary_width (0),
+  exchangeReqList (NULL), migrationReqList (NULL) { };
 
-      places->exchangeAll( destinationPlaces, functionId, destinations, tid );
-      break;
+  /**
+   * ACK used for PLACES_CALL_ALL_RETURN_OBJECT
+   * @param action
+   * @param argument
+   * @param arg_size
+   */
+  Message (ACTION_TYPE action, void *argument, int arg_size) :
+  action (action), size (NULL),
+  handle (VOID_HANDLE), dest_handle (VOID_HANDLE),
+  functionId (0), classname (""),
+  argument (argument), argument_size (arg_size), return_size (0),
+  argument_in_heap (false), hosts (NULL), destinations (NULL),
+  dimension (0), agent_population (-1), boundary_width (0),
+  exchangeReqList (NULL), migrationReqList (NULL) { };
 
-    case STATUS_AGENTSCALLALL:
-	agents = MASS_base::getCurrentAgents();
-	functionId = MASS_base::getCurrentFunctionId();
-	argument = MASS_base::getCurrentArgument();
-	arg_size = MASS_base::getCurrentArgSize();
-	msgType = MASS_base::getCurrentMsgType();
-	ret_size = MASS_base::getCurrentRetSize();
 
-	if(printOutput == true){
-	    convert.str("");
-	    convert << "Mthread[" << tid << "] works on AGENST_CALLALL:"
-		    << " agents = " << (void*)agents
-		    << " functionId = " << functionId
-		    << " argument = " << argument
-		    << " arg_size = " << arg_size
-		    << " msgType = " << msgType
-		    << " ret_size = " << ret_size;
-	    MASS_base::log( convert.str() );
-	}
-	if(msgType == Message::AGENTS_CALL_ALL_VOID_OBJECT){
-		//cerr << "Mthread[" << tid << "] call all agent void object" << endl;
-		agents->callAll(functionId, argument, tid);
-	}else{
-		//cerr << "Mthread[" << tid << "] call all agents return object" << endl;
-		agents->callAll(functionId, argument, arg_size, ret_size, tid);
-	}
-	break;
+  /**
+   * ACK used for AGENTS_CALL_ALL_RETURN_OBJECT
+   * @param action
+   * @param argument
+   * @param arg_size
+   * @param localPopulation
+   */
+  Message (ACTION_TYPE action, void *argument, int arg_size, int localPopulation) :
+  action (action), size (NULL),
+  handle (VOID_HANDLE), dest_handle (VOID_HANDLE),
+  functionId (0), classname (""),
+  argument (argument), argument_size (arg_size), return_size (0),
+  argument_in_heap (false), hosts (NULL), destinations (NULL),
+  dimension (0), agent_population (localPopulation), boundary_width (0),
+  exchangeReqList (NULL), migrationReqList (NULL) { };
 
-      case STATUS_MANAGEALL:
-		
-	//Get agents to be called with Manageall
-	agents = MASS_base::getCurrentAgents( );
+  /**
+   * ACK used for AGENTS_INITIALIZE and AGENTS_CALL_ALL_VOID_OBJECT
+   * @param action
+   * @param localPopulation
+   */
+  Message (ACTION_TYPE action, int localPopulation) :
+  action (action), size (NULL),
+  handle (VOID_HANDLE), dest_handle (VOID_HANDLE),
+  functionId (0), classname (""),
+  argument (NULL), argument_size (0), return_size (0),
+  argument_in_heap (false), hosts (NULL), destinations (NULL),
+  dimension (0), agent_population (localPopulation), boundary_width (0),
+  exchangeReqList (NULL), migrationReqList (NULL) { };
 
-	//Send logging message
-	if(printOutput == true){
-	    convert.str("");
-	    convert << "Mthread[" << tid << "] works on MANAGEALL:"
-		    << " agents = " << (void*)agents;
-	    MASS_base::log( convert.str() );
-	}
+  
+  /**
+   * EMPTY
+   */
+  Message () :
+  action (EMPTY), size (NULL),
+  handle (VOID_HANDLE), dest_handle (VOID_HANDLE),
+  functionId (0), classname (""),
+  argument (NULL), argument_size (0), return_size (0),
+  argument_in_heap (false), hosts (NULL), destinations (NULL),
+  dimension (0), agent_population (-1), boundary_width (0),
+  exchangeReqList (NULL), migrationReqList (NULL) { };
 
-	//Sent message for manageall
-	agents->manageAll( tid );
-	
-	break;
-    }
+  /**
+   * 
+   */
+  ~Message (); // delete argument and hosts.
 
-    // barrier
-    barrierThreads( tid );
-      
-  }
+  char *serialize (int &size);
+  void deserialize (char *msg, int size);
 
-  // last message
-  if(printOutput == true){
-      convert.str( "" );
-      convert << "Mthread[" << tid << "] terminated";
-      MASS_base::log( convert.str( ) );
-  }
-  return NULL;
-}
+  /**
+   * Get the action
+   * @return action
+   */
+  ACTION_TYPE getAction ()
+  {
+    return action;
+  };
 
-/**
- * 
- * @param new_status
- */
-void Mthread::resumeThreads( STATUS_TYPE new_status ) {
-  pthread_mutex_lock( &lock );
-  status = new_status;
-  pthread_cond_broadcast( &barrier_ready );
-  pthread_mutex_unlock( &lock );
-}
+  /**
+   * Get the size
+   * @return *size
+   */
+  vector<int> getSize ()
+  {
+    return *size;
+  };
 
-/**
- * 
- * @param tid
- */
-void Mthread::barrierThreads( int tid ) {
-  static int barrier_phases = 0;
+  /**
+   * Get the handle
+   * @return handle
+   */
+  int getHandle ()
+  {
+    return handle;
+  };
 
-  pthread_mutex_lock( &lock );
-  if ( ++barrier_count < int( MASS_base::threads.size( ) ) ) {
-    ostringstream convert;
-    if(printOutput == true){
-        convert << "tid[" << tid << "] waiting: barrier = " << barrier_phases;
-        MASS_base::log( convert.str( ) );
-    }
+  /**
+   * Get the destination handle
+   * @return dest_handle
+   */
+  int getDestHandle ()
+  {
+    return dest_handle;
+  };
 
-    pthread_cond_wait( &barrier_ready, &lock );
-  } else {
-    barrier_count = 0;
-    status = STATUS_READY;
-    ostringstream convert;
-    if(printOutput == true){
-        convert << "tid[" << tid << "] woke up all: barrier = " << barrier_phases;
-        MASS_base::log( convert.str( ) );
-    }
+  /**
+   * Get the functionId
+   * @return functionId
+   */
+  int getFunctionId ()
+  {
+    return functionId;
+  };
 
-    barrier_phases++;
-    pthread_cond_broadcast( &barrier_ready );
-  }
-  pthread_mutex_unlock( &lock );
-}
+  /**
+   * Get the class name
+   * @return classname
+   */
+  string getClassname ()
+  {
+    return classname;
+  };
+
+  /**
+   * Check if argument is valid
+   * @return (argument != NULL)
+   */
+  bool isArgumentValid ()
+  {
+    return ( argument != NULL);
+  };
+
+  /**
+   * Get the argument via memcpy
+   */
+  void getArgument (void *arg)
+  {
+    memcpy (arg, argument, argument_size);
+  };
+
+  /**
+   * Get the argument pointer
+   * @return argument
+   */
+  void *getArgumentPointer ()
+  {
+    return argument;
+  };
+
+  /**
+   * Get the argument size
+   * @return argument_size
+   */
+  int getArgumentSize ()
+  {
+    return argument_size;
+  };
+
+  /**
+   * Get the return size
+   * @return return_size
+   */
+  int getReturnSize ()
+  {
+    return return_size;
+  };
+
+  /**
+   * Get the Boundary Width
+   * @return boundary_width
+   */
+  int getBoundaryWidth ()
+  {
+    return boundary_width;
+  };
+
+  /**
+   * Get the Agent Populations
+   * @return agent_population
+   */
+  int getAgentPopulation ()
+  {
+    return agent_population;
+  };
+
+  /**
+   * Get the hosts
+   * @return *hosts
+   */
+  vector<string> getHosts ()
+  {
+    return *hosts;
+  };
+
+  /**
+   * Get the destinations
+   * @return destinations
+   */
+  vector<int*> *getDestinations ()
+  {
+    return destinations;
+  };
+
+  /**
+   * Get the Remote Exchange Request List
+   * @return exchangeReqList
+   */
+  vector<RemoteExchangeRequest*> *getExchangeReqList ()
+  {
+    return exchangeReqList;
+  };
+
+  /**
+   * Get the Agent Migration Request List
+   * @return migrationReqList
+   */
+  vector<AgentMigrationRequest*> *getMigrationReqList ()
+  {
+    return migrationReqList;
+  };
+
+protected:
+  ACTION_TYPE action;
+  vector<int> *size;
+  int handle;
+  int dest_handle;
+  int functionId;
+  string classname; // classname.so must be located in CWD.
+  void *argument;
+  int argument_size;
+  int return_size;
+  bool argument_in_heap;
+  vector<string> *hosts; // all hosts participated in computation
+  vector<int*> *destinations; // all destinations of exchangeAll
+  int dimension;
+  int agent_population;
+  int boundary_width;
+  vector<RemoteExchangeRequest*> *exchangeReqList;
+  vector<AgentMigrationRequest*> *migrationReqList;
+};
+
+#endif
