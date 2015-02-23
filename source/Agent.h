@@ -58,7 +58,9 @@ class Agent : MObject {
   * @param index
   * @return 
   */
-  int map( int initPopulation, vector<int> size, vector<int> index ) {
+  int map( int initPopulation, vector<int> size, vector<int> index, 
+	   Place* curPlace) {
+
     // compute the total # places
     int placeTotal = 1;
     for ( int x = 0; x < int( size.size( ) ); x++ ) 
