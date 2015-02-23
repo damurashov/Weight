@@ -73,6 +73,9 @@ void *Land::exchangetest( void *argument ) {
   return retVal;
 }
 
+/**
+ * Logs any inMessages associated with the Place.
+ */
 void *Land::checkInMessage( void *argument ) {
 
   ostringstream convert;
@@ -92,6 +95,8 @@ void *Land::checkInMessage( void *argument ) {
   return NULL;
 }
 
+/**
+ */
 void *Land::printOutMessage( void *argument ) {
   ostringstream convert;
   convert << "printOutMessage Land[" << index[0] << "][" << index[1] 
@@ -101,6 +106,9 @@ void *Land::printOutMessage( void *argument ) {
   return NULL;
 }
 
+/**
+ * Prints out the neighbors defined below if they exist.
+ */
 void *Land::printShadow( void *argument ) {
   int shadow[4];
   int north[2] = {0, 1}; 

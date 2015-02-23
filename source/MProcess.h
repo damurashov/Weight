@@ -8,6 +8,17 @@
 
 using namespace std;
 
+/**
+ * MProcesses are the MASS threads executing on various machines.  They are 
+ * responsible for maintaining some number of the total Places being used by
+ * the entire MASS program, as well as the associated Agents.  Each MProcess
+ * is referred to by its rank.
+ * @param hostName
+ * @param myPid
+ * @param nProc
+ * @param nThr
+ * @param port
+ */
 class MProcess {
  public:
   MProcess( char *hostName, int myPid, int nProc, int nThr, int port );

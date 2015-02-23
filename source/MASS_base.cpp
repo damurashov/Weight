@@ -111,7 +111,7 @@ bool MASS_base::initializeThreads( int nThr ) {
 }
 
 /**
- * 
+ * Logs a message to Mass's internal logs.
  * @param msg
  */
 void MASS_base::log( string msg ) {
@@ -136,7 +136,7 @@ void MASS_base::log( string msg ) {
 }
 
 /**
- * 
+ * Sets the hosts that MASS is using.
  * @param host_args
  */
 void MASS_base::setHosts( vector<string> host_args ) {
@@ -164,7 +164,7 @@ void MASS_base::setHosts( vector<string> host_args ) {
 }
 
 /**
-* 
+* Logs the hosts MASS is using.
 */
 void MASS_base::showHosts( ) {
   ostringstream convert;
@@ -178,7 +178,7 @@ void MASS_base::showHosts( ) {
 }
 
 /**
-* 
+* Returns the number of cores.  CURRENTLY NOT IMPLEMENTED.
 */
 int MASS_base::getCores( ) {
   // TODO: to be implemented

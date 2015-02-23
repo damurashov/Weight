@@ -6,8 +6,8 @@
 #include <dlfcn.h> // dlopen, dlsym, and dlclose
 
 //Used to toggle comments from Places.cpp
-// const bool printOutput = false;
-const bool printOutput = true;
+const bool printOutput = false;
+//const bool printOutput = true;
 
 /**
  * Instantiates a shared array with "size[]" from the "className" class as
@@ -15,8 +15,9 @@ const bool printOutput = true;
  * associated with a user-given handle that must be unique over
  * machines.
  * dimensions are numerated in the "..." format.
- * @param handle
- * @param className
+ * @param handle - A unique identifer that designates a group of places.  
+ *                 Must be unique over all machines.
+ * @param className - the user implemented class the places are constructed from
  * @param argument
  * @param argument_size
  * @param dim
@@ -45,8 +46,9 @@ Places::Places( int handle, string className, void *argument,
  * passing an argument to the "className" constructor. This array is
  * associated with a user-given handle that must be unique over
  * machines.
- * @param handle
- * @param className
+ * @param handle - A unique identifer that designates a group of places.  
+ *                 Must be unique over all machines.
+ * @param className - the user implemented class the places are constructed from
  * @param argument
  * @param argument_size
  * @param dim
@@ -61,9 +63,10 @@ Places::Places( int handle, string className, void *argument,
 }
 
 /**
- * 
- * @param handle
- * @param className
+ * Places constructor that creates places with a given dimension.
+ * @param handle - A unique identifer that designates a group of places.  
+ *                 Must be unique over all machines.
+ * @param className - the user implemented class the places are constructed from
  * @param boundary_width
  * @param argument
  * @param argument_size
@@ -90,9 +93,10 @@ Places::Places( int handle, string className, int boundary_width,
 }
 
 /**
- * 
- * @param handle
- * @param className
+ * Places constructor that creates places with a given dimension and size.
+ * @param handle - A unique identifer that designates a group of places.
+ *                 Must be unique over all machines.
+ * @param className - the user implemented class the places are constructed from
  * @param boundary_width
  * @param argument
  * @param argument_size
@@ -109,7 +113,7 @@ Places::Places( int handle, string className, int boundary_width,
 }
 
 /**
- * 
+ * Initializes the places with the given arguments and boundary width.
  * @param argument
  * @param argument_size
  * @param boundary_width

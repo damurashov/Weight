@@ -71,11 +71,13 @@ int main( int argc, char *args[] ) {
   delete retvals;
   
   // define the destinations, which represent the Places 
-  // adjacent to a particular place.
-  //     [X]
-  //  [X][O][X]
-  //     [X]
+  // adjacent to a particular place (represented by [0, 0].
+  //        [0, 1]                 [ north]
+  // [-1, 0][0, 0][1, 0]  == [west][origin][east]
+  //        [0,-1]                 [ south]
   // Each X is represent by an array containing its coordinates.
+  // Note that you can have an arbritrary number of destinations.  For example,
+  // northwest would be [-1,1].
   vector<int*> destinations;
   int north[2] = {0, 1};  destinations.push_back( north );
   int east[2]  = {1, 0};  destinations.push_back( east );
@@ -90,7 +92,11 @@ int main( int argc, char *args[] ) {
   // ask every place to report its current status.
   land->callAll( Land::checkInMessage_ );
   
+  
+  
    /*  THIS SECTION OF CODE INTRODUCES AGENTS  */
+  
+  
   
   // Create the agents.
   // Arguments are, in order:
@@ -139,10 +145,12 @@ int main( int argc, char *args[] ) {
   if ( printOutput == true )
     cout << "nomad->callAll( callalltest ) starts" << endl;
 
+  // callAll and save the return values from the nomads.
   retvals = (double *)
     nomad->callAll( Nomad::callalltest_, (void *)agent_callargs2,
 		    sizeof( int ), sizeof( double ) );
 
+  // print out the return values
   if(printOutput == true){
       for ( int i = 0; i < 15000; i++ )
         cout << retvals[i] << endl;

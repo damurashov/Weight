@@ -35,19 +35,6 @@ im * implement this method.
   virtual void *callMethod( int functionId, void *argument ) = 0;
   ~Place( ) { };
 
-/**
- * 
- */
-  int getDebugData() {
-    return NULL;  // causes warnings due to conversion from NULL to int
-  }
-
- /**
-  * 
-  */
-  void setDebugData() {
-    // currently empty
-  }
 
   // VARIABLES
   

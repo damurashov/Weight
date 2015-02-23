@@ -26,6 +26,9 @@ void *Nomad::agentInit( void *argument ) {
   return NULL;
 }
 
+/**
+ * Prints out a message.
+ */
 void *Nomad::somethingFun( void *argument ) {
   ostringstream convert;
   if(printOutput == true){
@@ -35,12 +38,15 @@ void *Nomad::somethingFun( void *argument ) {
   return NULL;
 }
 
+/**
+ * creates a child agent from a parent agent.
+ */
 void *Nomad::createChild( void *argument ) {
   int nChildren = 0;
   vector<void *> *arguments = new vector<void *>;
   arguments->push_back( argument );
   arguments->push_back( argument );
-  if ( agentId % 2 == 0 ) {
+  if ( agentId % 2 == 0 ) { // only spawn a child if my agent id is even
     nChildren = 2;
     spawn( nChildren, *arguments, 15 );
   }
@@ -54,6 +60,9 @@ void *Nomad::createChild( void *argument ) {
   return NULL;
 }
 
+/**
+ * Kill an unneeded agent.
+ */
 void *Nomad::killMe( void *argument ) {
   if ( agentId % 2 != 0 ) {
     kill( );
@@ -67,6 +76,9 @@ void *Nomad::killMe( void *argument ) {
   return NULL;
 }
 
+/**
+ * Have an agent move to a new place.
+ */
 void *Nomad::move( void *argument ) {
   if ( agentId % 5 == 0 ) {
     vector<int> dest;
@@ -83,6 +95,9 @@ void *Nomad::move( void *argument ) {
   return NULL;
 }
 
+/**
+ * Call all agents and have them report their arguments.
+ */
 void *Nomad::callalltest( void *argument ) {
   ostringstream convert;
   if(printOutput == true){
@@ -102,6 +117,10 @@ void *Nomad::callalltest( void *argument ) {
   return ret_val;
 }
 
+
+/**
+ * Add data to an agent to carry.
+ */
 void *Nomad::addData( void *argument ) {
   migratableDataSize = 24;
   migratableData = (void *)(new char[migratableDataSize]);
@@ -122,6 +141,9 @@ void *Nomad::addData( void *argument ) {
   return NULL;
 }
 
+/**
+ * Another sample movement, this time to a specific destination.
+ */
 void *Nomad::move2( void *argument ) {
 
   int x = ( place->index[0] + 20 ) % 100;

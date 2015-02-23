@@ -12,7 +12,8 @@ using namespace std;
 
 /**
  * Utilities for the MASS library.
- * Includes use of sockets and ssh2
+ * Includes use of sockets and SSH2
+ * Mostly focuses on providing SSH2 connections between MProcesses.
  */
 class Utilities {
  public:

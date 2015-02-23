@@ -302,8 +302,8 @@ void Agents::ma_setup( ) {
 }
 
 /**
- * 
- * @return 
+ * Returns the current number of agents.
+ * @return nAgents
  */
 int Agents::nAgents( ) {
   int nAgents = 0;
