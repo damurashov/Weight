@@ -9,8 +9,8 @@
 #include "Mthread.h"
 
 //Toggles output for MProcess
-const bool printOutput = false;
-//const bool printOutput = true;
+//const bool printOutput = false;
+const bool printOutput = true;
 
 /**
  * 
