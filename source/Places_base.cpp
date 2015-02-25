@@ -219,7 +219,7 @@ vector<int> Places_base::getGlobalArrayIndex( int singleIndex ) {
         << endl << "singleIndex = " << singleIndex << endl;
     MASS_base::log( convert.str( ) );
     vector<int> returnValue = getGlobalArrayIndex( singleIndex, 0 );
-    convert("");
+    convert.str("");
     convert << "returnValue.at(0) = " << returnValue.at(0) << endl;
     convert << "returnValue.at(1) = " << returnValue.at(1) << endl;
     MASS_base::log( convert.str( ) );
