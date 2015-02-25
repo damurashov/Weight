@@ -256,7 +256,7 @@ vector<int> Places_base::getGlobalArrayIndex( int singleIndex ) {
  */
 vector<int> Places_base::getGlobalArrayIndex( int index, int dim ) {
   vector<int> coords;           // a multi-dimensional coordinate (index)
-  coords.reserve( dimension );  // must match size of dimensions in model
+  coords.resize( dimension );   // must match size of dimensions in model
 
   // debugging
   ostringstream convert;
