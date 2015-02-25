@@ -487,13 +487,17 @@ void Places::callSome( int functionId, void *arguments[], int arg_size, int dim,
  *                    model, index 0 will always refer to the same actual
  *                    element (Place). However, an index of 1 will refer to the
  *                    first element along the dimension specified by 'dim'
+ * @param numPlaces   this is the physical number of places that are being
+ *                    referenced within the index[] array. This value is
+ *                    necessary since there is no method to determine the size
+ *                    of an array at runtime
  * @return            reference to (pointer) the location of the message queue,
  *                    which contains results from each call (size is equal to
  *                    ret_size argument - so, you can traverse using pointer
  *                    arithmetic)
  */
 void *Places::callSome( int functionId, void *arguments[], int arg_size,
-    int ret_size, int dim, int index[] ) {
+    int ret_size, int dim, int index[], int numPlaces ) {
   if ( printOutput == true ) {
     cerr << "Places::callSome( int functionId, void *arguments[], int arg_size,"
         " int ret_size, int dim, int index[] ) reached" << endl;
@@ -521,7 +525,15 @@ void *Places::callSome( int functionId, void *arguments[], int arg_size,
  *                    element, numbered according to the dimension. Using this
  *                    model, index 0 will always refer to the same actual
  *                    element (Place). However, an index of 1 will refer to the
- *                    first element along the dimension specified by 'dim'
+ *                    first element along the dimension specified by 'dim'.
+ *                    Values are indexes into the single (flattened) index of
+ *                    a particular Place. As such, the largest value will be
+ *                    equal to the total number of Places in your simulation,
+ *                    minus one (since zero-indexed into array)
+ * @param numPlaces   this is the physical number of places that are being
+ *                    referenced within the index[] array. This value is
+ *                    necessary since there is no method to determine the size
+ *                    of an array at runtime
  * @param type        the type of action to perform (see: Message::ACTION_TYPE)
  * @return            reference to (pointer) the location of the message queue,
  *                    which contains results from each call (size is equal to
@@ -529,14 +541,15 @@ void *Places::callSome( int functionId, void *arguments[], int arg_size,
  *                    arithmetic)
  */
 void *Places::cs_setup( int functionId, void *arguments, int arg_size,
-    int ret_size, int dim, int index[], Message::ACTION_TYPE type ) {
+    int ret_size, int dim, int index[], int numPlaces,
+    Message::ACTION_TYPE type ) {
   // calculate the total argument size for return-objects
   int total = 1; // the total number of place elements
-  for ( int i = 0; i < dimension; i++ )
+  for ( int i = 0; i < index; i++ )
     total *= size[i];
   int stripe = total / MASS_base::systemSize; // systemSize: # of processes used
 
-  // send PLACES_CALL_SOME_VOID_OBJECT message to each referenced slave (place)
+  // send PLACES_CALL_SOME_VOID_OBJECT message to each referenced place
   Message *m = NULL;
   for ( int i = 0; i < int( MASS::mNodes.size( ) ); i++ ) {
     // create a message
