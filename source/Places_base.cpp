@@ -258,12 +258,36 @@ vector<int> Places_base::getGlobalArrayIndex( int index, int dim ) {
   vector<int> coords;           // a multi-dimensional coordinate (index)
   coords.reserve( dimension );  // must match size of dimensions in model
 
+  // debugging
+  ostringstream convert;
+  if ( printOutput == true ) {
+    convert << "Places_base::getGlobalArrayIndex( int index, int dim ) reached." << endl;
+    convert << "index = " << index << endl;
+    convert << "dim = " << dim << endl;
+    convert << "coords.size() = " << coords.size();
+    MASS_base::log( convert.str( ) );
+  }
+
   // start at dimension user has indicated and proceed around loop to stop
   // at dimension value just before the starting point
   for ( int i = dim; i < dim + ( dimension - 1 ); i++ ) {
+    if ( printOutput == true ) {
+      convert.str("");
+      convert << "i = " << i << endl;
+      convert << "dim = " << dim << endl;
+      convert << "dimension = " << dimension << endl;
+      convert << "i % dimension = " << i % dimension << endl;
+      MASS_base::log( convert.str( ) );
+    }
     // calculate from designated dimension
     coords[i % dimension] = index % size[i % dimension];
     index /= size[i % dimension];
+  }
+  if ( printOutput == true ) {
+    convert.str("");
+    convert << "dim + ( dimension - 1 ) % dimension = " << dim + ( dimension - 1 ) % dimension << endl;
+    convert << "index = " << index << endl;
+    MASS_base::log( convert.str( ) );
   }
   // assign remainder to dimension value just before the starting point...
   coords[dim + ( dimension - 1 ) % dimension] = index;
