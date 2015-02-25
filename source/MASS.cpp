@@ -13,15 +13,30 @@ const bool printOutput = true;
 using namespace std;
 
 // Allocate static space
+/**
+ * Reference to Utilities class that MASS can use to manage SSH connection and
+ * launch remote processes
+ */
 Utilities MASS::util;
+/**
+ * Reference to MNode Objects that wrap each host in the simulation - providing
+ * an interface to manage the SSH connection and send/receive messages to the
+ * host
+ */
 vector<MNode*> MASS::mNodes;
 
 /**
+ * Initializes the MASS simulation.
+ *
  * Involves nProc processes in the same computation and has each 
  * process spawn nThr threads.
- * @param args
- * @param nProc
- * @param nThr
+ *
+ * @param args  pointer to the first element in an array of arguments sent to
+ *              MASS. The actual values of these elements correspond to (in
+ *              order): username, password, machineFilePath, and port
+ * @param nProc the number of processes to run simulation on (not including
+ *              master process)
+ * @param nThr  number of Threads to spin up for this instance of MASS
  */
 void MASS::init( char *args[], int nProc, int nThr ) {
   vector<string> hosts;
@@ -166,13 +181,17 @@ void MASS::finish( ) {
 }
 
 /**
+ * This method allows users to utilize a simulation-wide barrier/synchronization
+ * for all hosts running the MASS simulation.
  * 
- * @param return_values
- * @param stripe
- * @param arg_size
- * @param localAgents
+ * @param return_values any arguments to return from MProcesses on MNodes
+ * @param stripe        int of the stripe which is running barrier (usually
+ *                      master)
+ * @param ret_size      size of each return value to receive from MProcesses
+ * @param localAgents   array representing the number of agents at different
+ *                      nodes across the simulation space
  */
-void MASS::barrier_all_slaves( char *return_values, int stripe, int arg_size,
+void MASS::barrier_all_slaves( char *return_values, int stripe, int ret_size,
     int localAgents[] ) {
 
   // counts the agent population from each Mprocess
@@ -198,14 +217,14 @@ void MASS::barrier_all_slaves( char *return_values, int stripe, int arg_size,
     }
 
     // retrieve arguments back from each Mprocess
-    if ( return_values != NULL && arg_size > 0 ) {
+    if ( return_values != NULL && ret_size > 0 ) {
       if ( stripe > 0 && localAgents == NULL ) {
         // places.callAll( ) with return values
-        m->getArgument( return_values + arg_size * stripe * ( i + 1 ) );
+        m->getArgument( return_values + ret_size * stripe * ( i + 1 ) );
       }
       if ( stripe == 0 && localAgents != NULL ) {
         // agents.callAll( ) with return values
-        m->getArgument( return_values + arg_size * nAgentsSoFar );
+        m->getArgument( return_values + ret_size * nAgentsSoFar );
       }
     }
 
