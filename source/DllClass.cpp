@@ -7,8 +7,10 @@
 const bool printOutput = true;
 
 /**
- * 
- * @param className
+ * Method to construct new DllClass Objects. The DllClass Object wraps
+ * instantiation of user-defined Agent and Place Objects.
+ *
+ * @param className name of the user-defined class to instantiate/wrap
  */
 DllClass::DllClass( string className ) {
   // For debugging

@@ -53,9 +53,10 @@ class MASS_base {
   static char CUR_DIR[CUR_SIZE];
   static string hostName;                 // my local host name
   static int myPid;                       // my pid or rank
-  static int systemSize;                  // # processes
+  static int systemSize;
+
   static ofstream logger;                 // logger
-  static vector<string> hosts;             // all host names
+  static vector<string> hosts;
 
   static map<int, Places_base*> placesMap; // a collection of Places
   static map<int, Agents_base*> agentsMap; // a collection of Agents

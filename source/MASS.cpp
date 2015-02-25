@@ -36,29 +36,28 @@ void MASS::init( char *args[], int nProc, int nThr ) {
   // TODO
 
   // Read a given machine file
-  ifstream machinefile( machineFilePath, std::ifstream::in  );
+  ifstream machinefile( machineFilePath, std::ifstream::in );
   if ( machinefile.is_open( ) ) {
     while ( machinefile.good( ) ) {
       string machineName;
       getline( machinefile, machineName );
       if ( machineName.size( ) > 0 ) // skip a null string at the end
-	hosts.push_back( machineName ); 
+        hosts.push_back( machineName );
     }
     machinefile.close( );
-  }
-  else {
+  } else {
     cerr << "machine file: " << machineFilePath << " could not open." << endl;
     exit( -1 );
   }
 
   // For debugging
-  if(printOutput == true){
-      for ( int i = 0; i < int( hosts.size( ) ); i++ )
-        cerr << "rank " << (i + 1) << ": " << hosts[i]  << endl;
+  if ( printOutput == true ) {
+    for ( int i = 0; i < int( hosts.size( ) ); i++ )
+      cerr << "rank " << ( i + 1 ) << ": " << hosts[i] << endl;
   }
 
   // Handle nProc
-  if ( nProc < 0 || nProc > int( hosts.size( ) ) ) 
+  if ( nProc < 0 || nProc > int( hosts.size( ) ) )
     nProc = hosts.size( ) + 1; // count the master node
   systemSize = nProc;
 
@@ -72,7 +71,7 @@ void MASS::init( char *args[], int nProc, int nThr ) {
   int pid = 1; // a slave process id
 
   for ( int i = 0; i < int( hosts.size( ) ); i++, pid++ ) {
-    // retrieve each canonical remtoe machine name
+    // retrieve each canonical remote machine name
     string currHostName = hosts[i];
     struct hostent *host = gethostbyname( currHostName.c_str( ) );
     if ( host == NULL ) {
@@ -82,39 +81,40 @@ void MASS::init( char *args[], int nProc, int nThr ) {
     currHostName = host->h_name;
 
     // For debugging
-    if(printOutput == true)
-        cerr << "curHostName = " << currHostName << endl;
-  
+    if ( printOutput == true )
+      cerr << "curHostName = " << currHostName << endl;
+
     // Establish an ssh2 channel to a given port
-    Ssh2Connection *ssh2connection
-      = util.establishConnection( currHostName.c_str( ), LIBSSH2_PORT, 
-				  username, password );
+    Ssh2Connection *ssh2connection = util.establishConnection(
+        currHostName.c_str( ), LIBSSH2_PORT, username, password );
 
     // Start a remote process
-    string command = CUR_DIR;    // the absolute path to the command
-    command += "/mprocess ";        // the command
-    command += CUR_DIR; command += " ";      // 1st arg: current working dir
-    command += currHostName; command += " "; // 2nd arg: hostName
+    string command = CUR_DIR; // the absolute path to the command
+    command += "/mprocess ";  // the command
+    command += CUR_DIR;
+    command += " ";           // 1st arg: current working dir
+    command += currHostName;
+    command += " ";           // 2nd arg: hostName
     ostringstream convert;
-    
-    convert << pid << " "                    // 3rd arg: pid
-         << nProc << " "                  // 4th arg: #processes
-         << nThr << " "                   // 5th arg: #threads 
-         << MASS_PORT;                    // 6yh arg: MASS_PORT
+
+    convert << pid << " "     // 3rd arg: pid
+        << nProc << " "       // 4th arg: #processes
+        << nThr << " "        // 5th arg: #threads
+        << MASS_PORT;         // 6th arg: MASS_PORT
     command += convert.str( );
 
     if ( ssh2connection != NULL ) {
       if ( !util.launchRemoteProcess( ssh2connection, command.c_str( ) ) ) {
-	// connection failure
-	util.shutdown( ssh2connection, "abnormal" );
-	exit( -1 );
+        // connection failure
+        util.shutdown( ssh2connection, "abnormal" );
+        exit( -1 );
       }
       // A new remote process launched. 
       char localhost[100];
       bzero( localhost, 100 );
       gethostname( localhost, 100 );
       int localhost_size = strlen( localhost );
-      ssh2connection->write( (char *)&localhost_size, int( sizeof( int ) ) );
+      ssh2connection->write( (char *) &localhost_size, int( sizeof(int) ) );
       ssh2connection->write( localhost, localhost_size );
 
       Socket socket( port );
@@ -129,13 +129,13 @@ void MASS::init( char *args[], int nProc, int nThr ) {
 
   // Synchronize with all slave processes
   for ( int i = 0; i < int( hosts.size( ) ); i++ ) {
-    if (printOutput == true )
+    if ( printOutput == true )
       cerr << "init: wait for ack from " << mNodes[i]->getHostName( ) << endl;
 
     Message *m = mNodes[i]->receiveMessage( );
     if ( m->getAction( ) != Message::ACK ) {
-      cerr << "init didn't receive ack from rank " << ( i + 1 ) 
-	   << " at " << mNodes[i]->getHostName( ) << endl;
+      cerr << "init didn't receive ack from rank " << ( i + 1 ) << " at "
+          << mNodes[i]->getHostName( ) << endl;
       exit( -1 );
     }
     delete m;
@@ -158,7 +158,7 @@ void MASS::finish( ) {
     Message *m = new Message( Message::FINISH );
     mNodes[i]->sendMessage( m );
     delete m;
-    
+
   }
   // Synchronize with all slaves
   barrier_all_slaves( );
@@ -173,46 +173,46 @@ void MASS::finish( ) {
  * @param localAgents
  */
 void MASS::barrier_all_slaves( char *return_values, int stripe, int arg_size,
-			       int localAgents[] ){
+    int localAgents[] ) {
 
   // counts the agent population from each Mprocess
   int nAgentsSoFar = ( localAgents != NULL ) ? localAgents[0] : 0;
 
   // Synchronize with all slave processes                       
   for ( int i = 0; i < int( mNodes.size( ) ); i++ ) {
-    if(printOutput == true)
-        cerr << "barrier waits for ack from " << mNodes[i]->getHostName( ) << endl;
+    if ( printOutput == true )
+      cerr << "barrier waits for ack from " << mNodes[i]->getHostName( )
+          << endl;
     Message *m = mNodes[i]->receiveMessage( );
 
-    if(printOutput == true)
-        cerr << "barrier received a message from " << mNodes[i]->getHostName( ) 
-	     << "...message = " << m << endl;
+    if ( printOutput == true )
+      cerr << "barrier received a message from " << mNodes[i]->getHostName( )
+          << "...message = " << m << endl;
 
     // check this is an Ack
     if ( m->getAction( ) != Message::ACK ) {
-      cerr << "barrier didn't receive ack from rank " << ( i + 1 )
-	   << " at " << mNodes[i]->getHostName( ) 
-	   << " message action type = " << m->getAction( )
-	   << endl;
+      cerr << "barrier didn't receive ack from rank " << ( i + 1 ) << " at "
+          << mNodes[i]->getHostName( ) << " message action type = "
+          << m->getAction( ) << endl;
       exit( -1 );
     }
-    
+
     // retrieve arguments back from each Mprocess
-    if ( return_values != NULL && arg_size > 0) {
+    if ( return_values != NULL && arg_size > 0 ) {
       if ( stripe > 0 && localAgents == NULL ) {
-	// places.callAll( ) with return values
-	m->getArgument( return_values + arg_size * stripe * ( i + 1 ) );
+        // places.callAll( ) with return values
+        m->getArgument( return_values + arg_size * stripe * ( i + 1 ) );
       }
       if ( stripe == 0 && localAgents != NULL ) {
-	// agents.callAll( ) with return values
-	m->getArgument( return_values + arg_size * nAgentsSoFar );
+        // agents.callAll( ) with return values
+        m->getArgument( return_values + arg_size * nAgentsSoFar );
       }
     }
 
     // retrieve agent population from each Mprocess
-    if(printOutput == true){
-        cerr << "localAgents[" << (i + 1) << "] = m->getAgentPopulation: "
-	     << m->getAgentPopulation( ) << endl;
+    if ( printOutput == true ) {
+      cerr << "localAgents[" << ( i + 1 ) << "] = m->getAgentPopulation: "
+          << m->getAgentPopulation( ) << endl;
     }
 
     if ( localAgents != NULL ) {
@@ -220,8 +220,8 @@ void MASS::barrier_all_slaves( char *return_values, int stripe, int arg_size,
       nAgentsSoFar += localAgents[i + 1];
     }
 
-    if(printOutput == true)
-        cerr << "message deleted" << endl;
+    if ( printOutput == true )
+      cerr << "message deleted" << endl;
     delete m;
   }
 }

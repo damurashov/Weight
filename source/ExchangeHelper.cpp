@@ -15,7 +15,7 @@ int *ExchangeHelper::sockets;
  * @param size
  * @param rank
  * @param hosts
- * @param port
+ * @param port  port number to establish connections on
  */
 void ExchangeHelper::establishConnection( int size, int rank, 
 					  vector<string> hosts, int port ) {
