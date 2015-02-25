@@ -212,19 +212,6 @@ void Places_base::init_all( void *argument, int argument_size ) {
  * @return            a multi-dimensional index
  */
 vector<int> Places_base::getGlobalArrayIndex( int singleIndex ) {
-  // debugging
-  ostringstream convert;
-  if ( printOutput == true ) {
-    convert << "Places_base::getGlobalArrayIndex( int singleIndex ) reached."
-        << endl << "singleIndex = " << singleIndex << endl;
-    MASS_base::log( convert.str( ) );
-    vector<int> returnValue = getGlobalArrayIndex( singleIndex, 0 );
-    convert.str("");
-    convert << "returnValue.at(0) = " << returnValue.at(0) << endl;
-    convert << "returnValue.at(1) = " << returnValue.at(1) << endl;
-    MASS_base::log( convert.str( ) );
-  }
-
   return getGlobalArrayIndex( singleIndex, 0 ); // x-axis based ordering
 }
 
@@ -258,36 +245,12 @@ vector<int> Places_base::getGlobalArrayIndex( int index, int dim ) {
   vector<int> coords;           // a multi-dimensional coordinate (index)
   coords.resize( dimension );   // must match size of dimensions in model
 
-  // debugging
-  ostringstream convert;
-  if ( printOutput == true ) {
-    convert << "Places_base::getGlobalArrayIndex( int index, int dim ) reached." << endl;
-    convert << "index = " << index << endl;
-    convert << "dim = " << dim << endl;
-    convert << "coords.size() = " << coords.size();
-    MASS_base::log( convert.str( ) );
-  }
-
   // start at dimension user has indicated and proceed around loop to stop
   // at dimension value just before the starting point
   for ( int i = dim; i < dim + ( dimension - 1 ); i++ ) {
-    if ( printOutput == true ) {
-      convert.str("");
-      convert << "i = " << i << endl;
-      convert << "dim = " << dim << endl;
-      convert << "dimension = " << dimension << endl;
-      convert << "i % dimension = " << i % dimension << endl;
-      MASS_base::log( convert.str( ) );
-    }
     // calculate from designated dimension
     coords[i % dimension] = index % size[i % dimension];
     index /= size[i % dimension];
-  }
-  if ( printOutput == true ) {
-    convert.str("");
-    convert << "dim + ( dimension - 1 ) % dimension = " << dim + ( dimension - 1 ) % dimension << endl;
-    convert << "index = " << index << endl;
-    MASS_base::log( convert.str( ) );
   }
   // assign remainder to dimension value just before the starting point...
   coords[dim + ( dimension - 1 ) % dimension] = index;
