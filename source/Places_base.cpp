@@ -51,7 +51,9 @@ Places_base::Places_base( int handle, string className, int boundary_width,
 }
 
 /**
- * 
+ * Destructor for core Places_base Objects. Frees dynamic space set up to store
+ * all Places in this stripe, in addition to any shadow Places that may have
+ * been created at runtime for this stripe.
  */
 Places_base::~Places_base( ) {
   // destroy( places ); to be debugged
@@ -71,9 +73,13 @@ Places_base::~Places_base( ) {
 }
 
 /**
+ * Creates the individual Place Objects that live within this stripe - contained
+ * within this Places collection. This method also sets up any shadows across
+ * boundaries in the simulation space - enabling cross boundary communication to
+ * occur during the course of a simulation.
  * 
- * @param argument
- * @param argument_size
+ * @param argument        argument to pass into each Place constructor
+ * @param argument_size   total size of the argument
  */
 void Places_base::init_all( void *argument, int argument_size ) {
   // For debugging
@@ -195,31 +201,74 @@ void Places_base::init_all( void *argument, int argument_size ) {
 }
 
 /**
- * Converts a given plain single index into a multi-dimensional index.
+ * Converts a given plain single index into a multi-dimensional index. This
+ * allows absolute index values that would correspond to a single Place within
+ * the global simulation space (ordering in a one dimensional array) to be
+ * referenced by the actual index, according to the number of dimensions and
+ * size of each dimension in the simulation space.
  *
  * @param singleIndex an index in a plain single dimension that will be
  *                    converted to a multi-dimensional index.
  * @return            a multi-dimensional index
  */
 vector<int> Places_base::getGlobalArrayIndex( int singleIndex ) {
-  vector<int> index;          // a multi-dimensional index
-  index.reserve( dimension );
-  vector<int>::iterator iter = index.begin( );
-
-  for ( int i = dimension - 1; i >= 0; i-- ) {
-    // calculate from lower dimensions
-    index.insert( iter, 1, singleIndex % size[i] );
-    singleIndex /= size[i];
-  }
-
-  return index;
+  return getGlobalArrayIndex( singleIndex, 0 ); // x-axis based ordering
 }
 
 /**
+ * Converts a given plain single index into a multi-dimensional index. This
+ * allows absolute index values that would correspond to a single Place within
+ * the global simulation space (ordering in a one dimensional array) to be
+ * referenced by the actual index, according to the number of dimensions and
+ * size of each dimension in the simulation space.
+ *
+ * While the other Places_base::getGlobalArrayIndex( int singleIndex) method
+ * assumes that the starting index is based on a flattening algorithm that
+ * assumes first dimension-priority in the global array (e.g. - 'x' dimension is
+ * evaluated first, then 'y' dimension, so that the singleIndex of 4 would
+ * correspond to {4, 0} in a two dimensional array), this method allows the
+ * user to specify the dimension that should take priority.
+ *
+ * @param index       an index into a single dimension ordering of places that
+ *                    will be converted to a multi-dimensional coordinate index
+ * @param dim         the dimension that will take priority in the resulting
+ *                    indexing algorithm. Since dimension numbering is
+ *                    zero-based ('x' dimension is 0), the value of dim should
+ *                    be less than the number of dimensions
+ *                    (Places_base::dimension) in the simulation space. Large
+ *                    values will wrap around, so no out of bounds exception
+ *                    will be thrown, but the result will not match with
+ *                    expectations at runtime (unpredictable)
+ * @return            a multi-dimensional index
+ */
+vector<int> Places_base::getGlobalArrayIndex( int index, int dim ) {
+  vector<int> coords;           // a multi-dimensional coordinate (index)
+  coords.reserve( dimension );  // must match size of dimensions in model
+
+  // start at dimension user has indicated and proceed around loop to stop
+  // at dimension value just before the starting point
+  for ( int i = dim; i < dim + (dimension - 1); i++ ) {
+    // calculate from designated dimension
+    coords[i % dimension] = index % size[i % dimension];
+    index /= size[i % dimension];
+  }
+  // assign remainder to dimension value just before the starting point...
+  coords[dim + (dimension - 1) % dimension] = index;
+
+  return coords;
+}
+
+/**
+ * Calls the referenced function, passing along a related argument, at each
+ * Place contained within the simulation space (Places).
  * 
- * @param functionId
- * @param argument
- * @param tid
+ * @param functionId  the id of the function to call at each Place
+ * @param argument    the address (pointer) of an argument to send to
+ *                    the function called at each Place
+ * @param arg_size    the total size of the argument
+ * @param tid         the id of the thread
+ * @return            the address of the address of (pointer to a pointer) the
+ *                    return values stored from each function call
  */
 void Places_base::callAll( int functionId, void *argument, int tid ) {
   int range[2];

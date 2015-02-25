@@ -8,16 +8,40 @@
 const bool printOutput = false;
 //const bool printOutput = true;
 
+/**
+ * Mutex lock to protect critical sections of code from unpredictable/error
+ * situations arising from multi-threaded applications using shared resources
+ * (Thread interruption, interleaving, state changes, etc)
+ */
 pthread_mutex_t Mthread::lock;
+/**
+ * Pre-defined condition to signal when barrier is ready (thread can continue)
+ */
 pthread_cond_t Mthread::barrier_ready;
+/**
+ * Pre-defined condition to signal when barrier has completed (not used)
+ */
 pthread_cond_t Mthread::barrier_finished;
+/**
+ * Count of threads awaiting resolution for barrier synchronization
+ */
 int Mthread::barrier_count;
+/**
+ * The current status/state of this Mthread
+ */
 Mthread::STATUS_TYPE Mthread::status;
+/**
+ * Storage for the ID of this Mthread instance
+ */
 int Mthread::threadCreated;
+/**
+ * Number of Agents in simulation space
+ */
 int Mthread::agentBagSize;
 
 /**
- * 
+ * This method initalizes class members, in preparation of running a particular
+ * threaded task.
  */
 void Mthread::init( ) {
   pthread_mutex_init( &lock, NULL );
@@ -28,12 +52,19 @@ void Mthread::init( ) {
 }
 
 /**
+ * This method begins the run process for a threaded task in MASS (Mthread).
+ * Effectively, it starts a loop where the Mthread evaluates the next task to
+ * perform, performs it, and then waits for other threads to complete before
+ * moving on to the next task.
  * 
- * @param param
- * @return 
+ * @param threadId  a reference to the address that contains the thread ID for
+ *                  the actual Mthread instance to run
+ * @return          currently returns NULL when complete, can/should be adapted
+ *                  to pass through (return) values associated with relevant
+ *                  call (e.g. - callAll())
  */
-void *Mthread::run( void *param ) {
-  int tid = *(int *) param;
+void *Mthread::run( void *threadId ) {
+  int tid = *(int *) threadId;
   threadCreated = tid;
 
   // breath message
@@ -182,8 +213,11 @@ void *Mthread::run( void *param ) {
 }
 
 /**
+ * This method allows classes to set the status (STATUS_TYPE) value for this
+ * thread. This is used to signal to threads when they can begin work, what work
+ * to perform, and when to terminate.
  * 
- * @param new_status
+ * @param new_status  status to set for this Mthread instance
  */
 void Mthread::resumeThreads( STATUS_TYPE new_status ) {
   pthread_mutex_lock( &lock );
@@ -193,8 +227,10 @@ void Mthread::resumeThreads( STATUS_TYPE new_status ) {
 }
 
 /**
+ * This method provides a way for Mthread objects in the same thread group to
+ * synchronize between each other.
  * 
- * @param tid
+ * @param tid the ID of the thread that is initiating barrier synchronization
  */
 void Mthread::barrierThreads( int tid ) {
   static int barrier_phases = 0;

@@ -19,15 +19,15 @@ const bool printOutput = true;
  * associated with a user-given handle that must be unique over
  * machines.
  *
- * Dimensions for the simulation space are ennumerated in the "..." (variable
+ * Dimensions for the simulation space are enumerated in the "..." (variable
  * argument list) format.
  *
  * @param handle          a unique identifer that designates a group of Place
  *                        Objects as all belonging to the same simulation
  *                        (Places). Must be unique over all machines.
  * @param className       name of user-created Places class to load
- * @param argument        array of arguments to pass into each Place constructor
- * @param argument_size   size of each argument (e.g. - sizeof( int ) )
+ * @param argument        argument to pass into each Place constructor
+ * @param argument_size   total size of the argument
  * @param dim             how many dimensions this simulation encompasses
  * @param ...             variable argument parameters, should be equal to the
  *                        size (int) of each dimension in the simulation space
@@ -67,8 +67,8 @@ Places::Places( int handle, string className, void *argument, int argument_size,
  *                        Objects as all belonging to the same simulation
  *                        (Places). Must be unique over all machines.
  * @param className       name of user-created Places class to load
- * @param argument        array of arguments to pass into each Place constructor
- * @param argument_size   size of each argument (e.g. - sizeof( int ) )
+ * @param argument        argument to pass into each Place constructor
+ * @param argument_size   total size of the argument
  * @param dim             how many dimensions this simulation encompasses
  * @param size            array of numbers (int), representing the size of each
  *                        corresponding dimension in the simulation space
@@ -99,8 +99,8 @@ Places::Places( int handle, string className, void *argument, int argument_size,
  *                        (Places). Must be unique over all machines.
  * @param className       name of user-created Places class to load
  * @param boundary_width  width of the boundary to place between stripes
- * @param argument        array of arguments to pass into each Place constructor
- * @param argument_size   size of each argument (e.g. - sizeof( int ) )
+ * @param argument        argument to pass into each Place constructor
+ * @param argument_size   total size of the argument
  * @param dim             how many dimensions this simulation encompasses
  * @param ...             variable argument parameters, should be equal to the
  *                        size (int) of each dimension in the simulation space
@@ -125,15 +125,28 @@ Places::Places( int handle, string className, int boundary_width,
 }
 
 /**
- * Places constructor that creates places with a given dimension and size.
- * @param handle - A unique identifer that designates a group of places.
- *                 Must be unique over all machines.
- * @param className - the user implemented class the places are constructed from
- * @param boundary_width
- * @param argument
- * @param argument_size
- * @param dim
- * @param size
+ * Creates a Places Object that serves as a container Object for the
+ * neighborhood (collection) of each individual Place in a simulation, providing
+ * methods/functionality that corresponds with the entire simulation space.
+ *
+ * Instantiates a shared array with "size[]" from the "className" class by
+ * passing an argument to the "className" constructor. This array is
+ * associated with a user-given handle that must be unique over
+ * machines.
+ *
+ * Dimensions for the simulation space are ennumerated in the "..." (variable
+ * argument list) format.
+ *
+ * @param handle          a unique identifer that designates a group of Place
+ *                        Objects as all belonging to the same simulation
+ *                        (Places). Must be unique over all machines.
+ * @param className       name of user-created Places class to load
+ * @param boundary_width  width of the boundary to place between stripes
+ * @param argument        argument to pass into each Place constructor
+ * @param argument_size   total size of the argument
+ * @param dim             how many dimensions this simulation encompasses
+ * @param size            array of numbers (int), representing the size of each
+ *                        corresponding dimension in the simulation space
  */
 Places::Places( int handle, string className, int boundary_width,
     void *argument, int argument_size, int dim, int size[] ) :
@@ -145,14 +158,17 @@ Places::Places( int handle, string className, int boundary_width,
 }
 
 /**
- * Initializes the places with the given arguments and boundary width.
- * @param argument
- * @param argument_size
- * @param boundary_width
+ * This method creates the simulation space for Places, before sending an
+ * initialize message (command) to all hosts running this simulation. This
+ * effectively sets up the simulation space and initializes Places across
+ * all hosts.
+ *
+ * @param argument        argument to pass into each Place constructor
+ * @param argument_size   total size of the argument
+ * @param boundary_width  width of the boundary to place between stripes
  */
 void Places::init_master( void *argument, int argument_size,
     int boundary_width ) {
-
   // convert size[dimension] to vector<int>
   vector<int> *size_vector = new vector<int>( dimension );
   size_vector->assign( size, size + dimension );
@@ -198,24 +214,27 @@ void Places::init_master( void *argument, int argument_size,
 }
 
 /**
- * Calls the method specified with functionId of all array elements. Done
- * in parallel among multi-processes/threads.
- * @param functionId
+ * Calls the method specified with functionId against all Place instances in the
+ * simulation. Done in parallel among multi-processes/threads.
+ *
+ * @param functionId  user-defined ID (handle) for corresponding function to
+ *                    call in their user-defined Place class
  */
 void Places::callAll( int functionId ) {
   ca_setup( functionId, NULL, 0, 0, Message::PLACES_CALL_ALL_VOID_OBJECT );
 }
 
 /**
- * Calls the method specified with functionId of all array elements as
- * passing an argument to the method. Done in parallel among multi-
- * processes/threads.
- * @param functionId
- * @param argument
- * @param arg_size
+ * Calls the method specified with functionId against all Place instances in the
+ * simulation - passing in the argument referenced (with size equal to arg_size)
+ * to the method. Done in parallel among multi-processes/threads.
+ *
+ * @param functionId  user-defined ID (handle) for corresponding function to
+ *                    call in their user-defined Place class
+ * @param argument    argument to pass into each Place method call
+ * @param arg_size    total size of the argument
  */
 void Places::callAll( int functionId, void *argument, int arg_size ) {
-
   if ( printOutput == true ) {
     cerr << "callAll void object" << endl;
   }
@@ -231,11 +250,16 @@ void Places::callAll( int functionId, void *argument, int arg_size ) {
  * in parallel among multi-processes/threads. In case of a multi-
  * dimensional array, "i" is considered as the index when the array is
  * flattened to a single dimension.
- * @param functionId
- * @param argument
- * @param arg_size
- * @param ret_size
- * @return 
+ *
+ * @param functionId  user-defined ID (handle) for corresponding function to
+ *                    call in their user-defined Place class
+ * @param argument    argument to pass into each Place method call
+ * @param arg_size    total size of the argument
+ * @param ret_size    size of each return value
+ * @return            reference to (pointer) the location of the message queue,
+ *                    which contains results from each call (size is equal to
+ *                    ret_size argument - so, you can traverse using pointer
+ *                    arithmetic)
  */
 void *Places::callAll( int functionId, void *argument[], int arg_size,
     int ret_size ) {
@@ -249,13 +273,22 @@ void *Places::callAll( int functionId, void *argument[], int arg_size,
 }
 
 /**
+ * This method helps reduce repeated code by providing a single interface for
+ * every callAll() method in Places to utilize - handling the actual
+ * construction/sending of the Message, synchronization, and barrier needed to
+ * ensure that slaves have completed and return values (if needed) are available
+ * for calling methods to return.
  * 
- * @param functionId
- * @param argument
- * @param arg_size
- * @param ret_size
- * @param type
- * @return 
+ * @param functionId  user-defined ID (handle) for corresponding function to
+ *                    call in their user-defined Place class
+ * @param argument    argument to pass into each Place method call
+ * @param arg_size    total size of the argument
+ * @param ret_size    size of each return value
+ * @param type        type of Message (action) to send
+ * @return            reference to (pointer) the location of the message queue,
+ *                    which contains results from each call (size is equal to
+ *                    ret_size argument - so, you can traverse using pointer
+ *                    arithmetic)
  */
 void *Places::ca_setup( int functionId, void *argument, int arg_size,
     int ret_size, Message::ACTION_TYPE type ) {
@@ -454,8 +487,10 @@ void Places::callSome( int functionId, void *arguments[], int arg_size, int dim,
  *                    model, index 0 will always refer to the same actual
  *                    element (Place). However, an index of 1 will refer to the
  *                    first element along the dimension specified by 'dim'
- * @return            void * reference to return values from call(s) generated
- *                    during function operation
+ * @return            reference to (pointer) the location of the message queue,
+ *                    which contains results from each call (size is equal to
+ *                    ret_size argument - so, you can traverse using pointer
+ *                    arithmetic)
  */
 void *Places::callSome( int functionId, void *arguments[], int arg_size,
     int ret_size, int dim, int index[] ) {
@@ -472,9 +507,10 @@ void *Places::callSome( int functionId, void *arguments[], int arg_size,
  * This method helps reduce repeating code in the implementation of the various
  * callSome methods for Places.
  *
- * @param functionId  ID (int) of the function to call at each place
- * @param arguments   list of arguments to send to each place
- * @param arg_size    size of each argument
+ * @param functionId  user-defined ID (handle) for corresponding function to
+ *                    call in their user-defined Place class
+ * @param argument    argument to pass into each Place method call
+ * @param arg_size    total size of the argument
  * @param ret_size    size of each return value
  * @param dim         dimension of the array to call elements from. While
  *                    dimensions are typically considered in the form x, y, or
@@ -487,8 +523,10 @@ void *Places::callSome( int functionId, void *arguments[], int arg_size,
  *                    element (Place). However, an index of 1 will refer to the
  *                    first element along the dimension specified by 'dim'
  * @param type        the type of action to perform (see: Message::ACTION_TYPE)
- * @return            void * reference to return values from call(s) generated
- *                    during function operation
+ * @return            reference to (pointer) the location of the message queue,
+ *                    which contains results from each call (size is equal to
+ *                    ret_size argument - so, you can traverse using pointer
+ *                    arithmetic)
  */
 void *Places::cs_setup( int functionId, void *arguments, int arg_size,
     int ret_size, int dim, int index[], Message::ACTION_TYPE type ) {
@@ -577,9 +615,17 @@ void *Places::cs_setup( int functionId, void *arguments, int arg_size,
  * caller's inMessages[] stores values returned from all callees. More
  * specifically, inMessages[i] maintains a set of return values from the i th
  * callee.
- * @param dest_handle
- * @param functionId
- * @param destinations
+ *
+ * @param dest_handle   a unique identifer that designates a group of Place
+ *                      Objects as all belonging to the same simulation
+ *                      (Places). Must be unique over all machines.
+ * @param functionId    ID (int) of the function to call at each Place
+ * @param destinations  a collection of relative offsets from each original
+ *                      Place's location in the simulation. Using these
+ *                      offsets, the simulation can call the actual Place
+ *                      referenced (relative to the original Place) across the
+ *                      entire simulation space - collecting the result(s) from
+ *                      each of these neighbors in the original cell (Place)
  */
 void Places::exchangeAll( int dest_handle, int functionId,
     vector<int*> *destinations ) {
@@ -624,7 +670,25 @@ void Places::exchangeAll( int dest_handle, int functionId,
 }
 
 /**
+ * This is similar to exchangeAll, but the method is confined to just exchange
+ * existing data, the scope of affected Places is reduced, and the destinations
+ * (offset) for each affected Place (boundary) is pre-defined to only trade
+ * across this boundary to the corresponding "shadow cell" in the simulation
+ * space.
+ *
+ * The shadow cell's outMessage is copied over to every boundary cell in the
+ * simulation, enabling cross-boundary communication to occur.
  * 
+ * @param dest_handle   a unique identifer that designates a group of Place
+ *                      Objects as all belonging to the same simulation
+ *                      (Places). Must be unique over all machines.
+ * @param functionId    ID (int) of the function to call at each Place
+ * @param destinations  a collection of relative offsets from each original
+ *                      Place's location in the simulation. Using these
+ *                      offsets, the simulation can call the actual Place
+ *                      referenced (relative to the original Place) across the
+ *                      entire simulation space - collecting the result(s) from
+ *                      each of these neighbors in the original cell (Place)
  */
 void Places::exchangeBoundary( ) {
 
