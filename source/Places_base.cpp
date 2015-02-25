@@ -7,8 +7,8 @@
 #include <sstream> // ostringstream
 
 //Used to enable or disable output in places
-const bool printOutput = false;
-//const bool printOutput = true;
+//const bool printOutput = false;
+const bool printOutput = true;
 
 /**
  * Constructor for Places_base Objects. These Objects encompass the basic
@@ -212,6 +212,19 @@ void Places_base::init_all( void *argument, int argument_size ) {
  * @return            a multi-dimensional index
  */
 vector<int> Places_base::getGlobalArrayIndex( int singleIndex ) {
+  // debugging
+  ostringstream convert;
+  if ( printOutput == true ) {
+    convert << "Places_base::getGlobalArrayIndex( int singleIndex ) reached."
+        << endl << "singleIndex = " << singleIndex << endl;
+    MASS_base::log( convert.str( ) );
+    vector<int> returnValue = getGlobalArrayIndex( singleIndex, 0 );
+    convert("");
+    convert << "returnValue.at(0) = " << returnValue.at(0) << endl;
+    convert << "returnValue.at(1) = " << returnValue.at(1) << endl;
+    MASS_base::log( convert.str( ) );
+  }
+
   return getGlobalArrayIndex( singleIndex, 0 ); // x-axis based ordering
 }
 
@@ -247,13 +260,13 @@ vector<int> Places_base::getGlobalArrayIndex( int index, int dim ) {
 
   // start at dimension user has indicated and proceed around loop to stop
   // at dimension value just before the starting point
-  for ( int i = dim; i < dim + (dimension - 1); i++ ) {
+  for ( int i = dim; i < dim + ( dimension - 1 ); i++ ) {
     // calculate from designated dimension
     coords[i % dimension] = index % size[i % dimension];
     index /= size[i % dimension];
   }
   // assign remainder to dimension value just before the starting point...
-  coords[dim + (dimension - 1) % dimension] = index;
+  coords[dim + ( dimension - 1 ) % dimension] = index;
 
   return coords;
 }
