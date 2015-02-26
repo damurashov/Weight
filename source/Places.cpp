@@ -301,7 +301,8 @@ void *Places::ca_setup( int functionId, void *argument,
   Mthread::barrierThreads( 0 );
   
   // Synchronized with all slave processes
-  if ( type == Message::PLACES_CALL_ALL_VOID_OBJECT )
+  if ( type == Message::PLACES_CALL_ALL_VOID_OBJECT 
+	|| type == Message::PLACES_CALL_ALL_RETURN_OBJECT )
     MASS::barrier_all_slaves( MASS_base::currentReturns, stripe, 
 			      MASS_base::currentRetSize );
   else
