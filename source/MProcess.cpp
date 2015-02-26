@@ -208,6 +208,9 @@ void MProcess::start( ) {
         case Message::PLACES_CALL_SOME_VOID_OBJECT:
           break;
 
+        case Message::PLACES_CALL_SOME_RETURN_OBJECT:
+          break;
+
         case Message::PLACES_EXCHANGE_ALL:
           if ( printOutput == true ) {
             convert.str( "" );
