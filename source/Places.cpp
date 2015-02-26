@@ -404,14 +404,18 @@ void *Places::ca_setup( int functionId, void *argument, int arg_size,
  *                    model, index 0 will always refer to the same actual
  *                    element (Place). However, an index of 1 will refer to the
  *                    first element along the dimension specified by 'dim'
+ * @param indexSize   this is the physical number of elements that are being
+ *                    referenced within the index[] array. This value is
+ *                    necessary since there is no method to determine the size
+ *                    of an array at runtime
  */
-void Places::callSome( int functionId, int dim, int index[] ) {
+void Places::callSome( int functionId, int dim, int index[], int indexSize ) {
   if ( printOutput == true ) {
-    cerr << "Places::callSome( int functionId, int dim, int index[] ) reached"
-        << endl;
+    cerr << "Places::callSome( int functionId, int dim, int index[], int "
+        "indexSize ) reached" << endl;
   }
 
-  cs_setup( functionId, NULL, 0, 0, dim, index,
+  cs_setup( functionId, NULL, 0, 0, dim, index, indexSize,
       Message::PLACES_CALL_SOME_VOID_OBJECT );
 }
 
@@ -446,15 +450,19 @@ void Places::callSome( int functionId, int dim, int index[] ) {
  *                    model, index 0 will always refer to the same actual
  *                    element (Place). However, an index of 1 will refer to the
  *                    first element along the dimension specified by 'dim'
+ * @param indexSize   this is the physical number of elements that are being
+ *                    referenced within the index[] array. This value is
+ *                    necessary since there is no method to determine the size
+ *                    of an array at runtime
  */
 void Places::callSome( int functionId, void *arguments[], int arg_size, int dim,
-    int index[] ) {
+    int index[], int indexSize ) {
   if ( printOutput == true ) {
     cerr << "Places::callSome( int functionId, void *arguments[], "
-        "int arg_size, int dim, int index[] ) reached" << endl;
+        "int arg_size, int dim, int index[], int indexSize ) reached" << endl;
   }
 
-  cs_setup( functionId, (void *) arguments, arg_size, 0, dim, index,
+  cs_setup( functionId, (void *) arguments, arg_size, 0, dim, index, indexSize,
       Message::PLACES_CALL_SOME_VOID_OBJECT );
 }
 
@@ -487,7 +495,7 @@ void Places::callSome( int functionId, void *arguments[], int arg_size, int dim,
  *                    model, index 0 will always refer to the same actual
  *                    element (Place). However, an index of 1 will refer to the
  *                    first element along the dimension specified by 'dim'
- * @param numPlaces   this is the physical number of places that are being
+ * @param indexSize   this is the physical number of elements that are being
  *                    referenced within the index[] array. This value is
  *                    necessary since there is no method to determine the size
  *                    of an array at runtime
@@ -497,14 +505,14 @@ void Places::callSome( int functionId, void *arguments[], int arg_size, int dim,
  *                    arithmetic)
  */
 void *Places::callSome( int functionId, void *arguments[], int arg_size,
-    int ret_size, int dim, int index[], int numPlaces ) {
+    int ret_size, int dim, int index[], int indexSize ) {
   if ( printOutput == true ) {
     cerr << "Places::callSome( int functionId, void *arguments[], int arg_size,"
-        " int ret_size, int dim, int index[] ) reached" << endl;
+        " int ret_size, int dim, int index[], int indexSize ) reached" << endl;
   }
 
   return cs_setup( functionId, (void *) arguments, arg_size, ret_size, dim,
-      index, Message::PLACES_CALL_SOME_VOID_OBJECT );
+      index, indexSize, Message::PLACES_CALL_SOME_VOID_OBJECT );
 }
 
 /**
@@ -530,7 +538,7 @@ void *Places::callSome( int functionId, void *arguments[], int arg_size,
  *                    a particular Place. As such, the largest value will be
  *                    equal to the total number of Places in your simulation,
  *                    minus one (since zero-indexed into array)
- * @param numPlaces   this is the physical number of places that are being
+ * @param indexSize   this is the physical number of elements that are being
  *                    referenced within the index[] array. This value is
  *                    necessary since there is no method to determine the size
  *                    of an array at runtime
@@ -541,10 +549,20 @@ void *Places::callSome( int functionId, void *arguments[], int arg_size,
  *                    arithmetic)
  */
 void *Places::cs_setup( int functionId, void *arguments, int arg_size,
-    int ret_size, int dim, int index[], int numPlaces,
+    int ret_size, int dim, int index[], int indexSize,
     Message::ACTION_TYPE type ) {
-  // calculate the total argument size for return-objects
-  int total = 1; // the total number of place elements
+  // calculate the total number of places we're calling for return object size
+  int total = indexSize;    // assume total is equal to number in index[]
+  bool rangeValues = false; // track whether a range of values is defined
+  if ( indexSize == 3 ) {   // check to see if index[] refers to a range
+    for ( int i = 0; i < indexSize && !rangeValues; i++ ) {
+      if ( index[i] < 0 ) {
+        total = size[i];    // element refers to a range in this dimension
+        rangeValues = true; // flag that we're tracking a range (to parse later)
+      }
+    }
+  }
+
   for ( int i = 0; i < index; i++ )
     total *= size[i];
   int stripe = total / MASS_base::systemSize; // systemSize: # of processes used
