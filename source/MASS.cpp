@@ -7,8 +7,8 @@
 #include "MASS.h"
 
 //Used to toggle output for MASS.cpp
-//const bool printOutput = false;
-const bool printOutput = true;
+const bool printOutput = false;
+//const bool printOutput = true;
 
 using namespace std;
 
