@@ -25,14 +25,21 @@ class Place : MObject {
   
   /**
    * Is called from Places.callAll( ), callSome( ), exchangeAll( ), and
-ex * exchangeSome( ), and invoke the function specified with functionId as
-pa * passing arguments to this function. A user-derived Place class must
-im * implement this method.
+   * exchangeSome( ), and invoke the function specified with functionId as
+   * passing arguments to this function. A user-derived Place class must
+   * implement this method.
    * @param functionId
    * @param argument
    * @return 
    */
   virtual void *callMethod( int functionId, void *argument ) = 0;
+
+
+  //setNeighbors
+  //addNeighbor
+  //removeNeighbor
+
+
   ~Place( ) { };
 
 
@@ -44,6 +51,7 @@ im * implement this method.
   * of x, y, and z, or that of i, j, and k.
   */
   vector<int> size;
+
  /**  
   * Is an array that maintains each place’s coordinates. Intuitively,
   * index[0], index[1], and index[2] correspond to coordinates of x, y, and
@@ -74,8 +82,17 @@ im * implement this method.
   */
   int inMessage_size;
   
-  /** Includes all the agents residing locally on this place. */
+ /** 
+  * Includes all the agents residing locally on this place. 
+  */
   vector<MObject*> agents; 
+
+  /**
+   * A list of places neighboring this place.
+   * Takes the form of a list of relative coordinates for other places.
+   */
+  vector<int*> *neighbors;
+
 
  protected:
   void *getOutMessage( int handle, int index[] );

@@ -326,7 +326,7 @@ void *Places::ca_setup( int functionId, void *argument,
  * @param destinations
  */
 void Places::exchangeAll( int dest_handle, int functionId, 
-			  vector<int*> *destinations ) {
+ 			  vector<int*> *destinations ) {
 
   // send a PLACES_EXCHANGE_ALL message to each slave
   Message *m = new Message( Message::PLACES_EXCHANGE_ALL, 
@@ -346,6 +346,8 @@ void Places::exchangeAll( int dest_handle, int functionId,
   MASS_base::currentPlaces = this;
   MASS_base::destinationPlaces = MASS_base::placesMap[dest_handle];
   MASS_base::currentFunctionId = functionId;
+
+  // get currentDestinations from each place...
   MASS_base::currentDestinations = destinations;
 
   // reset requestCounter by the main thread
