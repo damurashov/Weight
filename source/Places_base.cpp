@@ -349,6 +349,96 @@ void **Places_base::callAll( int functionId, void *argument, int arg_size,
 }
 
 /**
+ * Calls the referenced function, passing along a related argument, at each
+ * Place referenced by this call within the simulation space (Places).
+ *
+ * @param functionId  the id of the function to call at each Place
+ * @param argument    the address (pointer) of an argument to send to
+ *                    the function called at each Place
+ * @param arg_size    the total size of the argument
+ * @param tid         the id of the thread
+ * @return            the address of the address of (pointer to a pointer) the
+ *                    return values stored from each function call
+ */
+void Places_base::callSome( int functionId, void *argument, int tid ) {
+  int range[2];
+  getLocalRange( range, tid );
+
+  DllClass *dllclass = MASS_base::dllMap[handle];
+
+  // debugging
+  ostringstream convert;
+  if ( printOutput == true ) {
+    convert << "thread[" << tid << "] callSome functionId = " << functionId
+        << ", range[0] = " << range[0] << " range[1] = " << range[1]
+        << ", dllclass = " << (void *) dllclass;
+    MASS_base::log( convert.str( ) );
+  }
+
+  if ( range[0] >= 0 && range[1] >= 0 ) {
+    for ( int i = range[0]; i <= range[1]; i++ ) {
+      if ( printOutput == true ) {
+        convert.str( "" );
+        convert << "thread[" << tid << "]: places[" << i << "] = "
+            << dllclass->places[i] << ", vptr = "
+            << *(int**) ( dllclass->places[i] );
+        MASS_base::log( convert.str( ) );
+      }
+      dllclass->places[i]->callMethod( functionId, argument ); // <-- seg fault
+    }
+  }
+}
+
+/**
+ * Calls the referenced function, passing along a related argument, at each
+ * Place referenced by this call contained within the simulation space (Places).
+ * Any return values generated from individual function calls are stored in an
+ * array, a pointer to the address (pointer to a pointer) of which is returned
+ * as a result of this call.
+ *
+ * @param functionId  the id of the function to call at each Place
+ * @param argument    the address (pointer) of an array of arguments to send to
+ *                    the function called at each Place
+ * @param arg_size    the size (int) of each argument
+ * @param ret_size    the size (int) of each return value
+ * @param tid         the id of the thread
+ * @return            the address of the address of (pointer to a pointer) the
+ *                    return values stored from each function call
+ */
+void **Places_base::callSome( int functionId, void *argument, int arg_size,
+    int ret_size, int tid ) {
+  int range[2];
+  getLocalRange( range, tid );
+
+  // debugging
+  ostringstream convert;
+  if ( printOutput == true ) {
+    convert << "thread[" << tid << "] callAll_return object functionId = "
+        << functionId << ", range[0] = " << range[0] << " range[1] = "
+        << range[1] << ", return_size = " << ret_size;
+    MASS_base::log( convert.str( ) );
+  }
+
+  DllClass *dllclass = MASS_base::dllMap[handle];
+  char *return_values = MASS_base::currentReturns + range[0] * ret_size;
+  if ( range[0] >= 0 && range[1] >= 0 ) {
+    for ( int i = range[0]; i <= range[1]; i++ ) {
+      if ( printOutput == true ) {
+        convert.str( "" );
+        convert << "thread[" << tid << "]: places[i] = " << dllclass->places[i];
+        MASS_base::log( convert.str( ) );
+      }
+      memcpy( (void *) return_values,
+          dllclass->places[i]->callMethod( functionId,
+              (char *) argument + arg_size * i ), ret_size );
+      return_values += ret_size;
+    }
+  }
+
+  return NULL;
+}
+
+/**
  * Returns the first and last of the range that should be allocated to a given
  * thread.
  *
@@ -1031,9 +1121,11 @@ int Places_base::getGlobalLinearIndexFromGlobalArrayIndex( int index[],
 }
 
 /**
+ * This method returns the rank of the node that contains the Place indicated
+ * by the index passed in (globalLinearIndex).
  * 
- * @param globalLinearIndex
- * @return 
+ * @param globalLinearIndex the absolute, single-dimensional index of a Place
+ * @return                  the rank of the node that contains this Place
  */
 int Places_base::getRankFromGlobalLinearIndex( int globalLinearIndex ) {
   static int total = 0;

@@ -90,6 +90,29 @@ public:
   exchangeReqList (NULL), migrationReqList (NULL) { };
 
   /**
+   * PLACES_CALL_SOME_VOID_OBJECT,
+   * PLACES_CALL_SOME_RETURN_OBJECT,
+   * AGENTS_CALL_SOME_VOID_OBJECT,
+   * AGENTS_CALL_SOME_RETURN_OBJECT
+   * @param action
+   * @param handle
+   * @param functionId
+   * @param argument
+   * @param arg_size
+   * @param ret_size
+   */
+  Message (ACTION_TYPE action,
+           int handle, int functionId, void *argument, int arg_size,
+           int ret_size) :
+  action (action), size (0),
+  handle (handle), dest_handle (VOID_HANDLE),
+  functionId (functionId), classname (""),
+  argument (argument), argument_size (arg_size), return_size (ret_size),
+  argument_in_heap (false), hosts (NULL), destinations (NULL),
+  dimension (0), agent_population (-1), boundary_width (0),
+  exchangeReqList (NULL), migrationReqList (NULL) { };
+
+  /**
    * PLACES_EXCHANGE_ALL
    * @param action
    * @param handle

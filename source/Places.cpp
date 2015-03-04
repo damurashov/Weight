@@ -361,7 +361,7 @@ void *Places::ca_setup( int functionId, void *argument, int arg_size,
   Mthread::barrierThreads( 0 );
 
   // Synchronized with all slave processes
-  if ( type == Message::PLACES_CALL_ALL_VOID_OBJECT )
+  if ( type == Message::PLACES_CALL_ALL_RETURN_OBJECT )
     MASS::barrier_all_slaves( MASS_base::currentReturns, stripe,
         MASS_base::currentRetSize );
   else
@@ -563,8 +563,7 @@ void *Places::cs_setup( int functionId, void *arguments, int arg_size,
     }
   }
 
-  for ( int i = 0; i < index; i++ )
-    total *= size[i];
+  // calculate size of stripe - divide calls up between MNodes
   int stripe = total / MASS_base::systemSize; // systemSize: # of processes used
 
   // send PLACES_CALL_SOME_VOID_OBJECT message to each referenced place
@@ -584,7 +583,7 @@ void *Places::cs_setup( int functionId, void *arguments, int arg_size,
               arg_size * stripe, ret_size ); // no remainder
 
       if ( printOutput == true ) {
-        cerr << "Places.callAll: arg_size = " << arg_size << " stripe = "
+        cerr << "Places.callSome: arg_size = " << arg_size << " stripe = "
             << stripe << " i + 1 = " << ( i + 1 ) << endl;
       }
     }
@@ -616,7 +615,7 @@ void *Places::cs_setup( int functionId, void *arguments, int arg_size,
   // resume threads
   Mthread::resumeThreads( Mthread::STATUS_CALLALL );
 
-  // callall implementation
+  // callSome implementation
   if ( type == Message::PLACES_CALL_ALL_VOID_OBJECT )
     Places_base::callAll( functionId, arguments, 0 ); // 0 = the main thread id
   else
