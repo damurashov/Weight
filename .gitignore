@@ -50,3 +50,6 @@ source/nbproject
 # work_directories
 work_ubuntu/*
 work_source/*
+.cproject
+.project
+.settings/org.eclipse.core.resources.prefs
