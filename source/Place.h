@@ -35,10 +35,11 @@ class Place : MObject {
   virtual void *callMethod( int functionId, void *argument ) = 0;
 
 
-  //setNeighbors
-  //addNeighbor
-  //removeNeighbor
-
+  // Methods to set, add, and remove neighbors.
+  vector<int*> getNeighbors() { return neighbors; };
+  void addNeighbors(vector<int*> *destinations);
+  void removeNeighbors(vector<int*> *destinations);
+  bool isNeighbor(int *destination);
 
   ~Place( ) { };
 
@@ -91,7 +92,7 @@ class Place : MObject {
    * A list of places neighboring this place.
    * Takes the form of a list of relative coordinates for other places.
    */
-  vector<int*> *neighbors;
+  vector<int*> neighbors;
 
 
  protected:

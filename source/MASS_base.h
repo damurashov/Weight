@@ -42,7 +42,7 @@ class MASS_base {
   static int getCurrentArgSize( ) { return currentArgSize; };
   static int getCurrentRetSize( ) { return currentRetSize; };
   static Message::ACTION_TYPE getCurrentMsgType( ) { return currentMsgType; };
-  static vector<int*> *getCurrentDestinations( ) {return currentDestinations;};
+  // static vector<int*> *getCurrentDestinations( ) {return currentDestinations;};
   static vector<pthread_t> threads;       // including main and child threads
   static void setHosts( vector<string> host_args );
   static void showHosts( );
@@ -70,7 +70,7 @@ class MASS_base {
   static int currentArgSize;
   static int currentRetSize;
   static char *currentReturns;
-  static vector<int*> *currentDestinations;
+  // static vector<int*> *currentDestinations;
   static Message::ACTION_TYPE currentMsgType;
   static ExchangeHelper exchange;
   static Agents_base* currentAgents;

@@ -334,14 +334,60 @@ void Places_base::getLocalRange( int range[], int tid ) {
 }
 
 /**
+ * Set the neighbors for a set of places.
+ * @param dstPlaces - places whose neighbors we are setting
+ * @param destinations - coordinates of the neighboring places
+ * @param tid
+ */
+void Places_base::setAllPlacesNeighbors(Places_base *dstPlaces, 
+					vector<int*> *destinations, int tid) {
+
+  int range[2];
+  getLocalRange( range, tid );
+  ostringstream convert;
+  // debugging
+  if(printOutput == true){
+    convert << "thread[" << tid << "] setAllPlacesNeighbors: range[0] = " 
+	    << range[0] << " range[1] = " << range[1];
+    MASS_base::log( convert.str( ) );
+  }
+
+  DllClass *src_dllclass = MASS_base::dllMap[ handle ];
+
+  if(printOutput == true){
+    convert.str( "" );
+    convert << "tid[" << tid << "]: checks destinations:";
+    for ( int i = 0; i < int( destinations->size( ) ); i++ ) {
+      int *offset = (*destinations)[i];
+      convert << "[" << offset[0]
+	      << "][" << offset[1] << "]  ";    
+    }
+    MASS_base::log( convert.str( ) );
+  }
+
+  // now scan all places within range[0] ~ range[1]
+  if ( range[0] >= 0 && range[1] >= 0 ) {
+    for ( int i = range[0]; i <= range[1]; i++ ) {
+      // for each place
+      Place *srcPlace = (Place *)(src_dllclass->places[i]);
+
+      // update its neighbors list
+      //srcPlace->neighbors = destinations;
+
+      srcPlace->addNeighbors(destinations);
+    }
+  }
+}
+
+
+/**
  * 
  * @param dstPlaces
  * @param functionId
- * @param destinations
  * @param tid
  */
 void Places_base::exchangeAll( Places_base *dstPlaces, int functionId,
-			       vector<int*> *destinations, int tid) {
+			       int tid) {
 
   int range[2];
   getLocalRange( range, tid );
@@ -356,7 +402,9 @@ void Places_base::exchangeAll( Places_base *dstPlaces, int functionId,
   DllClass *src_dllclass = MASS_base::dllMap[ handle ];
   DllClass *dst_dllclass = MASS_base::dllMap[ dstPlaces->handle ];
 
-  
+
+  // Need to get location info from each place's neighbors not destinations
+  /*
   if(printOutput == true){
       convert.str( "" );
       convert << "tid[" << tid << "]: checks destinations:";
@@ -367,6 +415,7 @@ void Places_base::exchangeAll( Places_base *dstPlaces, int functionId,
       }
       MASS_base::log( convert.str( ) );
       }
+  */
 
   // now scan all places within range[0] ~ range[1]
   if ( range[0] >= 0 && range[1] >= 0 ) {
@@ -374,14 +423,11 @@ void Places_base::exchangeAll( Places_base *dstPlaces, int functionId,
       // for each place
       Place *srcPlace = (Place *)(src_dllclass->places[i]);
 
-      // update its neighbors
-      srcPlace->neighbors = destinations;
-
       // check its neighbors
-      for ( int j = 0; j < int( srcPlace->neighbors->size( ) ); j++ ) {
+      for ( int j = 0; j < int( srcPlace->neighbors.size( ) ); j++ ) {
 
 	// for each neighbor
-	int *offset = (*srcPlace->neighbors)[j];
+	int *offset = (srcPlace->neighbors)[j];
 	int neighborCoord[dstPlaces->dimension];
 
 	// compute its coordinate

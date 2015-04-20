@@ -32,7 +32,7 @@ void *MASS_base::currentArgument;
 int MASS_base::currentArgSize;
 int MASS_base::currentRetSize;
 char *MASS_base::currentReturns;
-vector<int*> *MASS_base::currentDestinations;
+//vector<int*> *MASS_base::currentDestinations;
 Message::ACTION_TYPE MASS_base::currentMsgType;
 ExchangeHelper MASS_base::exchange;
 

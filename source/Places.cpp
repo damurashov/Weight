@@ -325,13 +325,12 @@ void *Places::ca_setup( int functionId, void *argument,
  * @param functionId
  * @param destinations
  */
-void Places::exchangeAll( int dest_handle, int functionId, 
- 			  vector<int*> *destinations ) {
+void Places::exchangeAll( int dest_handle, int functionId  ) {
 
   // send a PLACES_EXCHANGE_ALL message to each slave
   Message *m = new Message( Message::PLACES_EXCHANGE_ALL, 
 			    this->handle, dest_handle, functionId, 
-			    destinations, this->dimension );
+			    0, this->dimension );
 
   if(printOutput == true){
       cerr << "dest_handle = " << dest_handle << endl;
@@ -348,7 +347,7 @@ void Places::exchangeAll( int dest_handle, int functionId,
   MASS_base::currentFunctionId = functionId;
 
   // get currentDestinations from each place...
-  MASS_base::currentDestinations = destinations;
+  // MASS_base::currentDestinations = destinations;
 
   // reset requestCounter by the main thread
   MASS_base::requestCounter = 0;
@@ -361,8 +360,7 @@ void Places::exchangeAll( int dest_handle, int functionId,
 
   // exchangeall implementation
   Places_base::exchangeAll( MASS_base::destinationPlaces,
-			    functionId, 
-			    MASS_base::currentDestinations, 0 );
+			    functionId, 0 );
 
   // confirm all threads are done with exchangeAll.
   Mthread::barrierThreads( 0 );

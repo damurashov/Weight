@@ -19,8 +19,9 @@ class Places_base {
   void callAll( int functionId, void *argument, int tid );
   void **callAll( int functionId, void *argument, int arg_size, 
 		  int ret_size, int tid );
-  void exchangeAll( Places_base *dstPlaces, int functionId, 
+  void setAllPlacesNeighbors(Places_base *dstPlaces,
 		    vector<int*> *destinations, int tid );
+  void exchangeAll( Places_base *dstPlaces, int functionId, int tid );
   void exchangeBoundary( );      // called from Places.exchangeBoundary( ) 
 
   int getHandle( ) { return handle; };
