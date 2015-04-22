@@ -16,6 +16,7 @@ public:
   static const int checkInMessage_ = 3;
   static const int printOutMessage_ = 4;
   static const int printShadow_ = 5;
+  static const int addDestinations_ = 6;
 
   /**
    * Initialize a Land object by allocating memory for it.
@@ -38,6 +39,7 @@ public:
     case checkInMessage_: return checkInMessage( argument );
     case printOutMessage_: return printOutMessage( argument );
     case printShadow_: return printShadow( argument );
+    case addDestinations_: return addDestinations( argument );
     }
     return NULL;
   };
@@ -50,6 +52,7 @@ private:
   void *checkInMessage( void *argument );
   void *printOutMessage( void *argument );
   void *printShadow( void *argument );
+  void *addDestinations( void *argument );
 };
 
 #endif

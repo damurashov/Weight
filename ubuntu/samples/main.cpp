@@ -84,10 +84,15 @@ int main( int argc, char *args[] ) {
   int south[2] = {0, -1}; destinations.push_back( south );
   int west[2]  = {-1, 0}; destinations.push_back( west );
   
+  // pass lands addDestinations method the destination pointer
+  land->setAllPlacesNeighbors(land, &destinations, 1);
+  
+
+
   // given the handle of the places, a function in the Land class,
   // and the coordinates defined above, exchange information between the 
   // places.
-  land->exchangeAll( 1, Land::exchangetest_, &destinations );
+  land->exchangeAll( 1, Land::exchangetest_ );
   
   // ask every place to report its current status.
   land->callAll( Land::checkInMessage_ );
