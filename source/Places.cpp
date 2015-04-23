@@ -6,8 +6,8 @@
 #include <dlfcn.h> // dlopen, dlsym, and dlclose
 
 //Used to toggle comments from Places.cpp
-const bool printOutput = false;
-//const bool printOutput = true;
+//const bool printOutput = false;
+const bool printOutput = true;
 
 /**
  * Instantiates a shared array with "size[]" from the "className" class as
@@ -319,7 +319,7 @@ void *Places::ca_setup( int functionId, void *argument,
  * i from the current caller to the callee cell. The caller cell’s outMessage
  * is a continuous set of arguments passed to the callee’s method. The
  * caller’s inMessages[] stores values returned from all callees. More
- * specifically, inMessages[i] maintains a set of return values from the i th
+ * Specifically, inMessages[i] maintains a set of return values from the i th
  * callee.
  * @param dest_handle
  * @param functionId
@@ -333,14 +333,26 @@ void Places::exchangeAll( int dest_handle, int functionId  ) {
 			    0, this->dimension );
 
   if(printOutput == true){
+    cerr << "Places::exchangeAll ";
       cerr << "dest_handle = " << dest_handle << endl;
   }
 
   for ( int i =0; i < int ( MASS::mNodes.size( ) ); i++ ) {
+    if(printOutput == true){
+      cerr << "MASS::mNodes[" << i << "] receiving Message m." << endl;;
+    }
+
+
     MASS::mNodes[i]->sendMessage( m );
   }
   delete m;
  
+
+
+  if(printOutput == true){
+      cerr << "Sent messages to mNodes.  Beginning to retrieve places." << endl;
+  }
+
   // retrieve the corresponding places
   MASS_base::currentPlaces = this;
   MASS_base::destinationPlaces = MASS_base::placesMap[dest_handle];
@@ -358,9 +370,19 @@ void Places::exchangeAll( int dest_handle, int functionId  ) {
   // resume threads
   Mthread::resumeThreads( Mthread::STATUS_EXCHANGEALL );
 
+  
+  if(printOutput == true){
+    cerr << "Calling Places_base ExchangeAll now.\n";
+   }
+
   // exchangeall implementation
   Places_base::exchangeAll( MASS_base::destinationPlaces,
 			    functionId, 0 );
+
+  if(printOutput == true){
+    cerr << "Finished calling Places_base::exchangeAll.\n";
+   }
+
 
   // confirm all threads are done with exchangeAll.
   Mthread::barrierThreads( 0 );

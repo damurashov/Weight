@@ -63,7 +63,7 @@ void *Land::exchangetest( void *argument ) {
 
   if(printOutput == true){
       convert << "exchangetest[" << index[0] << "][" << index[1] << "] out of ["
-	      << size[0] << "][" << size[1] << "] received " << *(int *)argument;
+	      << size[0] << "][" << size[1] << "] received "; //<< *(int *)argument;
       MASS_base::log( convert.str( ) );
   }
 

@@ -7,8 +7,8 @@
 #include <sstream> // ostringstream
 
 //Used to enable or disable output in places
-const bool printOutput = false;
-//const bool printOutput = true;
+//const bool printOutput = false;
+const bool printOutput = true;
 
 /**
  * 
@@ -367,7 +367,18 @@ void Places_base::setAllPlacesNeighbors(Places_base *dstPlaces,
 
   // now scan all places within range[0] ~ range[1]
   if ( range[0] >= 0 && range[1] >= 0 ) {
+
+    if(printOutput == true){
+      convert << "Range is within range[0] to range[1]\n";
+      MASS_base::log( convert.str( ) );
+    }
+
     for ( int i = range[0]; i <= range[1]; i++ ) {
+     
+      //      if(printOutput == true){
+      //convert << "Adding neighbors to  place " << i << "\n";
+      //	MASS_base::log( convert.str( ) );
+      //}
       // for each place
       Place *srcPlace = (Place *)(src_dllclass->places[i]);
 
@@ -377,7 +388,16 @@ void Places_base::setAllPlacesNeighbors(Places_base *dstPlaces,
       srcPlace->addNeighbors(destinations);
     }
   }
+
+
+
+    if(printOutput == true){
+      convert << "Finished adding neighbors to all places.\n";
+      MASS_base::log( convert.str( ) );
+    }
+
 }
+
 
 
 /**
