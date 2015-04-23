@@ -3,6 +3,7 @@
 
 #include "MObject.h"
 #include <vector>
+#include <set>
 #include <iostream>
 
 using namespace std;
@@ -36,7 +37,7 @@ class Place : MObject {
 
 
   // Methods to set, add, and remove neighbors.
-  vector<int*> getNeighbors() { return neighbors; };
+  set<int*> getNeighbors() { return neighbors; };
   void addNeighbors(vector<int*> *destinations);
   void removeNeighbors(vector<int*> *destinations);
   bool isNeighbor(int *destination);
@@ -92,7 +93,8 @@ class Place : MObject {
    * A list of places neighboring this place.
    * Takes the form of a list of relative coordinates for other places.
    */
-  vector<int*> neighbors;
+  //vector<int*> neighbors;
+  set<int*> neighbors;
 
 
  protected:

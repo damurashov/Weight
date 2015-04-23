@@ -5,6 +5,7 @@
 #include "limits.h"
 #include <iostream>
 #include <sstream> // ostringstream
+#include <set>
 
 //Used to enable or disable output in places
 //const bool printOutput = false;
@@ -444,10 +445,14 @@ void Places_base::exchangeAll( Places_base *dstPlaces, int functionId,
       Place *srcPlace = (Place *)(src_dllclass->places[i]);
 
       // check its neighbors
-      for ( int j = 0; j < int( srcPlace->neighbors.size( ) ); j++ ) {
-
+      //for ( int j = 0; j < int( srcPlace->neighbors.size( ) ); j++ ) {
+      int inMsgIndex = -1;
+      for (set<int*>::iterator it = srcPlace->neighbors.begin(); 
+            it != srcPlace->neighbors.end(); 
+            ++it) {
+      inMsgIndex++;
 	// for each neighbor
-	int *offset = (srcPlace->neighbors)[j];
+	int *offset = *it; //(srcPlace->neighbors)[j];
 	int neighborCoord[dstPlaces->dimension];
 
 	// compute its coordinate
@@ -515,7 +520,7 @@ void Places_base::exchangeAll( Places_base *dstPlaces, int functionId,
 	    RemoteExchangeRequest *request 
 	      = new RemoteExchangeRequest( globalLinearIndex,
 					   orgGlobalLinearIndex,
-					   j, // inMsgIndex
+					   inMsgIndex, // inMsgIndex
 					   srcPlace->inMessage_size,
 					   srcPlace->outMessage,
 					   srcPlace->outMessage_size,
