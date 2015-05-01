@@ -150,8 +150,8 @@ char *Message::serialize( int &msg_size ) {
     msg_size += sizeof( int ); // int dest_handle,
     msg_size += sizeof( int ); // int functionId
     msg_size += sizeof( int ); // int dimension
-    msg_size += sizeof( int ); // destinations.size( );
-    msg_size += sizeof( int ) * ( dimension * destinations->size( ) ); 
+    //msg_size += sizeof( int ); // destinations.size( );
+    //msg_size += sizeof( int ) * ( dimension * destinations->size( ) ); 
 
     // compose a message
     pos = msg = new char[msg_size];
@@ -160,15 +160,16 @@ char *Message::serialize( int &msg_size ) {
     *(int *)pos = dest_handle;    pos += sizeof( int );         // dest_handle
     *(int *)pos = functionId;     pos += sizeof( int );         // functionId
     *(int *)pos = dimension;      pos += sizeof( int );         // dimension
-    *(int *)pos = destinations->size( ); pos += sizeof( int );  // dest->size()
+    //*(int *)pos = destinations->size( ); pos += sizeof( int );  // dest->size()
     
+    /*
     for ( int i = 0; i < int( destinations->size( ) ); i++ ) {
       int *dest = (*destinations)[i];
       for ( int j = 0; j < dimension; j++ ) {
-	*(int *)pos = dest[j];    
-	pos += sizeof( int ); // destination[i][j]
+	      *(int *)pos = dest[j];    
+	      pos += sizeof( int ); // destination[i][j]
       }
-    }
+    }*/
     break;
 
   case PLACES_EXCHANGE_ALL_REMOTE_REQUEST:
