@@ -21,6 +21,8 @@ class Places_base {
 		  int ret_size, int tid );
   void setAllPlacesNeighbors(Places_base *dstPlaces,
 		    vector<int*> *destinations, int tid );
+  void exchangeAll(Places_base *dstPlaces, int functionId, 
+		   vector<int*> *destinations, int tid );
   void exchangeAll( Places_base *dstPlaces, int functionId, int tid );
   void exchangeBoundary( );      // called from Places.exchangeBoundary( ) 
 

@@ -399,10 +399,26 @@ void Places_base::setAllPlacesNeighbors(Places_base *dstPlaces,
 
 }
 
+/**
+ * Replicates the original exchangeAll which acted upon destinations included
+ * in the parameters.  This version now performs sanity checks on the destinations.
+ * @param dstPlaces
+ * @param functionId
+ * @param destinations
+ * @param tid
+ */
+void Places_base::exchangeAll( Places_base *dstPlaces, int functionId, 
+			       vector<int*> *destinations, int tid ) {
+
+  // add our neighbors to each place.
+  this->setAllPlacesNeighbors(dstPlaces, destinations, tid);
+  // now call exchangeAll to act on those neighbors.
+  this->exchangeAll(dstPlaces, functionId, tid);
+}
 
 
 /**
- * 
+ * ExchangeAll method that relies on neighbors contained in each individual place.
  * @param dstPlaces
  * @param functionId
  * @param tid
@@ -422,21 +438,6 @@ void Places_base::exchangeAll( Places_base *dstPlaces, int functionId,
 
   DllClass *src_dllclass = MASS_base::dllMap[ handle ];
   DllClass *dst_dllclass = MASS_base::dllMap[ dstPlaces->handle ];
-
-
-  // Need to get location info from each place's neighbors not destinations
-  /*
-  if(printOutput == true){
-      convert.str( "" );
-      convert << "tid[" << tid << "]: checks destinations:";
-      for ( int i = 0; i < int( destinations->size( ) ); i++ ) {
-        int *offset = (*destinations)[i];
-        convert << "[" << offset[0]
-	        << "][" << offset[1] << "]  ";    
-      }
-      MASS_base::log( convert.str( ) );
-      }
-  */
 
   // now scan all places within range[0] ~ range[1]
   if ( range[0] >= 0 && range[1] >= 0 ) {
