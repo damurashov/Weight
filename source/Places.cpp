@@ -6,8 +6,8 @@
 #include <dlfcn.h> // dlopen, dlsym, and dlclose
 
 //Used to toggle comments from Places.cpp
-//const bool printOutput = false;
-const bool printOutput = true;
+const bool printOutput = false;
+//const bool printOutput = true;
 
 /**
  * Instantiates a shared array with "size[]" from the "className" class as
@@ -325,6 +325,82 @@ void *Places::ca_setup( int functionId, void *argument,
  * @param functionId
  * @param destinations
  */
+void Places::exchangeAll( int dest_handle, int functionId, 
+			  vector<int*> *destinations ) {
+  // send a PLACES_EXCHANGE_ALL message to each slave
+  Message *m = new Message( Message::PLACES_EXCHANGE_ALL, 
+			    this->handle, dest_handle, functionId, 
+			    0, this->dimension );
+
+  if(printOutput == true){
+    cerr << "Places::exchangeAll ";
+      cerr << "dest_handle = " << dest_handle << endl;
+  }
+
+  for ( int i =0; i < int ( MASS::mNodes.size( ) ); i++ ) {
+    if(printOutput == true){
+      cerr << "MASS::mNodes[" << i << "] receiving Message m." << endl;;
+    }
+
+
+    MASS::mNodes[i]->sendMessage( m );
+  }
+  delete m;
+ 
+
+
+  if(printOutput == true){
+      cerr << "Sent messages to mNodes.  Beginning to retrieve places." << endl;
+  }
+
+  // retrieve the corresponding places
+  MASS_base::currentPlaces = this;
+  MASS_base::destinationPlaces = MASS_base::placesMap[dest_handle];
+  MASS_base::currentFunctionId = functionId;
+
+  // reset requestCounter by the main thread
+  MASS_base::requestCounter = 0;
+
+  // for debug
+  MASS_base::showHosts( );
+
+  // resume threads
+  Mthread::resumeThreads( Mthread::STATUS_EXCHANGEALL );
+
+  
+  if(printOutput == true){
+    cerr << "Calling Places_base ExchangeAll now.\n";
+   }
+
+  // exchangeall implementation
+  Places_base::exchangeAll( MASS_base::destinationPlaces,
+			    functionId, destinations, 0 );
+
+  if(printOutput == true){
+    cerr << "Finished calling Places_base::exchangeAll.\n";
+   }
+
+
+  // confirm all threads are done with exchangeAll.
+  Mthread::barrierThreads( 0 );
+
+  // Synchronized with all slave processes
+  MASS::barrier_all_slaves( );
+
+}
+/**
+ * Calls from each of all cells to the method specified with functionId of
+ * all destination cells, each indexed with a different Vector element.
+ * Each vector element, say destination[] is an array of integers where
+ * destination[i] includes a relative index (or a distance) on the coordinate
+ * i from the current caller to the callee cell. The caller cell’s outMessage
+ * is a continuous set of arguments passed to the callee’s method. The
+ * caller’s inMessages[] stores values returned from all callees. More
+ * Specifically, inMessages[i] maintains a set of return values from the i th
+ * callee.
+ * @param dest_handle
+ * @param functionId
+ */
 void Places::exchangeAll( int dest_handle, int functionId  ) {
 
   // send a PLACES_EXCHANGE_ALL message to each slave
@@ -357,9 +433,6 @@ void Places::exchangeAll( int dest_handle, int functionId  ) {
   MASS_base::currentPlaces = this;
   MASS_base::destinationPlaces = MASS_base::placesMap[dest_handle];
   MASS_base::currentFunctionId = functionId;
-
-  // get currentDestinations from each place...
-  // MASS_base::currentDestinations = destinations;
 
   // reset requestCounter by the main thread
   MASS_base::requestCounter = 0;

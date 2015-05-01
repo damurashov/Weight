@@ -86,21 +86,13 @@ int main( int argc, char *args[] ) {
   
   // pass lands addDestinations method the destination pointer
 
-  cerr << "Adding neighbors to places."  << endl;
 
-  land->setAllPlacesNeighbors(land, &destinations, 1);
-  
-  cerr << "Finished adding neighbors to places." << endl;
+  //land->setAllPlacesNeighbors(land, &destinations, 1);
 
   // given the handle of the places, a function in the Land class,
   // and the coordinates defined above, exchange information between the 
   // places.
-
-
-  cerr << "Beginning exchangeall test." << endl;
-  land->exchangeAll( 1, Land::exchangetest_ );
-
-  cerr << "Finished echangeall test. " << endl;
+  land->exchangeAll( 1, Land::exchangetest_, &destinations );
   
   // ask every place to report its current status.
   land->callAll( Land::checkInMessage_ );

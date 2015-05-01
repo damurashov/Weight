@@ -8,8 +8,8 @@
 #include <set>
 
 //Used to enable or disable output in places
-//const bool printOutput = false;
-const bool printOutput = true;
+const bool printOutput = false;
+//const bool printOutput = true;
 
 /**
  * 
@@ -236,12 +236,12 @@ void Places_base::callAll( int functionId, void *argument, int tid ) {
 
   if ( range[0] >= 0 && range[1] >= 0 ) {
     for ( int i = range[0]; i <= range[1]; i++ ) {
-      if ( printOutput == true ) {
-	convert.str( "" );
-	convert << "thread[" << tid << "]: places[" << i 
-		<< "] = " << dllclass->places[i] 
-		<< ", vptr = " << *(int**)(dllclass->places[i]);
-	MASS_base::log( convert.str( ) );
+      if ( printOutput ) {
+	      convert.str( "" );
+	      convert << "thread[" << tid << "]: places[" << i 
+		    << "] = " << dllclass->places[i] 
+		    << ", vptr = " << *(int**)(dllclass->places[i]);
+	      MASS_base::log( convert.str( ) );
       }
       dllclass->places[i]->callMethod( functionId, argument ); // <-- seg fault
     }

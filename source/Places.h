@@ -26,6 +26,8 @@ class Places : public Places_base {
   void callAll( int functionId, void *argument, int arg_size );
   void *callAll( int functionId, void *argument[], int arg_size, 
 		 int ret_size );
+  void exchangeAll( int dest_handle, int functionId, 
+			  vector<int*> *destinations);
   void exchangeAll( int dest_handle, int functionId );
   void exchangeBoundary( );
   void init_master( void *argument, int argument_size, int boundary_width );
