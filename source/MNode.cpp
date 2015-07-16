@@ -31,6 +31,7 @@ const bool printOutput = false;
 using namespace std;
 
 void MNode::closeMainConnection( ) {
+    close (sd);
 }
 
 void MNode::sendMessage( Message *m ) {

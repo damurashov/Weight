@@ -174,6 +174,13 @@ void MASS::finish( ) {
   }
   // Synchronize with all slaves
   barrier_all_slaves( );
+  
+  // Close connection and finish each mprocess
+  for ( int i = 0; i < int( mNodes.size( ) ); i++ ) {
+    mNodes[i]->closeMainConnection( );
+    util.shutdown( ssh2connection, "normal shutdown" );
+  }
+    
   cerr << "MASS::finish: done" << endl;
 }
 
