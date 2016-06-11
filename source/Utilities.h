@@ -25,7 +25,12 @@
 
 #include "libssh2_config.h"
 #include <libssh2.h>
+#include <unistd.h>
 #include <iostream>         // cerr
+#include <pwd.h>
+#include <sys/types.h>
+#include <stdlib.h>
+#include <string.h>
 
 #include "Socket.h"         // Socket
 #include "Ssh2Connection.h"
@@ -34,8 +39,7 @@ using namespace std;
 
 class Utilities {
  public:
-  Utilities( ) : keyfile1( "~/.ssh/id_rsa.pub" ),  keyfile2( "~/.ssh/id_rsa" )
-    { };
+  Utilities( );
   Ssh2Connection *establishConnection( const char host[], 
 				       const int port,
 				       const char username[], 
@@ -45,8 +49,9 @@ class Utilities {
   void shutdown( const Ssh2Connection *ssh2connection, const char msg[] );
 
  private:
-  const char *keyfile1;
-  const char *keyfile2;
+  char *keyfile1;
+  char *keyfile2;
+  const char *passphrase;
 
   int waitsocket( int socket_fd, LIBSSH2_SESSION *session );
   void shutdown( Socket *socket, LIBSSH2_SESSION *session,

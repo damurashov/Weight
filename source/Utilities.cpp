@@ -25,6 +25,21 @@
 #include "Socket.h"
 #include "Ssh2Connection.h"
 
+Utilities::Utilities( ) : passphrase("") {
+  const char* homedir = getenv("HOME");
+  if ( homedir == NULL ) {
+    homedir = getpwuid( getuid() ) -> pw_dir;
+  }
+  keyfile1 = new char[150];
+  keyfile2 = new char[150];
+  strcpy( keyfile2, homedir );
+  strcat( keyfile2, "/.ssh/id_rsa");
+  strcpy( keyfile1, keyfile2 );
+  strcat( keyfile2, "\0" );
+  strcat( keyfile1, ".pub\0" );
+}
+
+
 static void kbd_callback( const char *name, int name_len,
 			  const char *instruction, int instruction_len,
 			  int num_prompts,
@@ -155,7 +170,7 @@ Ssh2Connection *Utilities::establishConnection( const char host[],
   }
   else if ( auth_pw & 4 ) { // Or by public key
     if ( libssh2_userauth_publickey_fromfile( session, username, keyfile1, 
-					       keyfile2, password ) ) {
+					       keyfile2, passphrase ) ) {
       shutdown( socket, session, NULL, "public-key authentication failed" );
       exit( -1 );
     }

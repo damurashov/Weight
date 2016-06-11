@@ -1,0 +1,33 @@
+#!/bin/bash
+
+sudo cp ssh2/lib/*.so* /usr/lib/ ;
+
+sudo cp ssh2/include/* /usr/include/ ;
+
+
+# build the mass library
+make  ;
+
+if [ -d "/usr/include/MASS" ]
+then
+        sudo rm -r /usr/include/MASS
+fi
+
+# make the include portion
+sudo mkdir /usr/include/MASS/ ;
+
+# move the files to the include files
+sudo cp ../source/*.h /usr/include/MASS/ ;
+
+# copy the library 
+sudo cp libmass.so /usr/lib/libmass.so ;
+sudo cp killMProcess.sh /usr/lib/killMProcess.sh ;
+sudo cp mprocess /usr/lib/mprocess ;
+
+# make the Mproc and killMproc accessable
+rm -r ~/.massUtils ;
+mkdir ~/.massUtils ;
+ln -s /usr/lib/killMProcess.sh ~/.massUtils/killMProcess.sh ;
+ln -s /usr/lib/mprocess ~/.massUtils/mprocess ;
+
+
