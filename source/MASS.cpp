@@ -178,7 +178,7 @@ void MASS::finish( ) {
     // Close connection and finish each mprocess
     for ( int i = 0; i < int( mNodes.size( ) ); i++ ) {
         mNodes[i]->closeMainConnection( );
-        Ssh2Connection connectionToClose = mNodes[i]->getConnection();
+        Ssh2Connection* connectionToClose = mNodes[i]->getConnection();
         util.shutdown( connectionToClose, "normal shutdown" );
     }
     
