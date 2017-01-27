@@ -38,24 +38,24 @@
 using namespace std;
 
 class Utilities {
- public:
-  Utilities( );
-  Ssh2Connection *establishConnection( const char host[], 
-				       const int port,
-				       const char username[], 
-				       const char password[] );
-  bool launchRemoteProcess( const Ssh2Connection *ssh2connection, 
-			    const char cmd[] );
-  void shutdown( const Ssh2Connection *ssh2connection, const char msg[] );
+public:
+	Utilities();
+	Ssh2Connection *establishConnection(const char host[],
+		const int port,
+		const char username[],
+		const char password[]);
+	bool launchRemoteProcess(const Ssh2Connection *ssh2connection,
+		const char cmd[]);
+	void shutdown(const Ssh2Connection *ssh2connection, const char msg[]);
 
- private:
-  char *keyfile1;
-  char *keyfile2;
-  const char *passphrase;
+private:
+	char *keyfile1;
+	char *keyfile2;
+	const char *passphrase;
 
-  int waitsocket( int socket_fd, LIBSSH2_SESSION *session );
-  void shutdown( Socket *socket, LIBSSH2_SESSION *session,
-		 LIBSSH2_CHANNEL *channel, const char msg[] );
+	int waitsocket(int socket_fd, LIBSSH2_SESSION *session);
+	void shutdown(Socket *socket, LIBSSH2_SESSION *session,
+		LIBSSH2_CHANNEL *channel, const char msg[]);
 };
 
 #endif

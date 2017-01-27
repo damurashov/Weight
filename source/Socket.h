@@ -44,19 +44,19 @@ extern "C"
 #define NULL_FD -1
 
 class Socket {
- public:
-  Socket( const int );
-  ~Socket( );
-  int getClientSocket( const char[] );
-  int getClientSocket( const char[], const int sndbufsize, const 
-		       bool nodelay );
-  int getServerSocket( );
-  int getServerSocket( const int rcvbufsize, const bool nodelay );
-  int getDescriptor( );
- private:
-  int port;
-  int clientFd;
-  int serverFd;
-};  
+public:
+	Socket(const int);
+	~Socket();
+	int getClientSocket(const char[]);
+	int getClientSocket(const char[], const int sndbufsize, const
+		bool nodelay);
+	int getServerSocket();
+	int getServerSocket(const int rcvbufsize, const bool nodelay);
+	int getDescriptor();
+private:
+	int port;
+	int clientFd;
+	int serverFd;
+};
 
 #endif  

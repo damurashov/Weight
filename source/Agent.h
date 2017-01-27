@@ -31,35 +31,35 @@
 using namespace std;
 
 class Agent : MObject {
-  friend class Agents_base;
-  friend class Message;
-  friend class AgentMigrationRequest;
- public:
-  Agent( void *argument ) : alive( true ), newChildren( 0 ), 
-    migratableData( NULL ), migratableDataSize( 0 ) { };
-  virtual void *callMethod( int functionId, void *argument ) = 0;
-  ~Agent( ) { if ( migratableData != NULL ) free( migratableData ); };
-  virtual int map( int initPopulation, vector<int> size, vector<int> index );
-  void kill( ) { alive = false; };
+	friend class Agents_base;
+	friend class Message;
+	friend class AgentMigrationRequest;
+public:
+	Agent(void *argument) : alive(true), newChildren(0),
+		migratableData(NULL), migratableDataSize(0) { };
+	virtual void *callMethod(int functionId, void *argument) = 0;
+	~Agent() { if (migratableData != NULL) free(migratableData); };
+	virtual int map(int initPopulation, vector<int> size, vector<int> index);
+	void kill() { alive = false; };
 
- protected:
-  bool migrate( int index, ... ) { return true; };
-  bool migrate( vector<int> index );
-  void spawn( int nAgents, vector<void*> arguments, int arg_size );
+protected:
+	bool migrate(int index, ...) { return true; };
+	bool migrate(vector<int> index);
+	void spawn(int nAgents, vector<void*> arguments, int arg_size);
 
-  //void spawn( int nAgents, void *arguments , int arg_size );
+	//void spawn( int nAgents, void *arguments , int arg_size );
 
-  int agentsHandle;
-  int placesHandle;
-  int agentId;
-  int parentId;
-  Place *place;
-  vector<int> index;
-  bool alive;
-  int newChildren;
-  vector<void*> arguments;
-  void *migratableData;    // to be cast to a user-defined data type 
-  int migratableDataSize;
+	int agentsHandle;
+	int placesHandle;
+	int agentId;
+	int parentId;
+	Place *place;
+	vector<int> index;
+	bool alive;
+	int newChildren;
+	vector<void*> arguments;
+	void *migratableData;    // to be cast to a user-defined data type 
+	int migratableDataSize;
 };
 
 #endif

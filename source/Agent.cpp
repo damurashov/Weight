@@ -25,46 +25,46 @@
 #include <iostream>
 #include <sstream>     // ostringstream
 
-//Set number for spawning additional Agents
-void Agent::spawn( int numAgents, vector<void*> arguments, int arg_size){
+ //Set number for spawning additional Agents
+void Agent::spawn(int numAgents, vector<void*> arguments, int arg_size) {
 
 	//Only want to make changes if the number to be created is above zero
-	if(numAgents > 0){
+	if (numAgents > 0) {
 		newChildren = numAgents;
 		this->arguments = arguments;
 	}
 }
 
-int Agent::map( int initPopulation, vector<int> size, vector<int> index ) {
+int Agent::map(int initPopulation, vector<int> size, vector<int> index) {
 
-    // compute the total # places
-    int placeTotal = 1;
-    for ( int x = 0; x < int( size.size( ) ); x++ )
-      placeTotal *= size[x];
+	// compute the total # places
+	int placeTotal = 1;
+	for (int x = 0; x < int(size.size()); x++)
+		placeTotal *= size[x];
 
-    // compute the global linear index
-    int linearIndex = 0;
-    for ( int i = 0; i < int( index.size( ) ); i++ ) {
-      if ( index[i] >= 0 && size[i] > 0 && index[i] < size[i] ) {
-        linearIndex = linearIndex * size[i];
-        linearIndex += index[i];
-      }
-    }
+	// compute the global linear index
+	int linearIndex = 0;
+	for (int i = 0; i < int(index.size()); i++) {
+		if (index[i] >= 0 && size[i] > 0 && index[i] < size[i]) {
+			linearIndex = linearIndex * size[i];
+			linearIndex += index[i];
+		}
+	}
 
-    // compute #agents per place a.k.a. colonists
-    int colonists = initPopulation / placeTotal;
-    int remainders = initPopulation % placeTotal;
-    if ( linearIndex < remainders ) colonists++; // add a remainder
+	// compute #agents per place a.k.a. colonists
+	int colonists = initPopulation / placeTotal;
+	int remainders = initPopulation % placeTotal;
+	if (linearIndex < remainders) colonists++; // add a remainder
 
-    return colonists;
+	return colonists;
 };
 
 //Set index for an Agent to migrate to
-bool Agent::migrate( vector<int> index ){
+bool Agent::migrate(vector<int> index) {
 	vector<int> sizeVectors;
 	sizeVectors = place->getSizeVect();
-	for(int i = 0; (unsigned)i < sizeVectors.size(); i++){
-		if(index[i] >= 0 && index[i] < sizeVectors[i])
+	for (int i = 0; (unsigned)i < sizeVectors.size(); i++) {
+		if (index[i] >= 0 && index[i] < sizeVectors[i])
 			continue;
 		else
 			return false;

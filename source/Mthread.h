@@ -27,28 +27,29 @@
 #include <pthread.h>
 
 class Mthread {
- public:
-  enum STATUS_TYPE { STATUS_READY,          // 0
-                     STATUS_TERMINATE,      // 1
-                     STATUS_CALLALL,        // 2
-		     STATUS_EXCHANGEALL,    // 3
-		     STATUS_AGENTSCALLALL,  // 4
-		     STATUS_MANAGEALL	    // 5
-  };
+public:
+	enum STATUS_TYPE {
+		STATUS_READY,          // 0
+		STATUS_TERMINATE,      // 1
+		STATUS_CALLALL,        // 2
+		STATUS_EXCHANGEALL,    // 3
+		STATUS_AGENTSCALLALL,  // 4
+		STATUS_MANAGEALL	    // 5
+	};
 
-  static void init( );
-  static void *run( void *param );
-  static void resumeThreads( STATUS_TYPE new_status );
-  static void barrierThreads( int tid );
+	static void init();
+	static void *run(void *param);
+	static void resumeThreads(STATUS_TYPE new_status);
+	static void barrierThreads(int tid);
 
-  static pthread_mutex_t lock;
-  static pthread_cond_t barrier_ready;
-  static pthread_cond_t barrier_finished;
-  static int barrier_count;
-  static STATUS_TYPE status;
+	static pthread_mutex_t lock;
+	static pthread_cond_t barrier_ready;
+	static pthread_cond_t barrier_finished;
+	static int barrier_count;
+	static STATUS_TYPE status;
 
-  static int threadCreated;
-  static int agentBagSize;
+	static int threadCreated;
+	static int agentBagSize;
 };
 
 #endif

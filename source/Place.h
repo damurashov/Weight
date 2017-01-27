@@ -30,31 +30,33 @@
 using namespace std;
 
 class Place : MObject {
-  friend class Places_base;
-  friend class Agents_base;
-  friend class Agent;
- public:
-  Place( void *argument ) : outMessage( NULL ), outMessage_size( 0 ), 
-    inMessage_size( 0 ) { inMessages.clear( ); };
- 
-  vector<int> getSizeVect( );
-  virtual void *callMethod( int functionId, void *argument ) = 0;
-  ~Place( ) { };
+	friend class Places_base;
+	friend class Agents_base;
+	friend class Agent;
+public:
+	Place(void *argument) : outMessage(NULL), outMessage_size(0),
+		inMessage_size(0) {
+		inMessages.clear();
+	};
 
-  vector<int> size;
-  vector<int> index;
-  void *outMessage;
-  vector<void*> inMessages;
-  int outMessage_size;
-  int inMessage_size;
-  vector<MObject*> agents;
+	vector<int> getSizeVect();
+	virtual void *callMethod(int functionId, void *argument) = 0;
+	~Place() { };
 
- protected:
-  void *getOutMessage( int handle, int index[] );
-  void putInMessage( int handle, int index[], int position, void *value );
+	vector<int> size;
+	vector<int> index;
+	void *outMessage;
+	vector<void*> inMessages;
+	int outMessage_size;
+	int inMessage_size;
+	vector<MObject*> agents;
 
- private:
-  Place *findDstPlace( int handle, int index[] );
+protected:
+	void *getOutMessage(int handle, int index[]);
+	void putInMessage(int handle, int index[], int position, void *value);
+
+private:
+	Place *findDstPlace(int handle, int index[]);
 };
 
 #endif

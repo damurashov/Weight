@@ -26,23 +26,23 @@
 #include "Agent.h"
 
 class AgentMigrationRequest {
- friend class Agents_base;
- friend class Message;
- public:
-  AgentMigrationRequest( int destIndex, Agent *agent ) :
-    destGlobalLinearIndex( destIndex ), agent( agent ) {
-  };
+	friend class Agents_base;
+	friend class Message;
+public:
+	AgentMigrationRequest(int destIndex, Agent *agent) :
+		destGlobalLinearIndex(destIndex), agent(agent) {
+	};
 
-  ~AgentMigrationRequest( ) {
-    /* DON'T DELETE AN AGENT!!
-    if ( agent->migratableDataSize > 0 && agent->migratableData != NULL )
-      free( agent->migratableData );
-    delete agent;
-    */
-  }
+	~AgentMigrationRequest() {
+		/* DON'T DELETE AN AGENT!!
+		if ( agent->migratableDataSize > 0 && agent->migratableData != NULL )
+		  free( agent->migratableData );
+		delete agent;
+		*/
+	}
 
-  int destGlobalLinearIndex;
-  Agent *agent;
+	int destGlobalLinearIndex;
+	Agent *agent;
 };
 
 #endif

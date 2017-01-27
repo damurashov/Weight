@@ -27,16 +27,16 @@
 #include "Socket.h"
 
 class Ssh2Connection {
- public:
-  Ssh2Connection( Socket *socket, 
-		  LIBSSH2_SESSION *session, LIBSSH2_CHANNEL *channel ) :
-    socket( socket ), session( session ), channel( channel ) { };
-  int read( char* buf, int size );
-  int write( char *buf, int size );
+public:
+	Ssh2Connection(Socket *socket,
+		LIBSSH2_SESSION *session, LIBSSH2_CHANNEL *channel) :
+		socket(socket), session(session), channel(channel) { };
+	int read(char* buf, int size);
+	int write(char *buf, int size);
 
-  Socket *socket;
-  LIBSSH2_SESSION *session;
-  LIBSSH2_CHANNEL *channel;
+	Socket *socket;
+	LIBSSH2_SESSION *session;
+	LIBSSH2_CHANNEL *channel;
 };
 
 #endif
