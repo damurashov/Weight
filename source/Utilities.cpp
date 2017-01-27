@@ -25,6 +25,9 @@
 #include "Socket.h"
 #include "Ssh2Connection.h"
 
+const bool printOutput = false;
+//const bool printOutput = true;
+
 Utilities::Utilities() : passphrase("") {
 	const char* homedir = getenv("HOME");
 	if (homedir == NULL) {
@@ -100,43 +103,44 @@ Ssh2Connection *Utilities::establishConnection(const char host[],
 		cerr << "failed to connect!" << endl;
 		exit(-1);
 	}
-	cerr << "socket to " << host << " created" << endl;
+	if (printOutput) {
+		cerr << "socket to " << host << " created" << endl;
+	}
 
 	// Create a session instance
 	LIBSSH2_SESSION *session = libssh2_session_init();
 	libssh2_session_set_timeout(session, 2000);
 	int return_code = 0;
-	if ((return_code =
-		libssh2_session_method_pref(session, LIBSSH2_METHOD_CRYPT_CS, "arcfour"))
-		!= 0) {
-		cerr << "session method preference CS error" << endl;
-		exit(-1);
-	}
 
 	for (int i = 0; i < 5; i++) {
 		if ((return_code = libssh2_session_handshake(session, sock)) == 0)
 			break;
-		cerr << "session handshake: retry " << i << endl;
+		if (printOutput)
+			cerr << "session handshake: retry " << i << endl;
 	}
 	if (return_code) {
 		shutdown(socket, session, NULL, "failure stablishing SSH session\0");
 		exit(-1);
 	}
-	cerr << "session created" << endl;
+	if (printOutput)
+		cerr << "session created" << endl;
 
 	// Check the fingerprint against our know hosts.
 	// TODO: do we need this?
 	const char *fingerprint = libssh2_hostkey_hash(session,
 		LIBSSH2_HOSTKEY_HASH_SHA1);
-	for (int i = 0; i < 20; i++) {
-		printf("%02x ", (unsigned char)fingerprint[i]);
+	if (printOutput) {
+		for (int i = 0; i < 20; i++) {
+			fprintf(stderr, "%02x ", (unsigned char)fingerprint[i]);
+		}
+		cerr << endl;
 	}
-	cout << endl;
 
 	// Check what authentication methods are available.
-	char *userauthlist = libssh2_userauth_list(session, username,
-		strlen(username));
-	cout << userauthlist << endl;
+	char *userauthlist = libssh2_userauth_list(session, username, strlen(username));
+	if (printOutput) {
+		cerr << "Available ssh auth types: " << userauthlist << endl;
+	}
 	int auth_pw = 0;
 	if (strstr(userauthlist, "password") != NULL)
 		auth_pw |= 1;
@@ -152,8 +156,9 @@ Ssh2Connection *Utilities::establishConnection(const char host[],
 		for (int i = 0; i < 5; i++) {
 			int retVal = libssh2_userauth_password(session, username, password);
 			if (retVal == 0) break;
-			cerr << "retry: " << (i + 1) << endl;
-			continue;
+			if (printOutput) {
+				cerr << "retry: " << (i + 1) << endl;
+			}
 		}
 		if (retVal != 0) {
 			shutdown(socket, session, NULL, "password authentication failed\0");
@@ -190,8 +195,8 @@ Ssh2Connection *Utilities::establishConnection(const char host[],
 
 bool Utilities::launchRemoteProcess(const Ssh2Connection *ssh2connection,
 	const char cmd[]) {
-
-	cerr << "launch a remote process: " << cmd << endl;
+	if (printOutput)
+		cerr << "launch a remote process: " << cmd << endl;
 	int return_code = 0;
 	while ((return_code = libssh2_channel_exec(ssh2connection->channel, cmd))
 		== LIBSSH2_ERROR_EAGAIN) {
@@ -200,7 +205,7 @@ bool Utilities::launchRemoteProcess(const Ssh2Connection *ssh2connection,
 	}
 
 	if (return_code != 0) {
-		shutdown(ssh2connection, "error in remote execution");
+		shutdown(ssh2connection, "error in launching remote process");
 		return false;
 	}
 
@@ -223,15 +228,18 @@ void Utilities::shutdown(Socket *socket,
 	if (channel != NULL) {
 		libssh2_channel_close(channel);
 		libssh2_channel_free(channel);
-		cerr << "channel released" << endl;
+		if (printOutput)
+			cerr << "channel released" << endl;
 	}
 	if (session != NULL) {
 		libssh2_session_disconnect(session, "Normal Shutdown");
 		libssh2_session_free(session);
-		cerr << "session released" << endl;
+		if (printOutput)
+			cerr << "session released" << endl;
 	}
 	if (socket != NULL) {
 		delete socket;
-		cerr << "socket disconnected" << endl;
+		if (printOutput)
+			cerr << "socket disconnected" << endl;
 	}
 }
