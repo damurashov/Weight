@@ -25,9 +25,12 @@
 #include <errno.h>      // errno
 #include <sstream>      // ostringstream
 
- //Used to toggle output for ExchangeHelper
+//Used to toggle output for ExchangeHelper
+#ifndef LOGGING
 const bool printOutput = false;
-//const bool printOutput = true;
+#else
+const bool printOutput = true;
+#endif
 
 Socket *ExchangeHelper::socket;
 int *ExchangeHelper::sockets;

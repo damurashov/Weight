@@ -5,26 +5,31 @@ LIBMASS = libmass.so
 MPROCESS = mprocess
 COMMON   = MASS_base.o Mthread.o Message.o Places_base.o Agents_base.o DllClass.o ExchangeHelper.o Socket.o Place.o Agent.o
 MASS_OBJS = Utilities.o Ssh2Connection.o MASS.o MNode.o Places.o Agents.o $(COMMON)
-prefix=/net/metis/home3/dslab/MASS/c++/ubuntu/ssh2
+prefix=./ssh2
 exec_prefix=$(prefix)
 libdir=$(exec_prefix)/lib
 includedir=$(prefix)/include
 SOURCE=../source
 
+# define options, currently only LOGGING=true
+ifeq ($(LOGGING), 1)
+OPTIONS = -DLOGGING
+endif
+
 all: $(LIBMASS) $(MPROCESS)
 	rm *.o
 
 $(LIBMASS): $(MASS_OBJS)
-	$(CC) $(MASS_OBJS) -fPIC -L$(libdir) -lssh2 -lpthread -rdynamic -ldl -shared -o $@ #libmass.so
+	$(CC) $(OPTIONS) $(MASS_OBJS) -fPIC -L$(libdir) -lssh2 -lpthread -rdynamic -ldl -shared -o $@ #libmass.so
 
 $(MPROCESS): MProcess.o $(COMMON)
-	$(CC) MProcess.o $(COMMON) -fPIC -lpthread -rdynamic -ldl -o $@ # mprocess
+	$(CC) $(OPTIONS) MProcess.o $(COMMON) -fPIC -lpthread -rdynamic -ldl -o $@ # mprocess
 
 clean: 
 	rm *.o $(LIBMASS) $(MPROCESS)
 
 %.o : $(SOURCE)/%.cpp
-	$(CC) -Wall -I$(includedir) -fPIC -c $< 
+	$(CC) $(OPTIONS) -Wall -I$(includedir) -fPIC -c $< 
 
 MProcess.o: $(SOURCE)/MProcess.h $(SOURCE)/MASS_base.h $(SOURCE)/Message.h
 MASS.o: $(SOURCE)/MASS_base.h $(SOURCE)/MASS.h $(SOURCE)/Utilities.h $(SOURCE)/Ssh2Connection.h $(SOURCE)/MNode.h $(SOURCE)/Places.h 

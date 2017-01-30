@@ -34,8 +34,10 @@ class Place : MObject {
 	friend class Agents_base;
 	friend class Agent;
 public:
-	Place(void *argument) : outMessage(NULL), outMessage_size(0),
-		inMessage_size(0) {
+	Place(void *argument) : inMessage_size(0) {
+		outMessage = new int;
+		*(int*)outMessage = 0;
+		outMessage_size = sizeof(int);
 		inMessages.clear();
 	};
 

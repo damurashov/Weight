@@ -26,12 +26,22 @@
 #include <map>
 #include <string>
 #include <stdlib.h>
+#include <sstream>
 #include "Agent.h"
+#include "DllClass.h"
+#include "Places_base.h"
 
  // AgentId = 0..4294967295 i.e. 42.9 milion
 #define MAX_AGENTS_PER_NODE 100000000 // 100 million
 
 using namespace std;
+
+enum moveAgentBackToOriginalQueueOperations {
+	moveRetBag2Agents,
+	moveRetBag2AgentsAndCreateNewRetBag,
+	popAgentsFromRetBagAndPushThemToAgents,
+	doNothing
+};
 
 class Agents_base {
 	friend class MProcess;
@@ -59,6 +69,17 @@ protected:
 	int initPopulation;
 	int localPopulation;
 	unsigned int currentAgentId;
+	void spawnHelper(int tid, Agent *evaluationAgent, DllClass *agentsDllClass, vector<Agent *> *retBag);
+	bool agentKilled(int tid, Agent *evaluationAgent);
+	void migrationHelper(int tid, Agent *evaluationAgent, vector<Agent *> *retBag, Places_base *evaluatedPlaces);
+	void migrationHelperCollisionFree(int tid, DllClass *dllclass, DllClass *agentsDllClass,
+		Places_base *evaluatedPlaces, vector<Agent *> *retBag);
+	void manageAllCleanUp(int tid, vector<Agent *> *retBag, Places_base *evaluatedPlaces,
+		moveAgentBackToOriginalQueueOperations op);
+	void moveAgentsBackToOriginalQueue(int tid, moveAgentBackToOriginalQueueOperations op);
+	bool calculateDirection(Agent *evalutionAgent, int x, int y, int z);
+	void addOne(Place *curPlace);
+	void deleteOne(Place *curPlace);
 
 	static void *processAgentMigrationRequest(void *param);
 

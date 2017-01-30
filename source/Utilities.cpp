@@ -25,8 +25,11 @@
 #include "Socket.h"
 #include "Ssh2Connection.h"
 
+#ifndef LOGGING
 const bool printOutput = false;
-//const bool printOutput = true;
+#else
+const bool printOutput = true;
+#endif
 
 Utilities::Utilities() : passphrase("") {
 	const char* homedir = getenv("HOME");

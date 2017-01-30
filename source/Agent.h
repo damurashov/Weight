@@ -39,7 +39,8 @@ public:
 		migratableData(NULL), migratableDataSize(0) { };
 	virtual void *callMethod(int functionId, void *argument) = 0;
 	~Agent() { if (migratableData != NULL) free(migratableData); };
-	virtual int map(int initPopulation, vector<int> size, vector<int> index);
+	virtual int map(int initPopulation, vector<int> size, 
+		vector<int> index, Place* curPlace);
 	void kill() { alive = false; };
 
 protected:

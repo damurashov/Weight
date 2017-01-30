@@ -35,7 +35,8 @@ void Agent::spawn(int numAgents, vector<void*> arguments, int arg_size) {
 	}
 }
 
-int Agent::map(int initPopulation, vector<int> size, vector<int> index) {
+int Agent::map(int initPopulation, vector<int> size, 
+		vector<int> index, Place* curPlace) {
 
 	// compute the total # places
 	int placeTotal = 1;

@@ -25,8 +25,11 @@
 #include <sstream> // ostringstream
 
  //Used to toggle output for DllClass
- //const bool printOutput = false;
+#ifndef LOGGING
+const bool printOutput = false;
+#else
 const bool printOutput = true;
+#endif
 
 DllClass::DllClass(string className) {
 	// For debugging

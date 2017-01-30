@@ -24,9 +24,12 @@
 #include "MASS_base.h"
 #include <sstream> // ostringstream
 
- //Used to toggle output for MNode
+//Used to toggle output for MNode
+#ifndef LOGGING
 const bool printOutput = false;
-//const bool printOutput = true;
+#else
+const bool printOutput = true;
+#endif
 
 using namespace std;
 

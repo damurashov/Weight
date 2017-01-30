@@ -28,10 +28,12 @@
 #include <iostream>
 #include <sstream> // ostringstream
 
- //Used to enable or disable output in places
+//Used to enable or disable output in places
+#ifndef LOGGING
 const bool printOutput = false;
-//const bool printOutput = true;
-
+#else
+const bool printOutput = true;
+#endif
 
 Places_base::Places_base(int handle, string className, int boundary_width,
 	void *argument, int argument_size,

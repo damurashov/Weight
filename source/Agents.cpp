@@ -27,8 +27,11 @@
 #include <sstream> // for ostringstream
 
  //Used to toggle output for Agents.cpp
+#ifndef LOGGING
 const bool printOutput = false;
-//const bool printOutput = true;
+#else
+const bool printOutput = true;
+#endif
 
 Agents::Agents(int handle, string className, void *argument,
 	int argument_size, Places *places, int initPopulation)

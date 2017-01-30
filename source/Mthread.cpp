@@ -26,9 +26,12 @@
 #include "Agents_base.h"
 #include "Mthread.h"
 
- //Used to toggle output for Mthread
+//Used to toggle output for Mthread
+#ifndef LOGGING
 const bool printOutput = false;
-//const bool printOutput = true;
+#else
+const bool printOutput = true;
+#endif
 
 pthread_mutex_t Mthread::lock;
 pthread_cond_t Mthread::barrier_ready;

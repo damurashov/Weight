@@ -1,0 +1,7 @@
+# ignore object files
+*.o
+# ignore any logs from running sample programs
+**/MASS_logs
+# ignore the compiled library, it should be recompiled locally when switching machines
+**/libmass.so
+**/mprocess

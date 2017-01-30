@@ -25,9 +25,12 @@
 #include <iostream>
 #include <sstream>   // ostringstream
 
- //Used to toggle output in Messages
+//Used to toggle output in Messages
+#ifndef LOGGING
 const bool printOutput = false;
-//const bool printOutput = true;
+#else
+const bool printOutput = true;
+#endif
 
 Message::~Message() {
 	if (argument_in_heap == true && argument != NULL) delete (char *)argument;

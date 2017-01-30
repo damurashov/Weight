@@ -27,9 +27,12 @@
 #include <iostream>
 #include <dlfcn.h> // dlopen, dlsym, and dlclose
 
- //Used to toggle comments from Places.cpp
- // const bool printOutput = false;
+//Used to toggle comments from Places.cpp
+#ifndef LOGGING
+const bool printOutput = false;
+#else
 const bool printOutput = true;
+#endif
 
 Places::Places(int handle, string className, void *argument,
 	int argument_size, int dim, ...)

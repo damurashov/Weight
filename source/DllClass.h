@@ -40,6 +40,7 @@ public:
 	Place **right_shadow;    // the shadown of the right neighbor's boundary
 	vector<Agent*> *agents;   // a bag of agents
 	vector<Agent*> *retBag;   // a temporary bag of agents
+	int agentCounter; // count # of unevaluated agents in vector<Agent*> *agents. Used in migrationHelperCollisionFree
 
 	DllClass(string className);
 };

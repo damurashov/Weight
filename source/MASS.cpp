@@ -28,9 +28,12 @@
 #include <sstream>  // ostringstream
 #include "MASS.h"
 
- //Used to toggle output for MASS.cpp
+//Used to toggle output for MASS.cpp
+#ifndef LOGGING
 const bool printOutput = false;
-//const bool printOutput = true;
+#else
+const bool printOutput = true;
+#endif
 
 using namespace std;
 
@@ -183,10 +186,6 @@ void MASS::finish() {
 	}
 
 	cerr << "MASS::finish: done" << endl;
-}
-
-void MASS::barrier_all_slaves() {
-
 }
 
 void MASS::barrier_all_slaves(char *return_values, int stripe, int arg_size,
