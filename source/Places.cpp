@@ -240,7 +240,8 @@ void *Places::ca_setup(int functionId, void *argument,
 		MASS::barrier_all_slaves(MASS_base::currentReturns, stripe,
 			MASS_base::currentRetSize);
 	else
-		MASS::barrier_all_slaves();
+		MASS::barrier_all_slaves(MASS_base::currentReturns, stripe,
+			MASS_base::currentRetSize);
 
 	return (void *)MASS_base::currentReturns;
 }

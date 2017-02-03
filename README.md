@@ -1,29 +1,29 @@
 ![logo.png](https://bitbucket.org/repo/AEx9kp/images/1314816353-logo.png)
 
-#MASS C++
+# MASS C++
 
 Multi-Agent Spatial Simulation Library
 
-- [Introduction](#introduction)
-- [Programming Model](#programming-model)
-	- [Abstractions: Places and Agents](#abstractions-places-and-agents)
-	- [Programming Framework](#programming-framework)
-- [Documentation](#documentation)
-	- [MASS](#mass)
-	- [Places](#places)
-		- [Places Class](#places-class)
-		- [Place Class](#place-class)
-		- [Example of a Place-Derived Class](#example-of-a-place-derived-class)
-	- [Agents](#agents)
-		- [Agents Class](#agents-class)
-		- [Agent Class](#agent-class)
-		- [Example of an Agent-Derived Class](#example-of-a-agent-derived-class)
-	- [Setup and Use](#setup-and-use)
-		- [Compilation](#compilation)
-			- [Application Directory Setup](#application-directory-setup)
-		- [Installation](#installation)
-		- [Abnormal Termination Clean-up](#abnormal-termination-clean-up)
-	- [Outputs and Logging](#outputs-and-logging)
+- [Introduction](#markdown-header-introduction)
+- [Programming Model](#markdown-header-programming-model)
+	- [Abstractions: Places and Agents](#markdown-header-abstractions-places-and-agents)
+	- [Programming Framework](#markdown-header-programming-framework)
+- [Documentation](#markdown-header-documentation)
+	- [MASS](#markdown-header-mass)
+	- [Places](#markdown-header-places)
+		- [Places Class](#markdown-header-places-class)
+		- [Place Class](#markdown-header-place-class)
+		- [Example of a Place-Derived Class](#markdown-header-example-of-a-place-derived-class)
+	- [Agents](#markdown-header-agents)
+		- [Agents Class](#markdown-header-agents-class)
+		- [Agent Class](#markdown-header-agent-class)
+		- [Example of an Agent-Derived Class](#markdown-header-example-of-a-agent-derived-class)
+	- [Setup and Use](#markdown-header-setup-and-use)
+		- [Compilation](#markdown-header-compilation)
+			- [Application Directory Setup](#markdown-header-application-directory-setup)
+		- [Installation](#markdown-header-installation)
+		- [Abnormal Termination Clean-up](#markdown-header-abnormal-termination-clean-up)
+	- [Outputs and Logging](#markdown-header-outputs-and-logging)
 
 
 ## Introduction
@@ -34,7 +34,7 @@ MASS is an open source library for parallelizing [agent-based simulations](https
 
 ### Abstractions: Places and Agents
 
-The concepts of Places and Agents are key to the MASS library.
+The concepts of [Places](#markdown-header-places) and [Agents](#markdown-header-agents) are key to the MASS library.
 
 Places are a matrix of elements (each element being a Place) that are dynamically allocated over a cluster of computing nodes. Places represent an abstraction of the execution environment in which Agents can exist, capable of holding thier own state and exchanging information with other places.
 
@@ -223,16 +223,9 @@ int inMessage_size;
 - Defines the current size of inMessage.
 
 ```cpp
-set<int*> Neighbors
-
-```cpp
 virtual void* callMethod(int functionId, void* arguments);
 ```
 - A method to be defined by the user in a Place-derived class. This method is called by Places.callAll() and Places.exchangeAll().
-
-```cpp
-
-
 
 #### Example of a Place-Derived Class ####
 
@@ -315,6 +308,32 @@ int main(int argc, char* argv[]) {
 ### Agents
 
 #### Agents Class ####
+
+```cpp
+Agents(int handle, string className, void* argument, int argument_size, Places* places, int initialPopulation);
+```
+- Constructs a new instance of Agents on the initialized Places. Handle should be unique across all machines and between all Agents and Places instances. Class Name should be the name of a user defined class that extends Agent. Argument is an argument that is passed to each instance of the initialized user-defined class in it's constructor. Argument Size defines the size of the argument. Places is a pointer to the Places instance over which the Agent objects should be allocated. initPopulation defines the initial population of the agents.
+
+```cpp
+void callAll(int functionId);
+```
+- Calls the method specified with functionId on all Agent objects referenced by this Agents instance. This is done in parallel among multi-processes/threads.
+
+```cpp
+void callAll(int functionId, void* argument, int arg_size);
+```
+- Same as above except the argument is passed to each element. Arg size specifies the size of the argument.
+
+```cpp
+void* callAll(int functionId, void* argument, int arg_size, int ret_size);
+```
+<!--- TODO: Better Explain how to access return values -->
+- Same as above except each Agent returns a value accessable via (void*)[i]. Ret Size defines the size of the return value.
+
+```cpp
+void manageAll();
+```
+- 
 
 #### Agent Class ####
 

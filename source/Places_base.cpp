@@ -270,7 +270,7 @@ void **Places_base::callAll(int functionId, void *argument,
 		for (int i = range[0]; i <= range[1]; i++) {
 			if (printOutput == true) {
 				convert.str("");
-				convert << "thread[" << tid << "]: places[i] = " << dllclass->places[i];
+				convert << "thread[" << tid << "]: places[" << i << "] = " << dllclass->places[i];
 				MASS_base::log(convert.str());
 			}
 			memcpy((void *)return_values, dllclass->places[i]->callMethod(functionId,

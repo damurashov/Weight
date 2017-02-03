@@ -422,6 +422,7 @@ void MProcess::sendReturnValues(void *argument, int nPlaces,
 	Message *msg = new Message(Message::ACK, argument,
 		nPlaces * return_size);
 	sendMessage(msg);
+	if (printOutput) MASS_base::log("Sent return value");
 	delete msg;
 }
 

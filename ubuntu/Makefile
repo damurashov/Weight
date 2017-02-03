@@ -11,10 +11,12 @@ libdir=$(exec_prefix)/lib
 includedir=$(prefix)/include
 SOURCE=../source
 
-# define options, currently only LOGGING=true
+# define options, currently only LOGGING=1
 ifeq ($(LOGGING), 1)
 OPTIONS = -DLOGGING
 endif
+
+#TODO: auto detect rehl vs ubuntu
 
 all: $(LIBMASS) $(MPROCESS)
 	rm *.o
@@ -48,8 +50,3 @@ Agents.o: $(SOURCE)/Agents.h $(SOURCE)/MObject.h $(SOURCE)/Place.h $(SOURCE)/Mes
 Agents_base.o: $(SOURCE)/Agents_base.h $(SOURCE)/MObject.h $(SOURCE)/Agent.h $(SOURCE)/AgentMigrationRequest.h
 DllClass.o: $(SOURCE)/DllClass.h $(SOURCE)/MObject.h $(SOURCE)/Place.h
 ExchangeHelper.o: $(SOURCE)/Socket.h $(SOURCE)/Message.h
-
-
-
-
-

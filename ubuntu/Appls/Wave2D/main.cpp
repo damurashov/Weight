@@ -1,61 +1,72 @@
 #include "MASS.h"
-#include "Wave2DMass.h"
-#include <stdlib.h> // atoi
-#include <unistd.h>
+#include "Wave2DMassPlace.h"
+#include <stdlib.h>
 #include <vector>
 #include "Timer.h"
 
-//Used to toggle output for Main
+
+#ifndef LOGGING
 const bool printOutput = false;
-//const bool printOutput = true;
+#else
+const bool printOutput = true;
+#endif
 
-int main( int argc, char *args[] ) {
+#define PLACES_HANDLE 1
 
-  if ( argc != 9 ) {
-    cerr << "usage: ./main username password machinefile port nProc nThr"<< endl;
-    return -1;
-  }
+Timer timer;
 
-  char *arguments[4];
-  arguments[0] = args[1]; // username
-  arguments[1] = args[2]; // password
-  arguments[2] = args[3]; // machinefile
-  arguments[3] = args[4]; // port
-  int nProc = atoi( args[5] ); //# of process
-  int nThr = atoi( args[6] );  //# of thread
-  int size = atoi( args[7] );  //# of array size
-  int maxTime = atoi( args[8] );  //# of time
-  Timer timer;  
-  MASS::init( arguments, nProc, nThr );
-  timer.start();
-  //cout<<"before create places"<<endl;
-  Places *wave2d = new Places( 1, "Wave2DMass", NULL, 0, 2, size, size );
-  //cout<<"after create places"<<endl;
-  wave2d->callAll( Wave2DMass::init_);
-  //cout<<"after create init"<<endl;
-  vector<int*> neighbors;
-  int north[2] = {0, -1};  neighbors.push_back( north );
-  int east[2]  = {1, 0};  neighbors.push_back( east );
-  int south[2] = {0, 1}; neighbors.push_back( south );
-  int west[2]  = {-1, 0}; neighbors.push_back( west );
-  // now go into a cyclic simulation
-  for ( int time = 0; time < maxTime; time++ ) {
-    //cout<<"simulating..."<<time<<endl;
-	wave2d->callAll( Wave2DMass::computeWave_, (void *)&time, sizeof(int) );
-	//cout<<"simulating...after callAll "<<time<<endl;
-        wave2d->exchangeBoundary( );
-	//cout<<"simulating... after exchangeAll"<<time<<endl;
-  }
+int main(int argc, char* argv[]) {
+	if (argc != 10) {
+		std::cerr << "usage: ./main username password machinefile port nProc nThr xSize ySize totalTurns" << std::endl;
+		exit(EXIT_FAILURE);
+	}
 
-   if(printOutput){
-    double *all = (double *)wave2d->callAll(Wave2DMass::collectWave_, NULL, 0, sizeof(double));
-    for(int i=0; i<size; i++){
-      for(int j=0; j<size; j++)
-	cout << *(all+i*size+j)<<" ";
-      cout<<endl;
-    }
-  }
-  cout << "elapsed time = " << timer.lap( ) << endl;
-  MASS::finish( );
+	// prep command line args
+	char* arguments[4];
+	arguments[0] = argv[1]; 				// username
+	arguments[1] = argv[2]; 				// password
+	arguments[2] = argv[3]; 				// machinefile
+	arguments[3] = argv[4]; 				// port
+	int nProcesses = atoi(argv[5]); 		// # of processes
+	int nThreads = atoi(argv[6]);			// # of threads
+	int xSize = atoi(argv[7]); 				// # size of x side of square matrix
+	int ySize = atoi(argv[8]); 				// # size of y side of square matrix
+	int totalTurns = atoi(argv[9]); 		// total simulation turns
 
+	// Initialize MASS
+	if (printOutput) std::cerr << "About to initialize MASS Library" << std::endl;
+	MASS::init(arguments, nProcesses, nThreads);
+
+	// Initialize Places
+	int boundary_width = 1;
+	Places* wave2dPlaces = new Places(PLACES_HANDLE, "Wave2DMassPlace", boundary_width, (void*) NULL, 0, 2, xSize, ySize);
+	wave2dPlaces->callAll(Wave2DMassPlace::init_);
+
+	wave2dPlaces->exchangeBoundary();
+	wave2dPlaces->callAll(Wave2DMassPlace::computeFirstTurn_);
+
+	// Run Simulation
+	for (int currentTurn = 0; currentTurn < totalTurns; currentTurn++) {
+		if (printOutput) std::cerr << "Inside simulation loop for turn " << currentTurn << std::endl;
+		wave2dPlaces->callAll(Wave2DMassPlace::loadOutMessage_);
+		wave2dPlaces->exchangeBoundary();
+		wave2dPlaces->callAll(Wave2DMassPlace::computeWave_);
+		if (printOutput) std::cerr << "Finished simulation loop for turn " << currentTurn << std::endl;
+	}
+
+	// Get Simulation Output
+	double* output = (double*)wave2dPlaces->callAll(Wave2DMassPlace::collectData_, NULL, 0, sizeof(double));
+
+	// Display Simulation Output
+	for (int y = 0; y < ySize; y++) {
+		for(int x = 0; x < xSize; x++) {
+			std::cout << *(output + (x * ySize) + y) << " ";
+		}
+		std::cout << std::endl;
+	}
+
+	// Cleanup MASS library remote processes
+	MASS::finish();
+
+	std::cerr << "Total simulation time (usec) for " << xSize << "x" << ySize << " with " << totalTurns << " turns: " << timer.getUsec() << std::endl;
 }
