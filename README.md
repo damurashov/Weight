@@ -168,13 +168,12 @@ void* callAll(int functionId, void* argument[], int arg_size, int ret_size);
 ```cpp
 void exchangeAll(int dest_handle, int functionId, vector<int*>* destinations);
 ```
-- Calls 
-
+- Calls the method specified with functionId on all Place elements in this Places instance. Return values are inserted into other Place instance's inMessage vectors. The Places instance is identified by the dest_handle and the destinations vector specifies a list of Place indexes inside that Places instance.
 
 ```cpp
 void exchangeBoundry();
 ```
-- Exchange the state of the boundary Place isntances with the left and right neighboring nodes.
+- Exchange the state of outMessage and inMessage on the boundary Place isntances with the left and right neighboring nodes.
 
 #### Place Class ####
 
@@ -185,7 +184,9 @@ Place is the abstract class from which a user can derive his/her application-spe
 ```cpp
 Place(void* args);
 ```
-- The default constructor, 
+- The default constructor, should be called by your Place-Derived class in the initialization list.
+
+##### Data Fields #####
 
 ```cpp
 vector<int> size;
@@ -195,7 +196,7 @@ vector<int> size;
 ```cpp
 vector<int> index;
 ```
-- Defines this places coordinates in the Places matrix in which this Place object resides. Index[0], index[1], and index[2] correspond to the coordinates in the x, y and z dimensions.
+- Defines this Place object's coordinates in the Places matrix in which this Place object resides. Index[0], index[1], and index[2] correspond to the coordinates in the x, y and z dimensions.
 
 ```cpp
 vector<MObject*> agents;
@@ -215,12 +216,14 @@ int outMessage_size;
 ```cpp
 vector<void*> inMessages;
 ```
-- Stores return values from calls made vi
+- Stores return values from calls made to exchangeAll().
 
 ```cpp
 int inMessage_size;
 ```
 - Defines the current size of inMessage.
+
+##### Methods #####
 
 ```cpp
 virtual void* callMethod(int functionId, void* arguments);
@@ -229,9 +232,11 @@ virtual void* callMethod(int functionId, void* arguments);
 
 #### Example of a Place-Derived Class ####
 
-An application-specific Place-derived class enables users to define custom functions to be called in parallel by defining identifiers for functions along with a callMethod function that takes in a function identifier and calls the correct internal function. Additionally note that because the user defined program dynamically links to the MASS library, the user must define instantiate() and destroy() C functions to be used by dlopen() and dlsym(). 
+An application-specific Place-derived class enables users to define custom functions to be called in parallel by defining identifiers for functions along with a callMethod function that takes in a function identifier and calls the correct internal function. Additionally note that because the user defined program dynamically links to the MASS library, the user must define instantiate() and destroy() C functions to be used by dlopen() and dlsym().
 
-The following is a simple example of a Place-Derived class:
+For an example of a useful Place-Derived Application see the sample [Wave2D](https://bitbucket.org/mass_library_developers/mass_cpp_core/src//samples/Wave2D/?at=master).
+
+The following is an outline example of a Place-Derived class:
 
 ```cpp
 #ifndef DERIVED_PLACE_H
@@ -285,6 +290,7 @@ extern "C" void destroy(Place* object) {
 ```
 
 This example class could be used by the following example driver:
+
 ```cpp
 #include "MASS.h"
 #include "DerivedPlace.h"
@@ -327,7 +333,7 @@ void callAll(int functionId, void* argument, int arg_size);
 ```cpp
 void* callAll(int functionId, void* argument, int arg_size, int ret_size);
 ```
-<!--- TODO: Better Explain how to access return values -->
+<!-- TODO: Better Explain how to access return values -->
 - Same as above except each Agent returns a value accessable via (void*)[i]. Ret Size defines the size of the return value.
 
 ```cpp
@@ -341,12 +347,70 @@ void manageAll();
 
 ### Setup and Use
 
+To 
+
 #### Compilation ####
 
+To compile the MASS library on your host, cd to the MASS directory and use the command:
+```
+make
+```
+
 ##### Application Directory Setup #####
+
+For applications that use the compiled but not installed version of MASS follow these steps.
+
+1- Set up a working directory and create a symbolic link to the mprocess daemon and the killMProcess.sh shell script:
+```
+ln -s PATH_TO_LIBRARY/mass_cpp_core/lib/mprocess mprocess
+ln -s PATH_TO_LIBRARY/mass_cpp_core/lib/killMProcess.sh killMProcess.sh
+```
+
+2- Create a machinefile.txt that describes remote (not local) computing nodes you want to use (currently just a list of IPs):
+```
+uw1-320-01
+uw1-320-02
+uw1-320-03
+uw1-320-04
+```
+
+3- Set up the following two shell variables (either add them to your .bash_profile or include them in compile and run scripts):
+```
+export MASS_DIR=PATH_TO_LIBRARY/mass_cpp_core
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$MASS_DIR/lib:$MASS_DIR/lib/dependencies/ssh2/lib
+```
+
+4- Compile your main program as well as all your Agent/Place-Derived classes (these classes should be compiled wihtout the .o extension).
+To compile your Agent/Place-Derived class, say Land.cpp use the command:
+```
+g++ -Wall Land.cpp -I$MASS_DIR/src -shared -fPIC -o Land
+```
+To compile your program that includes main(), use the command:
+```
+g++ -Wall main.cpp -I$MASS_DIR/src -L$MASS_DIR/lib -lmass -I$MASS_DIR/lib/dependencies/ssh2/include -L$MASS_DIR/lib/dependencies/ssh2/lib -lssh2 -o main
+```
+
 
 #### Installation ####
 
 #### Abnormal Termination Clean-up ####
 
+MASS programs can be exited normally (i.e., ^c), however please note the following MASS daemon behavior:
+
+Once your program invokes MASS::init(), all the remote machines you declared in machinefile.txt starts an mprocess daemon. All the daemons then dynamically link your code to it and execute MASS functions such as callAll, exchangeAll, and manageAll. Upon a call to MASS::finish(), these daemon processes will be terminated automatically. This in turn means that they may stay alive if your program finished without calling MASS::finish(). In that case run killMProcess.sh to kill remote mprocess daemons.
+
 #### Outputs and Logging ####
+
+Although your main program can use cout and cerr as usual, you cannot use them from remote Place/Agent objects. To catch outputs from a remote Place or Agent, use the MASS_base::log(string msg) function. If you need to pass any other data types in addition to a string, it is recommended to use ostringstream:
+```cpp
+ostringstream convert;
+convert.str("");
+convert << "Message from agent[" << agentId << "] = " << message;
+MASS_base::log(convert.str());
+```
+The message is written to the file named MASS_logs/PID_X_IPresult.txt, where X is the remote process ID and IP is the remote IP name. Assuming that you use uw1-320-01, uw1-320-02, and uw1-320-03 remotely from uw1-320-00, all logs from uw1-320-01 will be written to MASS_logs/PID_1_uw1-320-01result.txt.
+
+To enable logging from the library itself for debugging the library must be recompiled using the command:
+```
+make LOGGING=1
+```

@@ -1,4 +1,4 @@
-# ignore object files
+# ignore any object files
 *.o
 # ignore any logs from running sample programs
 **/MASS_logs
