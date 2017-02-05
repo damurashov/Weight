@@ -1,8 +1,8 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-sudo cp ssh2/lib/*.so* /usr/lib/ ;
+sudo cp dependencies/ssh2/lib/*.so* /usr/lib/ ;
 
-sudo cp ssh2/include/* /usr/include/ ;
+sudo cp dependencies/ssh2/include/* /usr/include/ ;
 
 
 # build the mass library
@@ -29,5 +29,3 @@ rm -r ~/.massUtils ;
 mkdir ~/.massUtils ;
 ln -s /usr/lib/killMProcess.sh ~/.massUtils/killMProcess.sh ;
 ln -s /usr/lib/mprocess ~/.massUtils/mprocess ;
-
-

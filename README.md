@@ -347,8 +347,6 @@ void manageAll();
 
 ### Setup and Use
 
-To 
-
 #### Compilation ####
 
 To compile the MASS library on your host, cd to the MASS directory and use the command:
@@ -392,6 +390,8 @@ g++ -Wall main.cpp -I$MASS_DIR/src -L$MASS_DIR/lib -lmass -I$MASS_DIR/lib/depend
 
 
 #### Installation ####
+
+If you wish to install the MASS library into your standard unix c++ linking and includes path instead of defining paths to your stored library you can run the install script in the lib directory. This script requires sudo privileges to update the correct directories. After installing a the directory ~/.massUtils will be created holding a link to mprocess and killMProcess.sh, these files still require symbolic links in the application directory to run MASS library.
 
 #### Abnormal Termination Clean-up ####
 
