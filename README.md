@@ -358,13 +358,13 @@ make
 
 For applications that use the compiled but not installed version of MASS follow these steps.
 
-1- Set up a working directory and create a symbolic link to the mprocess daemon and the killMProcess.sh shell script:
+1. Set up a working directory and create a symbolic link to the mprocess daemon and the killMProcess.sh shell script:
 ```
 ln -s PATH_TO_LIBRARY/mass_cpp_core/lib/mprocess mprocess
 ln -s PATH_TO_LIBRARY/mass_cpp_core/lib/killMProcess.sh killMProcess.sh
 ```
 
-2- Create a machinefile.txt that describes remote (not local) computing nodes you want to use (currently just a list of IPs):
+2. Create a machinefile.txt that describes remote (not local) computing nodes you want to use (currently just a list of IPs):
 ```
 uw1-320-01
 uw1-320-02
@@ -372,13 +372,13 @@ uw1-320-03
 uw1-320-04
 ```
 
-3- Set up the following two shell variables (either add them to your .bash_profile or include them in compile and run scripts):
+3. Set up the following two shell variables (either add them to your .bash_profile or include them in compile and run scripts):
 ```
 export MASS_DIR=PATH_TO_LIBRARY/mass_cpp_core
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$MASS_DIR/lib:$MASS_DIR/lib/dependencies/ssh2/lib
 ```
 
-4- Compile your main program as well as all your Agent/Place-Derived classes (these classes should be compiled wihtout the .o extension).
+4. Compile your main program as well as all your Agent/Place-Derived classes (these classes should be compiled wihtout the .o extension).
 To compile your Agent/Place-Derived class, say Land.cpp use the command:
 ```
 g++ -Wall Land.cpp -I$MASS_DIR/src -shared -fPIC -o Land
