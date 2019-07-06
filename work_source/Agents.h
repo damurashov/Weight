@@ -40,14 +40,15 @@ class Agents : public Agents_base {
     void *callAll(int functionId, void *argument, int arg_size, int ret_size);
     void callAll(int functionId, void *argument, int arg_size);
 
+    void manageAll();
+    void ma_setup();
+
     void doAll(int functionId, int numberOfIterations);
     void *doAll(int functionId, void *argument, int arg_size,
                 int numberOfIterations, int ret_size);
     void doAll(int *functionIdList, int func_size, void *argumentList,
                int arg_size, int numberOfIterations);
-
-    void manageAll();
-    void ma_setup();
+               
     int nAgents();
 
     void init_master(void *argument, int argument_size);

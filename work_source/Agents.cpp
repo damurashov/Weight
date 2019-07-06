@@ -205,6 +205,57 @@ void *Agents::ca_setup(int functionId, void *argument, int arg_size,
 
     return (void *)MASS_base::currentReturns;
 }
+
+// If statements to check for each condition. No else, as an Agent
+// can migrate and spawn at the same time.
+// Iterate through all agents present.
+void Agents::manageAll() { ma_setup(); }
+
+void Agents::ma_setup() {
+    // send an AGENTS_MANAGE_ALL message to each slave
+    Message *m = NULL;
+    for (int i = 0; i < int(MASS::mNodes.size()); i++) {
+        // create a message
+        m = new Message(Message::AGENTS_MANAGE_ALL, this->handle, 0);
+
+        // send it
+        MASS::mNodes[i]->sendMessage(m);
+
+        // MThread Update
+        Mthread::agentBagSize = MASS_base::dllMap[handle]->agents->size();
+
+        // make sure to delete it
+        delete m;
+    }
+
+    // retrieve the corresponding agents
+    MASS_base::currentAgents = this;
+    MASS_base::currentMsgType = Message::AGENTS_MANAGE_ALL;
+    MASS_base::dllMap[handle]->retBag = new vector<Agent *>;
+
+    // resume threads
+    Mthread::resumeThreads(Mthread::STATUS_MANAGEALL);
+
+    // callall implementatioin
+    Agents_base::manageAll(0);  // 0 = the main thread id
+
+    // confirm all threads are done with agents.callAll
+    Mthread::barrierThreads(0);
+
+    // Synchronized with all slave processes
+    MASS::barrier_all_slaves(localAgents);
+    localAgents[0] = localPopulation;
+
+    total = 0;
+    for (int i = 0; i < MASS_base::systemSize; i++) {
+        total += localAgents[i];
+        // for debugging
+        if (printOutput == true) {
+            cerr << "rank[" << i
+                 << "]'s local agent population = " << localAgents[i] << endl;
+        }
+    }
+}
 /**
  * Calls callAll and manageAll functions consecutively without responding
  *  back to user application in each iteration.
@@ -260,57 +311,6 @@ void Agents::doAll(int *functionIdList, int func_size, void *argumentList,
         }
     }
 }
-// If statements to check for each condition. No else, as an Agent
-// can migrate and spawn at the same time.
-// Iterate through all agents present.
-void Agents::manageAll() { ma_setup(); }
-
-void Agents::ma_setup() {
-    // send an AGENTS_MANAGE_ALL message to each slave
-    Message *m = NULL;
-    for (int i = 0; i < int(MASS::mNodes.size()); i++) {
-        // create a message
-        m = new Message(Message::AGENTS_MANAGE_ALL, this->handle, 0);
-
-        // send it
-        MASS::mNodes[i]->sendMessage(m);
-
-        // MThread Update
-        Mthread::agentBagSize = MASS_base::dllMap[handle]->agents->size();
-
-        // make sure to delete it
-        delete m;
-    }
-
-    // retrieve the corresponding agents
-    MASS_base::currentAgents = this;
-    MASS_base::currentMsgType = Message::AGENTS_MANAGE_ALL;
-    MASS_base::dllMap[handle]->retBag = new vector<Agent *>;
-
-    // resume threads
-    Mthread::resumeThreads(Mthread::STATUS_MANAGEALL);
-
-    // callall implementatioin
-    Agents_base::manageAll(0);  // 0 = the main thread id
-
-    // confirm all threads are done with agents.callAll
-    Mthread::barrierThreads(0);
-
-    // Synchronized with all slave processes
-    MASS::barrier_all_slaves(localAgents);
-    localAgents[0] = localPopulation;
-
-    total = 0;
-    for (int i = 0; i < MASS_base::systemSize; i++) {
-        total += localAgents[i];
-        // for debugging
-        if (printOutput == true) {
-            cerr << "rank[" << i
-                 << "]'s local agent population = " << localAgents[i] << endl;
-        }
-    }
-}
-
 int Agents::nAgents() {
     int nAgents = 0;
     for (int i = 0; i < MASS_base::systemSize; i++) nAgents += localAgents[i];
