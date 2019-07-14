@@ -46,9 +46,9 @@ class Agents : public Agents_base {
     void doAll(int functionId, int numberOfIterations);
     void *doAll(int functionId, void *argument, int arg_size,
                 int numberOfIterations, int ret_size);
-    void doAll(int *functionIdList, int func_size, void *argumentList,
+    void doAll(int functionIdList[], int func_size, void *argumentList[],
                int arg_size, int numberOfIterations);
-               
+
     int nAgents();
 
     void init_master(void *argument, int argument_size);
