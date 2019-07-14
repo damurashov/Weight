@@ -2,7 +2,7 @@
 
 # Below is the relative load path for the library
 # if the location of this application directory is changed, this must be updated
-export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:../../ssh2/lib
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:../..:../../ssh2/lib
 
 echo "Number of nodes? {1, 2, 4, 8, 16}: "
 read NUMNODES
@@ -17,7 +17,7 @@ read YSIZE
 echo "Port? "
 read PORT
 echo "Password? "
-read PASSWORD
+read -s PASSWORD
 
 head -$(($NUMNODES-1)) machinefile.txt > .tempmachinefile.txt
 
