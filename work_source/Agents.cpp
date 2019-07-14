@@ -300,11 +300,11 @@ void *Agents::doAll(int functionId, void *argument, int arg_size,
  * @param numberOfIterations : number of consecutive calls of callAll() and
  *        manageAll() functions
  */
-void Agents::doAll(int *functionIdList, int func_size, void *argumentList,
+void Agents::doAll(int functionIdList[], int func_size, void *argumentList[],
                    int arg_size, int numberOfIterations) {
     for (int i = 0; i < numberOfIterations; i++) {
         void *argument =
-            (argumentList != NULL && i < arg_size) ? (argumentList + i) : NULL;
+            (argumentList != NULL && i < func_size) ? argumentList[i] : NULL;
         for (int j = 0; j < func_size; j++) {
             callAll(functionIdList[j], argument, arg_size);
             manageAll();
