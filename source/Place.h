@@ -44,9 +44,7 @@ class Place : MObject {
 
     vector<int> getSizeVect();
     virtual void *callMethod(int functionId, void *argument) = 0;
-    ~Place(){
-        cleanNeighbors();
-    };
+    ~Place() { cleanNeighbors(); };
 
     vector<int> size;
     vector<int> index;
@@ -62,7 +60,8 @@ class Place : MObject {
         VON_NEUMANN3D,
         MEAD3D,
     };
-    vector<int *> neighbors;
+
+    vector<int*> getNeighbors();
 
     void cleanNeighbors();
     void addNeighbor(int *);
@@ -74,6 +73,7 @@ class Place : MObject {
     void putInMessage(int handle, int index[], int position, void *value);
 
    private:
+    vector<int *> neighbors;
     Place *findDstPlace(int handle, int index[]);
     vector<int *> getMeadNeighbors2d();
     vector<int *> getVNNeighbors2d();

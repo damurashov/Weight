@@ -86,14 +86,18 @@ void Place::putInMessage(int handle, int offset[], int position, void *value) {
     if (dstPlace != NULL && position < int(dstPlace->inMessages.size()))
         memcpy(dstPlace->inMessages[position], value, dstPlace->inMessage_size);
 }
-
 /**
- * clears the neighbor vector and fully clears the heap from any int[]'s stored there
+ * return the vector containing this places neighbors
+ */
+vector<int *> Place::getNeighbors() { return this->neighbors; }
+/**
+ * clears the neighbor vector and fully clears the heap from any int[]'s stored
+ * there
  */
 void Place::cleanNeighbors() {
     for (int i = 0; i < neighbors.size(); i++) {
         if (neighbors.at(i)) {
-            delete[] (neighbors.at(i));
+            delete[](neighbors.at(i));
         }
     }
     neighbors.clear();
@@ -108,15 +112,15 @@ void Place::addNeighbors(vector<int *> indexes) {
     }
 }
 /**
- * Add a single neighbor to this place, neighbor vector should be created in the heap,
- * program will clean it up later, no need for the user to do so.
+ * Add a single neighbor to this place, neighbor vector should be created in the
+ * heap, program will clean it up later, no need for the user to do so.
  */
-void Place::addNeighbor(int *index) { 
-    //check for redundant connections?
-    for(int i = 0; i < neighbors.size(); i++){
-        if(neighbors.at(i))
-    }
-    neighbors.push_back(index); }
+void Place::addNeighbor(int *index) {
+    // check for redundant connections?
+    for (int i = 0; i < neighbors.size(); i++) {
+        if (neighbors.at(i)) }
+    neighbors.push_back(index);
+}
 /**
  * adds neighbors in a given pattern if they exist.
  */

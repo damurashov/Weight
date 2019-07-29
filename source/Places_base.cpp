@@ -515,7 +515,200 @@ void Places_base::exchangeAll(Places_base *dstPlaces, int functionId,
 	}
 
 }
+/** 
+ * exchangeAll for neighbors functionality, exactly the same as above except it 
+ * references each place's neighbor vector instead of a static destination vector
+ */
+void Places_base::exchangeAll(Places_base *dstPlaces, int functionId, int tid){
+	int range[2];
+	getLocalRange(range, tid);
+	ostringstream convert;
+	// debugging
+	if (printOutput == true) {
+		convert << "thread[" << tid << "] exchangeAll functionId = " << functionId
+			<< ", range[0] = " << range[0] << " range[1] = " << range[1];
+		MASS_base::log(convert.str());
+	}
 
+	DllClass *src_dllclass = MASS_base::dllMap[handle];
+	DllClass *dst_dllclass = MASS_base::dllMap[dstPlaces->handle];
+
+	//#TODO - figure out logic for printing neighbors as they need not be uniform accross nodes
+
+	// if (printOutput == true) {
+	// 	convert.str("");
+	// 	convert << "tid[" << tid << "]: checks destinations:";
+	// 	for (int i = 0; i < int(destinations->size()); i++) {
+	// 		int *offset = (*destinations)[i];
+	// 		convert << "[" << offset[0]
+	// 			<< "][" << offset[1] << "]  ";
+	// 	}
+	// 	MASS_base::log(convert.str());
+	// }
+	// now scan all places within range[0] ~ range[1]
+
+	if (range[0] >= 0 && range[1] >= 0) {
+		for (int i = range[0]; i <= range[1]; i++) {
+			// for each place
+			Place *srcPlace = (Place *)(src_dllclass->places[i]);
+
+			// check its neighbors
+			for (int j = 0; j < int(srcPlace->getNeighbors()->size()); j++) {
+
+				// for each neighbor
+				int *offset = (*srcPlace->getNeighbors())[j];
+				int neighborCoord[dstPlaces->dimension];
+
+				// compute its coordinate
+				getGlobalNeighborArrayIndex(srcPlace->index, offset, dstPlaces->size,
+					dstPlaces->dimension, neighborCoord);
+				if (printOutput == true) {
+					convert.str("");
+					convert << "tid[" << tid << "]: calls from"
+						<< "[" << srcPlace->index[0]
+						<< "][" << srcPlace->index[1] << "]"
+						<< " (neighborCord[" << neighborCoord[0]
+						<< "][" << neighborCoord[1] << "]"
+						<< " dstPlaces->size[" << dstPlaces->size[0]
+						<< "][" << dstPlaces->size[1] << "]";
+				}
+				if (neighborCoord[0] != -1) {
+					// destination valid
+					int globalLinearIndex =
+						getGlobalLinearIndexFromGlobalArrayIndex(neighborCoord,
+							dstPlaces->size,
+							dstPlaces->dimension);
+					if (printOutput == true) {
+						convert << " linear = " << globalLinearIndex
+							<< " lower = " << dstPlaces->lower_boundary
+							<< " upper = " << dstPlaces->upper_boundary << ")";
+					}
+
+					if (globalLinearIndex >= dstPlaces->lower_boundary &&
+						globalLinearIndex <= dstPlaces->upper_boundary) {
+						// local destination
+						int destinationLocalLinearIndex
+							= globalLinearIndex - dstPlaces->lower_boundary;
+						Place *dstPlace =
+							(Place *)(dst_dllclass->places[destinationLocalLinearIndex]);
+
+						if (printOutput == true) {
+							convert << " to [" << dstPlace->index[0]
+								<< "][" << dstPlace->index[1] << "]";
+						}
+						// call the destination function
+						void *inMessage = dstPlace->callMethod(functionId,
+							srcPlace->outMessage);
+
+						// store this inMessage: 
+						// note that callMethod must return a dynamic memory space
+						srcPlace->inMessages.push_back(inMessage);
+
+						// for debug
+						if (printOutput == true) {
+							convert << " inMessage = "
+								<< *(int *)(srcPlace->inMessages.back());
+						}
+					}
+					else {
+						// remote destination
+
+						// find the destination node
+						int destRank
+							= getRankFromGlobalLinearIndex(globalLinearIndex);
+
+						// create a request
+						int orgGlobalLinearIndex =
+							getGlobalLinearIndexFromGlobalArrayIndex(&(srcPlace->index[0]),
+								size,
+								dimension);
+						RemoteExchangeRequest *request
+							= new RemoteExchangeRequest(globalLinearIndex,
+								orgGlobalLinearIndex,
+								j, // inMsgIndex
+								srcPlace->inMessage_size,
+								srcPlace->outMessage,
+								srcPlace->outMessage_size,
+								false);
+
+						// enqueue the request to this node.map
+						pthread_mutex_lock(&MASS_base::request_lock);
+						MASS_base::remoteRequests[destRank]->push_back(request);
+
+						if (printOutput == true) {
+							convert.str("");
+							convert << "remoteRequest[" << destRank << "]->push_back:"
+								<< " org = " << orgGlobalLinearIndex
+								<< " dst = " << globalLinearIndex
+								<< " size( ) = "
+								<< MASS_base::remoteRequests[destRank]->size();
+							MASS_base::log(convert.str());
+						}
+						pthread_mutex_unlock(&MASS_base::request_lock);
+					}
+				}
+				else {
+					if (printOutput == true)
+						convert << " to destination invalid";
+				}
+				if (printOutput == true) {
+					MASS_base::log(convert.str());
+				}
+			}
+		}
+	}
+
+	// all threads must barrier synchronize here.
+	Mthread::barrierThreads(tid);
+	if (tid == 0) {
+
+		if (printOutput == true) {
+			convert.str("");
+			convert << "tid[" << tid << "] now enters processRemoteExchangeRequest";
+			MASS_base::log(convert.str());
+		}
+		// the main thread spawns as many communication threads as the number of
+		// remote computing nodes and let each invoke processRemoteExchangeReq.
+
+		// args to threads: rank, srcHandle, dstHandle, functionId, lower_boundary
+		int comThrArgs[MASS_base::systemSize][5];
+		pthread_t thread_ref[MASS_base::systemSize]; // communication thread id
+		for (int rank = 0; rank < MASS_base::systemSize; rank++) {
+
+			if (rank == MASS_base::myPid) // don't communicate with myself
+				continue;
+
+			// set arguments 
+			comThrArgs[rank][0] = rank;
+			comThrArgs[rank][1] = handle;
+			comThrArgs[rank][2] = dstPlaces->handle;
+			comThrArgs[rank][3] = functionId;
+			comThrArgs[rank][4] = lower_boundary;
+
+			// start a communication thread
+			if (pthread_create(&thread_ref[rank], NULL,
+				Places_base::processRemoteExchangeRequest,
+				comThrArgs[rank]) != 0) {
+				MASS_base::log("Places_base.exchangeAll: failed in pthread_create");
+				exit(-1);
+			}
+		}
+
+		// wait for all the communication threads to be terminated
+		for (int rank = 0; rank < MASS_base::systemSize; rank++) {
+			if (rank == MASS_base::myPid) // don't communicate with myself
+				continue;
+			pthread_join(thread_ref[rank], NULL);
+		}
+	}
+	else {
+		if (printOutput == true) {
+			convert.str("");
+			convert << "tid[" << tid << "] skips processRemoteExchangeRequest";
+			MASS_base::log(convert.str());
+		}
+	}
+}
 void *Places_base::processRemoteExchangeRequest(void *param) {
 	int destRank = ((int *)param)[0];
 	int srcHandle = ((int *)param)[1];
