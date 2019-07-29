@@ -238,7 +238,9 @@ void Places_base::getLocalRange( int range[], int tid ) {
     range[1] = last;
   }
 }
-
+// void Places_base::exchangeAll(Places_base *dstPlaces, int functionId, int tid){
+//   exchangeAll( dstPlaces, functionId, , tid )
+// }
 void Places_base::exchangeAll( Places_base *dstPlaces, int functionId, 
 			       vector<int*> *destinations, int tid ) {
   int range[2];

@@ -43,7 +43,7 @@ class Places_base {
   void exchangeAll( Places_base *dstPlaces, int functionId, 
 		    vector<int*> *destinations, int tid );
 
-//  void exchangeAll( Places_base *dstPlaces, int functionId, int tid ); //for neighbor functionality
+  void exchangeAll( Places_base *dstPlaces, int functionId, int tid ); //for neighbor functionality
   int getHandle( ) { return handle; };
   int getPlacesSize( ) { return places_size; };
 

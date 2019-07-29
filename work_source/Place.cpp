@@ -47,11 +47,11 @@ void Place::addNeighbor(Place *place) { neighbors.push_back(place); }
  */
 void Place::addNeighbors(neighborPattern pattern) {
     switch (pattern) {
-        case FOUR: {
+        case VON_NEUMANN: {
             // TODO implement indexing
             break;
         }
-        case EIGHT: {
+        case MEAD: {
             // TODO implement indexing
             break;
         }

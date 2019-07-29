@@ -39,8 +39,7 @@ class Place : MObject {
         : outMessage(NULL), outMessage_size(0), inMessage_size(0) {
         inMessages.clear();
     };
-    // rename patterns according to specifications
-    enum neighborPattern { FOUR, EIGHT };
+    enum neighborPattern { VON_NEUMANN, MEAD };
 
     vector<int> getSizeVect();
     virtual void *callMethod(int functionId, void *argument) = 0;
@@ -53,21 +52,16 @@ class Place : MObject {
     int outMessage_size;
     int inMessage_size;
     vector<MObject *> agents;
-    vector<Place *> neighbors;
+
+    vector<vector<int *>> neighbors;
 
     void cleanNeighbors();
-    void addNeighbor(Place *place);
-    void addNeighbors(vector<Place *>);
+    void addNeighbor(vector<int *>);
+    void addNeighbors(vector<vector<int *>>);
     void addNeighbors(neighborPattern pattern);
-
-    // add vector for neighbors, implement in places_base, exchange all recives
-    // neighboring information, make new exchange all that uses neighbors vector
-    // instead of passed information
-
-    // cleanNeighbors()
-    // addNeighbors(vector)
-    // addNeighbors(Enumeration of different neighbor patterns)
-    // exchange all implementation in places basea
 };
+
+// mead - all 8 in 2d space
+// vonnouman - NESW in 2d space
 
 #endif

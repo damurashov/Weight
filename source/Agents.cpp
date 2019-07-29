@@ -257,7 +257,61 @@ void Agents::ma_setup() {
 		}
 	}
 }
-
+/**
+ * Calls callAll and manageAll functions consecutively without responding
+ *  back to user application in each iteration.
+ *
+ * @param functionId : the function id that is executed
+ * @param numberOfIterations : number of consecutive calls of callAll() and
+ *        manageAll() functions
+ */
+void Agents::doAll(int functionId, int numberOfIterations) {
+    for (int i = 0; i < numberOfIterations; i++) {
+        callAll(functionId);
+        manageAll();
+    }
+}
+/**
+ * Calls callAll and manageAll functions consecutively without responding
+ *  back to user application in each iteration.
+ *
+ * @param functionId : the function id that is executed
+ * @param argument : the argument to pass to each Agent
+ * @param arg_size : the size of the argument array
+ * @param numberOfIterations : number of consecutive calls of callAll() and
+ *        manageAll() functions
+ */
+void *Agents::doAll(int functionId, void *argument, int arg_size,
+                    int numberOfIterations, int ret_size) {
+    void *returnPointer;
+    for (int i = 0; i < numberOfIterations; i++) {
+        returnPointer = callAll(functionId, argument, arg_size, ret_size);
+        manageAll();
+    }
+    return returnPointer;
+}
+/**
+ * Calls callAll and manageAll functions consecutively without responding
+ *  back to user application in each iteration.
+ *
+ * @param functionIdList : the function id list that is executed
+ * @param func_size : the size of the functionIdList array
+ * @param argumentList : the arguments to pass to each Agent
+ * @param arg_size : the size of the argument array
+ * @param numberOfIterations : number of consecutive calls of callAll() and
+ *        manageAll() functions
+ */
+void Agents::doAll(int functionIdList[], int func_size, void *argumentList[],
+                   int arg_size, int numberOfIterations) {
+    for (int i = 0; i < numberOfIterations; i++) {
+        void *argument =
+            (argumentList != NULL && i < func_size) ? argumentList[i] : NULL;
+        for (int j = 0; j < func_size; j++) {
+            callAll(functionIdList[j], argument, arg_size);
+            manageAll();
+        }
+    }
+}
 int Agents::nAgents() {
 	int nAgents = 0;
 	for (int i = 0; i < MASS_base::systemSize; i++)
