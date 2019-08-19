@@ -61,7 +61,7 @@ class Place : MObject {
         MEAD3D,
     };
 
-    vector<int*> getNeighbors();
+    vector<int *> getNeighbors();
 
     void cleanNeighbors();
     void addNeighbor(int *);
@@ -75,6 +75,7 @@ class Place : MObject {
    private:
     vector<int *> neighbors;
     Place *findDstPlace(int handle, int index[]);
+    vector<int *> getMooreNeighbors(int);
     vector<int *> getMeadNeighbors2d();
     vector<int *> getVNNeighbors2d();
     vector<int *> getMeadNeighbors3d();

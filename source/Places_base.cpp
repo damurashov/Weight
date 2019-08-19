@@ -545,7 +545,7 @@ void Places_base::exchangeAll(Places_base *dstPlaces, int functionId, int tid){
 	// 	}
 	// 	MASS_base::log(convert.str());
 	// }
-	// now scan all places within range[0] ~ range[1]
+	//now scan all places within range[0] ~ range[1]
 
 	if (range[0] >= 0 && range[1] >= 0) {
 		for (int i = range[0]; i <= range[1]; i++) {

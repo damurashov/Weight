@@ -127,16 +127,16 @@ void Place::addNeighbor(int *index) {
 void Place::addNeighbors(neighborPattern pattern) {
     cleanNeighbors();
     switch (pattern) {
-        case MEAD2D: {
-            neighbors = move(getMeadNeighbors2d());
+        case MOORE2D: {
+            neighbors = move(getMooreNeighbors2d());
             break;
         }
         case VON_NEUMANN2D: {
             neighbors = getVNNeighbors2d();
             break;
         }
-        case MEAD3D: {
-            neighbors = getMeadNeighbors3d();
+        case MOORE3D: {
+            neighbors = getMooreNeighbors3d();
             break;
         }
         case VON_NEUMANN3D: {
@@ -148,7 +148,7 @@ void Place::addNeighbors(neighborPattern pattern) {
     }
 }
 
-vector<int *> Place::getMeadNeighbors2d() {
+vector<int *> Place::getVNNeighbors2d() {
     vector<int *> result;
     // 4 neighbors for Mead
     int *x = new int[2]{1, 0};
@@ -161,11 +161,11 @@ vector<int *> Place::getMeadNeighbors2d() {
     result.push_back(_y);
     return result;
 }
-vector<int *> Place::getVNNeighbors2d() {
+vector<int *> Place::getMooreNeighbors2d() {
     vector<int *> result;
-    // 8 vectors covers all neighbors in 3d
-    // 4 neighbors for Mead
-    result = getMeadNeighbors2d();
+    // 4 vectors covers all neighbors in 3d
+    // 4 more neighbors for Moore
+    result = getVNNeighbors2d();
     // 4 more for von neumann
     int *_xy = new int[2]{-1, 1};
     result.push_back(_xy);
@@ -177,7 +177,7 @@ vector<int *> Place::getVNNeighbors2d() {
     result.push_back(x_y);
     return result;
 }
-vector<int *> Place::getMeadNeighbors3d() {
+vector<int *> Place::getVNNeighbors3d() {
     vector<int *> result;
     // unit vectors only
     int *x = new int[3]{1, 0, 0};
@@ -194,7 +194,7 @@ vector<int *> Place::getMeadNeighbors3d() {
     result.push_back(_z);
     return result;
 }
-vector<int *> Place::getVNNeighbors3d() {
+vector<int *> Place::getMooreNeighbors3d() {
     vector<int *> result;
     // 26 neighbors for full coverage
     // unit vectors
