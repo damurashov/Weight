@@ -11,8 +11,13 @@ libdir=$(exec_prefix)/lib
 includedir=$(prefix)/include
 SOURCE=../source
 
+<<<<<<< HEAD
 all: $(LIBMASS) $(MPROCESS)
 	rm *.o
+=======
+all:  $(TARGET) $(LIBMASS) $(MPROCESS) $(WAVE2D) $(NOMAD)
+	rm -f *.o
+>>>>>>> origin/brownz_update_makefile
 
 $(LIBMASS): $(MASS_OBJS)
 	$(CC) $(MASS_OBJS) -fPIC -L$(libdir) -lssh2 -lpthread -rdynamic -ldl -shared -o $@ #libmass.so
