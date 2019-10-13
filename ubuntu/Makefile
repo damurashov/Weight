@@ -11,12 +11,17 @@ libdir=$(exec_prefix)/lib
 includedir=$(prefix)/include
 SOURCE=../source
 
+<<<<<<< HEAD
 # define options, currently only LOGGING=1
 ifeq ($(LOGGING), 1)
 OPTIONS = -DLOGGING
 endif
 
 #TODO: auto detect rehl vs ubuntu
+=======
+all:  $(TARGET) $(LIBMASS) $(MPROCESS) $(WAVE2D) $(NOMAD)
+	rm -f *.o
+>>>>>>> origin/brownz_update_makefile
 
 all: $(LIBMASS) $(MPROCESS)
 	rm *.o
@@ -28,7 +33,11 @@ $(MPROCESS): MProcess.o $(COMMON)
 	$(CC) $(OPTIONS) MProcess.o $(COMMON) -fPIC -lpthread -rdynamic -ldl -o $@ # mprocess
 
 clean: 
+<<<<<<< HEAD
 	rm *.o $(LIBMASS) $(MPROCESS)
+=======
+	rm -f *.o $(TARGET) $(LIBMASS) $(MPROCESS) $(WAVE2D) $(NOMAD)
+>>>>>>> origin/brownz_update_makefile
 
 %.o : $(SOURCE)/%.cpp
 	$(CC) $(OPTIONS) -Wall -I$(includedir) -fPIC -c $< 
