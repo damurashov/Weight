@@ -24,7 +24,6 @@
 #define NOMAD_H
 
 #include "Agent.h"
-#include "Wave2D.h"
 #include "MASS_base.h"
 #include <sstream> // ostringstream
 
