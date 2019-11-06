@@ -74,7 +74,55 @@ Place *Place::findDstPlace(int handle, int offset[]) {
 }
 
 /**
- *
+ * Allows the user to add a list of neighbors to this specific place.
+ * @param destinations - The neighbors to be added to the current neighbors list
+ */
+void Place::addNeighbors(vector<int*> *destinations) {
+  int *tmp; // to hold elements from destinations
+
+  // for each place in destinations, get the coordinate pair
+  for ( int i = 0; i < int( destinations->size( ) ); i++ ) {
+    tmp = (*destinations)[i];
+      
+      // using a set eliminates duplicates and guarantees items are sorted.
+      // A speed boost can be achieved by providing a 'hint' as to the location
+      // where you want to insert next.  This is currently not implemented.
+      neighbors.insert(tmp);
+  }
+}
+
+/**
+ * Allows the user to remove a list of specified neighbors from this specific place.
+ * Note that the neighbors can range
+ * @param destinations - The neighbors to be removed from the current neighbors list
+ */
+void Place::removeNeighbors(vector<int*> *destinations) {
+  int *tmp; // to hold elements in destinations
+
+  // for each place in destinations, get the coordinate pair
+  for ( int i = 0; i < int( destinations->size( ) ); i++ ) {
+    tmp = (*destinations)[i];
+
+    neighbors.erase(tmp);
+  }
+}
+
+/**
+ * Checks if a given neighbor exists in a Place's list of neighbors.
+ * @param destination - The neighbor to check for
+ * @return  true if the neighbor exists, false if it does not.
+ */
+bool Place::isNeighbor(int *destination) {
+
+  set<int*>::iterator it = neighbors.find(destination);
+  if (it!=neighbors.end()) {
+    return true;
+  } else return false;
+}
+
+
+/**
+ * 
  * @param handle
  * @param offset
  * @return

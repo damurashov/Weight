@@ -27,6 +27,7 @@
 #include "limits.h"
 #include <iostream>
 #include <sstream> // ostringstream
+#include <set>
 
 //Used to enable or disable output in places
 #ifndef LOGGING
@@ -709,7 +710,73 @@ void Places_base::exchangeAll(Places_base *dstPlaces, int functionId, int tid){
 	}
 }
 /**
- * 
+ * Set the neighbors for a set of places.
+ * @param dstPlaces - places whose neighbors we are setting
+ * @param destinations - coordinates of the neighboring places
+ * @param tid
+ */
+void Places_base::setAllPlacesNeighbors(Places_base *dstPlaces, 
+					vector<int*> *destinations, int tid) {
+
+  int range[2];
+  getLocalRange( range, tid );
+  ostringstream convert;
+  // debugging
+  if(printOutput == true){
+    convert << "thread[" << tid << "] setAllPlacesNeighbors: range[0] = " 
+	    << range[0] << " range[1] = " << range[1];
+    MASS_base::log( convert.str( ) );
+  }
+
+  DllClass *src_dllclass = MASS_base::dllMap[ handle ];
+
+  if(printOutput == true){
+    convert.str( "" );
+    convert << "tid[" << tid << "]: checks destinations:";
+    for ( int i = 0; i < int( destinations->size( ) ); i++ ) {
+      int *offset = (*destinations)[i];
+      convert << "[" << offset[0]
+	      << "][" << offset[1] << "]  ";    
+    }
+    MASS_base::log( convert.str( ) );
+  }
+
+  // now scan all places within range[0] ~ range[1]
+  if ( range[0] >= 0 && range[1] >= 0 ) {
+
+    if(printOutput == true){
+      convert << "Range is within range[0] to range[1]\n";
+      MASS_base::log( convert.str( ) );
+    }
+
+    for ( int i = range[0]; i <= range[1]; i++ ) {
+     
+      //      if(printOutput == true){
+      //convert << "Adding neighbors to  place " << i << "\n";
+      //	MASS_base::log( convert.str( ) );
+      //}
+      // for each place
+      Place *srcPlace = (Place *)(src_dllclass->places[i]);
+
+      // update its neighbors list
+      //srcPlace->neighbors = destinations;
+
+      srcPlace->addNeighbors(destinations);
+    }
+  }
+
+
+
+    if(printOutput == true){
+      convert << "Finished adding neighbors to all places.\n";
+      MASS_base::log( convert.str( ) );
+    }
+
+}
+
+/**
+ * Replicates the original exchangeAll which acted upon destinations included
+ * in the parameters.  This version now performs sanity checks on the destinations.
  * @param dstPlaces
  * @param functionId
  * @param destinations
@@ -746,10 +813,14 @@ void Places_base::exchangeAll( Places_base *dstPlaces, int functionId,
       Place *srcPlace = (Place *) ( src_dllclass->places[i] );
 
       // check its neighbors
-      for ( int j = 0; j < int( (*srcPlace).neighbors.size( ) ); j++ ) {
-
+      //for ( int j = 0; j < int( srcPlace->neighbors.size( ) ); j++ ) {
+      int inMsgIndex = -1;
+      for (set<int*>::iterator it = srcPlace->neighbors.begin(); 
+            it != srcPlace->neighbors.end(); 
+            ++it) {
+      inMsgIndex++;
 	// for each neighbor
-	int *offset = (*srcPlace).neighbors[j];
+	int *offset = *it; //(srcPlace->neighbors)[j];
 	int neighborCoord[dstPlaces->dimension];
 
 	// compute its coordinate
@@ -817,7 +888,7 @@ void Places_base::exchangeAll( Places_base *dstPlaces, int functionId,
 	    RemoteExchangeRequest *request 
 	      = new RemoteExchangeRequest( globalLinearIndex,
 					   orgGlobalLinearIndex,
-					   j, // inMsgIndex
+					   inMsgIndex, // inMsgIndex
 					   srcPlace->inMessage_size,
 					   srcPlace->outMessage,
 					   srcPlace->outMessage_size,

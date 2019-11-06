@@ -150,7 +150,7 @@ public:
   handle (handle), dest_handle (dest_handle),
   functionId (functionId), classname (""),
   argument (NULL), argument_size (0), return_size (0),
-  argument_in_heap (false), hosts (NULL), destinations (destinations),
+  argument_in_heap (false), hosts (NULL), destinations (NULL),
   dimension (dimension), agent_population (-1), boundary_width (0),
   exchangeReqList (NULL), migrationReqList (NULL) { };
 

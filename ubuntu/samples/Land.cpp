@@ -123,3 +123,15 @@ void *Land::printShadow(void *argument) {
 
     return NULL;
 }
+
+
+/**
+ * Adds destinations (neighbors) to given Places.
+ */
+void *Land::addDestinations( void *argument ) {
+
+  // TODO: Figure out how to grab from argument
+  
+
+  return NULL;
+}

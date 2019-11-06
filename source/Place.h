@@ -24,6 +24,7 @@
 #define PLACE_H
 
 #include <iostream>
+#include <set>
 #include <vector>
 #include "MObject.h"
 
@@ -97,6 +98,14 @@ class Place : MObject {
 
     /** Includes all the agents residing locally on this place. */
     vector<MObject *> agents;
+
+    // Methods to set, add, and remove neighbors.
+    set<int *> getNeighbors() { return neighbors; };
+    void addNeighbors(vector<int *> *destinations);
+    void removeNeighbors(vector<int *> *destinations);
+    bool isNeighbor(int *destination);
+
+    ~Place(){};
 
    protected:
     void *getOutMessage(int handle, int index[]);
