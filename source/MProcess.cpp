@@ -50,10 +50,10 @@ MProcess::MProcess( char *name, int myPid, int nProc, int nThr, int port ) {
   this->nThr = nThr;
   this->port = port;
   MASS_base::initMASS_base( name, myPid, nProc, port );
-  
+
   // Create a logger
   DIR *dir = NULL;
-  if ( ( dir =  opendir( MASS_LOGS ) ) == NULL )
+  if ( ( dir = opendir( MASS_LOGS ) ) == NULL )
     mkdir( MASS_LOGS, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH );
   else
     closedir( dir );
@@ -69,7 +69,7 @@ void MProcess::start( ) {
 
   // retrieve the client socket ipaddress
   int master_ip_size = 0;
-  read( 0, &master_ip_size, sizeof( int ) );
+  read( 0, &master_ip_size, sizeof(int) );
   char master_ip[master_ip_size + 1];
   bzero( master_ip, master_ip_size + 1 );
   read( 0, &master_ip, master_ip_size );
@@ -82,19 +82,20 @@ void MProcess::start( ) {
   sendAck( );
 
   bool alive = true;
-  while( alive ) {
+  while ( alive ) {
     // receive a new message from the master
     Message *m = receiveMessage( );
 
     ostringstream convert;
-    if(printOutput == true){
-        convert << "A new message received: action = " << m->getAction( ) << endl;
-        MASS_base::log( convert.str( ) );
+    if ( printOutput == true ) {
+      convert << "A new message received: action = " << m->getAction( ) << endl;
+      MASS_base::log( convert.str( ) );
     }
 
     // get prepared for the following arguments for PLACES_INITIALIZE
     vector<int> size;            // size[]
-    vector<string> hosts; hosts.clear( ); 
+    vector<string> hosts;
+    hosts.clear( );
     int argument_size = 0;       // argument[argument_size];
     char *argument = NULL;
     Places_base *places = NULL;  // new Places
@@ -573,9 +574,9 @@ void MProcess::sendAck( ) {
 void MProcess::sendAck( int localPopulation ) {
   Message *msg = new Message( Message::ACK, localPopulation );
   ostringstream convert;
-  if(printOutput == true){
-      convert << "msg->getAgentPopulation = " << msg->getAgentPopulation( );
-      MASS_base::log( convert.str( ) );
+  if ( printOutput == true ) {
+    convert << "msg->getAgentPopulation = " << msg->getAgentPopulation( );
+    MASS_base::log( convert.str( ) );
   }
   sendMessage( msg );
   delete msg;
@@ -588,9 +589,8 @@ void MProcess::sendAck( int localPopulation ) {
  * @param return_size
  */
 void MProcess::sendReturnValues( void *argument, int nPlaces,
-				int return_size ) {
-  Message *msg = new Message( Message::ACK, argument, 
-			      nPlaces * return_size );
+    int return_size ) {
+  Message *msg = new Message( Message::ACK, argument, nPlaces * return_size );
   sendMessage( msg );
   delete msg;
 }
@@ -602,10 +602,10 @@ void MProcess::sendReturnValues( void *argument, int nPlaces,
  * @param return_size
  * @param localPopulation
  */
-void MProcess::sendReturnValues( void *argument, int nAgents,
-				 int return_size, int localPopulation ) {
-  Message *msg = new Message( Message::ACK, argument, 
-			      nAgents * return_size, localPopulation );
+void MProcess::sendReturnValues( void *argument, int nAgents, int return_size,
+    int localPopulation ) {
+  Message *msg = new Message( Message::ACK, argument, nAgents * return_size,
+      localPopulation );
   sendMessage( msg );
   delete msg;
 }
@@ -629,23 +629,24 @@ void MProcess::sendMessage( Message *msg ) {
 Message *MProcess::receiveMessage( ) {
   int size = -1;
   int nRead = 0;
-  if ( read( sd, (void *)&size, sizeof( int ) ) > 0 ) {// receive a message size
+  if ( read( sd, (void *) &size, sizeof(int) ) > 0 ) { // receive a message size
 
     ostringstream convert;
-    if(printOutput == true){
-        convert << "receiveMessage: size = " << size << endl;
-        MASS_base::log( convert.str( ) );
+    if ( printOutput == true ) {
+      convert << "receiveMessage: size = " << size << endl;
+      MASS_base::log( convert.str( ) );
     }
 
     char *buf = new char[size];
-    for ( nRead = 0;
-	  ( nRead += read( sd, buf + nRead, size - nRead) ) < size; );
+    for ( nRead = 0; ( nRead += read( sd, buf + nRead, size - nRead ) ) < size;
+        )
+      ;
     Message *m = new Message( );
     m->deserialize( buf, size );
     return m;
   } else {
-    if(printOutput == true)
-        MASS_base::log( "receiveMessage error" );
+    if ( printOutput == true )
+      MASS_base::log( "receiveMessage error" );
     exit( -1 );
   }
 }

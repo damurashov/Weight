@@ -34,34 +34,36 @@ const bool printOutput = false;
 //const bool printOutput = true;
 
 /**
+ * Constructor for Places_base Objects. These Objects encompass the basic
+ * features that are found in all Places Objects, enabling MASS to be able to
+ * operate across all Places in a unified manner, regardless of each individual
+ * Place instantiation.
  * 
- * @param handle
- * @param className
- * @param boundary_width
- * @param argument
- * @param argument_size
- * @param dim
- * @param size
+ * @param handle          a unique identifer (int) that designates a group of
+ *                        places. Must be unique over all machines.
+ * @param className       name of the user-created Place classes to load
+ * @param boundary_width  width of the boundary to place between stripes
+ * @param argument        array of arguments to pass into each Place constructor
+ * @param argument_size   size of each argument (e.g. - sizeof( int ) )
+ * @param dim             how many dimensions this simulation encompasses
+ * @param size            array of numbers (int), representing the size of each
+ *                        corresponding dimension in the simulation space
  */
 Places_base::Places_base( int handle, string className, int boundary_width,
-			  void *argument, int argument_size, 
-			  int dim, int size[] )
-  : handle( handle ), className( className ), dimension( dim ), 
-    boundary_width( boundary_width ) {
+    void *argument, int argument_size, int dim, int size[] ) :
+    handle( handle ), className( className ), dimension( dim ), boundary_width(
+        boundary_width ) {
 
   ostringstream convert;
   if ( printOutput == true ) {
-      convert << "Places_base handle = " << handle 
-	      << ", class = " << className
-	      << ", argument_size = " << argument_size 
-	      << ", argument = " << (char *)argument
-	      << ", boundary_width = " << boundary_width
-	      << ", dim = " << dim
-	      << endl;
+    convert << "Places_base handle = " << handle << ", class = " << className
+        << ", argument_size = " << argument_size << ", argument = "
+        << (char *) argument << ", boundary_width = " << boundary_width
+        << ", dim = " << dim << endl;
     MASS_base::log( convert.str( ) );
   }
 
-  if ( size == NULL ) 
+  if ( size == NULL )
     // if given in "int dim, ..." format, init_all() must be called later 
     return;
   this->size = new int[dim];
@@ -99,32 +101,29 @@ Places_base::~Places_base( ) {
 void Places_base::init_all( void *argument, int argument_size ) {
   // For debugging
   ostringstream convert;
-  if(printOutput == true){
-      convert << "init_all handle = " << handle 
-	      << ", class = " << className
-	      << ", argument_size = " << argument_size 
-	      << ", argument = " << (char *)argument
-	      << ", dimension = " << dimension
-	      << endl;
-      for ( int i = 0; i < dimension; i++ )
-        convert << "size[" << i << "] = " << size[i] << "  ";
-      convert << endl;
-      MASS_base::log( convert.str( ) );
+  if ( printOutput == true ) {
+    convert << "init_all handle = " << handle << ", class = " << className
+        << ", argument_size = " << argument_size << ", argument = "
+        << (char *) argument << ", dimension = " << dimension << endl;
+    for ( int i = 0; i < dimension; i++ )
+      convert << "size[" << i << "] = " << size[i] << "  ";
+    convert << endl;
+    MASS_base::log( convert.str( ) );
   }
 
   // Print the current working directory
   /*
-  char buf[200];
-  getcwd( buf, 200 );
-  convert.str( "" );
-  convert << buf << endl;
-  MASS_base::log( convert.str( ) );
-  */
+   char buf[200];
+   getcwd( buf, 200 );
+   convert.str( "" );
+   convert << buf << endl;
+   MASS_base::log( convert.str( ) );
+   */
 
   // load the construtor and destructor
   DllClass *dllclass = new DllClass( className );
-  MASS_base::dllMap.
-    insert( map<int, DllClass*>::value_type( handle, dllclass ) );
+  MASS_base::dllMap.insert(
+      map<int, DllClass*>::value_type( handle, dllclass ) );
 
   // calculate lower_boundary and upper_boundary
   int total = 1;
@@ -133,14 +132,15 @@ void Places_base::init_all( void *argument, int argument_size ) {
   int stripe = total / MASS_base::systemSize;
 
   lower_boundary = stripe * MASS_base::myPid;
-  upper_boundary = ( MASS_base::myPid < MASS_base::systemSize - 1 ) ?
-    lower_boundary + stripe - 1 : total - 1;
+  upper_boundary =
+      ( MASS_base::myPid < MASS_base::systemSize - 1 ) ?
+          lower_boundary + stripe - 1 : total - 1;
   places_size = upper_boundary - lower_boundary + 1;
 
   // instantiate Places objects within dlclass
   this->places_size = places_size;
   //  maintaining an entire set
-  dllclass->places = new Place*[places_size]; 
+  dllclass->places = new Place*[places_size];
 
   vector<int> index;
   index.reserve( dimension );
@@ -148,13 +148,12 @@ void Places_base::init_all( void *argument, int argument_size ) {
   // initialize all Places objects
   for ( int i = 0; i < places_size; i++ ) {
     // instanitate a new place
-    dllclass->places[i] = (Place *)( dllclass->instantiate( argument ) );  
+    dllclass->places[i] = (Place *) ( dllclass->instantiate( argument ) );
     dllclass->places[i]->size.reserve( dimension );
     for ( int j = 0; j < dimension; j++ )
       // define size[] and index[]
-      dllclass->places[i]->size.push_back( size[j] ); 
-    dllclass->places[i]->index 
-      = getGlobalArrayIndex( lower_boundary + i );
+      dllclass->places[i]->size.push_back( size[j] );
+    dllclass->places[i]->index = getGlobalArrayIndex( lower_boundary + i );
   }
 
   // allocate the left/right shadows
@@ -167,32 +166,33 @@ void Places_base::init_all( void *argument, int argument_size ) {
     return;
   }
 
-  shadow_size 
-    = ( dimension == 1 ) ? boundary_width : total / size[0] * boundary_width;
+  shadow_size =
+      ( dimension == 1 ) ? boundary_width : total / size[0] * boundary_width;
   if ( printOutput == true ) {
     ostringstream convert;
     convert << "Places_base.shadow_size = " << shadow_size;
     MASS_base::log( convert.str( ) );
   }
-  dllclass->left_shadow = ( MASS_base::myPid == 0 ) ? 
-    NULL : new Place*[ shadow_size ];
-  dllclass->right_shadow = ( MASS_base::myPid == MASS_base::systemSize - 1 ) ? 
-    NULL : new Place*[ shadow_size ];    
+  dllclass->left_shadow =
+      ( MASS_base::myPid == 0 ) ? NULL : new Place*[shadow_size];
+  dllclass->right_shadow =
+      ( MASS_base::myPid == MASS_base::systemSize - 1 ) ?
+          NULL : new Place*[shadow_size];
 
   // initialize the left/right shadows
   for ( int i = 0; i < shadow_size; i++ ) {
-
     // left shadow initialization
     if ( dllclass->left_shadow != NULL ) {
       // instanitate a new place
-      dllclass->left_shadow[i] 
-	= (Place *)( dllclass->instantiate( argument ) );  
+      dllclass->left_shadow[i] =
+          (Place *) ( dllclass->instantiate( argument ) );
       dllclass->left_shadow[i]->size.reserve( dimension );
-      for ( int j = 0; j < dimension; j++ )
-	// define size[] and index[]
-	dllclass->left_shadow[i]->size.push_back( size[j] ); 
-      dllclass->left_shadow[i]->index 
-	= getGlobalArrayIndex( lower_boundary - shadow_size + i );
+      for ( int j = 0; j < dimension; j++ ) {
+        // define size[] and index[]
+        dllclass->left_shadow[i]->size.push_back( size[j] );
+      }
+      dllclass->left_shadow[i]->index = getGlobalArrayIndex(
+          lower_boundary - shadow_size + i );
       dllclass->left_shadow[i]->outMessage = NULL;
       dllclass->left_shadow[i]->outMessage_size = 0;
       dllclass->left_shadow[i]->inMessage_size = 0;
@@ -201,25 +201,28 @@ void Places_base::init_all( void *argument, int argument_size ) {
     // right shadow initialization
     if ( dllclass->right_shadow != NULL ) {
       // instanitate a new place
-      dllclass->right_shadow[i] 
-	= (Place *)( dllclass->instantiate( argument ) );  
+      dllclass->right_shadow[i] =
+          (Place *) ( dllclass->instantiate( argument ) );
       dllclass->right_shadow[i]->size.reserve( dimension );
-      for ( int j = 0; j < dimension; j++ )
-	// define size[] and index[]
-	dllclass->right_shadow[i]->size.push_back( size[j] ); 
-      dllclass->right_shadow[i]->index 
-	= getGlobalArrayIndex( upper_boundary + i );
+      for ( int j = 0; j < dimension; j++ ) {
+        // define size[] and index[]
+        dllclass->right_shadow[i]->size.push_back( size[j] );
+      }
+      dllclass->right_shadow[i]->index = getGlobalArrayIndex(
+          upper_boundary + i );
       dllclass->right_shadow[i]->outMessage = NULL;
       dllclass->right_shadow[i]->outMessage_size = 0;
       dllclass->right_shadow[i]->inMessage_size = 0;
-    }    
+    }
   }
 }
 
-/** @brief Converts a given plain single index into a multi-dimensional index.
-  *  @param[in] singleIndex an index in a plain single dimesion that will be
-   *                        converted in a multi-dimensional index.
-   * @return a multi-dimensional index			   
+/**
+ * Converts a given plain single index into a multi-dimensional index.
+ *
+ * @param singleIndex an index in a plain single dimension that will be
+ *                    converted to a multi-dimensional index.
+ * @return            a multi-dimensional index
  */
 vector<int> Places_base::getGlobalArrayIndex(int singleIndex) {
 	vector<int> index;            // a multi-dimensional index
@@ -271,41 +274,47 @@ void Places_base::callAll( int functionId, void *argument, int tid ) {
 }
 
 /**
+ * Calls the referenced function, passing along a related argument, at each
+ * Place contained within the simulation space (Places). Any return values
+ * generated from individual function calls are stored in an array, a pointer to
+ * the address (pointer to a pointer) of which is returned as a result of this
+ * call.
  * 
- * @param functionId
- * @param argument
- * @param arg_size
- * @param ret_size
- * @param tid
- * @return 
+ * @param functionId  the id of the function to call at each Place
+ * @param argument    the address (pointer) of an array of arguments to send to
+ *                    the function called at each Place
+ * @param arg_size    the size (int) of each argument
+ * @param ret_size    the size (int) of each return value
+ * @param tid         the id of the thread
+ * @return            the address of the address of (pointer to a pointer) the
+ *                    return values stored from each function call
  */
-void **Places_base::callAll( int functionId, void *argument, 
-			     int arg_size, int ret_size, int tid ) {
+void **Places_base::callAll( int functionId, void *argument, int arg_size,
+    int ret_size, int tid ) {
   int range[2];
   getLocalRange( range, tid );
 
   // debugging
   ostringstream convert;
   if ( printOutput == true ) {
-    convert << "thread[" << tid << "] callAll_return object functionId = " 
-	    << functionId
-	    << ", range[0] = " << range[0] << " range[1] = " << range[1]
-  	  << ", return_size = " << ret_size;
+    convert << "thread[" << tid << "] callAll_return object functionId = "
+        << functionId << ", range[0] = " << range[0] << " range[1] = "
+        << range[1] << ", return_size = " << ret_size;
     MASS_base::log( convert.str( ) );
   }
 
-  DllClass *dllclass = MASS_base::dllMap[ handle ];
+  DllClass *dllclass = MASS_base::dllMap[handle];
   char *return_values = MASS_base::currentReturns + range[0] * ret_size;
   if ( range[0] >= 0 && range[1] >= 0 ) {
     for ( int i = range[0]; i <= range[1]; i++ ) {
       if ( printOutput == true ) {
-	convert.str( "" );
-	convert << "thread[" << tid << "]: places[i] = " << dllclass->places[i];
-	MASS_base::log( convert.str( ) );
+        convert.str( "" );
+        convert << "thread[" << tid << "]: places[i] = " << dllclass->places[i];
+        MASS_base::log( convert.str( ) );
       }
-      memcpy( (void *)return_values, dllclass->places[i]->callMethod( functionId, 
-					      (char *)argument + arg_size * i
-					      ), ret_size );
+      memcpy( (void *) return_values,
+          dllclass->places[i]->callMethod( functionId,
+              (char *) argument + arg_size * i ), ret_size );
       return_values += ret_size;
     }
   }
@@ -573,33 +582,29 @@ void Places_base::exchangeAll( Places_base *dstPlaces, int functionId,
   getLocalRange( range, tid );
   ostringstream convert;
   // debugging
-  if(printOutput == true){
-      convert << "thread[" << tid << "] exchangeAll functionId = " << functionId
-	      << ", range[0] = " << range[0] << " range[1] = " << range[1];
-      MASS_base::log( convert.str( ) );
+  if ( printOutput == true ) {
+    convert << "thread[" << tid << "] exchangeAll functionId = " << functionId
+        << ", range[0] = " << range[0] << " range[1] = " << range[1];
+    MASS_base::log( convert.str( ) );
   }
 
-  DllClass *src_dllclass = MASS_base::dllMap[ handle ];
-  DllClass *dst_dllclass = MASS_base::dllMap[ dstPlaces->handle ];
+  DllClass *src_dllclass = MASS_base::dllMap[handle];
+  DllClass *dst_dllclass = MASS_base::dllMap[dstPlaces->handle];
 
-  // TODO: Need to find a way to replace destinations 
-  // with same meaning code block
-/*  if(printOutput == true){
-      convert.str( "" );
-      convert << "tid[" << tid << "]: checks destinations:";
-      for ( int i = 0; i < int( destinations->size( ) ); i++ ) {
-        int *offset = (*destinations)[i];
-        convert << "[" << offset[0]
-	        << "][" << offset[1] << "]  ";    
-      }
-      MASS_base::log( convert.str( ) );
-  } */
-
+  if ( printOutput == true ) {
+    convert.str( "" );
+    convert << "tid[" << tid << "]: checks destinations:";
+    for ( int i = 0; i < int( destinations->size( ) ); i++ ) {
+      int *offset = ( *destinations )[i];
+      convert << "[" << offset[0] << "][" << offset[1] << "]  ";
+    }
+    MASS_base::log( convert.str( ) );
+  }
   // now scan all places within range[0] ~ range[1]
   if ( range[0] >= 0 && range[1] >= 0 ) {
     for ( int i = range[0]; i <= range[1]; i++ ) {
       // for each place
-      Place *srcPlace = (Place *)(src_dllclass->places[i]);
+      Place *srcPlace = (Place *) ( src_dllclass->places[i] );
 
       // check its neighbors
       for ( int j = 0; j < int( (*srcPlace).neighbors.size( ) ); j++ ) {
@@ -709,21 +714,21 @@ void Places_base::exchangeAll( Places_base *dstPlaces, int functionId,
   Mthread::barrierThreads( tid );
   if ( tid == 0 ) {
 
-    if(printOutput == true){
-        convert.str( "" );
-        convert << "tid[" << tid << "] now enters processRemoteExchangeRequest";
-        MASS_base::log( convert.str( ) );
+    if ( printOutput == true ) {
+      convert.str( "" );
+      convert << "tid[" << tid << "] now enters processRemoteExchangeRequest";
+      MASS_base::log( convert.str( ) );
     }
     // the main thread spawns as many communication threads as the number of
     // remote computing nodes and let each invoke processRemoteExchangeReq.
-    
+
     // args to threads: rank, srcHandle, dstHandle, functionId, lower_boundary
     int comThrArgs[MASS_base::systemSize][5];
     pthread_t thread_ref[MASS_base::systemSize]; // communication thread id
     for ( int rank = 0; rank < MASS_base::systemSize; rank++ ) {
 
       if ( rank == MASS_base::myPid ) // don't communicate with myself
-	continue;
+        continue;
 
       // set arguments 
       comThrArgs[rank][0] = rank;
@@ -733,26 +738,24 @@ void Places_base::exchangeAll( Places_base *dstPlaces, int functionId,
       comThrArgs[rank][4] = lower_boundary;
 
       // start a communication thread
-      if ( pthread_create( &thread_ref[rank], NULL, 
-			   Places_base::processRemoteExchangeRequest, 
-			   comThrArgs[rank] ) != 0 ) {
-	MASS_base::log( "Places_base.exchangeAll: failed in pthread_create" );
-	exit( -1 );
+      if ( pthread_create( &thread_ref[rank], NULL,
+          Places_base::processRemoteExchangeRequest, comThrArgs[rank] ) != 0 ) {
+        MASS_base::log( "Places_base.exchangeAll: failed in pthread_create" );
+        exit( -1 );
       }
     }
 
     // wait for all the communication threads to be terminated
     for ( int rank = 0; rank < MASS_base::systemSize; rank++ ) {
       if ( rank == MASS_base::myPid ) // don't communicate with myself
-	continue;      
+        continue;
       pthread_join( thread_ref[rank], NULL );
     }
-  }
-  else {
-    if(printOutput == true){
-        convert.str( "" );
-        convert << "tid[" << tid << "] skips processRemoteExchangeRequest";
-        MASS_base::log( convert.str( ) );
+  } else {
+    if ( printOutput == true ) {
+      convert.str( "" );
+      convert << "tid[" << tid << "] skips processRemoteExchangeRequest";
+      MASS_base::log( convert.str( ) );
     }
   }
 
@@ -882,19 +885,19 @@ void *Places_base::processRemoteExchangeRequest(void *param) {
  * @return 
  */
 void *Places_base::processRemoteExchangeRequest( void *param ) {
-  int destRank = ( (int *)param )[0];
-  int srcHandle = ( (int *)param )[1];
-  int destHandle_at_src = ( (int *)param )[2];
-  int functionId = ( (int *)param )[3];
-  int my_lower_boundary = ( (int *)param )[4];
+  int destRank = ( (int *) param )[0];
+  int srcHandle = ( (int *) param )[1];
+  int destHandle_at_src = ( (int *) param )[2];
+  int functionId = ( (int *) param )[3];
+  int my_lower_boundary = ( (int *) param )[4];
 
   vector<RemoteExchangeRequest*>* orgRequest = NULL;
   ostringstream convert;
 
-  if(printOutput == true){
-      convert.str( "" );
-      convert << "rank[" << destRank << "]: starts processRemoteExchangeRequest";
-      MASS_base::log( convert.str( ) );
+  if ( printOutput == true ) {
+    convert.str( "" );
+    convert << "rank[" << destRank << "]: starts processRemoteExchangeRequest";
+    MASS_base::log( convert.str( ) );
   }
   // pick up the next rank to process
   orgRequest = MASS_base::remoteRequests[destRank];
@@ -902,26 +905,25 @@ void *Places_base::processRemoteExchangeRequest( void *param ) {
   // for debugging
   pthread_mutex_lock( &MASS_base::request_lock );
 
-  if(printOutput == true){
-      convert.str( "" );
-      convert << "tid[" << destRank << "] sends an exhange request to rank: " 
-	      << destRank << " size() = " << orgRequest->size( ) << endl;
-      for ( int i = 0; i < int( orgRequest->size( ) ); i++ ) {
-        convert << "send from "
-	        << (*orgRequest)[i]->orgGlobalLinearIndex << " to "
-	        << (*orgRequest)[i]->destGlobalLinearIndex << " at "
-	        << (*orgRequest)[i]->inMessageIndex << " inMsgSize: " 
-	        << (*orgRequest)[i]->inMessageSize << " outMsgSize: " 
-	        << (*orgRequest)[i]->outMessageSize << endl;
-      }
-      MASS_base::log( convert.str( ) );
+  if ( printOutput == true ) {
+    convert.str( "" );
+    convert << "tid[" << destRank << "] sends an exhange request to rank: "
+        << destRank << " size() = " << orgRequest->size( ) << endl;
+    for ( int i = 0; i < int( orgRequest->size( ) ); i++ ) {
+      convert << "send from " << ( *orgRequest )[i]->orgGlobalLinearIndex
+          << " to " << ( *orgRequest )[i]->destGlobalLinearIndex << " at "
+          << ( *orgRequest )[i]->inMessageIndex << " inMsgSize: "
+          << ( *orgRequest )[i]->inMessageSize << " outMsgSize: "
+          << ( *orgRequest )[i]->outMessageSize << endl;
+    }
+    MASS_base::log( convert.str( ) );
   }
   pthread_mutex_unlock( &MASS_base::request_lock );
 
   // now compose and send a message by a child
-  Message *messageToDest 
-    = new Message( Message::PLACES_EXCHANGE_ALL_REMOTE_REQUEST,
-		   srcHandle, destHandle_at_src, functionId, orgRequest );
+  Message *messageToDest = new Message(
+      Message::PLACES_EXCHANGE_ALL_REMOTE_REQUEST, srcHandle, destHandle_at_src,
+      functionId, orgRequest );
 
   struct ExchangeSendMessage rankNmessage;
   rankNmessage.rank = destRank;
@@ -937,78 +939,77 @@ void *Places_base::processRemoteExchangeRequest( void *param ) {
   pthread_join( thread_ref, NULL );
 
   // process a message
-  vector<RemoteExchangeRequest*>* receivedRequest 
-    = messageFromSrc->getExchangeReqList( );
+  vector<RemoteExchangeRequest*>* receivedRequest =
+      messageFromSrc->getExchangeReqList( );
 
   int destHandle_at_dst = messageFromSrc->getDestHandle( );
-  Places_base *dstPlaces = MASS_base::placesMap[ destHandle_at_dst ];
-  DllClass *dst_dllclass = MASS_base::dllMap[ destHandle_at_dst ];
+  Places_base *dstPlaces = MASS_base::placesMap[destHandle_at_dst];
+  DllClass *dst_dllclass = MASS_base::dllMap[destHandle_at_dst];
 
-  if(printOutput == true){
-      convert.str( "" );
-      convert << "request from rank[" << destRank << "] = " << receivedRequest;
-      convert << " size( ) = " << receivedRequest->size( );
+  if ( printOutput == true ) {
+    convert.str( "" );
+    convert << "request from rank[" << destRank << "] = " << receivedRequest;
+    convert << " size( ) = " << receivedRequest->size( );
   }
 
   // get prepared for a space to sotre return values
   int inMessageSizes = 0;
-  for ( int i = 0; i < int( receivedRequest->size( ) ); i++ ) 
-    inMessageSizes += (*receivedRequest)[i]->inMessageSize;
+  for ( int i = 0; i < int( receivedRequest->size( ) ); i++ )
+    inMessageSizes += ( *receivedRequest )[i]->inMessageSize;
   char retVals[inMessageSizes];
-  
-  if(printOutput == true){
-      convert << " retVals = " << (void *)retVals
-	      << " total inMessageSizes = " << inMessageSizes << endl;
+
+  if ( printOutput == true ) {
+    convert << " retVals = " << (void *) retVals << " total inMessageSizes = "
+        << inMessageSizes << endl;
   }
   // for each place, call the corresponding callMethod( ).
   char *retValPos = retVals;
   for ( int i = 0; i < int( receivedRequest->size( ) ); i++ ) {
 
-    if(printOutput == true){
-        convert << "received from "
-	        << (*receivedRequest)[i]->orgGlobalLinearIndex << " to "
-	        << (*receivedRequest)[i]->destGlobalLinearIndex << " at "
-	        << (*receivedRequest)[i]->inMessageIndex << " inMsgSize: " 
-	        << (*receivedRequest)[i]->inMessageSize << " outMsgSize: "
-	        << (*receivedRequest)[i]->outMessageSize 
-	        << " dstPlaces->lower = " << dstPlaces->lower_boundary
-	        << " dstPlaces->upper = " << dstPlaces->upper_boundary;
+    if ( printOutput == true ) {
+      convert << "received from "
+          << ( *receivedRequest )[i]->orgGlobalLinearIndex << " to "
+          << ( *receivedRequest )[i]->destGlobalLinearIndex << " at "
+          << ( *receivedRequest )[i]->inMessageIndex << " inMsgSize: "
+          << ( *receivedRequest )[i]->inMessageSize << " outMsgSize: "
+          << ( *receivedRequest )[i]->outMessageSize << " dstPlaces->lower = "
+          << dstPlaces->lower_boundary << " dstPlaces->upper = "
+          << dstPlaces->upper_boundary;
     }
-    int globalLinearIndex = (*receivedRequest)[i]->destGlobalLinearIndex;
-    void *outMessage = (*receivedRequest)[i]->outMessage;
-    
-    if ( globalLinearIndex >= dstPlaces->lower_boundary &&
-	 globalLinearIndex <= dstPlaces->upper_boundary ) {
+    int globalLinearIndex = ( *receivedRequest )[i]->destGlobalLinearIndex;
+    void *outMessage = ( *receivedRequest )[i]->outMessage;
+
+    if ( globalLinearIndex >= dstPlaces->lower_boundary
+        && globalLinearIndex <= dstPlaces->upper_boundary ) {
       // local destination
-      int destinationLocalLinearIndex 
-	= globalLinearIndex - dstPlaces->lower_boundary;
-      
-      if(printOutput == true)
-          convert << " dstLocal = " << destinationLocalLinearIndex << endl;
-      
-      Place *dstPlace = 
-	(Place *)(dst_dllclass->places[destinationLocalLinearIndex]);
-      
+      int destinationLocalLinearIndex = globalLinearIndex
+          - dstPlaces->lower_boundary;
+
+      if ( printOutput == true )
+        convert << " dstLocal = " << destinationLocalLinearIndex << endl;
+
+      Place *dstPlace =
+          (Place *) ( dst_dllclass->places[destinationLocalLinearIndex] );
+
       // call the destination function
-      void *inMessage = dstPlace->callMethod( functionId, 
-					      outMessage );
-      memcpy(  retValPos, inMessage, (*receivedRequest)[i]->inMessageSize );
-      retValPos += (*receivedRequest)[i]->inMessageSize;
+      void *inMessage = dstPlace->callMethod( functionId, outMessage );
+      memcpy( retValPos, inMessage, ( *receivedRequest )[i]->inMessageSize );
+      retValPos += ( *receivedRequest )[i]->inMessageSize;
     }
   }
-  if(printOutput == true){
-      MASS_base::log( convert.str( ) );
+  if ( printOutput == true ) {
+    MASS_base::log( convert.str( ) );
   }
   delete messageFromSrc;
 
   // send return values by a child thread
-  Message *messageToSrc = 
-    new Message( Message::PLACES_EXCHANGE_ALL_REMOTE_RETURN_OBJECT,
-		 retVals, inMessageSizes );
+  Message *messageToSrc = new Message(
+      Message::PLACES_EXCHANGE_ALL_REMOTE_RETURN_OBJECT, retVals,
+      inMessageSizes );
   rankNmessage.rank = destRank;
   rankNmessage.message = messageToSrc;
   pthread_create( &thread_ref, NULL, sendMessageByChild, &rankNmessage );
-  
+
   // receive return values by myself in parallel
   Message *messageFromDest = MASS_base::exchange.receiveMessage( destRank );
 
@@ -1022,46 +1023,45 @@ void *Places_base::processRemoteExchangeRequest( void *param ) {
   messageFromDest->getArgument( argument );
 
   int pos = 0;
-  DllClass *src_dllclass = MASS_base::dllMap[ srcHandle ];
-  
-  if(printOutput == true){
-      convert.str( "" );
-      convert << "return values: argumentSize = " << argumentSize
-	      << " src_dllclass = " << src_dllclass
-	      << " orgRequest->size( ) = " << orgRequest->size( );
-      MASS_base::log( convert.str( ) );
+  DllClass *src_dllclass = MASS_base::dllMap[srcHandle];
+
+  if ( printOutput == true ) {
+    convert.str( "" );
+    convert << "return values: argumentSize = " << argumentSize
+        << " src_dllclass = " << src_dllclass << " orgRequest->size( ) = "
+        << orgRequest->size( );
+    MASS_base::log( convert.str( ) );
   }
-  
+
   for ( int i = 0; i < int( orgRequest->size( ) ); i++ ) {
     // local source
-    int orgLocalLinearIndex
-      = (*orgRequest)[i]->orgGlobalLinearIndex - my_lower_boundary;
-    
+    int orgLocalLinearIndex = ( *orgRequest )[i]->orgGlobalLinearIndex
+        - my_lower_boundary;
+
     // locate a local place
-    Place *srcPlace =	(Place *)(src_dllclass->places[orgLocalLinearIndex]);
-    
+    Place *srcPlace = (Place *) ( src_dllclass->places[orgLocalLinearIndex] );
+
     // store a return value to it
     char *inMessage = new char[srcPlace->inMessage_size];
     memcpy( inMessage, argument + pos, srcPlace->inMessage_size );
     pos += srcPlace->inMessage_size;
-    
+
     // insert an item at inMessageIndex or just append it.
-    if ( int( srcPlace->inMessages.size( ) ) 
-	 > (*orgRequest)[i]->inMessageIndex )
-      srcPlace->inMessages.insert( srcPlace->inMessages.begin( ) 
-				   + (*orgRequest)[i]->inMessageIndex,
-				   (void *)inMessage );
+    if ( int( srcPlace->inMessages.size( ) )
+        > ( *orgRequest )[i]->inMessageIndex )
+      srcPlace->inMessages.insert(
+          srcPlace->inMessages.begin( ) + ( *orgRequest )[i]->inMessageIndex,
+          (void *) inMessage );
     else
-      srcPlace->inMessages.push_back( (void *)inMessage );
+      srcPlace->inMessages.push_back( (void *) inMessage );
 
     if ( printOutput == true ) {
       convert.str( "" );
-      convert << "srcPlace[" << srcPlace->index[0]<< "][" 
-	      << srcPlace->index[1] << "] inserted " 
-	      << "at " << (*orgRequest)[i]->inMessageIndex;
+      convert << "srcPlace[" << srcPlace->index[0] << "][" << srcPlace->index[1]
+          << "] inserted " << "at " << ( *orgRequest )[i]->inMessageIndex;
       MASS_base::log( convert.str( ) );
     }
-    
+
   }
   delete messageToDest; // messageToDest->orgReuqest is no longer used. delete it.
   delete messageFromDest;
@@ -1075,8 +1075,9 @@ void *Places_base::processRemoteExchangeRequest( void *param ) {
  * @return NULL
  */
 void *Places_base::sendMessageByChild( void *param ) {
-  int rank = ((struct ExchangeSendMessage *)param)->rank;
-  Message *message = (Message *)((struct ExchangeSendMessage *)param)->message;
+  int rank = ( (struct ExchangeSendMessage *) param )->rank;
+  Message *message =
+      (Message *) ( (struct ExchangeSendMessage *) param )->message;
   MASS_base::exchange.sendMessage( rank, message );
   return NULL;
 }
@@ -1087,8 +1088,8 @@ void *Places_base::sendMessageByChild( void *param ) {
 void Places_base::exchangeBoundary( ) {
   if ( shadow_size == 0 ) { // no boundary, no exchange
     ostringstream convert;
-    convert << "places (handle = " << handle 
-	    << ") has NO boundary, and thus invokes NO exchange boundary";
+    convert << "places (handle = " << handle
+        << ") has NO boundary, and thus invokes NO exchange boundary";
     MASS_base::log( convert.str( ) );
     return;
   }
@@ -1108,8 +1109,8 @@ void Places_base::exchangeBoundary( ) {
     param[0][3] = shadow_size;
     if ( printOutput == true ) {
       ostringstream convert;
-      convert << "exchangeBoundary: pthreacd_create( helper, R ) places_size=" 
-	      << places_size;
+      convert << "exchangeBoundary: pthreacd_create( helper, R ) places_size="
+          << places_size;
       MASS_base::log( convert.str( ) );
     }
     pthread_create( &thread_ref, NULL, exchangeBoundary_helper, param[0] );
@@ -1118,13 +1119,13 @@ void Places_base::exchangeBoundary( ) {
   if ( MASS_base::myPid > 0 ) {
     // the main takes charge of handling the left shadow.
     param[1][0] = 'L';
-    param[1][1] = handle;    
+    param[1][1] = handle;
     param[1][2] = places_size;
     param[1][3] = shadow_size;
     if ( printOutput == true ) {
       ostringstream convert;
-      convert << "exchangeBoundary: main thread( helper, L ) places_size=" 
-	      << places_size;
+      convert << "exchangeBoundary: main thread( helper, L ) places_size="
+          << places_size;
       MASS_base::log( convert.str( ) );
     }
     exchangeBoundary_helper( param[1] );
@@ -1132,11 +1133,12 @@ void Places_base::exchangeBoundary( ) {
 
   if ( thread_ref != 0l ) {
     // we are done with exchangeBoundary
-    int error_code = pthread_join( thread_ref, NULL ); 
+    int error_code = pthread_join( thread_ref, NULL );
     if ( error_code != 0 ) { // if we remove this if-clause, we will get a segmentation fault! Why?
       ostringstream convert;
-      convert << "exchangeBoundary: the main performs pthread_join with the child...error_code = " 
-	      << error_code;
+      convert
+          << "exchangeBoundary: the main performs pthread_join with the child...error_code = "
+          << error_code;
       MASS_base::log( convert.str( ) );
     }
   }
@@ -1149,33 +1151,31 @@ void Places_base::exchangeBoundary( ) {
  */
 void *Places_base::exchangeBoundary_helper( void *param ) {
   // identifiy the boundary space;
-  char direction = ( (int *)param )[0];
-  int handle = ( (int *)param )[1];
-  int places_size = ( (int *)param )[2];
-  int shadow_size = ( (int *)param )[3];
+  char direction = ( (int *) param )[0];
+  int handle = ( (int *) param )[1];
+  int places_size = ( (int *) param )[2];
+  int shadow_size = ( (int *) param )[3];
   DllClass *dllclass = MASS_base::dllMap[handle];
 
   ostringstream convert;
   if ( printOutput == true ) {
-      convert << "Places_base.exchangeBoundary_helper direction = " 
-	      << direction
-	      << ", handle = " << handle
-	      << ", places_size = " << places_size 
-	      << ", shadow_size = " << shadow_size
-	//<< ", outMessage_size = " << outMessage_size
-	      << endl;
+    convert << "Places_base.exchangeBoundary_helper direction = " << direction
+        << ", handle = " << handle << ", places_size = " << places_size
+        << ", shadow_size = " << shadow_size
+        //<< ", outMessage_size = " << outMessage_size
+        << endl;
     MASS_base::log( convert.str( ) );
   }
 
-  Place **boundary = ( direction == 'L' ) ? 
-    dllclass->places : 
-    dllclass->places + ( places_size - shadow_size );
+  Place **boundary =
+      ( direction == 'L' ) ?
+          dllclass->places : dllclass->places + ( places_size - shadow_size );
 
   // allocate a buffer to contain all outMessages in this boundary
   int outMessage_size = boundary[0]->outMessage_size;
   int buffer_size = shadow_size * outMessage_size;
-  char *buffer = (char *)( malloc( buffer_size ) );
-  
+  char *buffer = (char *) ( malloc( buffer_size ) );
+
   // copy all the outMessages into the buffer
   char *pos = buffer; // we shouldn't change the buffer pointer.
   for ( int i = 0; i < shadow_size; i++ ) {
@@ -1185,36 +1185,31 @@ void *Places_base::exchangeBoundary_helper( void *param ) {
 
   if ( printOutput == true ) {
     convert.str( "" );
-    convert << "Places_base.exchangeBoundary_helper direction = " 
-	    << direction
-	    << ", outMessage_size = " << outMessage_size
-	    << endl;
+    convert << "Places_base.exchangeBoundary_helper direction = " << direction
+        << ", outMessage_size = " << outMessage_size << endl;
     pos = buffer;
     for ( int i = 0; i < shadow_size; i++ ) {
-      convert << *(int *)pos << endl;
+      convert << *(int *) pos << endl;
       pos += outMessage_size;
     }
     MASS_base::log( convert.str( ) );
   }
 
   // create a PLACES_EXCHANGE_BOUNDARY_REMOTE_REQUEST message
-  Message *messageToDest = 
-    new Message( Message::PLACES_EXCHANGE_BOUNDARY_REMOTE_REQUEST,
-		 buffer, buffer_size );
+  Message *messageToDest = new Message(
+      Message::PLACES_EXCHANGE_BOUNDARY_REMOTE_REQUEST, buffer, buffer_size );
 
   // compose a PLACES_EXCHANGE_BOUNDARY_REMOTE_REQUEST message
-  int destRank 
-    = ( direction == 'L' ) ? MASS_base::myPid - 1 : MASS_base::myPid + 1;
+  int destRank =
+      ( direction == 'L' ) ? MASS_base::myPid - 1 : MASS_base::myPid + 1;
   struct ExchangeSendMessage rankNmessage;
   rankNmessage.rank = destRank;
   rankNmessage.message = messageToDest;
 
   if ( printOutput == true ) {
     convert.str( "" );
-    convert << "Places_base.exchangeBoundary_helper direction = " 
-	    << direction
-	    << ", rankNmessage.rank = " << rankNmessage.rank
-	    << endl;
+    convert << "Places_base.exchangeBoundary_helper direction = " << direction
+        << ", rankNmessage.rank = " << rankNmessage.rank << endl;
     MASS_base::log( convert.str( ) );
   }
 
@@ -1227,10 +1222,8 @@ void *Places_base::exchangeBoundary_helper( void *param ) {
 
   if ( printOutput == true ) {
     convert.str( "" );
-    convert << "Places_base.exchangeBoundary_helper direction = " 
-	    << direction
-	    << ", messageFromDest = " << messageFromDest
-	    << endl;
+    convert << "Places_base.exchangeBoundary_helper direction = " << direction
+        << ", messageFromDest = " << messageFromDest << endl;
     MASS_base::log( convert.str( ) );
   }
 
@@ -1238,12 +1231,10 @@ void *Places_base::exchangeBoundary_helper( void *param ) {
   if ( thread_ref != 0l ) {
     if ( pthread_join( thread_ref, NULL ) == 0 ) {
       if ( printOutput == true ) {
-	convert.str( "" );
-	convert << "Places_base.exchangeBoundary_helper direction = " 
-		<< direction
-		<< ", sendMessageByChild terminated"
-		<< endl;
-	MASS_base::log( convert.str( ) );
+        convert.str( "" );
+        convert << "Places_base.exchangeBoundary_helper direction = "
+            << direction << ", sendMessageByChild terminated" << endl;
+        MASS_base::log( convert.str( ) );
       }
     }
   }
@@ -1255,9 +1246,9 @@ void *Places_base::exchangeBoundary_helper( void *param ) {
   messageToDest = 0;
 
   // extract the message reeived and copy it to the corresponding shadow.
-  Place **shadow = ( direction == 'L' ) ? 
-    dllclass->left_shadow : dllclass->right_shadow;
-  buffer = (char *)( messageFromDest->getArgumentPointer( ) );
+  Place **shadow =
+      ( direction == 'L' ) ? dllclass->left_shadow : dllclass->right_shadow;
+  buffer = (char *) ( messageFromDest->getArgumentPointer( ) );
 
   // copy the buffer contents into the corresponding shadow
   for ( int i = 0; i < shadow_size; i++ ) {
@@ -1269,16 +1260,13 @@ void *Places_base::exchangeBoundary_helper( void *param ) {
     memcpy( shadow[i]->outMessage, buffer, outMessage_size );
     if ( printOutput == true ) {
       convert.str( "" );
-      convert << "Places_base.exchangeBoundary_helper direction = " 
-	      << direction
-	      << ", shadow[" << i << "]->outMessage = " 
-	      << shadow[i]->outMessage
-	      << ", buffer = " << *(int *)buffer
-	      << endl;
+      convert << "Places_base.exchangeBoundary_helper direction = " << direction
+          << ", shadow[" << i << "]->outMessage = " << shadow[i]->outMessage
+          << ", buffer = " << *(int *) buffer << endl;
       MASS_base::log( convert.str( ) );
     }
     buffer += outMessage_size;
-  }  
+  }
 
   // delete the message received
   // note that messageFromDest->argument is deleted automatically.
@@ -1288,42 +1276,53 @@ void *Places_base::exchangeBoundary_helper( void *param ) {
 }
 
 /**
- * 
- * @param src_index
- * @param offset
- * @param dst_size
- * @param dest_dimension
- * @param dest_index
+ * This method takes the coordinates of a given Place in the simulation and
+ * determines the coordinates of a neighbor, based on the offset values. The
+ * neighbor coordinates are stored within the dest_index argument, which allows
+ * for multi-dimensional array support (e.g. - x, y, and z axis coordinates).
+ * @param src_index       coordinates of source index
+ * @param offset          coordinate offsets from source index
+ * @param dst_size        size of each dimension in simulation space
+ * @param dest_dimension  number of dimensions the destination simulation space
+ *                        contains (likely equivalent to number of dimensions in
+ *                        source simulation)
+ * @param dest_index      storage for the destination index values (can't simply
+ *                        return a single value and easily support
+ *                        multi-dimensional coordinates)
  */
-void Places_base::getGlobalNeighborArrayIndex( vector<int>src_index, 
-					       int offset[],
-					       int dst_size[], 
-					       int dest_dimension,
-					       int dest_index[] ) {
-  for (int i = 0; i < dest_dimension; i++ ) {
+void Places_base::getGlobalNeighborArrayIndex( vector<int> src_index,
+    int offset[], int dst_size[], int dest_dimension, int dest_index[] ) {
+  for ( int i = 0; i < dest_dimension; i++ ) {
     dest_index[i] = src_index[i] + offset[i]; // calculate dest index
 
     if ( dest_index[i] < 0 || dest_index[i] >= dst_size[i] ) {
       // out of range
       for ( int j = 0; j < dest_dimension; j++ ) {
-	// all index must be set -1
-	dest_index[j] = -1;
-	return;
+        // all index must be set -1
+        dest_index[j] = -1;
+        return;
       }
     }
   }
 }
 
 /**
+ * Retrieves the absolute index within the global array of Places in this
+ * simulation. This method will convert the index array passed in, which may
+ * refer to specific locations within a multi-dimensional array, into a single
+ * index value that refers to the same Place within the global (single
+ * dimensional) collection of Places for a simulation.
  * 
- * @param index
- * @param size
- * @param dimension
- * @return 
+ * @param index     multi-dimensional indexes to a specific Place within your
+ *                  Places collection
+ * @param size      sizes for each dimension in your simulation
+ * @param dimension the number of dimensions in your simulation
+ * @return          the global linear index (single dimensional index) to a
+ *                  Place - or, INT_MIN if location does not exist (out of
+ *                  bounds, etc)
  */
-int Places_base::getGlobalLinearIndexFromGlobalArrayIndex( int index[], 
-							   int size[],
-							   int dimension ) {
+int Places_base::getGlobalLinearIndexFromGlobalArrayIndex( int index[],
+    int size[], int dimension ) {
   int retVal = 0;
 
   for ( int i = 0; i < dimension; i++ ) {
@@ -1332,8 +1331,7 @@ int Places_base::getGlobalLinearIndexFromGlobalArrayIndex( int index[],
     if ( index[i] >= 0 && index[i] < size[i] ) {
       retVal = retVal * size[i];
       retVal += index[i];
-    }
-    else
+    } else
       return INT_MIN; // out of space
   }
 
@@ -1358,8 +1356,8 @@ int Places_base::getRankFromGlobalLinearIndex( int globalLinearIndex ) {
   }
 
   int rank, scope;
-  for ( rank = 0, scope = stripe ; rank < MASS_base::systemSize; 
-	rank++, scope += stripe ) {
+  for ( rank = 0, scope = stripe; rank < MASS_base::systemSize; rank++, scope +=
+      stripe ) {
     if ( globalLinearIndex < scope )
       break;
   }

@@ -147,14 +147,15 @@ void Place::addNeighbors(neighborPattern pattern) {
 }
 
 /**
- *
- * @param handle
- * @param offset
- * @param position
- * @param value
+ * Method to store an input message within a given Place of the simulation.
+ * 
+ * @param handle    unique identifier for a set of Places in this simulation
+ * @param offset    relative location of destination (Place) to store input message
+ * @param position  numerical index to place input message (in message array)
+ * @param value     pointer to value to store in message array
  */
-void Place::putInMessage(int handle, int offset[], int position, void *value) {
-    Place *dstPlace = findDstPlace(handle, offset);
+void Place::putInMessage( int handle, int offset[], int position,
+    void *value ) {
 
     // fill out the space if inMessages are empty
     for (int i = 0; i <= position; i++)

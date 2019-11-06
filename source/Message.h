@@ -49,26 +49,28 @@ public:
     PLACES_INITIALIZE, // 3
     PLACES_CALL_ALL_VOID_OBJECT, // 4
     PLACES_CALL_ALL_RETURN_OBJECT, // 5
-    PLACES_CALL_SOME_VOID_OBJECT,
-    PLACES_EXCHANGE_ALL, // 7
-    PLACES_EXCHANGE_ALL_REMOTE_REQUEST, // 8
-    PLACES_EXCHANGE_ALL_REMOTE_RETURN_OBJECT, // 9
-    PLACES_EXCHANGE_BOUNDARY, // 10
-    PLACES_EXCHANGE_BOUNDARY_REMOTE_REQUEST, // 11
+    PLACES_CALL_SOME_VOID_OBJECT, // 6
+    PLACES_CALL_SOME_RETURN_OBJECT, // 7
+    PLACES_EXCHANGE_ALL, // 8
+    PLACES_EXCHANGE_ALL_REMOTE_REQUEST, // 9
+    PLACES_EXCHANGE_ALL_REMOTE_RETURN_OBJECT, // 10
+    PLACES_EXCHANGE_BOUNDARY, // 11
+    PLACES_EXCHANGE_BOUNDARY_REMOTE_REQUEST, // 12
 
-    AGENTS_INITIALIZE, // 12
-    AGENTS_CALL_ALL_VOID_OBJECT, // 13
-    AGENTS_CALL_ALL_RETURN_OBJECT, // 14
-    AGENTS_MANAGE_ALL, // 15
-    AGENTS_MIGRATION_REMOTE_REQUEST // 16
+    AGENTS_INITIALIZE, // 13
+    AGENTS_CALL_ALL_VOID_OBJECT, // 14
+    AGENTS_CALL_ALL_RETURN_OBJECT, // 15
+    AGENTS_MANAGE_ALL, // 16
+    AGENTS_MIGRATION_REMOTE_REQUEST // 17
   };
 
   /**
    * PLACES_INITIALIZE
-   * @param action
+   * @param action          type of action this message is performing
    * @param size
-   * @param handle
-   * @param classname
+   * @param handle          unique identifer that designates a group of places.
+   *                        Must be unique over all machines.
+   * @param classname       name of user-defined class message is targeting
    * @param argument
    * @param arg_size
    * @param boundary_width

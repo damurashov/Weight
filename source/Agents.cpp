@@ -129,10 +129,10 @@ void Agents::callAll(int functionId, void *argument, int arg_size) {
 
 /**
  * Calls the method specified with functionId of all agents as passing
- * arguments[i] to agent[i]’s method, and receives a return value from it
- * into (void *)[i] whose element’s size is return_value. Done in parallel
+ * arguments[i] to agent[i]'s method, and receives a return value from it
+ * into (void *)[i] whose element's size is return_value. Done in parallel
  * among multi-processes/threads. The order of agents depends on the
- * index of a place where they resides, starts from the place[0][0]…[0],
+ * index of a place where they resides, starts from the place[0][0]'[0],
  * and gets increased with the right-most index first and the left-most
  * index last.
  * @param functionId
@@ -250,25 +250,59 @@ void Agents::ma_setup() {
 
         // make sure to delete it
         delete m;
-    }
+        // send it
+        MASS::mNodes[i]->sendMessage(m);
+        if (printOutput == true) {
+            cerr << "AGENTS_CALL_ALL " << m->getAction() << " sent to " << i
+                 << endl;
 
+            cerr << "Bag Size is: " + MASS_base::dllMap[handle]->agents->size();
+        }
+        // make sure to delete it
+        delete m;
+    };
+    Mthread::agentBagSize = MASS_base::dllMap[handle]->agents->size();
+
+    // Check for correct behavior post-Agents_base implementation
     // retrieve the corresponding agents
     MASS_base::currentAgents = this;
-    MASS_base::currentMsgType = Message::AGENTS_MANAGE_ALL;
-    MASS_base::dllMap[handle]->retBag = new vector<Agent *>;
-
+    MASS_base::currentFunctionId = functionId;
+    MASS_base::currentArgument = argument;
+    MASS_base::currentArgSize = arg_size;
+    MASS_base::currentMsgType = type;
+    MASS_base::currentRetSize = ret_size;
+    MASS_base::currentReturns =
+        new char[total *
+                 MASS_base::currentRetSize];  // prepare an entire return space
     // resume threads
-    Mthread::resumeThreads(Mthread::STATUS_MANAGEALL);
+    ostringstream convert;
+
+    if (printOutput == true) {
+        convert << "MASS_base::currentgAgents = " << MASS_base::currentAgents
+                << endl;
+        convert << "MASS_base::getCurrentgAgents = "
+                << MASS_base::getCurrentAgents() << endl;
+        MASS_base::log(convert.str());
+    }
+
+    MASS_base::dllMap[handle]->retBag = new vector<Agent *>;
+    Mthread::resumeThreads(Mthread::STATUS_AGENTSCALLALL);
 
     // callall implementatioin
-    Agents_base::manageAll(0);  // 0 = the main thread id
+    if (type == Message::AGENTS_CALL_ALL_VOID_OBJECT)
+        Agents_base::callAll(functionId, argument,
+                             0);  // 0 = the main thread id
+    else
+        Agents_base::callAll(functionId, (void *)argument, arg_size, ret_size,
+                             0);
 
     // confirm all threads are done with agents.callAll
     Mthread::barrierThreads(0);
-
-    // Synchronized with all slave processes
-    MASS::barrier_all_slaves(localAgents);
     localAgents[0] = localPopulation;
+
+    // Synchronized with all slave processes by main thread.
+    MASS::barrier_all_slaves(MASS_base::currentReturns, 0,
+                             MASS_base::currentRetSize, localAgents);
 
     total = 0;
     for (int i = 0; i < MASS_base::systemSize; i++) {
@@ -278,67 +312,98 @@ void Agents::ma_setup() {
             cerr << "rank[" << i
                  << "]'s local agent population = " << localAgents[i] << endl;
         }
+
+        // retrieve the corresponding agents
+        MASS_base::currentAgents = this;
+        MASS_base::currentMsgType = Message::AGENTS_MANAGE_ALL;
+        MASS_base::dllMap[handle]->retBag = new vector<Agent *>;
+
+        // resume threads
+        Mthread::resumeThreads(Mthread::STATUS_MANAGEALL);
+
+        // callall implementatioin
+        Agents_base::manageAll(0);  // 0 = the main thread id
+
+        // confirm all threads are done with agents.callAll
+        Mthread::barrierThreads(0);
+
+        // Synchronized with all slave processes
+        MASS::barrier_all_slaves(localAgents);
+        localAgents[0] = localPopulation;
+
+        total = 0;
+        for (int i = 0; i < MASS_base::systemSize; i++) {
+            total += localAgents[i];
+            // for debugging
+            if (printOutput == true) {
+                cerr << "rank[" << i
+                     << "]'s local agent population = " << localAgents[i]
+                     << endl;
+            }
+        }
     }
-}
-/**
- *
- * @param  {int} functionId         :
- * @param  {int} numberOfIterations :
- */
-void doAll(int functionId, int numberOfIterations) {
-    for (int i = 0; i < numberOfIterations; i++) {
-        callAll(functionId);
-        manageAll();
-    }
-}
-/**
- * Calls callAll and manageAll functions consecutively without
- * responding back to user application in each iteration.
- *
- * @param functionId : the function id that is executed
- * @param argument : the argument to pass to each Agent
- * @param arg_size : the size of the argument array
- * @param numberOfIterations : number of consecutive calls of
- * callAll() and manageAll() functions
- */
-void *Agents::doAll(int functionId, void *argument, int arg_size,
-                    int numberOfIterations, int ret_size) {
-    void *returnPointer;
-    for (int i = 0; i < numberOfIterations; i++) {
-        returnPointer = callAll(functionId, argument, arg_size, ret_size);
-        manageAll();
-    }
-    return returnPointer;
-}
-/**
- * Calls callAll and manageAll functions consecutively without
- * responding back to user application in each iteration.
- *
- * @param functionIdList : the function id list that is executed
- * @param func_size : the size of the functionIdList array
- * @param argumentList : the arguments to pass to each Agent
- * @param arg_size : the size of the argument array
- * @param numberOfIterations : number of consecutive calls of
- * callAll() and manageAll() functions
- */
-void Agents::doAll(int functionIdList[], int func_size, void *argumentList[],
-                   int arg_size, int numberOfIterations) {
-    for (int i = 0; i < numberOfIterations; i++) {
-        void *argument =
-            (argumentList != NULL && i < func_size) ? argumentList[i] : NULL;
-        for (int j = 0; j < func_size; j++) {
-            callAll(functionIdList[j], argument, arg_size);
+    /**
+     *
+     * @param  {int} functionId         :
+     * @param  {int} numberOfIterations :
+     */
+    void doAll(int functionId, int numberOfIterations) {
+        for (int i = 0; i < numberOfIterations; i++) {
+            callAll(functionId);
             manageAll();
         }
     }
-}
-/**
- * Agents
- *
- * @return {int}  :
- */
-int Agents::nAgents() {
-    int nAgents = 0;
-    for (int i = 0; i < MASS_base::systemSize; i++) nAgents += localAgents[i];
-    return nAgents;
-}
+    /**
+     * Calls callAll and manageAll functions consecutively without
+     * responding back to user application in each iteration.
+     *
+     * @param functionId : the function id that is executed
+     * @param argument : the argument to pass to each Agent
+     * @param arg_size : the size of the argument array
+     * @param numberOfIterations : number of consecutive calls of
+     * callAll() and manageAll() functions
+     */
+    void *Agents::doAll(int functionId, void *argument, int arg_size,
+                        int numberOfIterations, int ret_size) {
+        void *returnPointer;
+        for (int i = 0; i < numberOfIterations; i++) {
+            returnPointer = callAll(functionId, argument, arg_size, ret_size);
+            manageAll();
+        }
+        return returnPointer;
+    }
+    /**
+     * Calls callAll and manageAll functions consecutively without
+     * responding back to user application in each iteration.
+     *
+     * @param functionIdList : the function id list that is executed
+     * @param func_size : the size of the functionIdList array
+     * @param argumentList : the arguments to pass to each Agent
+     * @param arg_size : the size of the argument array
+     * @param numberOfIterations : number of consecutive calls of
+     * callAll() and manageAll() functions
+     */
+    void Agents::doAll(int functionIdList[], int func_size,
+                       void *argumentList[], int arg_size,
+                       int numberOfIterations) {
+        for (int i = 0; i < numberOfIterations; i++) {
+            void *argument = (argumentList != NULL && i < func_size)
+                                 ? argumentList[i]
+                                 : NULL;
+            for (int j = 0; j < func_size; j++) {
+                callAll(functionIdList[j], argument, arg_size);
+                manageAll();
+            }
+        }
+    }
+    /**
+     * Agents
+     *
+     * @return {int}  :
+     */
+    int Agents::nAgents() {
+        int nAgents = 0;
+        for (int i = 0; i < MASS_base::systemSize; i++)
+            nAgents += localAgents[i];
+        return nAgents;
+    }
