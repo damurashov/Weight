@@ -32,15 +32,23 @@ const bool printOutput = true;
 using namespace std;
 
 // Allocate static space
+/**
+ * Reference to Utilities class that MASS can use to manage SSH connection and
+ * launch remote processes
+ */
 Utilities MASS::util;
 vector<MNode *> MASS::mNodes;
 
 /**
  * Involves nProc processes in the same computation and has each
  * process spawn nThr threads.
- * @param args
- * @param nProc
- * @param nThr
+ *
+ * @param args  pointer to the first element in an array of arguments sent to
+ *              MASS. The actual values of these elements correspond to (in
+ *              order): username, password, machineFilePath, and port
+ * @param nProc the number of processes to run simulation on (not including
+ *              master process)
+ * @param nThr  number of Threads to spin up for this instance of MASS
  */
 void MASS::init( char *args[], int nProc, int nThr ) {
   vector<string> hosts;

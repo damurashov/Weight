@@ -57,15 +57,47 @@ class Places_base {
     const string className;
     const int dimension;
 
+    /**
+     * The smallest, valid index present in a given stripe of the simulation
+     * space
+     */
     int lower_boundary;
+
+    /**
+     * The largest, valid index present in a given stripe (any remainders from
+     * stripe calculation will be included in final stripe - may be larger than
+     * other stripes)
+     */
     int upper_boundary;
+
+    /**
+     * The total number of Places that exist within this stripe of the
+     * simulation
+     */
     int places_size;
+
+    /**
+     * Defines the size of each dimension in the simulation space. Intuitively,
+     * size[0], size[1], and size[2] correspond to the size of x, y, and z, or
+     * that of i, j, and k.
+     */
     int *size;
+
+    /**
+     * Function of the simulation size and the boundary_width defined. This
+     * value stores the total number of Place Objects that constitute the shadow
+     * for boundaries (can think of as overlap)
+     */
     int shadow_size;
+
+    /**
+     * Width of any boundaries between stripes in simulation
+     */
     int boundary_width;
 
     void init_all(void *argument, int argument_size);
     vector<int> getGlobalArrayIndex(int singleIndex);
+    vector<int> getGlobalArrayIndex(int index, int dim);
     void getLocalRange(int range[], int tid);
     static void *processRemoteExchangeRequest(void *param);
     void getGlobalNeighborArrayIndex(vector<int> src_index, int offset[],

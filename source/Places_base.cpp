@@ -31,7 +31,9 @@
 //Used to enable or disable output in places
 #ifndef LOGGING
 const bool printOutput = false;
-//const bool printOutput = true;
+#else
+const bool printOutput = true;
+#endif
 
 /**
  * Constructor for Places_base Objects. These Objects encompass the basic
@@ -74,7 +76,9 @@ Places_base::Places_base( int handle, string className, int boundary_width,
 }
 
 /**
- * 
+ * Destructor for core Places_base Objects. Frees dynamic space set up to store
+ * all Places in this stripe, in addition to any shadow Places that may have
+ * been created at runtime for this stripe.
  */
 Places_base::~Places_base( ) {
   // destroy( places ); to be debugged
@@ -94,9 +98,13 @@ Places_base::~Places_base( ) {
 }
 
 /**
+ * Creates the individual Place Objects that live within this stripe - contained
+ * within this Places collection. This method also sets up any shadows across
+ * boundaries in the simulation space - enabling cross boundary communication to
+ * occur during the course of a simulation.
  * 
- * @param argument
- * @param argument_size
+ * @param argument        argument to pass into each Place constructor
+ * @param argument_size   total size of the argument
  */
 void Places_base::init_all( void *argument, int argument_size ) {
   // For debugging
@@ -218,31 +226,74 @@ void Places_base::init_all( void *argument, int argument_size ) {
 }
 
 /**
- * Converts a given plain single index into a multi-dimensional index.
+ * Converts a given plain single index into a multi-dimensional index. This
+ * allows absolute index values that would correspond to a single Place within
+ * the global simulation space (ordering in a one dimensional array) to be
+ * referenced by the actual index, according to the number of dimensions and
+ * size of each dimension in the simulation space.
  *
  * @param singleIndex an index in a plain single dimension that will be
  *                    converted to a multi-dimensional index.
  * @return            a multi-dimensional index
  */
-vector<int> Places_base::getGlobalArrayIndex(int singleIndex) {
-	vector<int> index;            // a multi-dimensional index
-	index.reserve(dimension);
-	vector<int>::iterator iter = index.begin();
-
-	for (int i = dimension - 1; i >= 0; i--) {
-		// calculate from lower dimensions
-		index.insert(iter, 1, singleIndex % size[i]);
-		singleIndex /= size[i];
-	}
-
-	return index;
+vector<int> Places_base::getGlobalArrayIndex( int singleIndex ) {
+  return getGlobalArrayIndex( singleIndex, 0 ); // x-axis based ordering
 }
 
 /**
+ * Converts a given plain single index into a multi-dimensional index. This
+ * allows absolute index values that would correspond to a single Place within
+ * the global simulation space (ordering in a one dimensional array) to be
+ * referenced by the actual index, according to the number of dimensions and
+ * size of each dimension in the simulation space.
+ *
+ * While the other Places_base::getGlobalArrayIndex( int singleIndex) method
+ * assumes that the starting index is based on a flattening algorithm that
+ * assumes first dimension-priority in the global array (e.g. - 'x' dimension is
+ * evaluated first, then 'y' dimension, so that the singleIndex of 4 would
+ * correspond to {4, 0} in a two dimensional array), this method allows the
+ * user to specify the dimension that should take priority.
+ *
+ * @param index       an index into a single dimension ordering of places that
+ *                    will be converted to a multi-dimensional coordinate index
+ * @param dim         the dimension that will take priority in the resulting
+ *                    indexing algorithm. Since dimension numbering is
+ *                    zero-based ('x' dimension is 0), the value of dim should
+ *                    be less than the number of dimensions
+ *                    (Places_base::dimension) in the simulation space. Large
+ *                    values will wrap around, so no out of bounds exception
+ *                    will be thrown, but the result will not match with
+ *                    expectations at runtime (unpredictable)
+ * @return            a multi-dimensional index
+ */
+vector<int> Places_base::getGlobalArrayIndex( int index, int dim ) {
+  vector<int> coords;           // a multi-dimensional coordinate (index)
+  coords.resize( dimension );   // must match size of dimensions in model
+
+  // start at dimension user has indicated and proceed around loop to stop
+  // at dimension value just before the starting point
+  for ( int i = dim; i < dim + ( dimension - 1 ); i++ ) {
+    // calculate from designated dimension
+    coords[i % dimension] = index % size[i % dimension];
+    index /= size[i % dimension];
+  }
+  // assign remainder to dimension value just before the starting point...
+  coords[dim + ( dimension - 1 ) % dimension] = index;
+
+  return coords;
+}
+
+/**
+ * Calls the referenced function, passing along a related argument, at each
+ * Place contained within the simulation space (Places).
  * 
- * @param functionId
- * @param argument
- * @param tid
+ * @param functionId  the id of the function to call at each Place
+ * @param argument    the address (pointer) of an argument to send to
+ *                    the function called at each Place
+ * @param arg_size    the total size of the argument
+ * @param tid         the id of the thread
+ * @return            the address of the address of (pointer to a pointer) the
+ *                    return values stored from each function call
  */
 void Places_base::callAll( int functionId, void *argument, int tid ) {
   int range[2];
@@ -322,47 +373,135 @@ void **Places_base::callAll( int functionId, void *argument, int arg_size,
   return NULL;
 }
 
-/** @brief Returns the first and last of the range that should be allocated
-  *        to a given thread
-  *
-  *  @param[i] tid an id of the thread that calls this function.
-  *  @return an array of two integers: element 0 = the first and 
-  *           element 1 = the last
-*/
-void Places_base::getLocalRange(int range[], int tid) {
+/**
+ * Calls the referenced function, passing along a related argument, at each
+ * Place referenced by this call within the simulation space (Places).
+ *
+ * @param functionId  the id of the function to call at each Place
+ * @param argument    the address (pointer) of an argument to send to
+ *                    the function called at each Place
+ * @param arg_size    the total size of the argument
+ * @param tid         the id of the thread
+ * @return            the address of the address of (pointer to a pointer) the
+ *                    return values stored from each function call
+ */
+void Places_base::callSome( int functionId, void *argument, int tid ) {
+  int range[2];
+  getLocalRange( range, tid );
 
-	int nThreads = MASS_base::threads.size();
-	int portion = places_size / nThreads; // a range to be allocated per thread
-	int remainder = places_size % nThreads;
+  DllClass *dllclass = MASS_base::dllMap[handle];
 
-	if (portion == 0) {
-		// there are more threads than elements in the MASS.Places_based object
-		if (remainder > tid) {
-			range[0] = tid;
-			range[1] = tid;
-		}
-		else {
-			range[0] = -1;
-			range[1] = -1;
-		}
-	}
-	else {
-		// there are more MASS.Places than threads
-		int first = tid * portion;
-		int last = (tid + 1) * portion - 1;
-		if (tid < remainder) {
-			// add in remainders
-			first += tid;
-			last = last + tid + 1; // 1 is one of remainders.
-		}
-		else {
-			// remainders have been assigned to previous threads
-			first += remainder;
-			last += remainder;
-		}
-		range[0] = first;
-		range[1] = last;
-	}
+  // debugging
+  ostringstream convert;
+  if ( printOutput == true ) {
+    convert << "thread[" << tid << "] callSome functionId = " << functionId
+        << ", range[0] = " << range[0] << " range[1] = " << range[1]
+        << ", dllclass = " << (void *) dllclass;
+    MASS_base::log( convert.str( ) );
+  }
+
+  if ( range[0] >= 0 && range[1] >= 0 ) {
+    for ( int i = range[0]; i <= range[1]; i++ ) {
+      if ( printOutput == true ) {
+        convert.str( "" );
+        convert << "thread[" << tid << "]: places[" << i << "] = "
+            << dllclass->places[i] << ", vptr = "
+            << *(int**) ( dllclass->places[i] );
+        MASS_base::log( convert.str( ) );
+      }
+      dllclass->places[i]->callMethod( functionId, argument ); // <-- seg fault
+    }
+  }
+}
+
+/**
+ * Calls the referenced function, passing along a related argument, at each
+ * Place referenced by this call contained within the simulation space (Places).
+ * Any return values generated from individual function calls are stored in an
+ * array, a pointer to the address (pointer to a pointer) of which is returned
+ * as a result of this call.
+ *
+ * @param functionId  the id of the function to call at each Place
+ * @param argument    the address (pointer) of an array of arguments to send to
+ *                    the function called at each Place
+ * @param arg_size    the size (int) of each argument
+ * @param ret_size    the size (int) of each return value
+ * @param tid         the id of the thread
+ * @return            the address of the address of (pointer to a pointer) the
+ *                    return values stored from each function call
+ */
+void **Places_base::callSome( int functionId, void *argument, int arg_size,
+    int ret_size, int tid ) {
+  int range[2];
+  getLocalRange( range, tid );
+
+  // debugging
+  ostringstream convert;
+  if ( printOutput == true ) {
+    convert << "thread[" << tid << "] callAll_return object functionId = "
+        << functionId << ", range[0] = " << range[0] << " range[1] = "
+        << range[1] << ", return_size = " << ret_size;
+    MASS_base::log( convert.str( ) );
+  }
+
+  DllClass *dllclass = MASS_base::dllMap[handle];
+  char *return_values = MASS_base::currentReturns + range[0] * ret_size;
+  if ( range[0] >= 0 && range[1] >= 0 ) {
+    for ( int i = range[0]; i <= range[1]; i++ ) {
+      if ( printOutput == true ) {
+        convert.str( "" );
+        convert << "thread[" << tid << "]: places[i] = " << dllclass->places[i];
+        MASS_base::log( convert.str( ) );
+      }
+      memcpy( (void *) return_values,
+          dllclass->places[i]->callMethod( functionId,
+              (char *) argument + arg_size * i ), ret_size );
+      return_values += ret_size;
+    }
+  }
+
+  return NULL;
+}
+
+/**
+ * Returns the first and last of the range that should be allocated to a given
+ * thread.
+ *
+ * @param  tid  an id of the thread that calls this function
+ * @return      an array of two integers: element 0 = the first and element 1 =
+ *              the last
+ */
+void Places_base::getLocalRange( int range[], int tid ) {
+
+  int nThreads = MASS_base::threads.size( );
+  int portion = places_size / nThreads; // a range to be allocated per thread
+  int remainder = places_size % nThreads;
+
+  if ( portion == 0 ) {
+    // there are more threads than elements in the MASS.Places_base object
+    if ( remainder > tid ) {
+      range[0] = tid;
+      range[1] = tid;
+    } else {
+      range[0] = -1;
+      range[1] = -1;
+    }
+  } else {
+    // there are more MASS.Places than threads
+    int first = tid * portion;
+    int last = ( tid + 1 ) * portion - 1;
+    if ( tid < remainder ) {
+      // add in remainders
+      first += tid;
+      last = last + tid + 1; // 1 is one of remainders.
+    } else {
+      // remainders have been assigned to previous threads
+      first += remainder;
+      last += remainder;
+    }
+    range[0] = first;
+    range[1] = last;
+  }
 }
 
 void Places_base::exchangeAll(Places_base *dstPlaces, int functionId,
@@ -1339,9 +1478,11 @@ int Places_base::getGlobalLinearIndexFromGlobalArrayIndex( int index[],
 }
 
 /**
+ * This method returns the rank of the node that contains the Place indicated
+ * by the index passed in (globalLinearIndex).
  * 
- * @param globalLinearIndex
- * @return 
+ * @param globalLinearIndex the absolute, single-dimensional index of a Place
+ * @return                  the rank of the node that contains this Place
  */
 int Places_base::getRankFromGlobalLinearIndex( int globalLinearIndex ) {
   static int total = 0;

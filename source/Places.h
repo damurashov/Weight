@@ -47,11 +47,11 @@ public:
   void callAll( int functionId );
   void callAll( int functionId, void *argument, int arg_size );
   void *callAll( int functionId, void *argument[], int arg_size, int ret_size );
-  void callSome( int functionId, int dim, int index[] );
+  void callSome( int functionId, int dim, int index[], int numPlaces );
   void callSome( int functionId, void *arguments[], int arg_size, int dim,
-      int index[] );
+      int index[], int numPlaces );
   void *callSome( int functionId, void *arguments[], int arg_size, int ret_size,
-      int dim, int index[] );
+      int dim, int index[], int numPlaces );
   void exchangeAll( int dest_handle, int functionId,
       vector<int*> *destinations );
   void exchangeBoundary( );
@@ -61,7 +61,7 @@ private:
   void *ca_setup( int functionId, void *argument, int arg_size, int ret_size,
       Message::ACTION_TYPE type );
   void *cs_setup( int functionId, void *arguments, int arg_size, int ret_size,
-      int dim, int index[], Message::ACTION_TYPE type );
+      int dim, int index[], int numPlaces, Message::ACTION_TYPE type );
 };
 
 #endif

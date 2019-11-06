@@ -680,6 +680,132 @@ bool Agents_base::agentKilled(int tid, Agent *evaluationAgent) {
 	}
 	return false; // should not be killed.
 }
+void *Agents_base::processAgentMigrationRequest( void *param ) {
+  int destRank = ( (int *) param )[0];
+  int agentHandle = ( (int *) param )[1];
+  int placeHandle = ( (int *) param )[2];
+  //  int my_lower_boundary = ( (int *)param )[3];
+
+  vector<AgentMigrationRequest*>* orgRequest = NULL;
+  ostringstream convert;
+
+  if ( printOutput == true ) {
+    convert.str( "" );
+    convert << "pthread_self[" << pthread_self( ) << "] rank[" << destRank
+        << "]: starts processAgentMigrationRequest";
+    MASS_base::log( convert.str( ) );
+  }
+
+  // pick up the next rank to process
+  orgRequest = MASS_base::migrationRequests[destRank];
+
+  // for debugging
+  pthread_mutex_lock( &MASS_base::request_lock );
+  if ( printOutput == true ) {
+    convert.str( "" );
+    convert << "tid[" << destRank << "] sends an exhange request to rank: "
+        << destRank << " size() = " << orgRequest->size( ) << endl;
+    MASS_base::log( convert.str( ) );
+
+    convert.str( "" );
+    for ( int i = 0; i < int( orgRequest->size( ) ); i++ ) {
+      convert << "send " << ( *orgRequest )[i]->agent << " to "
+          << ( *orgRequest )[i]->destGlobalLinearIndex << endl;
+    }
+    MASS_base::log( convert.str( ) );
+  }
+  pthread_mutex_unlock( &MASS_base::request_lock );
+
+  // now compose and send a message by a child
+  Message messageToDest( Message::AGENTS_MIGRATION_REMOTE_REQUEST, agentHandle,
+      placeHandle, orgRequest );
+
+  if ( printOutput == true ) {
+    convert.str( "" );
+    convert << "tid[" << destRank << "] made messageToDest to rank: "
+        << destRank;
+    MASS_base::log( convert.str( ) );
+  }
+
+  struct MigrationSendMessage rankNmessage;
+  rankNmessage.rank = destRank;
+  rankNmessage.message = &messageToDest;
+  pthread_t thread_ref;
+  pthread_create( &thread_ref, NULL, sendMessageByChild, &rankNmessage );
+
+  // receive a message by myself
+  Message *messageFromSrc = MASS_base::exchange.receiveMessage( destRank );
+
+  // at this point, the message must be exchanged.
+  pthread_join( thread_ref, NULL );
+
+  if ( printOutput == true ) {
+    convert.str( "" );
+    convert << "pthread id = " << thread_ref
+        << "pthread_join completed for rank[" << destRank
+        << "] and will delete messageToDest: " << &messageToDest;
+    MASS_base::log( convert.str( ) );
+
+    convert.str( "" );
+    convert << "Message Deleted";
+    MASS_base::log( convert.str( ) );
+  }
+
+  // process a message
+  vector<AgentMigrationRequest*>* receivedRequest =
+      messageFromSrc->getMigrationReqList( );
+
+  int agentsHandle = messageFromSrc->getHandle( );
+  int placesHandle = messageFromSrc->getDestHandle( );
+  Places_base *dstPlaces = MASS_base::placesMap[placesHandle];
+  DllClass *agents_dllclass = MASS_base::dllMap[agentsHandle];
+  DllClass *places_dllclass = MASS_base::dllMap[placesHandle];
+
+  if ( printOutput == true ) {
+    convert.str( "" );
+    convert << "request from rank[" << destRank << "] = " << receivedRequest;
+    convert << " size( ) = " << receivedRequest->size( );
+    MASS_base::log( convert.str( ) );
+  }
+
+  // retrieve agents from receiveRequest
+  while ( receivedRequest->size( ) > 0 ) {
+    AgentMigrationRequest *request = receivedRequest->back( );
+    receivedRequest->pop_back( );
+    int globalLinearIndex = request->destGlobalLinearIndex;
+    Agent *agent = request->agent;
+
+    // local destination
+    int destinationLocalLinearIndex = globalLinearIndex
+        - dstPlaces->lower_boundary;
+
+    if ( printOutput == true ) {
+      convert << " dstLocal = " << destinationLocalLinearIndex << endl;
+    }
+
+    Place *dstPlace =
+        (Place *) ( places_dllclass->places[destinationLocalLinearIndex] );
+
+    // push this agent into the place and the entire agent bag.
+    agent->place = dstPlace;
+    agent->index = dstPlace->index;
+    pthread_mutex_lock( &MASS_base::request_lock );
+    dstPlace->agents.push_back( agent );
+    agents_dllclass->agents->push_back( agent );
+    pthread_mutex_unlock( &MASS_base::request_lock );
+
+    delete request;
+  }
+
+  if ( printOutput == true ) {
+    convert.str( "" );
+    convert << "pthread_self[" << pthread_self( )
+        << "] retreive agents from rank[" << destRank << "]complated";
+    MASS_base::log( convert.str( ) );
+  }
+  pthread_exit( NULL );
+  return NULL;
+}
 
 /**
  * Moves a given agent to a new place. It is called from manageAl( ) for original

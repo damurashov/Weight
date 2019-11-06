@@ -28,14 +28,19 @@
 
 class Mthread {
 public:
-	enum STATUS_TYPE {
-		STATUS_READY,          // 0
-		STATUS_TERMINATE,      // 1
-		STATUS_CALLALL,        // 2
-		STATUS_EXCHANGEALL,    // 3
-		STATUS_AGENTSCALLALL,  // 4
-		STATUS_MANAGEALL	    // 5
-	};
+
+  /**
+   * Status Type
+   * A list of possible statuses
+   */
+  enum STATUS_TYPE {
+    STATUS_READY,         // 0
+    STATUS_TERMINATE,     // 1
+    STATUS_CALLALL,       // 2
+    STATUS_EXCHANGEALL,   // 3
+    STATUS_AGENTSCALLALL, // 4
+    STATUS_MANAGEALL      // 5
+  };
 
 	static void init();
 	static void *run(void *param);

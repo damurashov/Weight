@@ -30,15 +30,23 @@
  * Returns the size of the matrix that consists of application-specific
  * places. Intuitively, size[0], size[1], and size[2] correspond to the size
  * of x, y, and z, or that of i, j, and k.
- * @return
+ *
+ * @return  a collection of sizes that correspond to each dimension in the
+ *          simulation space
  */
 vector<int> Place::getSizeVect() { return size; }
 
 /**
- *
- * @param handle
- * @param offset
- * @return
+ * Method to retrieve the location (pointer) of a Place within the simulation.
+ * The Place returned will exist relative to the Place represented by this
+ * Object, using the 'handle' to ensure that they both live within the same
+ * simulation space, and the value(s) passed as offset to determine the relative
+ * location of the Place to retrieve.
+ * 
+ * @param handle  unique identifier for a set of Places in this simulation
+ * @param offset  relative location of destination (Place) to retrieve output
+ *                message from
+ * @return        pointer to output message for this Place, else NULL
  */
 Place *Place::findDstPlace(int handle, int offset[]) {
     // compute the global linear index from offset[]
