@@ -1,6 +1,8 @@
 #!/bin/sh
 
-export MASS_DIR=/net/metis/home3/dslab/MASS/c++
+#export MASS_DIR=/net/metis/home3/dslab/MASS/c++
+
+export MASS_DIR=../..
 
 g++ -Wall Nomad.cpp -I$MASS_DIR/source -shared -fPIC -o Nomad
 g++ -Wall Land.cpp -I$MASS_DIR/source -shared -fPIC -o Land

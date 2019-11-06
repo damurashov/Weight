@@ -1,0 +1,10 @@
+diff a/ubuntu/Makefile b/ubuntu/Makefile	(rejected hunks)
+@@ -15,7 +15,7 @@
+ SOURCE=../source
+ 
+ all:  $(TARGET) $(LIBMASS) $(MPROCESS) $(WAVE2D) $(NOMAD)
+-	rm *.o
++	rm -f *.o
+ 
+ $(TARGET): main.o $(LIBMASS) 
+ 	$(CC) main.o -L. -lmass -L$(libdir) -lssh2 -o $@ # main

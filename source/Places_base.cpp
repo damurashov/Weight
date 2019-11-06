@@ -1,3 +1,25 @@
+/*
+ MASS C++ Software License
+ © 2014-2015 University of Washington
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+ The above copyright notice and this permission notice shall be included in
+ all copies or substantial portions of the Software.
+ The following acknowledgment shall be used where appropriate in publications, presentations, etc.:
+ © 2014-2015 University of Washington. MASS was developed by Computing and Software Systems at University of Washington Bothell.
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ THE SOFTWARE.
+ */
+
 #include "Places_base.h"
 #include "MASS_base.h"
 #include "Message.h"
@@ -7,6 +29,7 @@
 #include <sstream> // ostringstream
 
 //Used to enable or disable output in places
+#ifndef LOGGING
 const bool printOutput = false;
 //const bool printOutput = true;
 
@@ -57,15 +80,15 @@ Places_base::~Places_base( ) {
   for ( int i = 0; i < places_size; i++ )
     dllclass->destroy( dllclass->places[i] );
 
-  if ( dllclass->left_shadow != NULL )
-    for ( int i = 0; i < shadow_size; i++ )
-      dllclass->destroy( dllclass->left_shadow[i] );
+	if (dllclass->left_shadow != NULL)
+		for (int i = 0; i < shadow_size; i++)
+			dllclass->destroy(dllclass->left_shadow[i]);
 
-  if ( dllclass->right_shadow != NULL )
-    for ( int i = 0; i < shadow_size; i++ )
-      dllclass->destroy( dllclass->right_shadow[i] );
+	if (dllclass->right_shadow != NULL)
+		for (int i = 0; i < shadow_size; i++)
+			dllclass->destroy(dllclass->right_shadow[i]);
 
-  dlclose( dllclass->stub );
+	dlclose(dllclass->stub);
 }
 
 /**
@@ -198,18 +221,18 @@ void Places_base::init_all( void *argument, int argument_size ) {
    *                        converted in a multi-dimensional index.
    * @return a multi-dimensional index			   
  */
-vector<int> Places_base::getGlobalArrayIndex( int singleIndex ) {
-  vector<int> index;            // a multi-dimensional index
-  index.reserve( dimension );
-  vector<int>::iterator iter = index.begin();
+vector<int> Places_base::getGlobalArrayIndex(int singleIndex) {
+	vector<int> index;            // a multi-dimensional index
+	index.reserve(dimension);
+	vector<int>::iterator iter = index.begin();
 
-  for ( int i = dimension - 1; i >= 0; i-- ) { 
-    // calculate from lower dimensions
-    index.insert( iter, 1, singleIndex % size[i] );
-    singleIndex /= size[i];
-  }
+	for (int i = dimension - 1; i >= 0; i--) {
+		// calculate from lower dimensions
+		index.insert(iter, 1, singleIndex % size[i]);
+		singleIndex /= size[i];
+	}
 
-  return index;
+	return index;
 }
 
 /**
@@ -222,29 +245,29 @@ void Places_base::callAll( int functionId, void *argument, int tid ) {
   int range[2];
   getLocalRange( range, tid );
 
-  DllClass *dllclass = MASS_base::dllMap[ handle ];
+	DllClass *dllclass = MASS_base::dllMap[handle];
 
-  // debugging
-  ostringstream convert;
-  if ( printOutput == true ) {
-    convert << "thread[" << tid << "] callAll functionId = " << functionId
-	    << ", range[0] = " << range[0] << " range[1] = " << range[1]
-	    << ", dllclass = " << (void *)dllclass;
-    MASS_base::log( convert.str( ) );
-  }
+	// debugging
+	ostringstream convert;
+	if (printOutput == true) {
+		convert << "thread[" << tid << "] callAll functionId = " << functionId
+			<< ", range[0] = " << range[0] << " range[1] = " << range[1]
+			<< ", dllclass = " << (void *)dllclass;
+		MASS_base::log(convert.str());
+	}
 
-  if ( range[0] >= 0 && range[1] >= 0 ) {
-    for ( int i = range[0]; i <= range[1]; i++ ) {
-      if ( printOutput == true ) {
-	convert.str( "" );
-	convert << "thread[" << tid << "]: places[" << i 
-		<< "] = " << dllclass->places[i] 
-		<< ", vptr = " << *(int**)(dllclass->places[i]);
-	MASS_base::log( convert.str( ) );
-      }
-      dllclass->places[i]->callMethod( functionId, argument ); // <-- seg fault
-    }
-  }
+	if (range[0] >= 0 && range[1] >= 0) {
+		for (int i = range[0]; i <= range[1]; i++) {
+			if (printOutput == true) {
+				convert.str("");
+				convert << "thread[" << tid << "]: places[" << i
+					<< "] = " << dllclass->places[i]
+					<< ", vptr = " << *(int**)(dllclass->places[i]);
+				MASS_base::log(convert.str());
+			}
+			dllclass->places[i]->callMethod(functionId, argument); // <-- seg fault
+		}
+	}
 }
 
 /**
@@ -297,42 +320,246 @@ void **Places_base::callAll( int functionId, void *argument,
   *  @return an array of two integers: element 0 = the first and 
   *           element 1 = the last
 */
-void Places_base::getLocalRange( int range[], int tid ) {
+void Places_base::getLocalRange(int range[], int tid) {
 
-  int nThreads = MASS_base::threads.size( );
-  int portion = places_size / nThreads; // a range to be allocated per thread
-  int remainder = places_size % nThreads;
+	int nThreads = MASS_base::threads.size();
+	int portion = places_size / nThreads; // a range to be allocated per thread
+	int remainder = places_size % nThreads;
 
-  if ( portion == 0 ) {
-    // there are more threads than elements in the MASS.Places_based object
-    if ( remainder > tid ) {
-      range[0] = tid;
-      range[1] = tid;
-    }
-    else {
-      range[0] = -1;
-      range[1] = -1;
-    }
-  }
-  else {
-    // there are more MASS.Places than threads
-    int first = tid * portion;
-    int last = ( tid + 1 ) * portion - 1;
-    if ( tid < remainder ) {
-      // add in remainders
-      first += tid;
-      last = last + tid + 1; // 1 is one of remainders.
-    }
-    else {
-      // remainders have been assigned to previous threads
-      first += remainder;
-      last += remainder;
-    }
-    range[0] = first;
-    range[1] = last;
-  }
+	if (portion == 0) {
+		// there are more threads than elements in the MASS.Places_based object
+		if (remainder > tid) {
+			range[0] = tid;
+			range[1] = tid;
+		}
+		else {
+			range[0] = -1;
+			range[1] = -1;
+		}
+	}
+	else {
+		// there are more MASS.Places than threads
+		int first = tid * portion;
+		int last = (tid + 1) * portion - 1;
+		if (tid < remainder) {
+			// add in remainders
+			first += tid;
+			last = last + tid + 1; // 1 is one of remainders.
+		}
+		else {
+			// remainders have been assigned to previous threads
+			first += remainder;
+			last += remainder;
+		}
+		range[0] = first;
+		range[1] = last;
+	}
 }
 
+void Places_base::exchangeAll(Places_base *dstPlaces, int functionId,
+	vector<int*> *destinations, int tid) {
+	int range[2];
+	getLocalRange(range, tid);
+	ostringstream convert;
+	// debugging
+	if (printOutput == true) {
+		convert << "thread[" << tid << "] exchangeAll functionId = " << functionId
+			<< ", range[0] = " << range[0] << " range[1] = " << range[1];
+		MASS_base::log(convert.str());
+	}
+
+	DllClass *src_dllclass = MASS_base::dllMap[handle];
+	DllClass *dst_dllclass = MASS_base::dllMap[dstPlaces->handle];
+
+	if (printOutput == true) {
+		convert.str("");
+		convert << "tid[" << tid << "]: checks destinations:";
+		for (int i = 0; i < int(destinations->size()); i++) {
+			int *offset = (*destinations)[i];
+			convert << "[" << offset[0]
+				<< "][" << offset[1] << "]  ";
+		}
+		MASS_base::log(convert.str());
+	}
+	// now scan all places within range[0] ~ range[1]
+	if (range[0] >= 0 && range[1] >= 0) {
+		for (int i = range[0]; i <= range[1]; i++) {
+			// for each place
+			Place *srcPlace = (Place *)(src_dllclass->places[i]);
+
+			// check its neighbors
+			for (int j = 0; j < int(destinations->size()); j++) {
+
+				// for each neighbor
+				int *offset = (*destinations)[j];
+				int neighborCoord[dstPlaces->dimension];
+
+				// compute its coordinate
+				getGlobalNeighborArrayIndex(srcPlace->index, offset, dstPlaces->size,
+					dstPlaces->dimension, neighborCoord);
+				if (printOutput == true) {
+					convert.str("");
+					convert << "tid[" << tid << "]: calls from"
+						<< "[" << srcPlace->index[0]
+						<< "][" << srcPlace->index[1] << "]"
+						<< " (neighborCord[" << neighborCoord[0]
+						<< "][" << neighborCoord[1] << "]"
+						<< " dstPlaces->size[" << dstPlaces->size[0]
+						<< "][" << dstPlaces->size[1] << "]";
+				}
+				if (neighborCoord[0] != -1) {
+					// destination valid
+					int globalLinearIndex =
+						getGlobalLinearIndexFromGlobalArrayIndex(neighborCoord,
+							dstPlaces->size,
+							dstPlaces->dimension);
+					if (printOutput == true) {
+						convert << " linear = " << globalLinearIndex
+							<< " lower = " << dstPlaces->lower_boundary
+							<< " upper = " << dstPlaces->upper_boundary << ")";
+					}
+
+					if (globalLinearIndex >= dstPlaces->lower_boundary &&
+						globalLinearIndex <= dstPlaces->upper_boundary) {
+						// local destination
+						int destinationLocalLinearIndex
+							= globalLinearIndex - dstPlaces->lower_boundary;
+						Place *dstPlace =
+							(Place *)(dst_dllclass->places[destinationLocalLinearIndex]);
+
+						if (printOutput == true) {
+							convert << " to [" << dstPlace->index[0]
+								<< "][" << dstPlace->index[1] << "]";
+						}
+						// call the destination function
+						void *inMessage = dstPlace->callMethod(functionId,
+							srcPlace->outMessage);
+
+						// store this inMessage: 
+						// note that callMethod must return a dynamic memory space
+						srcPlace->inMessages.push_back(inMessage);
+
+						// for debug
+						if (printOutput == true) {
+							convert << " inMessage = "
+								<< *(int *)(srcPlace->inMessages.back());
+						}
+					}
+					else {
+						// remote destination
+
+						// find the destination node
+						int destRank
+							= getRankFromGlobalLinearIndex(globalLinearIndex);
+
+						// create a request
+						int orgGlobalLinearIndex =
+							getGlobalLinearIndexFromGlobalArrayIndex(&(srcPlace->index[0]),
+								size,
+								dimension);
+						RemoteExchangeRequest *request
+							= new RemoteExchangeRequest(globalLinearIndex,
+								orgGlobalLinearIndex,
+								j, // inMsgIndex
+								srcPlace->inMessage_size,
+								srcPlace->outMessage,
+								srcPlace->outMessage_size,
+								false);
+
+						// enqueue the request to this node.map
+						pthread_mutex_lock(&MASS_base::request_lock);
+						MASS_base::remoteRequests[destRank]->push_back(request);
+
+						if (printOutput == true) {
+							convert.str("");
+							convert << "remoteRequest[" << destRank << "]->push_back:"
+								<< " org = " << orgGlobalLinearIndex
+								<< " dst = " << globalLinearIndex
+								<< " size( ) = "
+								<< MASS_base::remoteRequests[destRank]->size();
+							MASS_base::log(convert.str());
+						}
+						pthread_mutex_unlock(&MASS_base::request_lock);
+					}
+				}
+				else {
+					if (printOutput == true)
+						convert << " to destination invalid";
+				}
+				if (printOutput == true) {
+					MASS_base::log(convert.str());
+				}
+			}
+		}
+	}
+
+	// all threads must barrier synchronize here.
+	Mthread::barrierThreads(tid);
+	if (tid == 0) {
+
+		if (printOutput == true) {
+			convert.str("");
+			convert << "tid[" << tid << "] now enters processRemoteExchangeRequest";
+			MASS_base::log(convert.str());
+		}
+		// the main thread spawns as many communication threads as the number of
+		// remote computing nodes and let each invoke processRemoteExchangeReq.
+
+		// args to threads: rank, srcHandle, dstHandle, functionId, lower_boundary
+		int comThrArgs[MASS_base::systemSize][5];
+		pthread_t thread_ref[MASS_base::systemSize]; // communication thread id
+		for (int rank = 0; rank < MASS_base::systemSize; rank++) {
+
+			if (rank == MASS_base::myPid) // don't communicate with myself
+				continue;
+
+			// set arguments 
+			comThrArgs[rank][0] = rank;
+			comThrArgs[rank][1] = handle;
+			comThrArgs[rank][2] = dstPlaces->handle;
+			comThrArgs[rank][3] = functionId;
+			comThrArgs[rank][4] = lower_boundary;
+
+			// start a communication thread
+			if (pthread_create(&thread_ref[rank], NULL,
+				Places_base::processRemoteExchangeRequest,
+				comThrArgs[rank]) != 0) {
+				MASS_base::log("Places_base.exchangeAll: failed in pthread_create");
+				exit(-1);
+			}
+		}
+
+		// wait for all the communication threads to be terminated
+		for (int rank = 0; rank < MASS_base::systemSize; rank++) {
+			if (rank == MASS_base::myPid) // don't communicate with myself
+				continue;
+			pthread_join(thread_ref[rank], NULL);
+		}
+	}
+	else {
+		if (printOutput == true) {
+			convert.str("");
+			convert << "tid[" << tid << "] skips processRemoteExchangeRequest";
+			MASS_base::log(convert.str());
+		}
+	}
+
+}
+/** 
+ * exchangeAll for neighbors functionality, exactly the same as above except it 
+ * references each place's neighbor vector instead of a static destination vector
+ */
+void Places_base::exchangeAll(Places_base *dstPlaces, int functionId, int tid){
+	int range[2];
+	getLocalRange(range, tid);
+	ostringstream convert;
+	// debugging
+	if (printOutput == true) {
+		convert << "thread[" << tid << "] exchangeAll functionId = " << functionId
+			<< ", range[0] = " << range[0] << " range[1] = " << range[1];
+		MASS_base::log(convert.str());
+	}
+}
 /**
  * 
  * @param dstPlaces
@@ -526,7 +753,125 @@ void Places_base::exchangeAll( Places_base *dstPlaces, int functionId,
     }
   }
 
+	// all threads must barrier synchronize here.
+	Mthread::barrierThreads(tid);
+	if (tid == 0) {
+
+		if (printOutput == true) {
+			convert.str("");
+			convert << "tid[" << tid << "] now enters processRemoteExchangeRequest";
+			MASS_base::log(convert.str());
+		}
+		// the main thread spawns as many communication threads as the number of
+		// remote computing nodes and let each invoke processRemoteExchangeReq.
+
+		// args to threads: rank, srcHandle, dstHandle, functionId, lower_boundary
+		int comThrArgs[MASS_base::systemSize][5];
+		pthread_t thread_ref[MASS_base::systemSize]; // communication thread id
+		for (int rank = 0; rank < MASS_base::systemSize; rank++) {
+
+			if (rank == MASS_base::myPid) // don't communicate with myself
+				continue;
+
+			// set arguments 
+			comThrArgs[rank][0] = rank;
+			comThrArgs[rank][1] = handle;
+			comThrArgs[rank][2] = dstPlaces->handle;
+			comThrArgs[rank][3] = functionId;
+			comThrArgs[rank][4] = lower_boundary;
+
+			// start a communication thread
+			if (pthread_create(&thread_ref[rank], NULL,
+				Places_base::processRemoteExchangeRequest,
+				comThrArgs[rank]) != 0) {
+				MASS_base::log("Places_base.exchangeAll: failed in pthread_create");
+				exit(-1);
+			}
+		}
+
+		// wait for all the communication threads to be terminated
+		for (int rank = 0; rank < MASS_base::systemSize; rank++) {
+			if (rank == MASS_base::myPid) // don't communicate with myself
+				continue;
+			pthread_join(thread_ref[rank], NULL);
+		}
+	}
+	else {
+		if (printOutput == true) {
+			convert.str("");
+			convert << "tid[" << tid << "] skips processRemoteExchangeRequest";
+			MASS_base::log(convert.str());
+		}
+	}
 }
+void *Places_base::processRemoteExchangeRequest(void *param) {
+	int destRank = ((int *)param)[0];
+	int srcHandle = ((int *)param)[1];
+	int destHandle_at_src = ((int *)param)[2];
+	int functionId = ((int *)param)[3];
+	int my_lower_boundary = ((int *)param)[4];
+
+	vector<RemoteExchangeRequest*>* orgRequest = NULL;
+	ostringstream convert;
+
+	if (printOutput == true) {
+		convert.str("");
+		convert << "rank[" << destRank << "]: starts processRemoteExchangeRequest";
+		MASS_base::log(convert.str());
+	}
+	// pick up the next rank to process
+	orgRequest = MASS_base::remoteRequests[destRank];
+
+	// for debugging
+	pthread_mutex_lock(&MASS_base::request_lock);
+
+	if (printOutput == true) {
+		convert.str("");
+		convert << "tid[" << destRank << "] sends an exhange request to rank: "
+			<< destRank << " size() = " << orgRequest->size() << endl;
+		for (int i = 0; i < int(orgRequest->size()); i++) {
+			convert << "send from "
+				<< (*orgRequest)[i]->orgGlobalLinearIndex << " to "
+				<< (*orgRequest)[i]->destGlobalLinearIndex << " at "
+				<< (*orgRequest)[i]->inMessageIndex << " inMsgSize: "
+				<< (*orgRequest)[i]->inMessageSize << " outMsgSize: "
+				<< (*orgRequest)[i]->outMessageSize << endl;
+		}
+		MASS_base::log(convert.str());
+	}
+	pthread_mutex_unlock(&MASS_base::request_lock);
+
+	// now compose and send a message by a child
+	Message *messageToDest
+		= new Message(Message::PLACES_EXCHANGE_ALL_REMOTE_REQUEST,
+			srcHandle, destHandle_at_src, functionId, orgRequest);
+
+	struct ExchangeSendMessage rankNmessage;
+	rankNmessage.rank = destRank;
+	rankNmessage.message = messageToDest;
+	pthread_t thread_ref;
+	pthread_create(&thread_ref, NULL, sendMessageByChild, &rankNmessage);
+
+	// receive a message by myself
+	Message *messageFromSrc = MASS_base::exchange.receiveMessage(destRank);
+
+	// at this point, 
+	// at this point, the message must be exchanged.
+	pthread_join(thread_ref, NULL);
+
+	// process a message
+	vector<RemoteExchangeRequest*>* receivedRequest
+		= messageFromSrc->getExchangeReqList();
+
+	int destHandle_at_dst = messageFromSrc->getDestHandle();
+	Places_base *dstPlaces = MASS_base::placesMap[destHandle_at_dst];
+	DllClass *dst_dllclass = MASS_base::dllMap[destHandle_at_dst];
+
+	if (printOutput == true) {
+		convert.str("");
+		convert << "request from rank[" << destRank << "] = " << receivedRequest;
+		convert << " size( ) = " << receivedRequest->size();
+	}
 
 /**
  * 

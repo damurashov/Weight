@@ -1,9 +1,32 @@
+/*
+ MASS C++ Software License
+ © 2014-2015 University of Washington
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+ The above copyright notice and this permission notice shall be included in
+ all copies or substantial portions of the Software.
+ The following acknowledgment shall be used where appropriate in publications, presentations, etc.:
+ © 2014-2015 University of Washington. MASS was developed by Computing and Software Systems at University of Washington Bothell.
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ THE SOFTWARE.
+ */
+
 #include "Message.h"
 #include "MASS_base.h"
 #include <iostream>
 #include <sstream>   // ostringstream
 
 //Used to toggle output in Messages
+#ifndef LOGGING
 const bool printOutput = false;
 //const bool printOutput = true;
 
@@ -605,102 +628,323 @@ void Message::deserialize( char *msg, int msg_size ) {
             MASS_base::log( convert.str() );
 	}
 
-	memcpy( agent->migratableData, (void *)cur,
-		agent->migratableDataSize );
+	switch (*(ACTION_TYPE *)cur) {
+	case EMPTY:
+		action = EMPTY;
+		return;
+	case ACK:
+		if (printOutput == true) {
+			convert.str("");
+			convert << *(int *)cur << " ";
+		}
 
-	if(printOutput == true)
-	    MASS_base::log( "C" );
+		action = ACK; cur += sizeof(ACTION_TYPE);
 
-	cur += agent->migratableDataSize;
+		if (printOutput == true) {
+			convert << *(int *)cur << " ";
+		}
 
-	if(printOutput == true)
-	    MASS_base::log( "D" );
-      }
+		agent_population = *(int *)cur; cur += sizeof(int); // agent_population
 
-      if(printOutput == true){
-          convert.str( "" );
-          convert << "Deserialize: agentId(" << agent << ")[" << agent->agentId << "] migratableData = "
-	          << agent->migratableData;
-          MASS_base::log( convert.str() );
-      }
+		if (printOutput == true) {
+			convert << "coming agent_pouplation = " << agent_population;
+			MASS_base::log(convert.str());
+		}
 
-      request = new AgentMigrationRequest( destIndex, agent );
-      migrationReqList->push_back( request );
-    }
+		if (msg_size > int(sizeof(ACTION_TYPE) + sizeof(int))) {
+			argument_size = *(int *)cur; cur += sizeof(int); // argument_size
+			argument_in_heap = ((argument = new char[argument_size]) != NULL);
+			/*
+			convert.str( "" ); convert << "argument_size = " << argument_size;
+			MASS_base::log( convert.str( ) );
+			*/
+			memcpy(argument, (void *)cur, argument_size);     // argument
+			cur += argument_size;
+		}
+		if (printOutput == true)
+			cerr << "deserialize completed" << endl;
+		return;
 
-    return;
+	case PLACES_INITIALIZE:
+		action = PLACES_INITIALIZE; cur += sizeof(ACTION_TYPE);
+		size_size = *(int *)cur; cur += sizeof(int); // size.size( );
+		/*
+		convert.str( "" ); convert << "size = " << size_size << endl;
+		MASS_base::log( convert.str( ) );
+		*/
+		size = new vector<int>;
+		for (int i = 0; i < size_size; i++) {
+			/*
+			convert.str( "" ); convert << *(int *)cur << endl;
+			MASS_base::log( convert.str( ) );
+			*/
+			size->push_back(*(int *)cur); cur += sizeof(int); // size[i];
+		}
+		handle = *(int *)cur; cur += sizeof(int);          // handle
+		classname_size = *(int *)cur; cur += sizeof(int);  // classname_size
+		classname = ""; classname.append(cur, classname_size); // classname
+		// MASS_base::log( classname.c_str( ) );
 
-  case PLACES_EXCHANGE_ALL_REMOTE_RETURN_OBJECT: 
-  case PLACES_EXCHANGE_BOUNDARY_REMOTE_REQUEST:
-    if(printOutput == true){
-        convert.str( "" );
-        convert << "PLACES_EXCHANGE_ALL_REMOTE_RETURN_OBJECT: will deserialize"
-	        << " argument_size = " << argument_size;
-        MASS_base::log( convert.str( ) );
-    }
-    action = *(ACTION_TYPE *)cur; cur += sizeof( ACTION_TYPE ); // action
-    argument_size = *(int *)cur;  cur += sizeof( int );         // arg_size
-    
-    argument_in_heap = ( ( argument = new char[argument_size] ) != NULL ); 
-    memcpy( argument, (void *)cur, argument_size );              // argument
+		cur += classname_size;
+		argument_size = *(int *)cur; cur += sizeof(int);   // argument_size
+		argument_in_heap = ((argument = new char[argument_size]) != NULL);
+		/*
+		convert.str( "" ); convert << "argument_size = " << argument_size << endl;
+		MASS_base::log( convert.str( ) );
+		*/
+		memcpy(argument, (void *)cur, argument_size);      // argument
+		cur += argument_size;
+		boundary_width = *(int *)cur; cur += sizeof(int);  // boundary_width
+		hosts_size = *(int *)cur; cur += sizeof(int);      // hosts.size( );
+		/*
+		convert.str( "" ); convert << "host_size = " << hosts_size << endl;
+		MASS_base::log( convert.str( ) );
+		*/
+		hosts = new vector<string>;
+		for (int i = 0; i < hosts_size; i++) {
+			int hostname_size = *(int *)cur; cur += sizeof(int); // hosts[i].size()
+			string hostname = ""; hostname.append(cur, hostname_size);
+			cur += hostname_size;
+			//MASS_base::log( hostname );
+			hosts->push_back(hostname); // hosts[i]
+		}
+		return;
 
-    if(printOutput == true){
-        convert.str( "" );
-        convert << "PLACES_EXCHANGE_ALL_REMOTE_RETURN_OBJECT: deserialization done"
-	        << " argument_size = " << argument_size;
-        MASS_base::log( convert.str( ) );
-    }
+	case PLACES_CALL_ALL_VOID_OBJECT:
+	case PLACES_CALL_ALL_RETURN_OBJECT:
+		action = *(ACTION_TYPE *)cur; cur += sizeof(ACTION_TYPE); // action
+		handle = *(int *)cur;         cur += sizeof(int);         // handle
+		functionId = *(int *)cur;     cur += sizeof(int);         // functionId
+		argument_size = *(int *)cur;  cur += sizeof(int);         // arg_size
+		return_size = *(int *)cur;    cur += sizeof(int);         // return_size
+		argument_in_heap = ((argument = new char[argument_size]) != NULL);
+		memcpy(argument, (void *)cur, argument_size);              // argument
+		return;
 
-    return;
+	case PLACES_CALL_SOME_VOID_OBJECT: break;
+	case PLACES_EXCHANGE_ALL:
+		action = *(ACTION_TYPE *)cur; cur += sizeof(ACTION_TYPE); // action
+		handle = *(int *)cur;         cur += sizeof(int);         // handle
+		dest_handle = *(int *)cur;    cur += sizeof(int);         // dest_handle
+		functionId = *(int *)cur;     cur += sizeof(int);         // functionId
+		dimension = *(int *)cur;      cur += sizeof(int);         // dimension
+		destinations_size = *(int *)cur; cur += sizeof(int);      // dest->size()
+		destinations = new vector<int*>;
+		argument_in_heap = true;
 
-  case AGENTS_INITIALIZE:
-    action = *(ACTION_TYPE *)cur;   cur += sizeof( ACTION_TYPE ); // action
-    agent_population = *(int *)cur; cur += sizeof( int );         // population
-    handle = *(int *)cur;           cur += sizeof( int );         // handle
-    dest_handle = *(int *)cur;      cur += sizeof( int );     // placesHandle
-    classname_size = *(int *)cur;   cur += sizeof( int );     // classname_size
-    classname = ""; classname.append( cur, classname_size );  // classname
-    cur += classname_size; 
-    argument_size = *(int *)cur;  cur += sizeof( int );         // arg_size
-    argument_in_heap = ( ( argument = new char[argument_size] ) != NULL ); 
-    memcpy( argument, (void *)cur, argument_size );              // argument
+		for (int i = 0; i < destinations_size; i++) {
+			int *dest = new int[dimension];
+			for (int j = 0; j < dimension; j++) {
+				dest[j] = *(int *)cur;    cur += sizeof(int);    // destination[i][j]
+			}
+			destinations->push_back(dest);
+		}
+		return;
 
-    if(printOutput == true){
-        convert.str( "" ); 
-        convert << "population = " << agent_population
-	        << " handle = " << handle
-	        << " placeHandle = " << dest_handle
-	        << " classname = " << classname
-	        << " argument_size = " << argument_size;
-        MASS_base::log( convert.str( ) );
-    }
 
-    return;
+	case PLACES_EXCHANGE_ALL_REMOTE_REQUEST:
+		action = *(ACTION_TYPE *)cur; cur += sizeof(ACTION_TYPE); // action
+		handle = *(int *)cur;         cur += sizeof(int);         // handle
+		dest_handle = *(int *)cur;    cur += sizeof(int);         // dest_handle
+		functionId = *(int *)cur;     cur += sizeof(int);         // functionId
+		exchangeReqListSize = *(int *)cur; cur += sizeof(int);    // list->size
+		exchangeReqList = new vector<RemoteExchangeRequest*>;       // list created
+		argument_in_heap = true;
 
-  case AGENTS_CALL_ALL_VOID_OBJECT:
-  case AGENTS_CALL_ALL_RETURN_OBJECT: 
-	action = *(ACTION_TYPE *)cur;	cur += sizeof( ACTION_TYPE ); 	//action
-	handle = *(int *)cur;		cur += sizeof( int );		//handle
-	functionId = *(int *)cur;	cur += sizeof( int );		//functionId
-	argument_size = *(int *)cur;	cur += sizeof( int );		//arg_size
-	return_size = *(int *)cur;	cur += sizeof( int );		//return_size
-	argument_in_heap = ( ( argument = new char[argument_size] ) != NULL);
-	memcpy( argument, (void *)cur, argument_size);			//argument
-	return;
+		if (printOutput == true) {
+			convert.str("");
+			convert << "PLACES_EXCHANGE_ALL_REMOTE_REQUEST: "
+				<< " action = " << action << " handle = " << handle
+				<< " dest_handle = " << dest_handle
+				<< " functionId = " << functionId
+				<< " exchangeReqListSize = " << exchangeReqListSize;
+			MASS_base::log(convert.str());
+		}
 
-   return;
-  case AGENTS_MANAGE_ALL:
-  case PLACES_EXCHANGE_BOUNDARY:
-    action = *(ACTION_TYPE *)cur;	cur += sizeof( ACTION_TYPE );	//action
-    handle = *(int *)cur;		cur += sizeof( int );		//handle
+		for (int i = 0; i < exchangeReqListSize; i++) {
+			int destIndex = *(int *)cur; cur += sizeof(int);
+			int orgIndex = *(int *)cur; cur += sizeof(int);
+			int inMsgIndex = *(int *)cur; cur += sizeof(int);
+			int inMsgSize = *(int *)cur; cur += sizeof(int);
+			int outMessageSize = *(int *)cur; cur += sizeof(int);   // outMsgSize
+			char *outMessage = new char[outMessageSize];
+			memcpy(outMessage, (void *)cur, outMessageSize);         // outMessage
+			cur += outMessageSize;
 
-    return;
+			if (printOutput == true) {
+				convert.str("");
+				convert << "PLACES_EXCHANGE_ALL_REMOTE_REQUEST:"
+					<< " i = " << i << " destIndex = " << destIndex
+					<< " orgIndex = " << orgIndex
+					<< " inMsgIndex = " << inMsgIndex
+					<< " inMsgSize = " << inMsgSize
+					<< " outMessageSize = " << outMessageSize
+					<< " outMessage = " << *(int *)outMessage;
+				MASS_base::log(convert.str());
+			}
 
-  case FINISH: 
-    action = FINISH;
-    return;
+			RemoteExchangeRequest *request =
+				new RemoteExchangeRequest(destIndex, orgIndex, inMsgIndex, inMsgSize,
+					outMessage, outMessageSize, true);
+			exchangeReqList->push_back(request);
+		}
+		return;
 
-  default:
-    break;
-  }
+	case AGENTS_MIGRATION_REMOTE_REQUEST:
+
+		action = *(ACTION_TYPE *)cur;            cur += sizeof(ACTION_TYPE); // action type
+		handle = *(int *)cur;                    cur += sizeof(int);         // agent handle
+		dest_handle = *(int *)cur;               cur += sizeof(int);         // place handle
+		migrationReqListSize = *(int *)cur;      cur += sizeof(int);         // MigrationReqListy->size
+		migrationReqList = new vector<AgentMigrationRequest*>;                 // list created
+		argument_in_heap = true;
+
+		if (printOutput == true) {
+			convert.str("");
+			convert << "Deserialize: Agent handle: " << handle << " place handle: " << dest_handle;
+			MASS_base::log(convert.str());
+		}
+
+		agentsDllClass = MASS_base::dllMap[handle];
+		for (int i = 0; i < migrationReqListSize; i++) { // each migrationReq
+			destIndex = *(int *)cur;
+			cur += sizeof(int);
+			agent = (Agent *)(agentsDllClass->instantiate(NULL));
+			agent->agentsHandle = *(int *)cur;
+			cur += sizeof(int);
+			agent->placesHandle = *(int *)cur;
+			cur += sizeof(int);
+			agent->agentId = *(int *)cur;
+			cur += sizeof(int);
+			agent->parentId = *(int *)cur;
+			cur += sizeof(int);
+			agent->migratableDataSize = *(int *)cur;
+			cur += sizeof(int);
+			agent->alive = true;
+			agent->newChildren = 0;
+
+			if (printOutput == true) {
+				convert.str("");
+				convert << "Deserialize: agentId(" << agent << ")[" << agent->agentId << "] data size = "
+					<< agent->migratableDataSize;
+				MASS_base::log(convert.str());
+
+				convert.str("");
+				convert << "Deserialize: agentId(" << agent << ")[" << agent->agentId << "] data = "
+					<< (char *)cur;
+				MASS_base::log(convert.str());
+			}
+
+			if (agent->migratableDataSize > 0) {
+				if (printOutput == true)
+					MASS_base::log("A");
+
+				// agent->migratableData = malloc( agent->migratableDataSize );
+				agent->migratableData = (void *)(new char[agent->migratableDataSize]);
+
+				if (printOutput == true) {
+					convert.str("");
+					convert << "Deserialize: agentId(" << agent << ")[" << agent->agentId << "] malloc = "
+						<< agent->migratableData;
+					MASS_base::log(convert.str());
+				}
+
+				memcpy(agent->migratableData, (void *)cur,
+					agent->migratableDataSize);
+
+				if (printOutput == true)
+					MASS_base::log("C");
+
+				cur += agent->migratableDataSize;
+
+				if (printOutput == true)
+					MASS_base::log("D");
+			}
+
+			if (printOutput == true) {
+				convert.str("");
+				convert << "Deserialize: agentId(" << agent << ")[" << agent->agentId << "] migratableData = "
+					<< agent->migratableData;
+				MASS_base::log(convert.str());
+			}
+
+			request = new AgentMigrationRequest(destIndex, agent);
+			migrationReqList->push_back(request);
+		}
+
+		return;
+
+	case PLACES_EXCHANGE_ALL_REMOTE_RETURN_OBJECT:
+	case PLACES_EXCHANGE_BOUNDARY_REMOTE_REQUEST:
+		if (printOutput == true) {
+			convert.str("");
+			convert << "PLACES_EXCHANGE_ALL_REMOTE_RETURN_OBJECT: will deserialize"
+				<< " argument_size = " << argument_size;
+			MASS_base::log(convert.str());
+		}
+		action = *(ACTION_TYPE *)cur; cur += sizeof(ACTION_TYPE); // action
+		argument_size = *(int *)cur;  cur += sizeof(int);         // arg_size
+
+		argument_in_heap = ((argument = new char[argument_size]) != NULL);
+		memcpy(argument, (void *)cur, argument_size);              // argument
+
+		if (printOutput == true) {
+			convert.str("");
+			convert << "PLACES_EXCHANGE_ALL_REMOTE_RETURN_OBJECT: deserialization done"
+				<< " argument_size = " << argument_size;
+			MASS_base::log(convert.str());
+		}
+
+		return;
+
+	case AGENTS_INITIALIZE:
+		action = *(ACTION_TYPE *)cur;   cur += sizeof(ACTION_TYPE); // action
+		agent_population = *(int *)cur; cur += sizeof(int);         // population
+		handle = *(int *)cur;           cur += sizeof(int);         // handle
+		dest_handle = *(int *)cur;      cur += sizeof(int);     // placesHandle
+		classname_size = *(int *)cur;   cur += sizeof(int);     // classname_size
+		classname = ""; classname.append(cur, classname_size);  // classname
+		cur += classname_size;
+		argument_size = *(int *)cur;  cur += sizeof(int);         // arg_size
+		argument_in_heap = ((argument = new char[argument_size]) != NULL);
+		memcpy(argument, (void *)cur, argument_size);              // argument
+
+		if (printOutput == true) {
+			convert.str("");
+			convert << "population = " << agent_population
+				<< " handle = " << handle
+				<< " placeHandle = " << dest_handle
+				<< " classname = " << classname
+				<< " argument_size = " << argument_size;
+			MASS_base::log(convert.str());
+		}
+
+		return;
+
+	case AGENTS_CALL_ALL_VOID_OBJECT:
+	case AGENTS_CALL_ALL_RETURN_OBJECT:
+		action = *(ACTION_TYPE *)cur;	cur += sizeof(ACTION_TYPE); 	//action
+		handle = *(int *)cur;		cur += sizeof(int);		//handle
+		functionId = *(int *)cur;	cur += sizeof(int);		//functionId
+		argument_size = *(int *)cur;	cur += sizeof(int);		//arg_size
+		return_size = *(int *)cur;	cur += sizeof(int);		//return_size
+		argument_in_heap = ((argument = new char[argument_size]) != NULL);
+		memcpy(argument, (void *)cur, argument_size);			//argument
+		return;
+
+		return;
+	case AGENTS_MANAGE_ALL:
+	case PLACES_EXCHANGE_BOUNDARY:
+		action = *(ACTION_TYPE *)cur;	cur += sizeof(ACTION_TYPE);	//action
+		handle = *(int *)cur;		cur += sizeof(int);		//handle
+
+		return;
+
+	case FINISH:
+		action = FINISH;
+		return;
+
+	default:
+		break;
+	}
 }

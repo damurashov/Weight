@@ -1,25 +1,47 @@
-/* example/libssh2_config.h.  Generated from libssh2_config.h.in by configure.  */
-/* src/libssh2_config.h.in.  Generated from configure.ac by autoheader.  */
+/*
+ MASS C++ Software License
+ © 2014-2015 University of Washington
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+ The above copyright notice and this permission notice shall be included in
+ all copies or substantial portions of the Software.
+ The following acknowledgment shall be used where appropriate in publications, presentations, etc.:
+ © 2014-2015 University of Washington. MASS was developed by Computing and Software Systems at University of Washington Bothell.
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ THE SOFTWARE.
+ */
 
-/* Define if building universal (internal helper macro) */
-/* #undef AC_APPLE_UNIVERSAL_BUILD */
+ /* example/libssh2_config.h.  Generated from libssh2_config.h.in by configure.  */
+ /* src/libssh2_config.h.in.  Generated from configure.ac by autoheader.  */
 
-/* Define to one of `_getb67', `GETB67', `getb67' for Cray-2 and Cray-YMP
-   systems. This function is required for `alloca.c' support on those systems.
-   */
-/* #undef CRAY_STACKSEG_END */
+ /* Define if building universal (internal helper macro) */
+ /* #undef AC_APPLE_UNIVERSAL_BUILD */
 
-/* Define to 1 if using `alloca.c'. */
-/* #undef C_ALLOCA */
+ /* Define to one of `_getb67', `GETB67', `getb67' for Cray-2 and Cray-YMP
+	systems. This function is required for `alloca.c' support on those systems.
+	*/
+	/* #undef CRAY_STACKSEG_END */
 
-/* Define to 1 if you have `alloca', as a function or macro. */
+	/* Define to 1 if using `alloca.c'. */
+	/* #undef C_ALLOCA */
+
+	/* Define to 1 if you have `alloca', as a function or macro. */
 #define HAVE_ALLOCA 1
 
 /* Define to 1 if you have <alloca.h> and it should be used (not on Ultrix).
    */
 #define HAVE_ALLOCA_H 1
 
-/* Define to 1 if you have the <arpa/inet.h> header file. */
+   /* Define to 1 if you have the <arpa/inet.h> header file. */
 #define HAVE_ARPA_INET_H 1
 
 /* disabled non-blocking sockets */
@@ -158,10 +180,10 @@
    */
 #define LT_OBJDIR ".libs/"
 
-/* Define to 1 if _REENTRANT preprocessor symbol must be defined. */
-/* #undef NEED_REENTRANT */
+   /* Define to 1 if _REENTRANT preprocessor symbol must be defined. */
+   /* #undef NEED_REENTRANT */
 
-/* Name of package */
+   /* Name of package */
 #define PACKAGE "libssh2"
 
 /* Define to the address where bug reports for this package should be sent. */
@@ -188,9 +210,9 @@
 	STACK_DIRECTION > 0 => grows toward higher addresses
 	STACK_DIRECTION < 0 => grows toward lower addresses
 	STACK_DIRECTION = 0 => direction of growth unknown */
-/* #undef STACK_DIRECTION */
+	/* #undef STACK_DIRECTION */
 
-/* Define to 1 if you have the ANSI C header files. */
+	/* Define to 1 if you have the ANSI C header files. */
 #define STDC_HEADERS 1
 
 /* Version number of package */
@@ -204,7 +226,7 @@
 # endif
 #else
 # ifndef WORDS_BIGENDIAN
-/* #  undef WORDS_BIGENDIAN */
+   /* #  undef WORDS_BIGENDIAN */
 # endif
 #endif
 
@@ -220,5 +242,5 @@
 /* Define to `__inline__' or `__inline' if that's what the C compiler
    calls it, or to nothing if 'inline' is not supported under any name.  */
 #ifndef __cplusplus
-/* #undef inline */
+   /* #undef inline */
 #endif
