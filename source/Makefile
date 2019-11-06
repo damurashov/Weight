@@ -17,9 +17,9 @@ OPTIONS = -DLOGGING
 endif
 
 #TODO: auto detect rehl vs ubuntu
-all:  $(TARGET) $(LIBMASS) $(MPROCESS) $(WAVE2D) $(NOMAD)
-	rm -f *.o
 
+all: $(LIBMASS) $(MPROCESS)
+	rm *.o
 
 $(LIBMASS): $(MASS_OBJS)
 	$(CC) $(OPTIONS) $(MASS_OBJS) -fPIC -L$(libdir) -lssh2 -lpthread -rdynamic -ldl -shared -o $@ #libmass.so
