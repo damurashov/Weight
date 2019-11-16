@@ -56,9 +56,9 @@ class Place : MObject {
 
     enum neighborPattern {
         VON_NEUMANN2D,
-        MEAD2D,
+        MOORE2D,
         VON_NEUMANN3D,
-        MEAD3D,
+        MOORE3D,
     };
 
     vector<int *> getNeighbors();
@@ -68,18 +68,18 @@ class Place : MObject {
     void addNeighbors(vector<int *>);
     void addNeighbors(neighborPattern pattern);
 
+   private:
+    vector<int *> neighbors;
+    vector<int *> getMooreNeighbors2d();
+    vector<int *> getVNNeighbors2d();
+    vector<int *> getMooreNeighbors3d();
+    vector<int *> getVNNeighbors3d();
+
+    Place *findDstPlace(int handle, int index[]);
+
    protected:
     void *getOutMessage(int handle, int index[]);
     void putInMessage(int handle, int index[], int position, void *value);
-
-   private:
-    vector<int *> neighbors;
-    Place *findDstPlace(int handle, int index[]);
-    vector<int *> getMooreNeighbors(int);
-    vector<int *> getMeadNeighbors2d();
-    vector<int *> getVNNeighbors2d();
-    vector<int *> getMeadNeighbors3d();
-    vector<int *> getVNNeighbors3d();
 };
 
 #endif

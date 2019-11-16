@@ -13,11 +13,11 @@ public:
 	static int west[];
 
 	// define functionId's
-	static const int init_ = 0;
-	static const int computeFirstTurn_ = 1;
-	static const int computeWave_ = 2;
-	static const int loadOutMessage_ = 3;
-	static const int collectData_ = 4;
+	static constexpr int init_ = 0;
+	static constexpr int computeFirstTurn_ = 1;
+	static constexpr int computeWave_ = 2;
+	static constexpr int loadOutMessage_ = 3;
+	static constexpr int collectData_ = 4;
 	
 	// constructor
 	Wave2DMassPlace(void* argument);
@@ -67,10 +67,10 @@ private:
 	std::ostringstream convert;
 
 	// these may become a constructor param
-	static const double STARTING_WAVE = 20.0;
-	static const double c = 1.0;
-	static const double dt = 0.1;
-	static const double dd = 2.0;
+	static constexpr double STARTING_WAVE = 20.0;
+	static constexpr double c = 1.0;
+	static constexpr double dt = 0.1;
+	static constexpr double dd = 2.0;
 };
 
 #endif
