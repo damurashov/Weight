@@ -1,0 +1,609 @@
+\hypertarget{class_message}{}\doxysection{Message Class Reference}
+\label{class_message}\index{Message@{Message}}
+\doxysubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+enum \mbox{\hyperlink{class_message_a81428d70025d214fb50af4ac2b2643ac}{A\+C\+T\+I\+O\+N\+\_\+\+T\+Y\+PE}} \{ \newline
+{\bfseries E\+M\+P\+TY}, 
+{\bfseries F\+I\+N\+I\+SH}, 
+{\bfseries A\+CK}, 
+{\bfseries P\+L\+A\+C\+E\+S\+\_\+\+I\+N\+I\+T\+I\+A\+L\+I\+ZE}, 
+\newline
+{\bfseries P\+L\+A\+C\+E\+S\+\_\+\+C\+A\+L\+L\+\_\+\+A\+L\+L\+\_\+\+V\+O\+I\+D\+\_\+\+O\+B\+J\+E\+CT}, 
+{\bfseries P\+L\+A\+C\+E\+S\+\_\+\+C\+A\+L\+L\+\_\+\+A\+L\+L\+\_\+\+R\+E\+T\+U\+R\+N\+\_\+\+O\+B\+J\+E\+CT}, 
+{\bfseries P\+L\+A\+C\+E\+S\+\_\+\+C\+A\+L\+L\+\_\+\+S\+O\+M\+E\+\_\+\+V\+O\+I\+D\+\_\+\+O\+B\+J\+E\+CT}, 
+{\bfseries P\+L\+A\+C\+E\+S\+\_\+\+C\+A\+L\+L\+\_\+\+S\+O\+M\+E\+\_\+\+R\+E\+T\+U\+R\+N\+\_\+\+O\+B\+J\+E\+CT}, 
+\newline
+{\bfseries P\+L\+A\+C\+E\+S\+\_\+\+E\+X\+C\+H\+A\+N\+G\+E\+\_\+\+A\+LL}, 
+{\bfseries P\+L\+A\+C\+E\+S\+\_\+\+E\+X\+C\+H\+A\+N\+G\+E\+\_\+\+A\+L\+L\+\_\+\+R\+E\+M\+O\+T\+E\+\_\+\+R\+E\+Q\+U\+E\+ST}, 
+{\bfseries P\+L\+A\+C\+E\+S\+\_\+\+E\+X\+C\+H\+A\+N\+G\+E\+\_\+\+A\+L\+L\+\_\+\+R\+E\+M\+O\+T\+E\+\_\+\+R\+E\+T\+U\+R\+N\+\_\+\+O\+B\+J\+E\+CT}, 
+{\bfseries P\+L\+A\+C\+E\+S\+\_\+\+E\+X\+C\+H\+A\+N\+G\+E\+\_\+\+B\+O\+U\+N\+D\+A\+RY}, 
+\newline
+{\bfseries P\+L\+A\+C\+E\+S\+\_\+\+E\+X\+C\+H\+A\+N\+G\+E\+\_\+\+B\+O\+U\+N\+D\+A\+R\+Y\+\_\+\+R\+E\+M\+O\+T\+E\+\_\+\+R\+E\+Q\+U\+E\+ST}, 
+{\bfseries A\+G\+E\+N\+T\+S\+\_\+\+I\+N\+I\+T\+I\+A\+L\+I\+ZE}, 
+{\bfseries A\+G\+E\+N\+T\+S\+\_\+\+C\+A\+L\+L\+\_\+\+A\+L\+L\+\_\+\+V\+O\+I\+D\+\_\+\+O\+B\+J\+E\+CT}, 
+{\bfseries A\+G\+E\+N\+T\+S\+\_\+\+C\+A\+L\+L\+\_\+\+A\+L\+L\+\_\+\+R\+E\+T\+U\+R\+N\+\_\+\+O\+B\+J\+E\+CT}, 
+\newline
+{\bfseries A\+G\+E\+N\+T\+S\+\_\+\+M\+A\+N\+A\+G\+E\+\_\+\+A\+LL}, 
+{\bfseries A\+G\+E\+N\+T\+S\+\_\+\+M\+I\+G\+R\+A\+T\+I\+O\+N\+\_\+\+R\+E\+M\+O\+T\+E\+\_\+\+R\+E\+Q\+U\+E\+ST}
+ \}
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_message_a98ee5fb091aeb638d9e0fd391696f1c3}{Message}} (\mbox{\hyperlink{class_message_a81428d70025d214fb50af4ac2b2643ac}{A\+C\+T\+I\+O\+N\+\_\+\+T\+Y\+PE}} action, vector$<$ int $>$ $\ast$size, int handle, string classname, void $\ast$argument, int arg\+\_\+size, int boundary\+\_\+width, vector$<$ string $>$ $\ast$hosts)
+\item 
+\mbox{\hyperlink{class_message_a296215e508f6fd7ae6832184114f3acd}{Message}} (\mbox{\hyperlink{class_message_a81428d70025d214fb50af4ac2b2643ac}{A\+C\+T\+I\+O\+N\+\_\+\+T\+Y\+PE}} action, int handle, int function\+Id, void $\ast$argument, int arg\+\_\+size, int ret\+\_\+size)
+\item 
+\mbox{\hyperlink{class_message_a296215e508f6fd7ae6832184114f3acd}{Message}} (\mbox{\hyperlink{class_message_a81428d70025d214fb50af4ac2b2643ac}{A\+C\+T\+I\+O\+N\+\_\+\+T\+Y\+PE}} action, int handle, int function\+Id, void $\ast$argument, int arg\+\_\+size, int ret\+\_\+size)
+\item 
+\mbox{\hyperlink{class_message_aaae891fccbe63a156edda07f549278ab}{Message}} (\mbox{\hyperlink{class_message_a81428d70025d214fb50af4ac2b2643ac}{A\+C\+T\+I\+O\+N\+\_\+\+T\+Y\+PE}} action, int handle, int dest\+\_\+handle, int function\+Id, vector$<$ int $\ast$ $>$ $\ast$destinations, int dimension)
+\item 
+\mbox{\hyperlink{class_message_a72398d8dfb861161ac77069a52949f42}{Message}} (\mbox{\hyperlink{class_message_a81428d70025d214fb50af4ac2b2643ac}{A\+C\+T\+I\+O\+N\+\_\+\+T\+Y\+PE}} action, int handle, int dest\+\_\+handle, int function\+Id, vector$<$ \mbox{\hyperlink{class_remote_exchange_request}{Remote\+Exchange\+Request}} $\ast$ $>$ $\ast$exchange\+Req\+List)
+\item 
+\mbox{\hyperlink{class_message_a881ead0281d91ffe7ac1f8486ac77cb5}{Message}} (\mbox{\hyperlink{class_message_a81428d70025d214fb50af4ac2b2643ac}{A\+C\+T\+I\+O\+N\+\_\+\+T\+Y\+PE}} action, char $\ast$ret\+Vals, int ret\+Vals\+Size)
+\item 
+\mbox{\hyperlink{class_message_aba67fae5c97470aece38ff1d5e305b7c}{Message}} (\mbox{\hyperlink{class_message_a81428d70025d214fb50af4ac2b2643ac}{A\+C\+T\+I\+O\+N\+\_\+\+T\+Y\+PE}} action, int init\+Population, int handle, int place\+Handle, string class\+Name, void $\ast$argument, int argument\+\_\+size)
+\item 
+\mbox{\hyperlink{class_message_af5561c0fb51362f1f3a2e9375e7b973f}{Message}} (\mbox{\hyperlink{class_message_a81428d70025d214fb50af4ac2b2643ac}{A\+C\+T\+I\+O\+N\+\_\+\+T\+Y\+PE}} action, int handle, int dummy)
+\item 
+\mbox{\hyperlink{class_message_a7db5660cef4a7cba1c4806694586d926}{Message}} (\mbox{\hyperlink{class_message_a81428d70025d214fb50af4ac2b2643ac}{A\+C\+T\+I\+O\+N\+\_\+\+T\+Y\+PE}} action, int agent\+Handle, int place\+Handle, vector$<$ \mbox{\hyperlink{class_agent_migration_request}{Agent\+Migration\+Request}} $\ast$ $>$ $\ast$migration\+Req\+List)
+\item 
+\mbox{\hyperlink{class_message_a6fc49b828e7bbd0d3798e13a76b0d6db}{Message}} (\mbox{\hyperlink{class_message_a81428d70025d214fb50af4ac2b2643ac}{A\+C\+T\+I\+O\+N\+\_\+\+T\+Y\+PE}} action)
+\item 
+\mbox{\hyperlink{class_message_ad924d805b7c9ec95aa85f05af1786f9f}{Message}} (\mbox{\hyperlink{class_message_a81428d70025d214fb50af4ac2b2643ac}{A\+C\+T\+I\+O\+N\+\_\+\+T\+Y\+PE}} action, void $\ast$argument, int arg\+\_\+size)
+\item 
+\mbox{\hyperlink{class_message_a968916e212764a87df64a70fcb616fb4}{Message}} (\mbox{\hyperlink{class_message_a81428d70025d214fb50af4ac2b2643ac}{A\+C\+T\+I\+O\+N\+\_\+\+T\+Y\+PE}} action, void $\ast$argument, int arg\+\_\+size, int local\+Population)
+\item 
+\mbox{\hyperlink{class_message_a2a64a78f548520377d27f5447c775a5e}{Message}} (\mbox{\hyperlink{class_message_a81428d70025d214fb50af4ac2b2643ac}{A\+C\+T\+I\+O\+N\+\_\+\+T\+Y\+PE}} action, int local\+Population)
+\item 
+\mbox{\hyperlink{class_message_a4fc4f717b634e66070366cb7722d7761}{Message}} ()
+\item 
+\mbox{\hyperlink{class_message_a3f7275462831f787a861271687bcad67}{$\sim$\+Message}} ()
+\item 
+char $\ast$ \mbox{\hyperlink{class_message_ac991088be48900f1f09c3cfb67f88ec1}{serialize}} (int \&size)
+\item 
+void \mbox{\hyperlink{class_message_a32a19c4ec0764bb6851bab1224c93be4}{deserialize}} (char $\ast$msg, int size)
+\item 
+\mbox{\hyperlink{class_message_a81428d70025d214fb50af4ac2b2643ac}{A\+C\+T\+I\+O\+N\+\_\+\+T\+Y\+PE}} \mbox{\hyperlink{class_message_adef52e2ab3c64199528dcfed204d431b}{get\+Action}} ()
+\item 
+vector$<$ int $>$ \mbox{\hyperlink{class_message_af81ebfd2dcde7cf9317583b925444e38}{get\+Size}} ()
+\item 
+int \mbox{\hyperlink{class_message_afa520d4245e56216d12590f1b0f2ef5a}{get\+Handle}} ()
+\item 
+int \mbox{\hyperlink{class_message_a3c64f280551c1bc07119be8106151b25}{get\+Dest\+Handle}} ()
+\item 
+int \mbox{\hyperlink{class_message_aed64a4f27ec431b6cab9249889167af6}{get\+Function\+Id}} ()
+\item 
+string \mbox{\hyperlink{class_message_a5294a4d63932102ba36afccb47d37a58}{get\+Classname}} ()
+\item 
+bool \mbox{\hyperlink{class_message_a4ef9a345e9a08b0cd6d581f079ad3b5b}{is\+Argument\+Valid}} ()
+\item 
+void \mbox{\hyperlink{class_message_a5f61d5344a114b56667c96c0d8b0cad9}{get\+Argument}} (void $\ast$arg)
+\item 
+void $\ast$ \mbox{\hyperlink{class_message_aa3185d539808341398fc61b2d24ea945}{get\+Argument\+Pointer}} ()
+\item 
+int \mbox{\hyperlink{class_message_a66ed14673bf203f3e7ca464a182689f8}{get\+Argument\+Size}} ()
+\item 
+int \mbox{\hyperlink{class_message_ac254b6dfe7993456d9ef9c7249ae4c68}{get\+Return\+Size}} ()
+\item 
+int \mbox{\hyperlink{class_message_a35c0ec3b8c4b612dadf66c8f852ab43d}{get\+Boundary\+Width}} ()
+\item 
+int \mbox{\hyperlink{class_message_ac0f40ca496cc39bc96309e1a0ad3fe19}{get\+Agent\+Population}} ()
+\item 
+vector$<$ string $>$ \mbox{\hyperlink{class_message_a2595bebb408e043aaf30a0b885e1a660}{get\+Hosts}} ()
+\item 
+vector$<$ int $\ast$ $>$ $\ast$ \mbox{\hyperlink{class_message_a97fa9b53b09a37b502a639354a603918}{get\+Destinations}} ()
+\item 
+vector$<$ \mbox{\hyperlink{class_remote_exchange_request}{Remote\+Exchange\+Request}} $\ast$ $>$ $\ast$ \mbox{\hyperlink{class_message_ad8ea8b5c1ded81b4d8c94b130ab2f7d3}{get\+Exchange\+Req\+List}} ()
+\item 
+vector$<$ \mbox{\hyperlink{class_agent_migration_request}{Agent\+Migration\+Request}} $\ast$ $>$ $\ast$ \mbox{\hyperlink{class_message_a4d069de7a16063f3116daa6630022248}{get\+Migration\+Req\+List}} ()
+\end{DoxyCompactItemize}
+\doxysubsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_message_ae21d1004f9fb3fc5db8c37284b57f341}\label{class_message_ae21d1004f9fb3fc5db8c37284b57f341}} 
+\mbox{\hyperlink{class_message_a81428d70025d214fb50af4ac2b2643ac}{A\+C\+T\+I\+O\+N\+\_\+\+T\+Y\+PE}} {\bfseries action}
+\item 
+\mbox{\Hypertarget{class_message_ac4f2b99dd67edeb2eafb98b6aafc7f6d}\label{class_message_ac4f2b99dd67edeb2eafb98b6aafc7f6d}} 
+vector$<$ int $>$ $\ast$ {\bfseries size}
+\item 
+\mbox{\Hypertarget{class_message_a183df5b800201499e9d9d1f282ea1173}\label{class_message_a183df5b800201499e9d9d1f282ea1173}} 
+int {\bfseries handle}
+\item 
+\mbox{\Hypertarget{class_message_af9f98e5890d586b4d893634f53e0aa17}\label{class_message_af9f98e5890d586b4d893634f53e0aa17}} 
+int {\bfseries dest\+\_\+handle}
+\item 
+\mbox{\Hypertarget{class_message_aac0d19b130e4775aa3536fecce8d82f0}\label{class_message_aac0d19b130e4775aa3536fecce8d82f0}} 
+int {\bfseries function\+Id}
+\item 
+\mbox{\Hypertarget{class_message_ab4895e500536a504d0eb67adbfab2907}\label{class_message_ab4895e500536a504d0eb67adbfab2907}} 
+string {\bfseries classname}
+\item 
+\mbox{\Hypertarget{class_message_a519643612f8f49a526c6c5d9ad2b36ec}\label{class_message_a519643612f8f49a526c6c5d9ad2b36ec}} 
+void $\ast$ {\bfseries argument}
+\item 
+\mbox{\Hypertarget{class_message_ac2fc0833a6dc886bb0951329afaebeae}\label{class_message_ac2fc0833a6dc886bb0951329afaebeae}} 
+int {\bfseries argument\+\_\+size}
+\item 
+\mbox{\Hypertarget{class_message_a5e5944934d621373d062e16c449dc185}\label{class_message_a5e5944934d621373d062e16c449dc185}} 
+int {\bfseries return\+\_\+size}
+\item 
+\mbox{\Hypertarget{class_message_a50669a73fe62893ff71b3370847fa580}\label{class_message_a50669a73fe62893ff71b3370847fa580}} 
+bool {\bfseries argument\+\_\+in\+\_\+heap}
+\item 
+\mbox{\Hypertarget{class_message_a93a4dd82decd28ad386144bc8db0df8c}\label{class_message_a93a4dd82decd28ad386144bc8db0df8c}} 
+vector$<$ string $>$ $\ast$ {\bfseries hosts}
+\item 
+\mbox{\Hypertarget{class_message_a485d066f16f2b58f69ca3769e4d8ec2c}\label{class_message_a485d066f16f2b58f69ca3769e4d8ec2c}} 
+vector$<$ int $\ast$ $>$ $\ast$ {\bfseries destinations}
+\item 
+\mbox{\Hypertarget{class_message_a71dc9cbd4630b3b67f3ffd94dc0ab505}\label{class_message_a71dc9cbd4630b3b67f3ffd94dc0ab505}} 
+int {\bfseries dimension}
+\item 
+\mbox{\Hypertarget{class_message_aebab9b79bff20d18f959ddaf518089ad}\label{class_message_aebab9b79bff20d18f959ddaf518089ad}} 
+int {\bfseries agent\+\_\+population}
+\item 
+\mbox{\Hypertarget{class_message_aa12ac21b5d26576a6157f11706cc3fd4}\label{class_message_aa12ac21b5d26576a6157f11706cc3fd4}} 
+int {\bfseries boundary\+\_\+width}
+\item 
+\mbox{\Hypertarget{class_message_ab18f9f6f00c1a74ff51a56948d009a84}\label{class_message_ab18f9f6f00c1a74ff51a56948d009a84}} 
+vector$<$ \mbox{\hyperlink{class_remote_exchange_request}{Remote\+Exchange\+Request}} $\ast$ $>$ $\ast$ {\bfseries exchange\+Req\+List}
+\item 
+\mbox{\Hypertarget{class_message_a972f9a166e7f304c2f22fed37f97cf10}\label{class_message_a972f9a166e7f304c2f22fed37f97cf10}} 
+vector$<$ \mbox{\hyperlink{class_agent_migration_request}{Agent\+Migration\+Request}} $\ast$ $>$ $\ast$ {\bfseries migration\+Req\+List}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Member Enumeration Documentation}
+\mbox{\Hypertarget{class_message_a81428d70025d214fb50af4ac2b2643ac}\label{class_message_a81428d70025d214fb50af4ac2b2643ac}} 
+\index{Message@{Message}!ACTION\_TYPE@{ACTION\_TYPE}}
+\index{ACTION\_TYPE@{ACTION\_TYPE}!Message@{Message}}
+\doxysubsubsection{\texorpdfstring{ACTION\_TYPE}{ACTION\_TYPE}}
+{\footnotesize\ttfamily enum \mbox{\hyperlink{class_message_a81428d70025d214fb50af4ac2b2643ac}{Message\+::\+A\+C\+T\+I\+O\+N\+\_\+\+T\+Y\+PE}}}
+
+A\+C\+T\+I\+O\+N\+\_\+\+T\+Y\+PE A list of actions assigned to numbers. 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_message_a98ee5fb091aeb638d9e0fd391696f1c3}\label{class_message_a98ee5fb091aeb638d9e0fd391696f1c3}} 
+\index{Message@{Message}!Message@{Message}}
+\index{Message@{Message}!Message@{Message}}
+\doxysubsubsection{\texorpdfstring{Message()}{Message()}\hspace{0.1cm}{\footnotesize\ttfamily [1/14]}}
+{\footnotesize\ttfamily Message\+::\+Message (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_message_a81428d70025d214fb50af4ac2b2643ac}{A\+C\+T\+I\+O\+N\+\_\+\+T\+Y\+PE}}}]{action,  }\item[{vector$<$ int $>$ $\ast$}]{size,  }\item[{int}]{handle,  }\item[{string}]{classname,  }\item[{void $\ast$}]{argument,  }\item[{int}]{arg\+\_\+size,  }\item[{int}]{boundary\+\_\+width,  }\item[{vector$<$ string $>$ $\ast$}]{hosts }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+P\+L\+A\+C\+E\+S\+\_\+\+I\+N\+I\+T\+I\+A\+L\+I\+ZE 
+\begin{DoxyParams}{Parameters}
+{\em action} & type of action this message is performing \\
+\hline
+{\em size} & \\
+\hline
+{\em handle} & unique identifer that designates a group of places. Must be unique over all machines. \\
+\hline
+{\em classname} & name of user-\/defined class message is targeting \\
+\hline
+{\em argument} & \\
+\hline
+{\em arg\+\_\+size} & \\
+\hline
+{\em boundary\+\_\+width} & \\
+\hline
+{\em hosts} & \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_message_a296215e508f6fd7ae6832184114f3acd}\label{class_message_a296215e508f6fd7ae6832184114f3acd}} 
+\index{Message@{Message}!Message@{Message}}
+\index{Message@{Message}!Message@{Message}}
+\doxysubsubsection{\texorpdfstring{Message()}{Message()}\hspace{0.1cm}{\footnotesize\ttfamily [2/14]}}
+{\footnotesize\ttfamily Message\+::\+Message (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_message_a81428d70025d214fb50af4ac2b2643ac}{A\+C\+T\+I\+O\+N\+\_\+\+T\+Y\+PE}}}]{action,  }\item[{int}]{handle,  }\item[{int}]{function\+Id,  }\item[{void $\ast$}]{argument,  }\item[{int}]{arg\+\_\+size,  }\item[{int}]{ret\+\_\+size }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+P\+L\+A\+C\+E\+S\+\_\+\+C\+A\+L\+L\+\_\+\+A\+L\+L\+\_\+\+V\+O\+I\+D\+\_\+\+O\+B\+J\+E\+CT, P\+L\+A\+C\+E\+S\+\_\+\+C\+A\+L\+L\+\_\+\+A\+L\+L\+\_\+\+R\+E\+T\+U\+R\+N\+\_\+\+O\+B\+J\+E\+CT, A\+G\+E\+N\+T\+S\+\_\+\+C\+A\+L\+L\+\_\+\+A\+L\+L\+\_\+\+V\+O\+I\+D\+\_\+\+O\+B\+J\+E\+CT, A\+G\+E\+N\+T\+S\+\_\+\+C\+A\+L\+L\+\_\+\+A\+L\+L\+\_\+\+R\+E\+T\+U\+R\+N\+\_\+\+O\+B\+J\+E\+CT 
+\begin{DoxyParams}{Parameters}
+{\em action} & \\
+\hline
+{\em handle} & \\
+\hline
+{\em function\+Id} & \\
+\hline
+{\em argument} & \\
+\hline
+{\em arg\+\_\+size} & \\
+\hline
+{\em ret\+\_\+size} & \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_message_a296215e508f6fd7ae6832184114f3acd}\label{class_message_a296215e508f6fd7ae6832184114f3acd}} 
+\index{Message@{Message}!Message@{Message}}
+\index{Message@{Message}!Message@{Message}}
+\doxysubsubsection{\texorpdfstring{Message()}{Message()}\hspace{0.1cm}{\footnotesize\ttfamily [3/14]}}
+{\footnotesize\ttfamily Message\+::\+Message (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_message_a81428d70025d214fb50af4ac2b2643ac}{A\+C\+T\+I\+O\+N\+\_\+\+T\+Y\+PE}}}]{action,  }\item[{int}]{handle,  }\item[{int}]{function\+Id,  }\item[{void $\ast$}]{argument,  }\item[{int}]{arg\+\_\+size,  }\item[{int}]{ret\+\_\+size }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+P\+L\+A\+C\+E\+S\+\_\+\+C\+A\+L\+L\+\_\+\+S\+O\+M\+E\+\_\+\+V\+O\+I\+D\+\_\+\+O\+B\+J\+E\+CT, P\+L\+A\+C\+E\+S\+\_\+\+C\+A\+L\+L\+\_\+\+S\+O\+M\+E\+\_\+\+R\+E\+T\+U\+R\+N\+\_\+\+O\+B\+J\+E\+CT, A\+G\+E\+N\+T\+S\+\_\+\+C\+A\+L\+L\+\_\+\+S\+O\+M\+E\+\_\+\+V\+O\+I\+D\+\_\+\+O\+B\+J\+E\+CT, A\+G\+E\+N\+T\+S\+\_\+\+C\+A\+L\+L\+\_\+\+S\+O\+M\+E\+\_\+\+R\+E\+T\+U\+R\+N\+\_\+\+O\+B\+J\+E\+CT 
+\begin{DoxyParams}{Parameters}
+{\em action} & \\
+\hline
+{\em handle} & \\
+\hline
+{\em function\+Id} & \\
+\hline
+{\em argument} & \\
+\hline
+{\em arg\+\_\+size} & \\
+\hline
+{\em ret\+\_\+size} & \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_message_aaae891fccbe63a156edda07f549278ab}\label{class_message_aaae891fccbe63a156edda07f549278ab}} 
+\index{Message@{Message}!Message@{Message}}
+\index{Message@{Message}!Message@{Message}}
+\doxysubsubsection{\texorpdfstring{Message()}{Message()}\hspace{0.1cm}{\footnotesize\ttfamily [4/14]}}
+{\footnotesize\ttfamily Message\+::\+Message (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_message_a81428d70025d214fb50af4ac2b2643ac}{A\+C\+T\+I\+O\+N\+\_\+\+T\+Y\+PE}}}]{action,  }\item[{int}]{handle,  }\item[{int}]{dest\+\_\+handle,  }\item[{int}]{function\+Id,  }\item[{vector$<$ int $\ast$ $>$ $\ast$}]{destinations,  }\item[{int}]{dimension }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+P\+L\+A\+C\+E\+S\+\_\+\+E\+X\+C\+H\+A\+N\+G\+E\+\_\+\+A\+LL 
+\begin{DoxyParams}{Parameters}
+{\em action} & \\
+\hline
+{\em handle} & \\
+\hline
+{\em dest\+\_\+handle} & \\
+\hline
+{\em function\+Id} & \\
+\hline
+{\em destinations} & \\
+\hline
+{\em dimension} & \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_message_a72398d8dfb861161ac77069a52949f42}\label{class_message_a72398d8dfb861161ac77069a52949f42}} 
+\index{Message@{Message}!Message@{Message}}
+\index{Message@{Message}!Message@{Message}}
+\doxysubsubsection{\texorpdfstring{Message()}{Message()}\hspace{0.1cm}{\footnotesize\ttfamily [5/14]}}
+{\footnotesize\ttfamily Message\+::\+Message (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_message_a81428d70025d214fb50af4ac2b2643ac}{A\+C\+T\+I\+O\+N\+\_\+\+T\+Y\+PE}}}]{action,  }\item[{int}]{handle,  }\item[{int}]{dest\+\_\+handle,  }\item[{int}]{function\+Id,  }\item[{vector$<$ \mbox{\hyperlink{class_remote_exchange_request}{Remote\+Exchange\+Request}} $\ast$ $>$ $\ast$}]{exchange\+Req\+List }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+P\+L\+A\+C\+E\+S\+\_\+\+E\+X\+C\+H\+A\+N\+G\+E\+\_\+\+A\+L\+L\+\_\+\+R\+E\+M\+O\+T\+E\+\_\+\+R\+E\+Q\+U\+E\+ST 
+\begin{DoxyParams}{Parameters}
+{\em action} & \\
+\hline
+{\em handle} & \\
+\hline
+{\em dest\+\_\+handle} & \\
+\hline
+{\em function\+Id} & \\
+\hline
+{\em exchange\+Req\+List} & \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_message_a881ead0281d91ffe7ac1f8486ac77cb5}\label{class_message_a881ead0281d91ffe7ac1f8486ac77cb5}} 
+\index{Message@{Message}!Message@{Message}}
+\index{Message@{Message}!Message@{Message}}
+\doxysubsubsection{\texorpdfstring{Message()}{Message()}\hspace{0.1cm}{\footnotesize\ttfamily [6/14]}}
+{\footnotesize\ttfamily Message\+::\+Message (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_message_a81428d70025d214fb50af4ac2b2643ac}{A\+C\+T\+I\+O\+N\+\_\+\+T\+Y\+PE}}}]{action,  }\item[{char $\ast$}]{ret\+Vals,  }\item[{int}]{ret\+Vals\+Size }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+P\+L\+A\+C\+E\+S\+\_\+\+E\+X\+C\+H\+A\+N\+G\+E\+\_\+\+A\+L\+L\+\_\+\+R\+E\+M\+O\+T\+E\+\_\+\+R\+E\+T\+U\+R\+N\+\_\+\+O\+B\+J\+E\+CT and P\+L\+A\+C\+E\+S\+\_\+\+E\+X\+C\+H\+A\+N\+G\+E\+\_\+\+B\+O\+U\+N\+D\+A\+R\+Y\+\_\+\+R\+E\+M\+O\+T\+E\+\_\+\+R\+E\+Q\+U\+E\+ST 
+\begin{DoxyParams}{Parameters}
+{\em action} & \\
+\hline
+{\em ret\+Vals} & \\
+\hline
+{\em ret\+Vals\+Size} & \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_message_aba67fae5c97470aece38ff1d5e305b7c}\label{class_message_aba67fae5c97470aece38ff1d5e305b7c}} 
+\index{Message@{Message}!Message@{Message}}
+\index{Message@{Message}!Message@{Message}}
+\doxysubsubsection{\texorpdfstring{Message()}{Message()}\hspace{0.1cm}{\footnotesize\ttfamily [7/14]}}
+{\footnotesize\ttfamily Message\+::\+Message (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_message_a81428d70025d214fb50af4ac2b2643ac}{A\+C\+T\+I\+O\+N\+\_\+\+T\+Y\+PE}}}]{action,  }\item[{int}]{init\+Population,  }\item[{int}]{handle,  }\item[{int}]{place\+Handle,  }\item[{string}]{class\+Name,  }\item[{void $\ast$}]{argument,  }\item[{int}]{argument\+\_\+size }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+A\+G\+E\+N\+T\+S\+\_\+\+I\+N\+I\+T\+I\+A\+L\+I\+ZE 
+\begin{DoxyParams}{Parameters}
+{\em action} & \\
+\hline
+{\em init\+Population} & \\
+\hline
+{\em handle} & \\
+\hline
+{\em place\+Handle} & \\
+\hline
+{\em class\+Name} & \\
+\hline
+{\em argument} & \\
+\hline
+{\em argument\+\_\+size} & \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_message_af5561c0fb51362f1f3a2e9375e7b973f}\label{class_message_af5561c0fb51362f1f3a2e9375e7b973f}} 
+\index{Message@{Message}!Message@{Message}}
+\index{Message@{Message}!Message@{Message}}
+\doxysubsubsection{\texorpdfstring{Message()}{Message()}\hspace{0.1cm}{\footnotesize\ttfamily [8/14]}}
+{\footnotesize\ttfamily Message\+::\+Message (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_message_a81428d70025d214fb50af4ac2b2643ac}{A\+C\+T\+I\+O\+N\+\_\+\+T\+Y\+PE}}}]{action,  }\item[{int}]{handle,  }\item[{int}]{dummy }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+A\+G\+E\+N\+T\+S\+\_\+\+M\+A\+N\+A\+G\+E\+\_\+\+A\+LL and P\+L\+A\+C\+E\+S\+\_\+\+E\+X\+C\+H\+A\+N\+G\+E\+\_\+\+B\+O\+U\+N\+D\+A\+RY 
+\begin{DoxyParams}{Parameters}
+{\em action} & \\
+\hline
+{\em handle} & \\
+\hline
+{\em dummy} & \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_message_a7db5660cef4a7cba1c4806694586d926}\label{class_message_a7db5660cef4a7cba1c4806694586d926}} 
+\index{Message@{Message}!Message@{Message}}
+\index{Message@{Message}!Message@{Message}}
+\doxysubsubsection{\texorpdfstring{Message()}{Message()}\hspace{0.1cm}{\footnotesize\ttfamily [9/14]}}
+{\footnotesize\ttfamily Message\+::\+Message (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_message_a81428d70025d214fb50af4ac2b2643ac}{A\+C\+T\+I\+O\+N\+\_\+\+T\+Y\+PE}}}]{action,  }\item[{int}]{agent\+Handle,  }\item[{int}]{place\+Handle,  }\item[{vector$<$ \mbox{\hyperlink{class_agent_migration_request}{Agent\+Migration\+Request}} $\ast$ $>$ $\ast$}]{migration\+Req\+List }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+A\+G\+E\+N\+T\+S\+\_\+\+M\+I\+G\+R\+A\+T\+I\+O\+N\+\_\+\+R\+E\+M\+O\+T\+E\+\_\+\+R\+E\+Q\+U\+E\+ST 
+\begin{DoxyParams}{Parameters}
+{\em action} & \\
+\hline
+{\em agent\+Handle} & \\
+\hline
+{\em place\+Handle} & \\
+\hline
+{\em migration\+Req\+List} & \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_message_a6fc49b828e7bbd0d3798e13a76b0d6db}\label{class_message_a6fc49b828e7bbd0d3798e13a76b0d6db}} 
+\index{Message@{Message}!Message@{Message}}
+\index{Message@{Message}!Message@{Message}}
+\doxysubsubsection{\texorpdfstring{Message()}{Message()}\hspace{0.1cm}{\footnotesize\ttfamily [10/14]}}
+{\footnotesize\ttfamily Message\+::\+Message (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_message_a81428d70025d214fb50af4ac2b2643ac}{A\+C\+T\+I\+O\+N\+\_\+\+T\+Y\+PE}}}]{action }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+F\+I\+N\+I\+SH A\+CK 
+\begin{DoxyParams}{Parameters}
+{\em action} & \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_message_ad924d805b7c9ec95aa85f05af1786f9f}\label{class_message_ad924d805b7c9ec95aa85f05af1786f9f}} 
+\index{Message@{Message}!Message@{Message}}
+\index{Message@{Message}!Message@{Message}}
+\doxysubsubsection{\texorpdfstring{Message()}{Message()}\hspace{0.1cm}{\footnotesize\ttfamily [11/14]}}
+{\footnotesize\ttfamily Message\+::\+Message (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_message_a81428d70025d214fb50af4ac2b2643ac}{A\+C\+T\+I\+O\+N\+\_\+\+T\+Y\+PE}}}]{action,  }\item[{void $\ast$}]{argument,  }\item[{int}]{arg\+\_\+size }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+A\+CK used for P\+L\+A\+C\+E\+S\+\_\+\+C\+A\+L\+L\+\_\+\+A\+L\+L\+\_\+\+R\+E\+T\+U\+R\+N\+\_\+\+O\+B\+J\+E\+CT 
+\begin{DoxyParams}{Parameters}
+{\em action} & \\
+\hline
+{\em argument} & \\
+\hline
+{\em arg\+\_\+size} & \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_message_a968916e212764a87df64a70fcb616fb4}\label{class_message_a968916e212764a87df64a70fcb616fb4}} 
+\index{Message@{Message}!Message@{Message}}
+\index{Message@{Message}!Message@{Message}}
+\doxysubsubsection{\texorpdfstring{Message()}{Message()}\hspace{0.1cm}{\footnotesize\ttfamily [12/14]}}
+{\footnotesize\ttfamily Message\+::\+Message (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_message_a81428d70025d214fb50af4ac2b2643ac}{A\+C\+T\+I\+O\+N\+\_\+\+T\+Y\+PE}}}]{action,  }\item[{void $\ast$}]{argument,  }\item[{int}]{arg\+\_\+size,  }\item[{int}]{local\+Population }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+A\+CK used for A\+G\+E\+N\+T\+S\+\_\+\+C\+A\+L\+L\+\_\+\+A\+L\+L\+\_\+\+R\+E\+T\+U\+R\+N\+\_\+\+O\+B\+J\+E\+CT 
+\begin{DoxyParams}{Parameters}
+{\em action} & \\
+\hline
+{\em argument} & \\
+\hline
+{\em arg\+\_\+size} & \\
+\hline
+{\em local\+Population} & \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_message_a2a64a78f548520377d27f5447c775a5e}\label{class_message_a2a64a78f548520377d27f5447c775a5e}} 
+\index{Message@{Message}!Message@{Message}}
+\index{Message@{Message}!Message@{Message}}
+\doxysubsubsection{\texorpdfstring{Message()}{Message()}\hspace{0.1cm}{\footnotesize\ttfamily [13/14]}}
+{\footnotesize\ttfamily Message\+::\+Message (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_message_a81428d70025d214fb50af4ac2b2643ac}{A\+C\+T\+I\+O\+N\+\_\+\+T\+Y\+PE}}}]{action,  }\item[{int}]{local\+Population }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+A\+CK used for A\+G\+E\+N\+T\+S\+\_\+\+I\+N\+I\+T\+I\+A\+L\+I\+ZE and A\+G\+E\+N\+T\+S\+\_\+\+C\+A\+L\+L\+\_\+\+A\+L\+L\+\_\+\+V\+O\+I\+D\+\_\+\+O\+B\+J\+E\+CT 
+\begin{DoxyParams}{Parameters}
+{\em action} & \\
+\hline
+{\em local\+Population} & \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_message_a4fc4f717b634e66070366cb7722d7761}\label{class_message_a4fc4f717b634e66070366cb7722d7761}} 
+\index{Message@{Message}!Message@{Message}}
+\index{Message@{Message}!Message@{Message}}
+\doxysubsubsection{\texorpdfstring{Message()}{Message()}\hspace{0.1cm}{\footnotesize\ttfamily [14/14]}}
+{\footnotesize\ttfamily Message\+::\+Message (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+E\+M\+P\+TY \mbox{\Hypertarget{class_message_a3f7275462831f787a861271687bcad67}\label{class_message_a3f7275462831f787a861271687bcad67}} 
+\index{Message@{Message}!````~Message@{$\sim$Message}}
+\index{````~Message@{$\sim$Message}!Message@{Message}}
+\doxysubsubsection{\texorpdfstring{$\sim$Message()}{~Message()}}
+{\footnotesize\ttfamily Message\+::$\sim$\+Message (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Deconstructor for \mbox{\hyperlink{class_message}{Message}} Objects. Will free the following resources, if they are currently taking up dynamic memory space, before \mbox{\hyperlink{class_message}{Message}} itself is deleted\+: 
+\begin{DoxyEnumerate}
+\item argument\+: array of arguments 
+\item hosts\+: vector of hosts participating in computation 
+\item destinations\+: vector of all destinations in exchange\+All 
+\item \mbox{\hyperlink{class_remote_exchange_request}{Remote\+Exchange\+Request}} Objects held in exchange\+Req\+List (does not delete list) 
+\item \mbox{\hyperlink{class_agent_migration_request}{Agent\+Migration\+Request}} Objects held in migration\+Req\+List (does not delete list) 
+\end{DoxyEnumerate}
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_message_a32a19c4ec0764bb6851bab1224c93be4}\label{class_message_a32a19c4ec0764bb6851bab1224c93be4}} 
+\index{Message@{Message}!deserialize@{deserialize}}
+\index{deserialize@{deserialize}!Message@{Message}}
+\doxysubsubsection{\texorpdfstring{deserialize()}{deserialize()}}
+{\footnotesize\ttfamily void Message\+::deserialize (\begin{DoxyParamCaption}\item[{char $\ast$}]{msg,  }\item[{int}]{msg\+\_\+size }\end{DoxyParamCaption})}
+
+Method to deserialize the various Messages that can be communicated within a \mbox{\hyperlink{class_m_a_s_s}{M\+A\+SS}} simulation (enumerated by \mbox{\hyperlink{class_message_a81428d70025d214fb50af4ac2b2643ac}{Message\+::\+A\+C\+T\+I\+O\+N\+\_\+\+T\+Y\+PE}} Enum). The value of, and therefore \textquotesingle{}type\textquotesingle{} of, the \mbox{\hyperlink{class_message_a81428d70025d214fb50af4ac2b2643ac}{Message\+::\+A\+C\+T\+I\+O\+N\+\_\+\+T\+Y\+PE}} for a message is stored at the beginning of the message. So, a simple cast to the Object at the beginning of the char dereferenced value (char $\ast$msg) will resolve to the A\+C\+T\+I\+O\+N\+\_\+\+T\+Y\+PE and drive the remainder of the deserialization process (varies with type).
+
+
+\begin{DoxyParams}{Parameters}
+{\em msg} & location of (pointer) the serialized char message to be decoded \\
+\hline
+{\em msg\+\_\+size} & address of the int, which indicates the size of the message to be serialized (and later sent) \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_message_adef52e2ab3c64199528dcfed204d431b}\label{class_message_adef52e2ab3c64199528dcfed204d431b}} 
+\index{Message@{Message}!getAction@{getAction}}
+\index{getAction@{getAction}!Message@{Message}}
+\doxysubsubsection{\texorpdfstring{getAction()}{getAction()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_message_a81428d70025d214fb50af4ac2b2643ac}{A\+C\+T\+I\+O\+N\+\_\+\+T\+Y\+PE}} Message\+::get\+Action (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Get the action \begin{DoxyReturn}{Returns}
+action 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_message_ac0f40ca496cc39bc96309e1a0ad3fe19}\label{class_message_ac0f40ca496cc39bc96309e1a0ad3fe19}} 
+\index{Message@{Message}!getAgentPopulation@{getAgentPopulation}}
+\index{getAgentPopulation@{getAgentPopulation}!Message@{Message}}
+\doxysubsubsection{\texorpdfstring{getAgentPopulation()}{getAgentPopulation()}}
+{\footnotesize\ttfamily int Message\+::get\+Agent\+Population (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Get the \mbox{\hyperlink{class_agent}{Agent}} Populations \begin{DoxyReturn}{Returns}
+agent\+\_\+population 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_message_a5f61d5344a114b56667c96c0d8b0cad9}\label{class_message_a5f61d5344a114b56667c96c0d8b0cad9}} 
+\index{Message@{Message}!getArgument@{getArgument}}
+\index{getArgument@{getArgument}!Message@{Message}}
+\doxysubsubsection{\texorpdfstring{getArgument()}{getArgument()}}
+{\footnotesize\ttfamily void Message\+::get\+Argument (\begin{DoxyParamCaption}\item[{void $\ast$}]{arg }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Get the argument via memcpy \mbox{\Hypertarget{class_message_aa3185d539808341398fc61b2d24ea945}\label{class_message_aa3185d539808341398fc61b2d24ea945}} 
+\index{Message@{Message}!getArgumentPointer@{getArgumentPointer}}
+\index{getArgumentPointer@{getArgumentPointer}!Message@{Message}}
+\doxysubsubsection{\texorpdfstring{getArgumentPointer()}{getArgumentPointer()}}
+{\footnotesize\ttfamily void$\ast$ Message\+::get\+Argument\+Pointer (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Get the argument pointer \begin{DoxyReturn}{Returns}
+argument 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_message_a66ed14673bf203f3e7ca464a182689f8}\label{class_message_a66ed14673bf203f3e7ca464a182689f8}} 
+\index{Message@{Message}!getArgumentSize@{getArgumentSize}}
+\index{getArgumentSize@{getArgumentSize}!Message@{Message}}
+\doxysubsubsection{\texorpdfstring{getArgumentSize()}{getArgumentSize()}}
+{\footnotesize\ttfamily int Message\+::get\+Argument\+Size (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Get the argument size \begin{DoxyReturn}{Returns}
+argument\+\_\+size 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_message_a35c0ec3b8c4b612dadf66c8f852ab43d}\label{class_message_a35c0ec3b8c4b612dadf66c8f852ab43d}} 
+\index{Message@{Message}!getBoundaryWidth@{getBoundaryWidth}}
+\index{getBoundaryWidth@{getBoundaryWidth}!Message@{Message}}
+\doxysubsubsection{\texorpdfstring{getBoundaryWidth()}{getBoundaryWidth()}}
+{\footnotesize\ttfamily int Message\+::get\+Boundary\+Width (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Get the Boundary Width \begin{DoxyReturn}{Returns}
+boundary\+\_\+width 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_message_a5294a4d63932102ba36afccb47d37a58}\label{class_message_a5294a4d63932102ba36afccb47d37a58}} 
+\index{Message@{Message}!getClassname@{getClassname}}
+\index{getClassname@{getClassname}!Message@{Message}}
+\doxysubsubsection{\texorpdfstring{getClassname()}{getClassname()}}
+{\footnotesize\ttfamily string Message\+::get\+Classname (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Get the class name \begin{DoxyReturn}{Returns}
+classname 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_message_a3c64f280551c1bc07119be8106151b25}\label{class_message_a3c64f280551c1bc07119be8106151b25}} 
+\index{Message@{Message}!getDestHandle@{getDestHandle}}
+\index{getDestHandle@{getDestHandle}!Message@{Message}}
+\doxysubsubsection{\texorpdfstring{getDestHandle()}{getDestHandle()}}
+{\footnotesize\ttfamily int Message\+::get\+Dest\+Handle (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Get the destination handle \begin{DoxyReturn}{Returns}
+dest\+\_\+handle 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_message_a97fa9b53b09a37b502a639354a603918}\label{class_message_a97fa9b53b09a37b502a639354a603918}} 
+\index{Message@{Message}!getDestinations@{getDestinations}}
+\index{getDestinations@{getDestinations}!Message@{Message}}
+\doxysubsubsection{\texorpdfstring{getDestinations()}{getDestinations()}}
+{\footnotesize\ttfamily vector$<$int$\ast$$>$$\ast$ Message\+::get\+Destinations (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Get the destinations \begin{DoxyReturn}{Returns}
+destinations 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_message_ad8ea8b5c1ded81b4d8c94b130ab2f7d3}\label{class_message_ad8ea8b5c1ded81b4d8c94b130ab2f7d3}} 
+\index{Message@{Message}!getExchangeReqList@{getExchangeReqList}}
+\index{getExchangeReqList@{getExchangeReqList}!Message@{Message}}
+\doxysubsubsection{\texorpdfstring{getExchangeReqList()}{getExchangeReqList()}}
+{\footnotesize\ttfamily vector$<$\mbox{\hyperlink{class_remote_exchange_request}{Remote\+Exchange\+Request}}$\ast$$>$$\ast$ Message\+::get\+Exchange\+Req\+List (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Get the Remote Exchange Request List \begin{DoxyReturn}{Returns}
+exchange\+Req\+List 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_message_aed64a4f27ec431b6cab9249889167af6}\label{class_message_aed64a4f27ec431b6cab9249889167af6}} 
+\index{Message@{Message}!getFunctionId@{getFunctionId}}
+\index{getFunctionId@{getFunctionId}!Message@{Message}}
+\doxysubsubsection{\texorpdfstring{getFunctionId()}{getFunctionId()}}
+{\footnotesize\ttfamily int Message\+::get\+Function\+Id (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Get the function\+Id \begin{DoxyReturn}{Returns}
+function\+Id 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_message_afa520d4245e56216d12590f1b0f2ef5a}\label{class_message_afa520d4245e56216d12590f1b0f2ef5a}} 
+\index{Message@{Message}!getHandle@{getHandle}}
+\index{getHandle@{getHandle}!Message@{Message}}
+\doxysubsubsection{\texorpdfstring{getHandle()}{getHandle()}}
+{\footnotesize\ttfamily int Message\+::get\+Handle (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Get the handle \begin{DoxyReturn}{Returns}
+handle 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_message_a2595bebb408e043aaf30a0b885e1a660}\label{class_message_a2595bebb408e043aaf30a0b885e1a660}} 
+\index{Message@{Message}!getHosts@{getHosts}}
+\index{getHosts@{getHosts}!Message@{Message}}
+\doxysubsubsection{\texorpdfstring{getHosts()}{getHosts()}}
+{\footnotesize\ttfamily vector$<$string$>$ Message\+::get\+Hosts (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Get the hosts \begin{DoxyReturn}{Returns}
+$\ast$hosts 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_message_a4d069de7a16063f3116daa6630022248}\label{class_message_a4d069de7a16063f3116daa6630022248}} 
+\index{Message@{Message}!getMigrationReqList@{getMigrationReqList}}
+\index{getMigrationReqList@{getMigrationReqList}!Message@{Message}}
+\doxysubsubsection{\texorpdfstring{getMigrationReqList()}{getMigrationReqList()}}
+{\footnotesize\ttfamily vector$<$\mbox{\hyperlink{class_agent_migration_request}{Agent\+Migration\+Request}}$\ast$$>$$\ast$ Message\+::get\+Migration\+Req\+List (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Get the \mbox{\hyperlink{class_agent}{Agent}} Migration Request List \begin{DoxyReturn}{Returns}
+migration\+Req\+List 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_message_ac254b6dfe7993456d9ef9c7249ae4c68}\label{class_message_ac254b6dfe7993456d9ef9c7249ae4c68}} 
+\index{Message@{Message}!getReturnSize@{getReturnSize}}
+\index{getReturnSize@{getReturnSize}!Message@{Message}}
+\doxysubsubsection{\texorpdfstring{getReturnSize()}{getReturnSize()}}
+{\footnotesize\ttfamily int Message\+::get\+Return\+Size (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Get the return size \begin{DoxyReturn}{Returns}
+return\+\_\+size 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_message_af81ebfd2dcde7cf9317583b925444e38}\label{class_message_af81ebfd2dcde7cf9317583b925444e38}} 
+\index{Message@{Message}!getSize@{getSize}}
+\index{getSize@{getSize}!Message@{Message}}
+\doxysubsubsection{\texorpdfstring{getSize()}{getSize()}}
+{\footnotesize\ttfamily vector$<$int$>$ Message\+::get\+Size (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Get the size \begin{DoxyReturn}{Returns}
+$\ast$size 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_message_a4ef9a345e9a08b0cd6d581f079ad3b5b}\label{class_message_a4ef9a345e9a08b0cd6d581f079ad3b5b}} 
+\index{Message@{Message}!isArgumentValid@{isArgumentValid}}
+\index{isArgumentValid@{isArgumentValid}!Message@{Message}}
+\doxysubsubsection{\texorpdfstring{isArgumentValid()}{isArgumentValid()}}
+{\footnotesize\ttfamily bool Message\+::is\+Argument\+Valid (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Check if argument is valid \begin{DoxyReturn}{Returns}
+(argument != N\+U\+LL) 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_message_ac991088be48900f1f09c3cfb67f88ec1}\label{class_message_ac991088be48900f1f09c3cfb67f88ec1}} 
+\index{Message@{Message}!serialize@{serialize}}
+\index{serialize@{serialize}!Message@{Message}}
+\doxysubsubsection{\texorpdfstring{serialize()}{serialize()}}
+{\footnotesize\ttfamily char $\ast$ Message\+::serialize (\begin{DoxyParamCaption}\item[{int \&}]{msg\+\_\+size }\end{DoxyParamCaption})}
+
+Method to serialize the various Messages that can be communicated within a \mbox{\hyperlink{class_m_a_s_s}{M\+A\+SS}} simulation (enumerated by \mbox{\hyperlink{class_message_a81428d70025d214fb50af4ac2b2643ac}{Message\+::\+A\+C\+T\+I\+O\+N\+\_\+\+T\+Y\+PE}} Enum).
+
+
+\begin{DoxyParams}{Parameters}
+{\em msg\+\_\+size} & address of the int, which indicates the size of the message to be serialized (and later sent) \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+location of (pointer) the char message in serialized form 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+Message.\+h\item 
+Message.\+cpp\end{DoxyCompactItemize}

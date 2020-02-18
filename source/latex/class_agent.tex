@@ -1,0 +1,270 @@
+\hypertarget{class_agent}{}\doxysection{Agent Class Reference}
+\label{class_agent}\index{Agent@{Agent}}
+
+
+{\ttfamily \#include $<$Agent.\+h$>$}
+
+Inheritance diagram for Agent\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_agent}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_agent_afb741f3fb7e4398794c8ec37e267de9d}{Agent}} (void $\ast$argument)
+\item 
+virtual void $\ast$ \mbox{\hyperlink{class_agent_a65f2d388d848ea47b88973042c2622d1}{call\+Method}} (int function\+Id, void $\ast$argument)=0
+\item 
+\mbox{\hyperlink{class_agent_ab8dd8d152605cf1339fed595376e83cb}{$\sim$\+Agent}} ()
+\item 
+int \mbox{\hyperlink{class_agent_a5f1d5aec4bc206da7f9abd3d1aafb401}{map}} (int init\+Population, vector$<$ int $>$ size, vector$<$ int $>$ \mbox{\hyperlink{class_agent_ac63e0b39f46496de56dc099b01b94319}{index}}, \mbox{\hyperlink{class_place}{Place}} $\ast$cur\+Place)
+\item 
+void \mbox{\hyperlink{class_agent_ab6c718a543273950de91b04303f6b6df}{kill}} ()
+\item 
+int \mbox{\hyperlink{class_agent_ac4e7e488598d6c1e321a5de29d7b7025}{get\+Debug\+Data}} ()
+\item 
+void \mbox{\hyperlink{class_agent_ab8abbef307856e3af6a688c1265eed5a}{set\+Debug\+Data}} (int argument)
+\end{DoxyCompactItemize}
+\doxysubsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_agent_a7f6e36848d4e66c5f20e2cc30d1775f5}\label{class_agent_a7f6e36848d4e66c5f20e2cc30d1775f5}} 
+bool {\bfseries migrate} (int \mbox{\hyperlink{class_agent_ac63e0b39f46496de56dc099b01b94319}{index}},...)
+\item 
+bool \mbox{\hyperlink{class_agent_a046817345b248e226988c5aabe4e1449}{migrate}} (vector$<$ int $>$ \mbox{\hyperlink{class_agent_ac63e0b39f46496de56dc099b01b94319}{index}})
+\item 
+void \mbox{\hyperlink{class_agent_a82c640efd4e21de4d68f87f8d76e36e8}{spawn}} (int n\+Agents, vector$<$ void $\ast$ $>$ \mbox{\hyperlink{class_agent_a0917de14f7cb780c0f2840c8d3c23b75}{arguments}}, int arg\+\_\+size)
+\end{DoxyCompactItemize}
+\doxysubsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+int \mbox{\hyperlink{class_agent_a36e33d5ad7d8bad7dd3350004d3848b3}{agents\+Handle}}
+\item 
+int \mbox{\hyperlink{class_agent_aa7d4c436b2d644570a6eeb81517bc628}{places\+Handle}}
+\item 
+int \mbox{\hyperlink{class_agent_aaef9bfd568f1d58925eac51cf7130534}{agent\+Id}}
+\item 
+int \mbox{\hyperlink{class_agent_a137730074a31b62815441cb6679e2d5b}{parent\+Id}}
+\item 
+\mbox{\hyperlink{class_place}{Place}} $\ast$ \mbox{\hyperlink{class_agent_aac0b3a3bbf3ccae4f9102a1ead5bf1b6}{place}}
+\item 
+vector$<$ int $>$ \mbox{\hyperlink{class_agent_ac63e0b39f46496de56dc099b01b94319}{index}}
+\item 
+bool \mbox{\hyperlink{class_agent_a999c058533910b5dd9d2f0bfcf8f27fe}{alive}}
+\item 
+int \mbox{\hyperlink{class_agent_ad5e9503a6c40b54d9d7d05caf053e7ae}{new\+Children}}
+\item 
+vector$<$ void $\ast$ $>$ \mbox{\hyperlink{class_agent_a0917de14f7cb780c0f2840c8d3c23b75}{arguments}}
+\item 
+void $\ast$ \mbox{\hyperlink{class_agent_a5c5aad49172b359eebcfe8b6da065c40}{migratable\+Data}}
+\item 
+int \mbox{\hyperlink{class_agent_aa5ac34c15ca2b8fbe2f3185afe2ff94a}{migratable\+Data\+Size}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Friends}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_agent_ac5255c2aa2d0a38a7a3f9e7c98cec3a2}\label{class_agent_ac5255c2aa2d0a38a7a3f9e7c98cec3a2}} 
+class {\bfseries Agents\+\_\+base}
+\item 
+\mbox{\Hypertarget{class_agent_a658ef47bd757fd5e0f13adab5a417ced}\label{class_agent_a658ef47bd757fd5e0f13adab5a417ced}} 
+class {\bfseries Message}
+\item 
+\mbox{\Hypertarget{class_agent_af93dea6250f0dca8ab5ec7e5d5f60220}\label{class_agent_af93dea6250f0dca8ab5ec7e5d5f60220}} 
+class {\bfseries Agent\+Migration\+Request}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\mbox{\hyperlink{class_agent}{Agent}} class 
+\begin{DoxyParams}{Parameters}
+{\em argument} & \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_agent_afb741f3fb7e4398794c8ec37e267de9d}\label{class_agent_afb741f3fb7e4398794c8ec37e267de9d}} 
+\index{Agent@{Agent}!Agent@{Agent}}
+\index{Agent@{Agent}!Agent@{Agent}}
+\doxysubsubsection{\texorpdfstring{Agent()}{Agent()}}
+{\footnotesize\ttfamily Agent\+::\+Agent (\begin{DoxyParamCaption}\item[{void $\ast$}]{argument }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Is the default constructor. A contiguous space of arguments is passed to the constructor 
+\begin{DoxyParams}{Parameters}
+{\em argument} & \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_agent_ab8dd8d152605cf1339fed595376e83cb}\label{class_agent_ab8dd8d152605cf1339fed595376e83cb}} 
+\index{Agent@{Agent}!````~Agent@{$\sim$Agent}}
+\index{````~Agent@{$\sim$Agent}!Agent@{Agent}}
+\doxysubsubsection{\texorpdfstring{$\sim$Agent()}{~Agent()}}
+{\footnotesize\ttfamily Agent\+::$\sim$\+Agent (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Destructor 
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_agent_a65f2d388d848ea47b88973042c2622d1}\label{class_agent_a65f2d388d848ea47b88973042c2622d1}} 
+\index{Agent@{Agent}!callMethod@{callMethod}}
+\index{callMethod@{callMethod}!Agent@{Agent}}
+\doxysubsubsection{\texorpdfstring{callMethod()}{callMethod()}}
+{\footnotesize\ttfamily virtual void$\ast$ Agent\+::call\+Method (\begin{DoxyParamCaption}\item[{int}]{function\+Id,  }\item[{void $\ast$}]{argument }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+Is called from \mbox{\hyperlink{class_agents_a058d674baa86786d646e8dfb3372477b}{Agents.\+call\+All}}. It invokes the function specified with function\+Id as passing arguments to this function. A user-\/derived \mbox{\hyperlink{class_agent}{Agent}} class must implement this method. 
+\begin{DoxyParams}{Parameters}
+{\em function\+Id} & \\
+\hline
+{\em argument} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{class_m_object}{M\+Object}}.
+
+\mbox{\Hypertarget{class_agent_ac4e7e488598d6c1e321a5de29d7b7025}\label{class_agent_ac4e7e488598d6c1e321a5de29d7b7025}} 
+\index{Agent@{Agent}!getDebugData@{getDebugData}}
+\index{getDebugData@{getDebugData}!Agent@{Agent}}
+\doxysubsubsection{\texorpdfstring{getDebugData()}{getDebugData()}}
+{\footnotesize\ttfamily int Agent\+::get\+Debug\+Data (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\begin{DoxyReturn}{Returns}
+id 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_agent_ab6c718a543273950de91b04303f6b6df}\label{class_agent_ab6c718a543273950de91b04303f6b6df}} 
+\index{Agent@{Agent}!kill@{kill}}
+\index{kill@{kill}!Agent@{Agent}}
+\doxysubsubsection{\texorpdfstring{kill()}{kill()}}
+{\footnotesize\ttfamily void Agent\+::kill (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Terminates the calling agent upon a next call to \mbox{\hyperlink{class_agents_a89b1475f698697ab91bd75a267d4236c}{Agents.\+manage\+All( )}}. More specifically, \mbox{\hyperlink{class_agent_ab6c718a543273950de91b04303f6b6df}{kill( )}} sets the \char`\"{}alive\char`\"{} variable false. \mbox{\Hypertarget{class_agent_a5f1d5aec4bc206da7f9abd3d1aafb401}\label{class_agent_a5f1d5aec4bc206da7f9abd3d1aafb401}} 
+\index{Agent@{Agent}!map@{map}}
+\index{map@{map}!Agent@{Agent}}
+\doxysubsubsection{\texorpdfstring{map()}{map()}}
+{\footnotesize\ttfamily int Agent\+::map (\begin{DoxyParamCaption}\item[{int}]{init\+Population,  }\item[{vector$<$ int $>$}]{size,  }\item[{vector$<$ int $>$}]{index,  }\item[{\mbox{\hyperlink{class_place}{Place}} $\ast$}]{cur\+Place }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Returns the number of agents to initially instantiate on a place indexed with coordinates\mbox{[}\mbox{]}. The max\+Agents parameter indicates the number of agents to create over the entire application. The argument size\mbox{[}\mbox{]} defines the size of the \char`\"{}\+Place\char`\"{} matrix to which a given \char`\"{}\+Agent\char`\"{} class belongs. The system-\/provided (thus default) \mbox{\hyperlink{class_agent_a5f1d5aec4bc206da7f9abd3d1aafb401}{map( )}} method distributes agents over places uniformly as in\+: max\+Agents / size.\+length The \mbox{\hyperlink{class_agent_a5f1d5aec4bc206da7f9abd3d1aafb401}{map( )}} method may be overloaded by an application-\/specific method. A user-\/provided \mbox{\hyperlink{class_agent_a5f1d5aec4bc206da7f9abd3d1aafb401}{map( )}} method may ignore max\+Agents when creating agents. 
+\begin{DoxyParams}{Parameters}
+{\em init\+Population} & \\
+\hline
+{\em size} & \\
+\hline
+{\em index} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_agent_a046817345b248e226988c5aabe4e1449}\label{class_agent_a046817345b248e226988c5aabe4e1449}} 
+\index{Agent@{Agent}!migrate@{migrate}}
+\index{migrate@{migrate}!Agent@{Agent}}
+\doxysubsubsection{\texorpdfstring{migrate()}{migrate()}}
+{\footnotesize\ttfamily bool Agent\+::migrate (\begin{DoxyParamCaption}\item[{vector$<$ int $>$}]{index }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+Initiates an agent migration upon a next call to \mbox{\hyperlink{class_agents_a89b1475f698697ab91bd75a267d4236c}{Agents.\+manage\+All( )}}. More specifically, migrate( ) updates the calling agent’s index\mbox{[}\mbox{]}. 
+\begin{DoxyParams}{Parameters}
+{\em index} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_agent_ab8abbef307856e3af6a688c1265eed5a}\label{class_agent_ab8abbef307856e3af6a688c1265eed5a}} 
+\index{Agent@{Agent}!setDebugData@{setDebugData}}
+\index{setDebugData@{setDebugData}!Agent@{Agent}}
+\doxysubsubsection{\texorpdfstring{setDebugData()}{setDebugData()}}
+{\footnotesize\ttfamily void Agent\+::set\+Debug\+Data (\begin{DoxyParamCaption}\item[{int}]{argument }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+modify the debug data of the agent \mbox{\Hypertarget{class_agent_a82c640efd4e21de4d68f87f8d76e36e8}\label{class_agent_a82c640efd4e21de4d68f87f8d76e36e8}} 
+\index{Agent@{Agent}!spawn@{spawn}}
+\index{spawn@{spawn}!Agent@{Agent}}
+\doxysubsubsection{\texorpdfstring{spawn()}{spawn()}}
+{\footnotesize\ttfamily void Agent\+::spawn (\begin{DoxyParamCaption}\item[{int}]{num\+Agents,  }\item[{vector$<$ void $\ast$ $>$}]{arguments,  }\item[{int}]{arg\+\_\+size }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+Spawns a “num\+Agents’ of new agents, as passing arguments\mbox{[}i\mbox{]} (with arg\+\_\+size) to the i-\/th new agent upon a next call to \mbox{\hyperlink{class_agents_a89b1475f698697ab91bd75a267d4236c}{Agents.\+manage\+All( )}}. More specifically, \mbox{\hyperlink{class_agent_a82c640efd4e21de4d68f87f8d76e36e8}{spawn( )}} changes the calling agent’s new\+Children. 
+\begin{DoxyParams}{Parameters}
+{\em num\+Agents} & \\
+\hline
+{\em arguments} & \\
+\hline
+{\em arg\+\_\+size} & \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{class_agent_aaef9bfd568f1d58925eac51cf7130534}\label{class_agent_aaef9bfd568f1d58925eac51cf7130534}} 
+\index{Agent@{Agent}!agentId@{agentId}}
+\index{agentId@{agentId}!Agent@{Agent}}
+\doxysubsubsection{\texorpdfstring{agentId}{agentId}}
+{\footnotesize\ttfamily int Agent\+::agent\+Id\hspace{0.3cm}{\ttfamily [protected]}}
+
+Is this agent’s identifier. It is calculated as\+: the sequence number $\ast$ the size of this agent’s belonging matrix + the index of the current place when all places are flattened to a single dimensional array. \mbox{\Hypertarget{class_agent_a36e33d5ad7d8bad7dd3350004d3848b3}\label{class_agent_a36e33d5ad7d8bad7dd3350004d3848b3}} 
+\index{Agent@{Agent}!agentsHandle@{agentsHandle}}
+\index{agentsHandle@{agentsHandle}!Agent@{Agent}}
+\doxysubsubsection{\texorpdfstring{agentsHandle}{agentsHandle}}
+{\footnotesize\ttfamily int Agent\+::agents\+Handle\hspace{0.3cm}{\ttfamily [protected]}}
+
+Maintains this handle of the agents class to which this agent belongs. \mbox{\Hypertarget{class_agent_a999c058533910b5dd9d2f0bfcf8f27fe}\label{class_agent_a999c058533910b5dd9d2f0bfcf8f27fe}} 
+\index{Agent@{Agent}!alive@{alive}}
+\index{alive@{alive}!Agent@{Agent}}
+\doxysubsubsection{\texorpdfstring{alive}{alive}}
+{\footnotesize\ttfamily bool Agent\+::alive\hspace{0.3cm}{\ttfamily [protected]}}
+
+Is true while this agent is active. Once it is set false, this agent is killed upon a next call to \mbox{\hyperlink{class_agents_a89b1475f698697ab91bd75a267d4236c}{Agents.\+manage\+All( )}}. \mbox{\Hypertarget{class_agent_a0917de14f7cb780c0f2840c8d3c23b75}\label{class_agent_a0917de14f7cb780c0f2840c8d3c23b75}} 
+\index{Agent@{Agent}!arguments@{arguments}}
+\index{arguments@{arguments}!Agent@{Agent}}
+\doxysubsubsection{\texorpdfstring{arguments}{arguments}}
+{\footnotesize\ttfamily vector$<$void $\ast$$>$ Agent\+::arguments\hspace{0.3cm}{\ttfamily [protected]}}
+
+Is an array of arguments, each passed to a different new child. \mbox{\Hypertarget{class_agent_ac63e0b39f46496de56dc099b01b94319}\label{class_agent_ac63e0b39f46496de56dc099b01b94319}} 
+\index{Agent@{Agent}!index@{index}}
+\index{index@{index}!Agent@{Agent}}
+\doxysubsubsection{\texorpdfstring{index}{index}}
+{\footnotesize\ttfamily vector$<$int$>$ Agent\+::index\hspace{0.3cm}{\ttfamily [protected]}}
+
+Is an array that maintains the coordinates of where this agent resides. Intuitively, index\mbox{[}0\mbox{]}, index\mbox{[}1\mbox{]}, and index\mbox{[}2\mbox{]} correspond to coordinates of x, y, and z, or those of i, j, and k. \mbox{\Hypertarget{class_agent_a5c5aad49172b359eebcfe8b6da065c40}\label{class_agent_a5c5aad49172b359eebcfe8b6da065c40}} 
+\index{Agent@{Agent}!migratableData@{migratableData}}
+\index{migratableData@{migratableData}!Agent@{Agent}}
+\doxysubsubsection{\texorpdfstring{migratableData}{migratableData}}
+{\footnotesize\ttfamily void$\ast$ Agent\+::migratable\+Data\hspace{0.3cm}{\ttfamily [protected]}}
+
+Is a pointer to a user-\/allocated space that will be carried with the agent when it migrates to a different space. To be cast to a user-\/defined data type. \mbox{\Hypertarget{class_agent_aa5ac34c15ca2b8fbe2f3185afe2ff94a}\label{class_agent_aa5ac34c15ca2b8fbe2f3185afe2ff94a}} 
+\index{Agent@{Agent}!migratableDataSize@{migratableDataSize}}
+\index{migratableDataSize@{migratableDataSize}!Agent@{Agent}}
+\doxysubsubsection{\texorpdfstring{migratableDataSize}{migratableDataSize}}
+{\footnotesize\ttfamily int Agent\+::migratable\+Data\+Size\hspace{0.3cm}{\ttfamily [protected]}}
+
+Indicates the size of the migrateble\+Data space. \mbox{\Hypertarget{class_agent_ad5e9503a6c40b54d9d7d05caf053e7ae}\label{class_agent_ad5e9503a6c40b54d9d7d05caf053e7ae}} 
+\index{Agent@{Agent}!newChildren@{newChildren}}
+\index{newChildren@{newChildren}!Agent@{Agent}}
+\doxysubsubsection{\texorpdfstring{newChildren}{newChildren}}
+{\footnotesize\ttfamily int Agent\+::new\+Children\hspace{0.3cm}{\ttfamily [protected]}}
+
+Is the number of new children created by this agent upon a next call to \mbox{\hyperlink{class_agents_a89b1475f698697ab91bd75a267d4236c}{Agents.\+manage\+All( )}}. \mbox{\Hypertarget{class_agent_a137730074a31b62815441cb6679e2d5b}\label{class_agent_a137730074a31b62815441cb6679e2d5b}} 
+\index{Agent@{Agent}!parentId@{parentId}}
+\index{parentId@{parentId}!Agent@{Agent}}
+\doxysubsubsection{\texorpdfstring{parentId}{parentId}}
+{\footnotesize\ttfamily int Agent\+::parent\+Id\hspace{0.3cm}{\ttfamily [protected]}}
+
+Is the identifier of this agent’s parent. \mbox{\Hypertarget{class_agent_aac0b3a3bbf3ccae4f9102a1ead5bf1b6}\label{class_agent_aac0b3a3bbf3ccae4f9102a1ead5bf1b6}} 
+\index{Agent@{Agent}!place@{place}}
+\index{place@{place}!Agent@{Agent}}
+\doxysubsubsection{\texorpdfstring{place}{place}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_place}{Place}}$\ast$ Agent\+::place\hspace{0.3cm}{\ttfamily [protected]}}
+
+Points to the current place where this agent resides. \mbox{\Hypertarget{class_agent_aa7d4c436b2d644570a6eeb81517bc628}\label{class_agent_aa7d4c436b2d644570a6eeb81517bc628}} 
+\index{Agent@{Agent}!placesHandle@{placesHandle}}
+\index{placesHandle@{placesHandle}!Agent@{Agent}}
+\doxysubsubsection{\texorpdfstring{placesHandle}{placesHandle}}
+{\footnotesize\ttfamily int Agent\+::places\+Handle\hspace{0.3cm}{\ttfamily [protected]}}
+
+Maintains this handle of the agents class with which this agent is associated. 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+Agent.\+h\item 
+Agent.\+cpp\end{DoxyCompactItemize}

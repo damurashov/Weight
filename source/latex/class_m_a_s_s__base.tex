@@ -1,0 +1,378 @@
+\hypertarget{class_m_a_s_s__base}{}\doxysection{M\+A\+S\+S\+\_\+base Class Reference}
+\label{class_m_a_s_s__base}\index{MASS\_base@{MASS\_base}}
+Inheritance diagram for M\+A\+S\+S\+\_\+base\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_m_a_s_s__base}
+\end{center}
+\end{figure}
+\doxysubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static void \mbox{\hyperlink{class_m_a_s_s__base_a9048a0afbdc65c1c344ccf7d29c3352f}{init\+M\+A\+S\+S\+\_\+base}} (const char $\ast$name, int \mbox{\hyperlink{class_m_a_s_s__base_a91356ede0e58ec0a7f0cd9287415a6cb}{my\+Pid}}, int n\+Proc, int port)
+\item 
+static bool \mbox{\hyperlink{class_m_a_s_s__base_afcef87cd404f7158d2ea3eecc3f2cf4d}{initialize\+Threads}} (int n\+Thr)
+\item 
+static void \mbox{\hyperlink{class_m_a_s_s__base_a342bd5ded375cf3ab0f086eba395cdd4}{log}} (string msg)
+\item 
+static int \mbox{\hyperlink{class_m_a_s_s__base_aad4cef8143c15e9b5a929a25c0a19625}{get\+Cores}} ()
+\item 
+\mbox{\Hypertarget{class_m_a_s_s__base_a2ffe802c4783c6d394bc0db78b388b8b}\label{class_m_a_s_s__base_a2ffe802c4783c6d394bc0db78b388b8b}} 
+static int {\bfseries get\+My\+Pid} ()
+\item 
+\mbox{\Hypertarget{class_m_a_s_s__base_a3f6a1e5a56c0d313a2c726f8e4e61481}\label{class_m_a_s_s__base_a3f6a1e5a56c0d313a2c726f8e4e61481}} 
+static \mbox{\hyperlink{class_places__base}{Places\+\_\+base}} $\ast$ {\bfseries get\+Current\+Places} ()
+\item 
+\mbox{\Hypertarget{class_m_a_s_s__base_ab976692363dbebdf706466183f799203}\label{class_m_a_s_s__base_ab976692363dbebdf706466183f799203}} 
+static \mbox{\hyperlink{class_places__base}{Places\+\_\+base}} $\ast$ {\bfseries get\+Destination\+Places} ()
+\item 
+\mbox{\Hypertarget{class_m_a_s_s__base_a11b0087b9c1251d5df64eec0814274e1}\label{class_m_a_s_s__base_a11b0087b9c1251d5df64eec0814274e1}} 
+static \mbox{\hyperlink{class_agents__base}{Agents\+\_\+base}} $\ast$ {\bfseries get\+Current\+Agents} ()
+\item 
+\mbox{\Hypertarget{class_m_a_s_s__base_acfd081726f8b20119fdceac9798450ee}\label{class_m_a_s_s__base_acfd081726f8b20119fdceac9798450ee}} 
+static int {\bfseries get\+Current\+Function\+Id} ()
+\item 
+\mbox{\Hypertarget{class_m_a_s_s__base_a12d97bdb83a9c97c3ae9320a962add78}\label{class_m_a_s_s__base_a12d97bdb83a9c97c3ae9320a962add78}} 
+static void $\ast$ {\bfseries get\+Current\+Argument} ()
+\item 
+\mbox{\Hypertarget{class_m_a_s_s__base_ab75151e0ca18f30a5cfba627ec40fb42}\label{class_m_a_s_s__base_ab75151e0ca18f30a5cfba627ec40fb42}} 
+static int {\bfseries get\+Current\+Arg\+Size} ()
+\item 
+\mbox{\Hypertarget{class_m_a_s_s__base_a6faac906bdd4046284cc1b6b7e033d13}\label{class_m_a_s_s__base_a6faac906bdd4046284cc1b6b7e033d13}} 
+static int {\bfseries get\+Current\+Ret\+Size} ()
+\item 
+\mbox{\Hypertarget{class_m_a_s_s__base_a0adbf322821be1500e2631675c3e0b27}\label{class_m_a_s_s__base_a0adbf322821be1500e2631675c3e0b27}} 
+static \mbox{\hyperlink{class_message_a81428d70025d214fb50af4ac2b2643ac}{Message\+::\+A\+C\+T\+I\+O\+N\+\_\+\+T\+Y\+PE}} {\bfseries get\+Current\+Msg\+Type} ()
+\item 
+\mbox{\Hypertarget{class_m_a_s_s__base_ab466d848fa922b16156bd8091638f58b}\label{class_m_a_s_s__base_ab466d848fa922b16156bd8091638f58b}} 
+static vector$<$ int $\ast$ $>$ $\ast$ {\bfseries get\+Current\+Destinations} ()
+\item 
+static void \mbox{\hyperlink{class_m_a_s_s__base_a6a0460ca63dba196bace129535463289}{set\+Hosts}} (vector$<$ string $>$ host\+\_\+args)
+\item 
+static void \mbox{\hyperlink{class_m_a_s_s__base_ad8701993d5996f5c8c03c6e8fc1c4401}{show\+Hosts}} ()
+\end{DoxyCompactItemize}
+\doxysubsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+static vector$<$ pthread\+\_\+t $>$ \mbox{\hyperlink{class_m_a_s_s__base_a3536c626fd712bc2b1cb001a3d8680a3}{threads}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Static Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+static int \mbox{\hyperlink{class_m_a_s_s__base_aa061c00078adce0cbf84b46f14ecc6d4}{M\+A\+S\+S\+\_\+\+P\+O\+RT}} = 0
+\item 
+static bool \mbox{\hyperlink{class_m_a_s_s__base_a55e1d348bc06e58033bcd79ed063406c}{I\+N\+I\+T\+I\+A\+L\+I\+Z\+ED}} = false
+\item 
+static char \mbox{\hyperlink{class_m_a_s_s__base_a06d0d950dd4ad2fc12e6617a73c5c9fe}{C\+U\+R\+\_\+\+D\+IR}} \mbox{[}C\+U\+R\+\_\+\+S\+I\+ZE\mbox{]}
+\item 
+static string \mbox{\hyperlink{class_m_a_s_s__base_ab648e7c59d5586227a3ef8a0198ddccc}{host\+Name}}
+\item 
+static int \mbox{\hyperlink{class_m_a_s_s__base_a91356ede0e58ec0a7f0cd9287415a6cb}{my\+Pid}} = 0
+\item 
+static int \mbox{\hyperlink{class_m_a_s_s__base_a242208618a0e59ad4bb5196c1381fea8}{system\+Size}} = 0
+\item 
+static ofstream \mbox{\hyperlink{class_m_a_s_s__base_a232736ac2f04302cb5da25c6232f0c7a}{logger}}
+\item 
+static vector$<$ string $>$ \mbox{\hyperlink{class_m_a_s_s__base_ad1d38bea60d31955b5d8df712f9b3c1b}{hosts}}
+\item 
+static map$<$ int, \mbox{\hyperlink{class_places__base}{Places\+\_\+base}} $\ast$ $>$ \mbox{\hyperlink{class_m_a_s_s__base_a17680d659ce1d41fd0a735928a3ec0df}{places\+Map}}
+\item 
+static map$<$ int, \mbox{\hyperlink{class_agents__base}{Agents\+\_\+base}} $\ast$ $>$ \mbox{\hyperlink{class_m_a_s_s__base_a96213a4c6cdf52b4fb6baf9df6a887a2}{agents\+Map}}
+\item 
+static map$<$ int, \mbox{\hyperlink{class_dll_class}{Dll\+Class}} $\ast$ $>$ \mbox{\hyperlink{class_m_a_s_s__base_adea19f72356b3e409552600fde4d9a10}{dll\+Map}}
+\item 
+static vector$<$ vector$<$ \mbox{\hyperlink{class_remote_exchange_request}{Remote\+Exchange\+Request}} $\ast$ $>$ $\ast$ $>$ \mbox{\hyperlink{class_m_a_s_s__base_ac2bf3795de619e14caca306eccdcc14b}{remote\+Requests}}
+\item 
+static vector$<$ vector$<$ \mbox{\hyperlink{class_agent_migration_request}{Agent\+Migration\+Request}} $\ast$ $>$ $\ast$ $>$ \mbox{\hyperlink{class_m_a_s_s__base_a36c1a5664d614caad6164cdfea2c826a}{migration\+Requests}}
+\item 
+static int \mbox{\hyperlink{class_m_a_s_s__base_a5da16e34deda59c8d56fee11ed213cb0}{request\+Counter}}
+\item 
+static \mbox{\hyperlink{class_places__base}{Places\+\_\+base}} $\ast$ \mbox{\hyperlink{class_m_a_s_s__base_a928728acbeeff6d3a84945a75a1cad58}{current\+Places}}
+\item 
+static \mbox{\hyperlink{class_places__base}{Places\+\_\+base}} $\ast$ \mbox{\hyperlink{class_m_a_s_s__base_ab07f8dfe28c0e7945e090062761c88d5}{destination\+Places}}
+\item 
+static int \mbox{\hyperlink{class_m_a_s_s__base_a8e26f0accc1ec788201b8718c7d8867e}{current\+Function\+Id}}
+\item 
+static void $\ast$ \mbox{\hyperlink{class_m_a_s_s__base_a90f6ae4a827dd58322ab9a9aa1411260}{current\+Argument}}
+\item 
+static int \mbox{\hyperlink{class_m_a_s_s__base_a5bc69ce30b9bba1deadac452a9f18fed}{current\+Arg\+Size}}
+\item 
+static int \mbox{\hyperlink{class_m_a_s_s__base_a489e0298f51a46c222a49d8e8aae26fe}{current\+Ret\+Size}}
+\item 
+static char $\ast$ \mbox{\hyperlink{class_m_a_s_s__base_adb66a42ca4cb472f2178970cd471bff0}{current\+Returns}}
+\item 
+static vector$<$ int $\ast$ $>$ $\ast$ \mbox{\hyperlink{class_m_a_s_s__base_a036c171d3ee4b35cc8248892d7a54686}{current\+Destinations}}
+\item 
+static \mbox{\hyperlink{class_message_a81428d70025d214fb50af4ac2b2643ac}{Message\+::\+A\+C\+T\+I\+O\+N\+\_\+\+T\+Y\+PE}} \mbox{\hyperlink{class_m_a_s_s__base_adeec740304b226ed10377101e5d8519b}{current\+Msg\+Type}}
+\item 
+static \mbox{\hyperlink{class_exchange_helper}{Exchange\+Helper}} \mbox{\hyperlink{class_m_a_s_s__base_a18a88a27d390e8e2e50bd89dd2c02725}{exchange}}
+\item 
+static \mbox{\hyperlink{class_agents__base}{Agents\+\_\+base}} $\ast$ \mbox{\hyperlink{class_m_a_s_s__base_a7dc8469270ab9b1ab38178dc91af1211}{current\+Agents}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Friends}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_m_a_s_s__base_a0c3311519772b279059d3c0acad032ac}\label{class_m_a_s_s__base_a0c3311519772b279059d3c0acad032ac}} 
+class {\bfseries M\+Process}
+\item 
+\mbox{\Hypertarget{class_m_a_s_s__base_ad216acab8f263bec59cec142db5178b3}\label{class_m_a_s_s__base_ad216acab8f263bec59cec142db5178b3}} 
+class {\bfseries Places\+\_\+base}
+\item 
+\mbox{\Hypertarget{class_m_a_s_s__base_ac5255c2aa2d0a38a7a3f9e7c98cec3a2}\label{class_m_a_s_s__base_ac5255c2aa2d0a38a7a3f9e7c98cec3a2}} 
+class {\bfseries Agents\+\_\+base}
+\item 
+\mbox{\Hypertarget{class_m_a_s_s__base_a658ef47bd757fd5e0f13adab5a417ced}\label{class_m_a_s_s__base_a658ef47bd757fd5e0f13adab5a417ced}} 
+class {\bfseries Message}
+\item 
+\mbox{\Hypertarget{class_m_a_s_s__base_a0312c0cac4befa7a5fc59b01b5e597e7}\label{class_m_a_s_s__base_a0312c0cac4befa7a5fc59b01b5e597e7}} 
+class {\bfseries Place}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_m_a_s_s__base_aad4cef8143c15e9b5a929a25c0a19625}\label{class_m_a_s_s__base_aad4cef8143c15e9b5a929a25c0a19625}} 
+\index{MASS\_base@{MASS\_base}!getCores@{getCores}}
+\index{getCores@{getCores}!MASS\_base@{MASS\_base}}
+\doxysubsubsection{\texorpdfstring{getCores()}{getCores()}}
+{\footnotesize\ttfamily int M\+A\+S\+S\+\_\+base\+::get\+Cores (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+Returns the number of cores currently available on the machine. If -\/1 is returned, then the option is not supported on this platform. If zero is returned, then it means that the relevant functions and headers exist, but one has to ask at run time what degree of support is available. Else, will return the number of available cores.
+
+\begin{DoxyReturn}{Returns}
+numeric representation of the number of cores available on this machine (will not count configured cores that are offline/unavailable at runtime) 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_m_a_s_s__base_afcef87cd404f7158d2ea3eecc3f2cf4d}\label{class_m_a_s_s__base_afcef87cd404f7158d2ea3eecc3f2cf4d}} 
+\index{MASS\_base@{MASS\_base}!initializeThreads@{initializeThreads}}
+\index{initializeThreads@{initializeThreads}!MASS\_base@{MASS\_base}}
+\doxysubsubsection{\texorpdfstring{initializeThreads()}{initializeThreads()}}
+{\footnotesize\ttfamily bool M\+A\+S\+S\+\_\+base\+::initialize\+Threads (\begin{DoxyParamCaption}\item[{int}]{n\+Thr }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+This method initializes the individual threads for a given \mbox{\hyperlink{class_m_a_s_s}{M\+A\+SS}} instance.
+
+
+\begin{DoxyParams}{Parameters}
+{\em n\+Thr} & number of Threads to spin up for this instance of \mbox{\hyperlink{class_m_a_s_s}{M\+A\+SS}} \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true if Threads initialized successfully, else false 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_m_a_s_s__base_a9048a0afbdc65c1c344ccf7d29c3352f}\label{class_m_a_s_s__base_a9048a0afbdc65c1c344ccf7d29c3352f}} 
+\index{MASS\_base@{MASS\_base}!initMASS\_base@{initMASS\_base}}
+\index{initMASS\_base@{initMASS\_base}!MASS\_base@{MASS\_base}}
+\doxysubsubsection{\texorpdfstring{initMASS\_base()}{initMASS\_base()}}
+{\footnotesize\ttfamily void M\+A\+S\+S\+\_\+base\+::init\+M\+A\+S\+S\+\_\+base (\begin{DoxyParamCaption}\item[{const char $\ast$}]{name,  }\item[{int}]{my\+Pid,  }\item[{int}]{n\+Proc,  }\item[{int}]{port }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+This method initializes core (base) \mbox{\hyperlink{class_m_a_s_s}{M\+A\+SS}} Object data attributes.
+
+
+\begin{DoxyParams}{Parameters}
+{\em name} & the name of the host running this instance of \mbox{\hyperlink{class_m_a_s_s}{M\+A\+SS}} \\
+\hline
+{\em my\+Pid} & the numeric rank of this process ID (master == 0) \\
+\hline
+{\em n\+Proc} & the number of processes to run simulation on \\
+\hline
+{\em port} & the port to use for group communication \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_m_a_s_s__base_a342bd5ded375cf3ab0f086eba395cdd4}\label{class_m_a_s_s__base_a342bd5ded375cf3ab0f086eba395cdd4}} 
+\index{MASS\_base@{MASS\_base}!log@{log}}
+\index{log@{log}!MASS\_base@{MASS\_base}}
+\doxysubsubsection{\texorpdfstring{log()}{log()}}
+{\footnotesize\ttfamily void M\+A\+S\+S\+\_\+base\+::log (\begin{DoxyParamCaption}\item[{string}]{msg }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+Logs a message to Mass\textquotesingle{}s internal logs. If this instance of \mbox{\hyperlink{class_m_a_s_s}{M\+A\+SS}} represents the master node (my\+Pid == 0), then logs are printed directly to the cerr output. Otherwise, all slave nodes print out messages to the following file\+:
+
+$<$\+C\+U\+R\+\_\+\+D\+I\+R$>$/\+M\+A\+S\+S\+\_\+logs/\+P\+I\+D\+\_\+$<$my\+Pid$>$\+\_\+$<$hostname$>$result.\+txt
+
+
+\begin{DoxyParams}{Parameters}
+{\em msg} & String of message to print to output log \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_m_a_s_s__base_a6a0460ca63dba196bace129535463289}\label{class_m_a_s_s__base_a6a0460ca63dba196bace129535463289}} 
+\index{MASS\_base@{MASS\_base}!setHosts@{setHosts}}
+\index{setHosts@{setHosts}!MASS\_base@{MASS\_base}}
+\doxysubsubsection{\texorpdfstring{setHosts()}{setHosts()}}
+{\footnotesize\ttfamily void M\+A\+S\+S\+\_\+base\+::set\+Hosts (\begin{DoxyParamCaption}\item[{vector$<$ string $>$}]{host\+\_\+args }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+Sets the hosts that \mbox{\hyperlink{class_m_a_s_s}{M\+A\+SS}} is using and establishes S\+SH communication for the group to use.
+
+
+\begin{DoxyParams}{Parameters}
+{\em host\+\_\+args} & list of host names that \mbox{\hyperlink{class_m_a_s_s}{M\+A\+SS}} should run on \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_m_a_s_s__base_ad8701993d5996f5c8c03c6e8fc1c4401}\label{class_m_a_s_s__base_ad8701993d5996f5c8c03c6e8fc1c4401}} 
+\index{MASS\_base@{MASS\_base}!showHosts@{showHosts}}
+\index{showHosts@{showHosts}!MASS\_base@{MASS\_base}}
+\doxysubsubsection{\texorpdfstring{showHosts()}{showHosts()}}
+{\footnotesize\ttfamily M\+A\+S\+S\+\_\+base\+::show\+Hosts (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+Logs the hosts \mbox{\hyperlink{class_m_a_s_s}{M\+A\+SS}} is using. 
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{class_m_a_s_s__base_a96213a4c6cdf52b4fb6baf9df6a887a2}\label{class_m_a_s_s__base_a96213a4c6cdf52b4fb6baf9df6a887a2}} 
+\index{MASS\_base@{MASS\_base}!agentsMap@{agentsMap}}
+\index{agentsMap@{agentsMap}!MASS\_base@{MASS\_base}}
+\doxysubsubsection{\texorpdfstring{agentsMap}{agentsMap}}
+{\footnotesize\ttfamily map$<$ int, \mbox{\hyperlink{class_agents__base}{Agents\+\_\+base}} $\ast$ $>$ M\+A\+S\+S\+\_\+base\+::agents\+Map\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [protected]}}
+
+Associative container that stores all \mbox{\hyperlink{class_agents}{Agents}} collections for a given handle \mbox{\Hypertarget{class_m_a_s_s__base_a06d0d950dd4ad2fc12e6617a73c5c9fe}\label{class_m_a_s_s__base_a06d0d950dd4ad2fc12e6617a73c5c9fe}} 
+\index{MASS\_base@{MASS\_base}!CUR\_DIR@{CUR\_DIR}}
+\index{CUR\_DIR@{CUR\_DIR}!MASS\_base@{MASS\_base}}
+\doxysubsubsection{\texorpdfstring{CUR\_DIR}{CUR\_DIR}}
+{\footnotesize\ttfamily char M\+A\+S\+S\+\_\+base\+::\+C\+U\+R\+\_\+\+D\+IR\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [protected]}}
+
+C String of current working directory (char array) \mbox{\Hypertarget{class_m_a_s_s__base_a7dc8469270ab9b1ab38178dc91af1211}\label{class_m_a_s_s__base_a7dc8469270ab9b1ab38178dc91af1211}} 
+\index{MASS\_base@{MASS\_base}!currentAgents@{currentAgents}}
+\index{currentAgents@{currentAgents}!MASS\_base@{MASS\_base}}
+\doxysubsubsection{\texorpdfstring{currentAgents}{currentAgents}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_agents__base}{Agents\+\_\+base}} $\ast$ M\+A\+S\+S\+\_\+base\+::current\+Agents\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [protected]}}
+
+Collection of \mbox{\hyperlink{class_agents__base}{Agents\+\_\+base}} Object references (pointers) that should refer to the current set of \mbox{\hyperlink{class_agents}{Agents}} (usually retrieved/set for a given handle) \mbox{\Hypertarget{class_m_a_s_s__base_a5bc69ce30b9bba1deadac452a9f18fed}\label{class_m_a_s_s__base_a5bc69ce30b9bba1deadac452a9f18fed}} 
+\index{MASS\_base@{MASS\_base}!currentArgSize@{currentArgSize}}
+\index{currentArgSize@{currentArgSize}!MASS\_base@{MASS\_base}}
+\doxysubsubsection{\texorpdfstring{currentArgSize}{currentArgSize}}
+{\footnotesize\ttfamily int M\+A\+S\+S\+\_\+base\+::current\+Arg\+Size\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [protected]}}
+
+Current size of the argument being processed for an \mbox{\hyperlink{class_agent}{Agent}} or \mbox{\hyperlink{class_place}{Place}} method request \mbox{\Hypertarget{class_m_a_s_s__base_a90f6ae4a827dd58322ab9a9aa1411260}\label{class_m_a_s_s__base_a90f6ae4a827dd58322ab9a9aa1411260}} 
+\index{MASS\_base@{MASS\_base}!currentArgument@{currentArgument}}
+\index{currentArgument@{currentArgument}!MASS\_base@{MASS\_base}}
+\doxysubsubsection{\texorpdfstring{currentArgument}{currentArgument}}
+{\footnotesize\ttfamily void $\ast$ M\+A\+S\+S\+\_\+base\+::current\+Argument\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [protected]}}
+
+Reference to (pointer) the current argument being processed for an \mbox{\hyperlink{class_agent}{Agent}} or \mbox{\hyperlink{class_place}{Place}} method request \mbox{\Hypertarget{class_m_a_s_s__base_a036c171d3ee4b35cc8248892d7a54686}\label{class_m_a_s_s__base_a036c171d3ee4b35cc8248892d7a54686}} 
+\index{MASS\_base@{MASS\_base}!currentDestinations@{currentDestinations}}
+\index{currentDestinations@{currentDestinations}!MASS\_base@{MASS\_base}}
+\doxysubsubsection{\texorpdfstring{currentDestinations}{currentDestinations}}
+{\footnotesize\ttfamily vector$<$ int $\ast$ $>$ $\ast$ M\+A\+S\+S\+\_\+base\+::current\+Destinations\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [protected]}}
+
+Collection of pointers to int pointers that refer to the global array index of current destinations for an exchange all request \mbox{\Hypertarget{class_m_a_s_s__base_a8e26f0accc1ec788201b8718c7d8867e}\label{class_m_a_s_s__base_a8e26f0accc1ec788201b8718c7d8867e}} 
+\index{MASS\_base@{MASS\_base}!currentFunctionId@{currentFunctionId}}
+\index{currentFunctionId@{currentFunctionId}!MASS\_base@{MASS\_base}}
+\doxysubsubsection{\texorpdfstring{currentFunctionId}{currentFunctionId}}
+{\footnotesize\ttfamily int M\+A\+S\+S\+\_\+base\+::current\+Function\+Id\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [protected]}}
+
+Index (int) of the function ID currently being called on a user-\/defined \mbox{\hyperlink{class_agent}{Agent}} or \mbox{\hyperlink{class_place}{Place}} class \mbox{\Hypertarget{class_m_a_s_s__base_adeec740304b226ed10377101e5d8519b}\label{class_m_a_s_s__base_adeec740304b226ed10377101e5d8519b}} 
+\index{MASS\_base@{MASS\_base}!currentMsgType@{currentMsgType}}
+\index{currentMsgType@{currentMsgType}!MASS\_base@{MASS\_base}}
+\doxysubsubsection{\texorpdfstring{currentMsgType}{currentMsgType}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_message_a81428d70025d214fb50af4ac2b2643ac}{Message\+::\+A\+C\+T\+I\+O\+N\+\_\+\+T\+Y\+PE}} M\+A\+S\+S\+\_\+base\+::current\+Msg\+Type\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [protected]}}
+
+This is the type of the current message being processed. More information on available types can be found in \mbox{\hyperlink{_message_8h_source}{Message.\+h}} (\mbox{\hyperlink{class_message_a81428d70025d214fb50af4ac2b2643ac}{Message\+::\+A\+C\+T\+I\+O\+N\+\_\+\+T\+Y\+PE}}) \mbox{\Hypertarget{class_m_a_s_s__base_a928728acbeeff6d3a84945a75a1cad58}\label{class_m_a_s_s__base_a928728acbeeff6d3a84945a75a1cad58}} 
+\index{MASS\_base@{MASS\_base}!currentPlaces@{currentPlaces}}
+\index{currentPlaces@{currentPlaces}!MASS\_base@{MASS\_base}}
+\doxysubsubsection{\texorpdfstring{currentPlaces}{currentPlaces}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_places__base}{Places\+\_\+base}} $\ast$ M\+A\+S\+S\+\_\+base\+::current\+Places\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [protected]}}
+
+Collection of \mbox{\hyperlink{class_places__base}{Places\+\_\+base}} Object references (pointers) that should refer to the current set of \mbox{\hyperlink{class_places}{Places}} (usually retrieved/set for a given handle) \mbox{\Hypertarget{class_m_a_s_s__base_a489e0298f51a46c222a49d8e8aae26fe}\label{class_m_a_s_s__base_a489e0298f51a46c222a49d8e8aae26fe}} 
+\index{MASS\_base@{MASS\_base}!currentRetSize@{currentRetSize}}
+\index{currentRetSize@{currentRetSize}!MASS\_base@{MASS\_base}}
+\doxysubsubsection{\texorpdfstring{currentRetSize}{currentRetSize}}
+{\footnotesize\ttfamily int M\+A\+S\+S\+\_\+base\+::current\+Ret\+Size\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [protected]}}
+
+Current size of the return value being stored for an \mbox{\hyperlink{class_agent}{Agent}} or \mbox{\hyperlink{class_place}{Place}} method call \mbox{\Hypertarget{class_m_a_s_s__base_adb66a42ca4cb472f2178970cd471bff0}\label{class_m_a_s_s__base_adb66a42ca4cb472f2178970cd471bff0}} 
+\index{MASS\_base@{MASS\_base}!currentReturns@{currentReturns}}
+\index{currentReturns@{currentReturns}!MASS\_base@{MASS\_base}}
+\doxysubsubsection{\texorpdfstring{currentReturns}{currentReturns}}
+{\footnotesize\ttfamily char $\ast$ M\+A\+S\+S\+\_\+base\+::current\+Returns\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [protected]}}
+
+Reference to (pointer) the current return values stored as a result of an \mbox{\hyperlink{class_agent}{Agent}} or \mbox{\hyperlink{class_place}{Place}} method call \mbox{\Hypertarget{class_m_a_s_s__base_ab07f8dfe28c0e7945e090062761c88d5}\label{class_m_a_s_s__base_ab07f8dfe28c0e7945e090062761c88d5}} 
+\index{MASS\_base@{MASS\_base}!destinationPlaces@{destinationPlaces}}
+\index{destinationPlaces@{destinationPlaces}!MASS\_base@{MASS\_base}}
+\doxysubsubsection{\texorpdfstring{destinationPlaces}{destinationPlaces}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_places__base}{Places\+\_\+base}} $\ast$ M\+A\+S\+S\+\_\+base\+::destination\+Places\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [protected]}}
+
+Collection of \mbox{\hyperlink{class_places__base}{Places\+\_\+base}} Object references (pointers) that should refer to an alternate set of \mbox{\hyperlink{class_places}{Places}} in the simulation (usually a \textquotesingle{}future\textquotesingle{} set of \mbox{\hyperlink{class_places}{Places}} after an exchange\+All has occurred) \mbox{\Hypertarget{class_m_a_s_s__base_adea19f72356b3e409552600fde4d9a10}\label{class_m_a_s_s__base_adea19f72356b3e409552600fde4d9a10}} 
+\index{MASS\_base@{MASS\_base}!dllMap@{dllMap}}
+\index{dllMap@{dllMap}!MASS\_base@{MASS\_base}}
+\doxysubsubsection{\texorpdfstring{dllMap}{dllMap}}
+{\footnotesize\ttfamily map$<$ int, \mbox{\hyperlink{class_dll_class}{Dll\+Class}} $\ast$ $>$ M\+A\+S\+S\+\_\+base\+::dll\+Map\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [protected]}}
+
+Associative container that stores all \mbox{\hyperlink{class_dll_class}{Dll\+Class}} references for a given handle \mbox{\Hypertarget{class_m_a_s_s__base_a18a88a27d390e8e2e50bd89dd2c02725}\label{class_m_a_s_s__base_a18a88a27d390e8e2e50bd89dd2c02725}} 
+\index{MASS\_base@{MASS\_base}!exchange@{exchange}}
+\index{exchange@{exchange}!MASS\_base@{MASS\_base}}
+\doxysubsubsection{\texorpdfstring{exchange}{exchange}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_exchange_helper}{Exchange\+Helper}} M\+A\+S\+S\+\_\+base\+::exchange\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [protected]}}
+
+Reference to the helper class that helps negotiate socket communication \mbox{\Hypertarget{class_m_a_s_s__base_ab648e7c59d5586227a3ef8a0198ddccc}\label{class_m_a_s_s__base_ab648e7c59d5586227a3ef8a0198ddccc}} 
+\index{MASS\_base@{MASS\_base}!hostName@{hostName}}
+\index{hostName@{hostName}!MASS\_base@{MASS\_base}}
+\doxysubsubsection{\texorpdfstring{hostName}{hostName}}
+{\footnotesize\ttfamily string M\+A\+S\+S\+\_\+base\+::host\+Name\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [protected]}}
+
+String of host running this instance of \mbox{\hyperlink{class_m_a_s_s}{M\+A\+SS}} \mbox{\Hypertarget{class_m_a_s_s__base_ad1d38bea60d31955b5d8df712f9b3c1b}\label{class_m_a_s_s__base_ad1d38bea60d31955b5d8df712f9b3c1b}} 
+\index{MASS\_base@{MASS\_base}!hosts@{hosts}}
+\index{hosts@{hosts}!MASS\_base@{MASS\_base}}
+\doxysubsubsection{\texorpdfstring{hosts}{hosts}}
+{\footnotesize\ttfamily vector$<$ string $>$ M\+A\+S\+S\+\_\+base\+::hosts\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [protected]}}
+
+Collection of host names concurrently working on this simulation \mbox{\Hypertarget{class_m_a_s_s__base_a55e1d348bc06e58033bcd79ed063406c}\label{class_m_a_s_s__base_a55e1d348bc06e58033bcd79ed063406c}} 
+\index{MASS\_base@{MASS\_base}!INITIALIZED@{INITIALIZED}}
+\index{INITIALIZED@{INITIALIZED}!MASS\_base@{MASS\_base}}
+\doxysubsubsection{\texorpdfstring{INITIALIZED}{INITIALIZED}}
+{\footnotesize\ttfamily bool M\+A\+S\+S\+\_\+base\+::\+I\+N\+I\+T\+I\+A\+L\+I\+Z\+ED = false\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [protected]}}
+
+Track whether or not this simulation has initialized all Threads yet \mbox{\Hypertarget{class_m_a_s_s__base_a232736ac2f04302cb5da25c6232f0c7a}\label{class_m_a_s_s__base_a232736ac2f04302cb5da25c6232f0c7a}} 
+\index{MASS\_base@{MASS\_base}!logger@{logger}}
+\index{logger@{logger}!MASS\_base@{MASS\_base}}
+\doxysubsubsection{\texorpdfstring{logger}{logger}}
+{\footnotesize\ttfamily ofstream M\+A\+S\+S\+\_\+base\+::logger\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [protected]}}
+
+Reference to a simple output stream logger \mbox{\Hypertarget{class_m_a_s_s__base_aa061c00078adce0cbf84b46f14ecc6d4}\label{class_m_a_s_s__base_aa061c00078adce0cbf84b46f14ecc6d4}} 
+\index{MASS\_base@{MASS\_base}!MASS\_PORT@{MASS\_PORT}}
+\index{MASS\_PORT@{MASS\_PORT}!MASS\_base@{MASS\_base}}
+\doxysubsubsection{\texorpdfstring{MASS\_PORT}{MASS\_PORT}}
+{\footnotesize\ttfamily int M\+A\+S\+S\+\_\+base\+::\+M\+A\+S\+S\+\_\+\+P\+O\+RT = 0\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [protected]}}
+
+Port number to establish connections for interprocess communication \mbox{\Hypertarget{class_m_a_s_s__base_a36c1a5664d614caad6164cdfea2c826a}\label{class_m_a_s_s__base_a36c1a5664d614caad6164cdfea2c826a}} 
+\index{MASS\_base@{MASS\_base}!migrationRequests@{migrationRequests}}
+\index{migrationRequests@{migrationRequests}!MASS\_base@{MASS\_base}}
+\doxysubsubsection{\texorpdfstring{migrationRequests}{migrationRequests}}
+{\footnotesize\ttfamily vector$<$ vector$<$ \mbox{\hyperlink{class_agent_migration_request}{Agent\+Migration\+Request}} $\ast$ $>$ $\ast$ $>$ M\+A\+S\+S\+\_\+base\+::migration\+Requests\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [protected]}}
+
+Collection of pointers to containers of \mbox{\hyperlink{class_agent_migration_request}{Agent\+Migration\+Request}} pointers -\/ you can pretty much think of this as a massive queue of all \mbox{\hyperlink{class_agent}{Agent}} migration requests \mbox{\Hypertarget{class_m_a_s_s__base_a91356ede0e58ec0a7f0cd9287415a6cb}\label{class_m_a_s_s__base_a91356ede0e58ec0a7f0cd9287415a6cb}} 
+\index{MASS\_base@{MASS\_base}!myPid@{myPid}}
+\index{myPid@{myPid}!MASS\_base@{MASS\_base}}
+\doxysubsubsection{\texorpdfstring{myPid}{myPid}}
+{\footnotesize\ttfamily int M\+A\+S\+S\+\_\+base\+::my\+Pid = 0\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [protected]}}
+
+Numeric representation of this node\textquotesingle{}s rank (master == 0) \mbox{\Hypertarget{class_m_a_s_s__base_a17680d659ce1d41fd0a735928a3ec0df}\label{class_m_a_s_s__base_a17680d659ce1d41fd0a735928a3ec0df}} 
+\index{MASS\_base@{MASS\_base}!placesMap@{placesMap}}
+\index{placesMap@{placesMap}!MASS\_base@{MASS\_base}}
+\doxysubsubsection{\texorpdfstring{placesMap}{placesMap}}
+{\footnotesize\ttfamily map$<$ int, \mbox{\hyperlink{class_places__base}{Places\+\_\+base}} $\ast$ $>$ M\+A\+S\+S\+\_\+base\+::places\+Map\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [protected]}}
+
+Associative container that stores all \mbox{\hyperlink{class_places}{Places}} collections for a given handle \mbox{\Hypertarget{class_m_a_s_s__base_ac2bf3795de619e14caca306eccdcc14b}\label{class_m_a_s_s__base_ac2bf3795de619e14caca306eccdcc14b}} 
+\index{MASS\_base@{MASS\_base}!remoteRequests@{remoteRequests}}
+\index{remoteRequests@{remoteRequests}!MASS\_base@{MASS\_base}}
+\doxysubsubsection{\texorpdfstring{remoteRequests}{remoteRequests}}
+{\footnotesize\ttfamily vector$<$ vector$<$ \mbox{\hyperlink{class_remote_exchange_request}{Remote\+Exchange\+Request}} $\ast$ $>$ $\ast$ $>$ M\+A\+S\+S\+\_\+base\+::remote\+Requests\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [protected]}}
+
+Collection of pointers to containers of \mbox{\hyperlink{class_remote_exchange_request}{Remote\+Exchange\+Request}} pointers -\/ you can pretty much think of this as a massive queue of all remote exchange requests \mbox{\Hypertarget{class_m_a_s_s__base_a5da16e34deda59c8d56fee11ed213cb0}\label{class_m_a_s_s__base_a5da16e34deda59c8d56fee11ed213cb0}} 
+\index{MASS\_base@{MASS\_base}!requestCounter@{requestCounter}}
+\index{requestCounter@{requestCounter}!MASS\_base@{MASS\_base}}
+\doxysubsubsection{\texorpdfstring{requestCounter}{requestCounter}}
+{\footnotesize\ttfamily int M\+A\+S\+S\+\_\+base\+::request\+Counter\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [protected]}}
+
+Should store the number of requests in queue, but doesn\textquotesingle{}t appear to be fully implemented yet (value is set to zero and never changed) \mbox{\Hypertarget{class_m_a_s_s__base_a242208618a0e59ad4bb5196c1381fea8}\label{class_m_a_s_s__base_a242208618a0e59ad4bb5196c1381fea8}} 
+\index{MASS\_base@{MASS\_base}!systemSize@{systemSize}}
+\index{systemSize@{systemSize}!MASS\_base@{MASS\_base}}
+\doxysubsubsection{\texorpdfstring{systemSize}{systemSize}}
+{\footnotesize\ttfamily int M\+A\+S\+S\+\_\+base\+::system\+Size = 0\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [protected]}}
+
+Number of processes running simulation \mbox{\Hypertarget{class_m_a_s_s__base_a3536c626fd712bc2b1cb001a3d8680a3}\label{class_m_a_s_s__base_a3536c626fd712bc2b1cb001a3d8680a3}} 
+\index{MASS\_base@{MASS\_base}!threads@{threads}}
+\index{threads@{threads}!MASS\_base@{MASS\_base}}
+\doxysubsubsection{\texorpdfstring{threads}{threads}}
+{\footnotesize\ttfamily vector$<$ pthread\+\_\+t $>$ M\+A\+S\+S\+\_\+base\+::threads\hspace{0.3cm}{\ttfamily [static]}}
+
+Collection of threads running this \mbox{\hyperlink{class_m_a_s_s}{M\+A\+SS}} instance 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+M\+A\+S\+S\+\_\+base.\+h\item 
+M\+A\+S\+S\+\_\+base.\+cpp\item 
+Places.\+cpp\end{DoxyCompactItemize}

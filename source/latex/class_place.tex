@@ -1,0 +1,282 @@
+\hypertarget{class_place}{}\doxysection{Place Class Reference}
+\label{class_place}\index{Place@{Place}}
+Inheritance diagram for Place\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=3.000000cm]{class_place}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_place_aa7f1747dce6b33b2a84a98ca5966681e}\label{class_place_aa7f1747dce6b33b2a84a98ca5966681e}} 
+enum {\bfseries neighbor\+Pattern} \{ {\bfseries V\+O\+N\+\_\+\+N\+E\+U\+M\+A\+N\+N2D}, 
+{\bfseries M\+O\+O\+R\+E2D}, 
+{\bfseries V\+O\+N\+\_\+\+N\+E\+U\+M\+A\+N\+N3D}, 
+{\bfseries M\+O\+O\+R\+E3D}
+ \}
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_place_aae4b71d07b1fbe36fa68b6b02c305add}{Place}} (void $\ast$argument)
+\item 
+vector$<$ int $>$ \mbox{\hyperlink{class_place_a02447da994914d5c415777bfb0afaf83}{get\+Size\+Vect}} ()
+\item 
+virtual void $\ast$ \mbox{\hyperlink{class_place_a8c1e4441bd05c8721dcfeba0523afc48}{call\+Method}} (int function\+Id, void $\ast$argument)=0
+\item 
+set$<$ int $\ast$ $>$ \mbox{\hyperlink{class_place_a50534eaba0231e952d1ad3d897fb8bd5}{get\+Neighbors}} ()
+\item 
+void \mbox{\hyperlink{class_place_aab6e76869eafe9ce13518d9a7e1314fe}{add\+Neighbors}} (vector$<$ int $\ast$ $>$ $\ast$destinations)
+\item 
+void \mbox{\hyperlink{class_place_a483539881a3fb23c1c16cc21cee268ef}{remove\+Neighbors}} (vector$<$ int $\ast$ $>$ $\ast$destinations)
+\item 
+bool \mbox{\hyperlink{class_place_ab55d07145202494b136dcb19b93c82c4}{is\+Neighbor}} (int $\ast$destination)
+\item 
+\mbox{\Hypertarget{class_place_a5ea63de0ccb7c31d4a54b2fc2366a202}\label{class_place_a5ea63de0ccb7c31d4a54b2fc2366a202}} 
+vector$<$ int $\ast$ $>$ {\bfseries get\+Neighbors} ()
+\item 
+void \mbox{\hyperlink{class_place_ae27d0fee6e553a310523bc3f042dcf78}{clean\+Neighbors}} ()
+\item 
+void \mbox{\hyperlink{class_place_a4dc267b4a7e9e6f478502c014d3355cc}{add\+Neighbor}} (int $\ast$)
+\item 
+void \mbox{\hyperlink{class_place_a195a5458983dabde6134c60a891d9e31}{add\+Neighbors}} (vector$<$ int $\ast$ $>$)
+\item 
+void \mbox{\hyperlink{class_place_ad217911806107fe8fcd07b6719f81022}{add\+Neighbors}} (neighbor\+Pattern pattern)
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+vector$<$ int $>$ \mbox{\hyperlink{class_place_a44cc2d415303a469256f4ef8e7db42bd}{size}}
+\item 
+vector$<$ int $>$ \mbox{\hyperlink{class_place_a06cca84c479a85053c2e03984ea50825}{index}}
+\item 
+void $\ast$ \mbox{\hyperlink{class_place_a8e1f880d741c1d9908ca1802afd79f58}{out\+Message}}
+\item 
+vector$<$ void $\ast$ $>$ \mbox{\hyperlink{class_place_a616ca8bfc5ec8d31445390962b2b55eb}{in\+Messages}}
+\item 
+int \mbox{\hyperlink{class_place_a8583a77ab0458b1a60c2b094b020d54f}{out\+Message\+\_\+size}}
+\item 
+int \mbox{\hyperlink{class_place_aa05127a791736880e93e58adc3463162}{in\+Message\+\_\+size}}
+\item 
+vector$<$ \mbox{\hyperlink{class_m_object}{M\+Object}} $\ast$ $>$ \mbox{\hyperlink{class_place_a0dc06840abca8a3717b38cb67f8aa488}{agents}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void $\ast$ \mbox{\hyperlink{class_place_a50ced81d26f901358bae63125718afff}{get\+Out\+Message}} (int handle, int \mbox{\hyperlink{class_place_a06cca84c479a85053c2e03984ea50825}{index}}\mbox{[}$\,$\mbox{]})
+\item 
+void \mbox{\hyperlink{class_place_a09d1964b73f7abff4ad800f94e96c755}{put\+In\+Message}} (int handle, int \mbox{\hyperlink{class_place_a06cca84c479a85053c2e03984ea50825}{index}}\mbox{[}$\,$\mbox{]}, int position, void $\ast$value)
+\end{DoxyCompactItemize}
+\doxysubsection*{Friends}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_place_abc54a816edf7b554465a32494a6c5eae}\label{class_place_abc54a816edf7b554465a32494a6c5eae}} 
+class {\bfseries Places\+\_\+base}
+\item 
+\mbox{\Hypertarget{class_place_acb8017236302fd377a59241f17749ba2}\label{class_place_acb8017236302fd377a59241f17749ba2}} 
+class {\bfseries Agents\+\_\+base}
+\item 
+\mbox{\Hypertarget{class_place_a1d1436d7c2c8e539d72ab407ecb68b94}\label{class_place_a1d1436d7c2c8e539d72ab407ecb68b94}} 
+class {\bfseries Agent}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_place_aae4b71d07b1fbe36fa68b6b02c305add}\label{class_place_aae4b71d07b1fbe36fa68b6b02c305add}} 
+\index{Place@{Place}!Place@{Place}}
+\index{Place@{Place}!Place@{Place}}
+\doxysubsubsection{\texorpdfstring{Place()}{Place()}}
+{\footnotesize\ttfamily Place\+::\+Place (\begin{DoxyParamCaption}\item[{void $\ast$}]{argument }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Is the default constructor. A contiguous space of arguments is passed to the constructor. 
+\begin{DoxyParams}{Parameters}
+{\em argument} & \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_place_a4dc267b4a7e9e6f478502c014d3355cc}\label{class_place_a4dc267b4a7e9e6f478502c014d3355cc}} 
+\index{Place@{Place}!addNeighbor@{addNeighbor}}
+\index{addNeighbor@{addNeighbor}!Place@{Place}}
+\doxysubsubsection{\texorpdfstring{addNeighbor()}{addNeighbor()}}
+{\footnotesize\ttfamily void Place\+::add\+Neighbor (\begin{DoxyParamCaption}\item[{int $\ast$}]{index }\end{DoxyParamCaption})}
+
+Add a single neighbor to this place, neighbor vector should be created in the heap, program will clean it up later, no need for the user to do so. \mbox{\Hypertarget{class_place_ad217911806107fe8fcd07b6719f81022}\label{class_place_ad217911806107fe8fcd07b6719f81022}} 
+\index{Place@{Place}!addNeighbors@{addNeighbors}}
+\index{addNeighbors@{addNeighbors}!Place@{Place}}
+\doxysubsubsection{\texorpdfstring{addNeighbors()}{addNeighbors()}\hspace{0.1cm}{\footnotesize\ttfamily [1/3]}}
+{\footnotesize\ttfamily void Place\+::add\+Neighbors (\begin{DoxyParamCaption}\item[{neighbor\+Pattern}]{pattern }\end{DoxyParamCaption})}
+
+adds neighbors in a given pattern if they exist. \mbox{\Hypertarget{class_place_aab6e76869eafe9ce13518d9a7e1314fe}\label{class_place_aab6e76869eafe9ce13518d9a7e1314fe}} 
+\index{Place@{Place}!addNeighbors@{addNeighbors}}
+\index{addNeighbors@{addNeighbors}!Place@{Place}}
+\doxysubsubsection{\texorpdfstring{addNeighbors()}{addNeighbors()}\hspace{0.1cm}{\footnotesize\ttfamily [2/3]}}
+{\footnotesize\ttfamily void Place\+::add\+Neighbors (\begin{DoxyParamCaption}\item[{vector$<$ int $\ast$ $>$ $\ast$}]{destinations }\end{DoxyParamCaption})}
+
+Allows the user to add a list of neighbors to this specific place. 
+\begin{DoxyParams}{Parameters}
+{\em destinations} & -\/ The neighbors to be added to the current neighbors list \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_place_a195a5458983dabde6134c60a891d9e31}\label{class_place_a195a5458983dabde6134c60a891d9e31}} 
+\index{Place@{Place}!addNeighbors@{addNeighbors}}
+\index{addNeighbors@{addNeighbors}!Place@{Place}}
+\doxysubsubsection{\texorpdfstring{addNeighbors()}{addNeighbors()}\hspace{0.1cm}{\footnotesize\ttfamily [3/3]}}
+{\footnotesize\ttfamily void Place\+::add\+Neighbors (\begin{DoxyParamCaption}\item[{vector$<$ int $\ast$ $>$}]{indexes }\end{DoxyParamCaption})}
+
+replace neighbors completely using a vector of places \mbox{\Hypertarget{class_place_a8c1e4441bd05c8721dcfeba0523afc48}\label{class_place_a8c1e4441bd05c8721dcfeba0523afc48}} 
+\index{Place@{Place}!callMethod@{callMethod}}
+\index{callMethod@{callMethod}!Place@{Place}}
+\doxysubsubsection{\texorpdfstring{callMethod()}{callMethod()}}
+{\footnotesize\ttfamily virtual void$\ast$ Place\+::call\+Method (\begin{DoxyParamCaption}\item[{int}]{function\+Id,  }\item[{void $\ast$}]{argument }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+Is called from \mbox{\hyperlink{class_places_a7ae5662bea16d6191b16b8beba732cb6}{Places.\+call\+All( )}}, call\+Some( ), exchange\+All( ), and exchange\+Some( ), and invoke the function specified with function\+Id as passing arguments to this function. A user-\/derived \mbox{\hyperlink{class_place}{Place}} class must implement this method. 
+\begin{DoxyParams}{Parameters}
+{\em function\+Id} & \\
+\hline
+{\em argument} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{class_m_object}{M\+Object}}.
+
+\mbox{\Hypertarget{class_place_ae27d0fee6e553a310523bc3f042dcf78}\label{class_place_ae27d0fee6e553a310523bc3f042dcf78}} 
+\index{Place@{Place}!cleanNeighbors@{cleanNeighbors}}
+\index{cleanNeighbors@{cleanNeighbors}!Place@{Place}}
+\doxysubsubsection{\texorpdfstring{cleanNeighbors()}{cleanNeighbors()}}
+{\footnotesize\ttfamily void Place\+::clean\+Neighbors (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+clears the neighbor vector and fully clears the heap from any int\mbox{[}\mbox{]}\textquotesingle{}s stored there \mbox{\Hypertarget{class_place_a50534eaba0231e952d1ad3d897fb8bd5}\label{class_place_a50534eaba0231e952d1ad3d897fb8bd5}} 
+\index{Place@{Place}!getNeighbors@{getNeighbors}}
+\index{getNeighbors@{getNeighbors}!Place@{Place}}
+\doxysubsubsection{\texorpdfstring{getNeighbors()}{getNeighbors()}}
+{\footnotesize\ttfamily vector$<$ int $\ast$ $>$ Place\+::get\+Neighbors (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+return the vector containing this places neighbors \mbox{\Hypertarget{class_place_a50ced81d26f901358bae63125718afff}\label{class_place_a50ced81d26f901358bae63125718afff}} 
+\index{Place@{Place}!getOutMessage@{getOutMessage}}
+\index{getOutMessage@{getOutMessage}!Place@{Place}}
+\doxysubsubsection{\texorpdfstring{getOutMessage()}{getOutMessage()}}
+{\footnotesize\ttfamily void $\ast$ Place\+::get\+Out\+Message (\begin{DoxyParamCaption}\item[{int}]{handle,  }\item[{int}]{offset\mbox{[}$\,$\mbox{]} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+\begin{DoxyParams}{Parameters}
+{\em handle} & \\
+\hline
+{\em offset} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_place_a02447da994914d5c415777bfb0afaf83}\label{class_place_a02447da994914d5c415777bfb0afaf83}} 
+\index{Place@{Place}!getSizeVect@{getSizeVect}}
+\index{getSizeVect@{getSizeVect}!Place@{Place}}
+\doxysubsubsection{\texorpdfstring{getSizeVect()}{getSizeVect()}}
+{\footnotesize\ttfamily vector$<$ int $>$ Place\+::get\+Size\+Vect (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Returns the size of the matrix that consists of application-\/specific places. Intuitively, size\mbox{[}0\mbox{]}, size\mbox{[}1\mbox{]}, and size\mbox{[}2\mbox{]} correspond to the size of x, y, and z, or that of i, j, and k.
+
+\begin{DoxyReturn}{Returns}
+a collection of sizes that correspond to each dimension in the simulation space 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_place_ab55d07145202494b136dcb19b93c82c4}\label{class_place_ab55d07145202494b136dcb19b93c82c4}} 
+\index{Place@{Place}!isNeighbor@{isNeighbor}}
+\index{isNeighbor@{isNeighbor}!Place@{Place}}
+\doxysubsubsection{\texorpdfstring{isNeighbor()}{isNeighbor()}}
+{\footnotesize\ttfamily bool Place\+::is\+Neighbor (\begin{DoxyParamCaption}\item[{int $\ast$}]{destination }\end{DoxyParamCaption})}
+
+Checks if a given neighbor exists in a \mbox{\hyperlink{class_place}{Place}}\textquotesingle{}s list of neighbors. 
+\begin{DoxyParams}{Parameters}
+{\em destination} & -\/ The neighbor to check for \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true if the neighbor exists, false if it does not. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_place_a09d1964b73f7abff4ad800f94e96c755}\label{class_place_a09d1964b73f7abff4ad800f94e96c755}} 
+\index{Place@{Place}!putInMessage@{putInMessage}}
+\index{putInMessage@{putInMessage}!Place@{Place}}
+\doxysubsubsection{\texorpdfstring{putInMessage()}{putInMessage()}}
+{\footnotesize\ttfamily void Place\+::put\+In\+Message (\begin{DoxyParamCaption}\item[{int}]{handle,  }\item[{int}]{offset\mbox{[}$\,$\mbox{]},  }\item[{int}]{position,  }\item[{void $\ast$}]{value }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+Method to store an input message within a given \mbox{\hyperlink{class_place}{Place}} of the simulation.
+
+
+\begin{DoxyParams}{Parameters}
+{\em handle} & unique identifier for a set of \mbox{\hyperlink{class_places}{Places}} in this simulation \\
+\hline
+{\em offset} & relative location of destination (\mbox{\hyperlink{class_place}{Place}}) to store input message \\
+\hline
+{\em position} & numerical index to place input message (in message array) \\
+\hline
+{\em value} & pointer to value to store in message array \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_place_a483539881a3fb23c1c16cc21cee268ef}\label{class_place_a483539881a3fb23c1c16cc21cee268ef}} 
+\index{Place@{Place}!removeNeighbors@{removeNeighbors}}
+\index{removeNeighbors@{removeNeighbors}!Place@{Place}}
+\doxysubsubsection{\texorpdfstring{removeNeighbors()}{removeNeighbors()}}
+{\footnotesize\ttfamily void Place\+::remove\+Neighbors (\begin{DoxyParamCaption}\item[{vector$<$ int $\ast$ $>$ $\ast$}]{destinations }\end{DoxyParamCaption})}
+
+Allows the user to remove a list of specified neighbors from this specific place. Note that the neighbors can range 
+\begin{DoxyParams}{Parameters}
+{\em destinations} & -\/ The neighbors to be removed from the current neighbors list \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{class_place_a0dc06840abca8a3717b38cb67f8aa488}\label{class_place_a0dc06840abca8a3717b38cb67f8aa488}} 
+\index{Place@{Place}!agents@{agents}}
+\index{agents@{agents}!Place@{Place}}
+\doxysubsubsection{\texorpdfstring{agents}{agents}}
+{\footnotesize\ttfamily vector$<$\mbox{\hyperlink{class_m_object}{M\+Object}} $\ast$$>$ Place\+::agents}
+
+Includes all the agents residing locally on this place. \mbox{\Hypertarget{class_place_a06cca84c479a85053c2e03984ea50825}\label{class_place_a06cca84c479a85053c2e03984ea50825}} 
+\index{Place@{Place}!index@{index}}
+\index{index@{index}!Place@{Place}}
+\doxysubsubsection{\texorpdfstring{index}{index}}
+{\footnotesize\ttfamily vector$<$int$>$ Place\+::index}
+
+Is an array that maintains each place’s coordinates. Intuitively, index\mbox{[}0\mbox{]}, index\mbox{[}1\mbox{]}, and index\mbox{[}2\mbox{]} correspond to coordinates of x, y, and z, or those of i, j, and k. \mbox{\Hypertarget{class_place_aa05127a791736880e93e58adc3463162}\label{class_place_aa05127a791736880e93e58adc3463162}} 
+\index{Place@{Place}!inMessage\_size@{inMessage\_size}}
+\index{inMessage\_size@{inMessage\_size}!Place@{Place}}
+\doxysubsubsection{\texorpdfstring{inMessage\_size}{inMessage\_size}}
+{\footnotesize\ttfamily int Place\+::in\+Message\+\_\+size}
+
+Defines the size of in\+Message. \mbox{\Hypertarget{class_place_a616ca8bfc5ec8d31445390962b2b55eb}\label{class_place_a616ca8bfc5ec8d31445390962b2b55eb}} 
+\index{Place@{Place}!inMessages@{inMessages}}
+\index{inMessages@{inMessages}!Place@{Place}}
+\doxysubsubsection{\texorpdfstring{inMessages}{inMessages}}
+{\footnotesize\ttfamily vector$<$void $\ast$$>$ Place\+::in\+Messages}
+
+Receives a return value in in\+Messages\mbox{[}i\mbox{]} from a function call made to the i-\/th remote cell through exchange\+All( ) and exchange\+Some( ). Each element size must be specified with in\+Message\+\_\+size. \mbox{\Hypertarget{class_place_a8e1f880d741c1d9908ca1802afd79f58}\label{class_place_a8e1f880d741c1d9908ca1802afd79f58}} 
+\index{Place@{Place}!outMessage@{outMessage}}
+\index{outMessage@{outMessage}!Place@{Place}}
+\doxysubsubsection{\texorpdfstring{outMessage}{outMessage}}
+{\footnotesize\ttfamily void$\ast$ Place\+::out\+Message}
+
+Stores a set arguments to be passed to a set of remote-\/cell functions that will be invoked by exchange\+All( ) or exchange\+Some( ) in the nearest future. The argument size must be specified with out\+Message\+\_\+size. \mbox{\Hypertarget{class_place_a8583a77ab0458b1a60c2b094b020d54f}\label{class_place_a8583a77ab0458b1a60c2b094b020d54f}} 
+\index{Place@{Place}!outMessage\_size@{outMessage\_size}}
+\index{outMessage\_size@{outMessage\_size}!Place@{Place}}
+\doxysubsubsection{\texorpdfstring{outMessage\_size}{outMessage\_size}}
+{\footnotesize\ttfamily int Place\+::out\+Message\+\_\+size}
+
+Defines the size of out\+Message. \mbox{\Hypertarget{class_place_a44cc2d415303a469256f4ef8e7db42bd}\label{class_place_a44cc2d415303a469256f4ef8e7db42bd}} 
+\index{Place@{Place}!size@{size}}
+\index{size@{size}!Place@{Place}}
+\doxysubsubsection{\texorpdfstring{size}{size}}
+{\footnotesize\ttfamily vector$<$int$>$ Place\+::size}
+
+Defines the size of the matrix that consists of application-\/specific places. Intuitively, size\mbox{[}0\mbox{]}, size\mbox{[}1\mbox{]}, and size\mbox{[}2\mbox{]} correspond to the size of x, y, and z, or that of i, j, and k. 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+Place.\+h\item 
+Place.\+cpp\end{DoxyCompactItemize}

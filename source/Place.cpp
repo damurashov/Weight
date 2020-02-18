@@ -42,7 +42,7 @@ vector<int> Place::getSizeVect() { return size; }
  * Object, using the 'handle' to ensure that they both live within the same
  * simulation space, and the value(s) passed as offset to determine the relative
  * location of the Place to retrieve.
- * 
+ *
  * @param handle  unique identifier for a set of Places in this simulation
  * @param offset  relative location of destination (Place) to retrieve output
  *                message from
@@ -69,42 +69,21 @@ Place *Place::findDstPlace(int handle, int offset[]) {
     int destinationLocalLinearIndex =
         globalLinearIndex - places->lower_boundary;
 
-    // return the destination outMessage
-    return (dstPlace != NULL) ? dstPlace->outMessage : NULL;
-}
+    Place *dstPlace = NULL;
+    int shadow_index;
+    if (destinationLocalLinearIndex >= 0 &&
+        destinationLocalLinearIndex < places->places_size)
+        dstPlace = dllclass->places[destinationLocalLinearIndex];
+    else if (destinationLocalLinearIndex < 0 &&
+             (shadow_index =
+                  destinationLocalLinearIndex + places->shadow_size) >= 0)
+        dstPlace = dllclass->left_shadow[shadow_index];
+    else if ((shadow_index =
+                  destinationLocalLinearIndex - places->places_size) >= 0 &&
+             shadow_index < places->shadow_size)
+        dstPlace = dllclass->right_shadow[shadow_index];
 
-/**
- * Allows the user to add a list of neighbors to this specific place.
- * @param destinations - The neighbors to be added to the current neighbors list
- */
-void Place::addNeighbors(vector<int*> *destinations) {
-  int *tmp; // to hold elements from destinations
-
-  // for each place in destinations, get the coordinate pair
-  for ( int i = 0; i < int( destinations->size( ) ); i++ ) {
-    tmp = (*destinations)[i];
-      
-      // using a set eliminates duplicates and guarantees items are sorted.
-      // A speed boost can be achieved by providing a 'hint' as to the location
-      // where you want to insert next.  This is currently not implemented.
-      neighbors.insert(tmp);
-  }
-}
-
-/**
- * Allows the user to remove a list of specified neighbors from this specific place.
- * Note that the neighbors can range
- * @param destinations - The neighbors to be removed from the current neighbors list
- */
-void Place::removeNeighbors(vector<int*> *destinations) {
-  int *tmp; // to hold elements in destinations
-
-  // for each place in destinations, get the coordinate pair
-  for ( int i = 0; i < int( destinations->size( ) ); i++ ) {
-    tmp = (*destinations)[i];
-
-    neighbors.erase(tmp);
-  }
+    return dstPlace;
 }
 
 /**
@@ -113,21 +92,39 @@ void Place::removeNeighbors(vector<int*> *destinations) {
  * @return  true if the neighbor exists, false if it does not.
  */
 bool Place::isNeighbor(int *destination) {
-
-  set<int*>::iterator it = neighbors.find(destination);
-  if (it!=neighbors.end()) {
-    return true;
-  } else return false;
+    for (unsigned int i = 0; i < neighbors.size(); i++) {
+        if (neighbors[i] == destination) {
+            return true;
+        }
+    }
+    return false;
 }
 
-
 /**
- * 
+ *
  * @param handle
  * @param offset
  * @return
  */
 void *Place::getOutMessage(int handle, int offset[]) {
+    Place *dstPlace = findDstPlace(handle, offset);
+
+    // return the destination outMessage
+    return (dstPlace != NULL) ? dstPlace->outMessage : NULL;
+}
+
+/**
+ * Method to store an input message within a given Place of the simulation.
+ *
+ * @param handle    unique identifier for a set of Places in this simulation
+ * @param offset    relative location of destination (Place) to store input
+ * message
+ * @param position  numerical index to place input message (in message array)
+ * @param value     pointer to value to store in message array
+ */
+void Place::putInMessage(int handle, int offset[], int position, void *value) {
+    Place *dstPlace = findDstPlace(handle, offset);
+
     // fill out the space if inMessages are empty
     for (int i = 0; i <= position; i++)
         if (int(dstPlace->inMessages.size()) <= i &&
@@ -135,20 +132,15 @@ void *Place::getOutMessage(int handle, int offset[]) {
             dstPlace->inMessages.push_back(malloc(dstPlace->inMessage_size));
 
     // write to the destination inMessage[position]
-    if (dstPlace != NULL && position < int(dstPlace->inMessages.size())) {
+    if (dstPlace != NULL && position < int(dstPlace->inMessages.size()))
         memcpy(dstPlace->inMessages[position], value, dstPlace->inMessage_size);
-    }
 }
-/**
- * return the vector containing this places neighbors
- */
-vector<int *> Place::getNeighbors() { return this->neighbors; }
 /**
  * clears the neighbor vector and fully clears the heap from any int[]'s stored
  * there
  */
 void Place::cleanNeighbors() {
-    for (int i = 0; i < neighbors.size(); i++) {
+    for (unsigned int i = 0; i < neighbors.size(); i++) {
         if (neighbors.at(i)) {
             delete[](neighbors.at(i));
         }
@@ -160,20 +152,22 @@ void Place::cleanNeighbors() {
  */
 void Place::addNeighbors(vector<int *> indexes) {
     cleanNeighbors();
-    for (int i = 0; i < indexes.size(); i++) {
-        neighbors.push_back(indexes.at(i));
-    }
+    copy(indexes.begin(), indexes.end(), back_inserter(neighbors));
 }
 /**
  * Add a single neighbor to this place, neighbor vector should be created in the
  * heap, program will clean it up later, no need for the user to do so.
  */
-void Place::addNeighbor(int *index) {
+void Place::addNeighbor(int *index, int dimension) {
     // check for redundant connections?
     // for (int i = 0; i < neighbors.size(); i++) {
     //     if (neighbors.at(i)) {
     //     }
-    neighbors.push_back(index);
+    int tmp[dimension];
+    for (int i = 0; i < dimension; i++) {
+        tmp[i] = index[i];
+    }
+    neighbors.push_back(tmp);
 }
 /**
  * adds neighbors in a given pattern if they exist.
@@ -200,28 +194,6 @@ void Place::addNeighbors(neighborPattern pattern) {
         default:
             break;
     }
-}
-
-/**
- * Method to store an input message within a given Place of the simulation.
- * 
- * @param handle    unique identifier for a set of Places in this simulation
- * @param offset    relative location of destination (Place) to store input message
- * @param position  numerical index to place input message (in message array)
- * @param value     pointer to value to store in message array
- */
-void Place::putInMessage( int handle, int offset[], int position,
-    void *value ) {
-
-    // fill out the space if inMessages are empty
-    for (int i = 0; i <= position; i++)
-        if (int(dstPlace->inMessages.size()) <= i &&
-            dstPlace->inMessage_size > 0)
-            dstPlace->inMessages.push_back(malloc(dstPlace->inMessage_size));
-
-    // write to the destination inMessage[position]
-    if (dstPlace != NULL && position < int(dstPlace->inMessages.size()))
-        memcpy(dstPlace->inMessages[position], value, dstPlace->inMessage_size);
 }
 
 vector<int *> Place::getVNNeighbors2d() {
@@ -274,7 +246,7 @@ vector<int *> Place::getMooreNeighbors3d() {
     vector<int *> result;
     // 26 neighbors for full coverage
     // unit vectors
-    result = getMeadNeighbors3d();
+    result = getMooreNeighbors2d();
     // x and y
     int *xy = new int[3]{1, 1, 0};
     result.push_back(xy);

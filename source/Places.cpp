@@ -821,25 +821,6 @@ void Places::exchangeAll(int dest_handle, int functionId) {
     MASS::barrier_all_slaves();
 }
 
-// reset requestCounter by the main thread
-MASS_base::requestCounter = 0;
-
-// for debug
-MASS_base::showHosts();
-
-// resume threads
-Mthread::resumeThreads(Mthread::STATUS_EXCHANGEALL);
-
-// exchangeall implementation
-Places_base::exchangeAll(MASS_base::destinationPlaces, functionId,
-                         MASS_base::currentDestinations, 0);
-
-// confirm all threads are done with exchangeAll.
-Mthread::barrierThreads(0);
-
-// Synchronized with all slave processes
-MASS::barrier_all_slaves();
-}
 /**
  * This is similar to exchangeAll, but the method is confined to just exchange
  * existing data, the scope of affected Places is reduced, and the destinations

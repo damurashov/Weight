@@ -1,0 +1,66 @@
+\hypertarget{class_m_node}{}\doxysection{M\+Node Class Reference}
+\label{class_m_node}\index{MNode@{MNode}}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_m_node_a624c5738a3b1b3595876f11cb62a54f4}\label{class_m_node_a624c5738a3b1b3595876f11cb62a54f4}} 
+{\bfseries M\+Node} (string host\+Name, int pid, \mbox{\hyperlink{class_ssh2_connection}{Ssh2\+Connection}} $\ast$ssh2connection, int sd)
+\item 
+void \mbox{\hyperlink{class_m_node_aeaff580eaaf5fdc8524b05af05f27bef}{close\+Main\+Connection}} ()
+\item 
+void \mbox{\hyperlink{class_m_node_a64a02e1b5ebac989d1f46a24ed62d6c1}{send\+Message}} (\mbox{\hyperlink{class_message}{Message}} $\ast$m)
+\item 
+\mbox{\hyperlink{class_message}{Message}} $\ast$ \mbox{\hyperlink{class_m_node_a0d429c0275bc2273bfff2dcf0c027874}{receive\+Message}} ()
+\item 
+\mbox{\Hypertarget{class_m_node_a34dfd82e178ec3d8bb00d1e172cb43fe}\label{class_m_node_a34dfd82e178ec3d8bb00d1e172cb43fe}} 
+\mbox{\hyperlink{class_ssh2_connection}{Ssh2\+Connection}} $\ast$ {\bfseries get\+Connection} ()
+\item 
+\mbox{\Hypertarget{class_m_node_ab511b776b9f1994172e7a37d4726cdf1}\label{class_m_node_ab511b776b9f1994172e7a37d4726cdf1}} 
+string {\bfseries get\+Host\+Name} ()
+\item 
+\mbox{\Hypertarget{class_m_node_ad85d2547d5603800f1b5ed063de31d55}\label{class_m_node_ad85d2547d5603800f1b5ed063de31d55}} 
+int {\bfseries get\+Pid} ()
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_m_node_aeaff580eaaf5fdc8524b05af05f27bef}\label{class_m_node_aeaff580eaaf5fdc8524b05af05f27bef}} 
+\index{MNode@{MNode}!closeMainConnection@{closeMainConnection}}
+\index{closeMainConnection@{closeMainConnection}!MNode@{MNode}}
+\doxysubsubsection{\texorpdfstring{closeMainConnection()}{closeMainConnection()}}
+{\footnotesize\ttfamily void M\+Node\+::close\+Main\+Connection (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Not yet implemented. \mbox{\Hypertarget{class_m_node_a0d429c0275bc2273bfff2dcf0c027874}\label{class_m_node_a0d429c0275bc2273bfff2dcf0c027874}} 
+\index{MNode@{MNode}!receiveMessage@{receiveMessage}}
+\index{receiveMessage@{receiveMessage}!MNode@{MNode}}
+\doxysubsubsection{\texorpdfstring{receiveMessage()}{receiveMessage()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_message}{Message}} $\ast$ M\+Node\+::receive\+Message (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Method to receive messages from individual \mbox{\hyperlink{class_m_node}{M\+Node}} instances within a simulation.
+
+Each host used in a simulation is represented by an \mbox{\hyperlink{class_m_node}{M\+Node}}, which provides an interface to the various \mbox{\hyperlink{class_m_process}{M\+Process}} and M\+Thread instances running on the host, using a common messaging paradigm.
+
+\begin{DoxyReturn}{Returns}
+the \mbox{\hyperlink{class_message}{Message}} from this \mbox{\hyperlink{class_m_node}{M\+Node}} 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_m_node_a64a02e1b5ebac989d1f46a24ed62d6c1}\label{class_m_node_a64a02e1b5ebac989d1f46a24ed62d6c1}} 
+\index{MNode@{MNode}!sendMessage@{sendMessage}}
+\index{sendMessage@{sendMessage}!MNode@{MNode}}
+\doxysubsubsection{\texorpdfstring{sendMessage()}{sendMessage()}}
+{\footnotesize\ttfamily void M\+Node\+::send\+Message (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_message}{Message}} $\ast$}]{m }\end{DoxyParamCaption})}
+
+Method to send messages to individual \mbox{\hyperlink{class_m_node}{M\+Node}} instances within a simulation.
+
+Each host used in a simulation is represented by an \mbox{\hyperlink{class_m_node}{M\+Node}}, which provides an interface to the various \mbox{\hyperlink{class_m_process}{M\+Process}} and M\+Thread instances running on the host, using a common messaging paradigm.
+
+
+\begin{DoxyParams}{Parameters}
+{\em m} & the address of (pointer) the actual \mbox{\hyperlink{class_message}{Message}} Object to send \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+M\+Node.\+h\item 
+M\+Node.\+cpp\end{DoxyCompactItemize}

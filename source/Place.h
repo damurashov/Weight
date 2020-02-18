@@ -100,12 +100,8 @@ class Place : MObject {
     vector<MObject *> agents;
 
     // Methods to set, add, and remove neighbors.
-    set<int *> getNeighbors() { return neighbors; };
-    void addNeighbors(vector<int *> *destinations);
-    void removeNeighbors(vector<int *> *destinations);
+    vector<int *> getNeighbors() { return neighbors; };
     bool isNeighbor(int *destination);
-
-    ~Place(){};
 
    protected:
     void *getOutMessage(int handle, int index[]);
@@ -127,10 +123,8 @@ class Place : MObject {
         MOORE3D,
     };
 
-    vector<int *> getNeighbors();
-
     void cleanNeighbors();
-    void addNeighbor(int *);
+    void addNeighbor(int *, int dimension);
     void addNeighbors(vector<int *>);
     void addNeighbors(neighborPattern pattern);
 

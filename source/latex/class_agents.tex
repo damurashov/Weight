@@ -1,0 +1,204 @@
+\hypertarget{class_agents}{}\doxysection{Agents Class Reference}
+\label{class_agents}\index{Agents@{Agents}}
+
+
+{\ttfamily \#include $<$Agents.\+h$>$}
+
+Inheritance diagram for Agents\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_agents}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_agents_a7bb953c35e02ac3e82b42ece9ca5e9b5}{Agents}} (int handle, string class\+Name, void $\ast$argument, int argument\+\_\+size, \mbox{\hyperlink{class_places}{Places}} $\ast$places, int init\+Population)
+\item 
+void \mbox{\hyperlink{class_agents_a058d674baa86786d646e8dfb3372477b}{call\+All}} (int function\+Id)
+\item 
+void \mbox{\hyperlink{class_agents_aee5e963be750e3bbbf948d8f58d85489}{call\+All}} (int function\+Id, void $\ast$argument, int arg\+\_\+size)
+\item 
+void $\ast$ \mbox{\hyperlink{class_agents_a80628bf80cf3c21cf538c01a5ec6c5e9}{call\+All}} (int function\+Id, void $\ast$argument, int arg\+\_\+size, int ret\+\_\+size)
+\item 
+\mbox{\Hypertarget{class_agents_a75febdecb97882846b36a40ad6e8529e}\label{class_agents_a75febdecb97882846b36a40ad6e8529e}} 
+void {\bfseries do\+All} (int function\+Id, int number\+Of\+Iterations)
+\item 
+\mbox{\Hypertarget{class_agents_ab50bae274019a80b674d35b28f4fb9e8}\label{class_agents_ab50bae274019a80b674d35b28f4fb9e8}} 
+void $\ast$ {\bfseries do\+All} (int function\+Id, void $\ast$argument, int arg\+\_\+size, int number\+Of\+Iterations, int ret\+\_\+size)
+\item 
+\mbox{\Hypertarget{class_agents_a0082d24fbe0507b6400f3f73df36c3c0}\label{class_agents_a0082d24fbe0507b6400f3f73df36c3c0}} 
+void {\bfseries do\+All} (int function\+Id\+List\mbox{[}$\,$\mbox{]}, int func\+\_\+size, void $\ast$argument\+List\mbox{[}$\,$\mbox{]}, int arg\+\_\+size, int number\+Of\+Iterations)
+\item 
+void \mbox{\hyperlink{class_agents_a89b1475f698697ab91bd75a267d4236c}{manage\+All}} ()
+\item 
+void \mbox{\hyperlink{class_agents_a2d7ec3d2bb86008ef91ea9c16e3a3ebf}{ma\+\_\+setup}} ()
+\item 
+\mbox{\Hypertarget{class_agents_af29344641f1d520cd2a91c792d6e64f4}\label{class_agents_af29344641f1d520cd2a91c792d6e64f4}} 
+int {\bfseries n\+Agents} ()
+\item 
+void \mbox{\hyperlink{class_agents_a8e7d492b8329859c5172d7cee208bd1f}{init\+\_\+master}} (void $\ast$argument, int argument\+\_\+size)
+\end{DoxyCompactItemize}
+\doxysubsection*{Additional Inherited Members}
+
+
+\doxysubsection{Detailed Description}
+\mbox{\hyperlink{class_agents}{Agents}} class 
+\begin{DoxyParams}{Parameters}
+{\em handle} & \\
+\hline
+{\em class\+Name} & \\
+\hline
+{\em argument} & \\
+\hline
+{\em argument\+\_\+size} & \\
+\hline
+{\em places} & \\
+\hline
+{\em init\+Population} & \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_agents_a7bb953c35e02ac3e82b42ece9ca5e9b5}\label{class_agents_a7bb953c35e02ac3e82b42ece9ca5e9b5}} 
+\index{Agents@{Agents}!Agents@{Agents}}
+\index{Agents@{Agents}!Agents@{Agents}}
+\doxysubsubsection{\texorpdfstring{Agents()}{Agents()}}
+{\footnotesize\ttfamily Agents\+::\+Agents (\begin{DoxyParamCaption}\item[{int}]{handle,  }\item[{string}]{class\+Name,  }\item[{void $\ast$}]{argument,  }\item[{int}]{argument\+\_\+size,  }\item[{\mbox{\hyperlink{class_places}{Places}} $\ast$}]{places,  }\item[{int}]{init\+Population }\end{DoxyParamCaption})}
+
+Instantiates a set of agents from the \char`\"{}class\+Name\char`\"{} class, passes the \char`\"{}argument\char`\"{} object to their constructor, associates them with a given \char`\"{}\+Places\char`\"{} matrix, and distributes them over these places, based the map( ) method that is defined within the \mbox{\hyperlink{class_agent}{Agent}} class. If a user does not overload it by him/herself, map( ) uniformly distributes an \char`\"{}init\+Population\char`\"{} number of agents. If a user-\/provided map( ) method is used, it must return the number of agents spawned at each place regardless of the init\+Population parameter. Each set of agents is associated with a user-\/given handle that must be unique over machines. 
+\begin{DoxyParams}{Parameters}
+{\em handle} & \\
+\hline
+{\em class\+Name} & \\
+\hline
+{\em argument} & \\
+\hline
+{\em argument\+\_\+size} & \\
+\hline
+{\em places} & \\
+\hline
+{\em init\+Population} & \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_agents_a058d674baa86786d646e8dfb3372477b}\label{class_agents_a058d674baa86786d646e8dfb3372477b}} 
+\index{Agents@{Agents}!callAll@{callAll}}
+\index{callAll@{callAll}!Agents@{Agents}}
+\doxysubsubsection{\texorpdfstring{callAll()}{callAll()}\hspace{0.1cm}{\footnotesize\ttfamily [1/3]}}
+{\footnotesize\ttfamily void Agents\+::call\+All (\begin{DoxyParamCaption}\item[{int}]{function\+Id }\end{DoxyParamCaption})}
+
+Calls the method specified with function\+Id of all agents. Done in parallel among multi-\/processes/threads 
+\begin{DoxyParams}{Parameters}
+{\em function\+Id} & \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_agents_aee5e963be750e3bbbf948d8f58d85489}\label{class_agents_aee5e963be750e3bbbf948d8f58d85489}} 
+\index{Agents@{Agents}!callAll@{callAll}}
+\index{callAll@{callAll}!Agents@{Agents}}
+\doxysubsubsection{\texorpdfstring{callAll()}{callAll()}\hspace{0.1cm}{\footnotesize\ttfamily [2/3]}}
+{\footnotesize\ttfamily void Agents\+::call\+All (\begin{DoxyParamCaption}\item[{int}]{function\+Id,  }\item[{void $\ast$}]{argument,  }\item[{int}]{arg\+\_\+size }\end{DoxyParamCaption})}
+
+Calls the method specified with function\+Id of all agents as passing a (void $\ast$)argument to the method. Done in parallel among multi-\/processes/threads. 
+\begin{DoxyParams}{Parameters}
+{\em \{int\}} & function\+Id \+: \\
+\hline
+{\em \{void$\ast$\}} & argument \+: \\
+\hline
+{\em \{int\}} & arg\+\_\+size \+: \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_agents_a80628bf80cf3c21cf538c01a5ec6c5e9}\label{class_agents_a80628bf80cf3c21cf538c01a5ec6c5e9}} 
+\index{Agents@{Agents}!callAll@{callAll}}
+\index{callAll@{callAll}!Agents@{Agents}}
+\doxysubsubsection{\texorpdfstring{callAll()}{callAll()}\hspace{0.1cm}{\footnotesize\ttfamily [3/3]}}
+{\footnotesize\ttfamily void $\ast$ Agents\+::call\+All (\begin{DoxyParamCaption}\item[{int}]{function\+Id,  }\item[{void $\ast$}]{argument,  }\item[{int}]{arg\+\_\+size,  }\item[{int}]{ret\+\_\+size }\end{DoxyParamCaption})}
+
+Calls the method specified with function\+Id of all agents as passing arguments\mbox{[}i\mbox{]} to agent\mbox{[}i\mbox{]}\textquotesingle{}s method, and receives a return value from it into (void $\ast$)\mbox{[}i\mbox{]} whose element\textquotesingle{}s size is return\+\_\+value. Done in parallel among multi-\/processes/threads. The order of agents depends on the index of a place where they resides, starts from the place\mbox{[}0\mbox{]}\mbox{[}0\mbox{]}\textquotesingle{}\mbox{[}0\mbox{]}, and gets increased with the right-\/most index first and the left-\/most index last. 
+\begin{DoxyParams}{Parameters}
+{\em function\+Id} & \\
+\hline
+{\em argument} & \\
+\hline
+{\em arg\+\_\+size} & \\
+\hline
+{\em ret\+\_\+size} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_agents_a8e7d492b8329859c5172d7cee208bd1f}\label{class_agents_a8e7d492b8329859c5172d7cee208bd1f}} 
+\index{Agents@{Agents}!init\_master@{init\_master}}
+\index{init\_master@{init\_master}!Agents@{Agents}}
+\doxysubsubsection{\texorpdfstring{init\_master()}{init\_master()}}
+{\footnotesize\ttfamily void Agents\+::init\+\_\+master (\begin{DoxyParamCaption}\item[{void $\ast$}]{argument,  }\item[{int}]{argument\+\_\+size }\end{DoxyParamCaption})}
+
+
+\begin{DoxyParams}{Parameters}
+{\em argument} & \\
+\hline
+{\em argument\+\_\+size} & \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_agents_a2d7ec3d2bb86008ef91ea9c16e3a3ebf}\label{class_agents_a2d7ec3d2bb86008ef91ea9c16e3a3ebf}} 
+\index{Agents@{Agents}!ma\_setup@{ma\_setup}}
+\index{ma\_setup@{ma\_setup}!Agents@{Agents}}
+\doxysubsubsection{\texorpdfstring{ma\_setup()}{ma\_setup()}}
+{\footnotesize\ttfamily void Agents\+::ma\+\_\+setup (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\hyperlink{class_agents_a2d7ec3d2bb86008ef91ea9c16e3a3ebf}{Agents\+::ma\+\_\+setup}} 
+\begin{DoxyParams}{Parameters}
+{\em \{int\}} & function\+Id \+: \\
+\hline
+{\em \{int\}} & number\+Of\+Iterations \+:\\
+\hline
+\end{DoxyParams}
+Calls call\+All and manage\+All functions consecutively without responding back to user application in each iteration.
+
+
+\begin{DoxyParams}{Parameters}
+{\em function\+Id} & \+: the function id that is executed \\
+\hline
+{\em argument} & \+: the argument to pass to each \mbox{\hyperlink{class_agent}{Agent}} \\
+\hline
+{\em arg\+\_\+size} & \+: the size of the argument array \\
+\hline
+{\em number\+Of\+Iterations} & \+: number of consecutive calls of \mbox{\hyperlink{class_agents_a058d674baa86786d646e8dfb3372477b}{call\+All()}} and \mbox{\hyperlink{class_agents_a89b1475f698697ab91bd75a267d4236c}{manage\+All()}} functions\\
+\hline
+\end{DoxyParams}
+Calls call\+All and manage\+All functions consecutively without responding back to user application in each iteration.
+
+
+\begin{DoxyParams}{Parameters}
+{\em function\+Id\+List} & \+: the function id list that is executed \\
+\hline
+{\em func\+\_\+size} & \+: the size of the function\+Id\+List array \\
+\hline
+{\em argument\+List} & \+: the arguments to pass to each \mbox{\hyperlink{class_agent}{Agent}} \\
+\hline
+{\em arg\+\_\+size} & \+: the size of the argument array \\
+\hline
+{\em number\+Of\+Iterations} & \+: number of consecutive calls of \mbox{\hyperlink{class_agents_a058d674baa86786d646e8dfb3372477b}{call\+All()}} and \mbox{\hyperlink{class_agents_a89b1475f698697ab91bd75a267d4236c}{manage\+All()}} functions\\
+\hline
+\end{DoxyParams}
+\mbox{\hyperlink{class_agents}{Agents}}
+
+\begin{DoxyReturn}{Returns}
+\{int\} \+:
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_agents_a89b1475f698697ab91bd75a267d4236c}\label{class_agents_a89b1475f698697ab91bd75a267d4236c}} 
+\index{Agents@{Agents}!manageAll@{manageAll}}
+\index{manageAll@{manageAll}!Agents@{Agents}}
+\doxysubsubsection{\texorpdfstring{manageAll()}{manageAll()}}
+{\footnotesize\ttfamily void Agents\+::manage\+All (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Updates each agent’s status, based on each of its latest migrate( ), spawn( ), and kill( ) calls. These methods are defined in the \mbox{\hyperlink{class_agent}{Agent}} base class and may be invoked from other functions through call\+All and exchange\+All. Done in parallel among multi-\/processes/threads 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+Agents.\+h\item 
+Agents.\+cpp\end{DoxyCompactItemize}

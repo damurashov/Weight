@@ -1,0 +1,403 @@
+\hypertarget{class_places__base}{}\doxysection{Places\+\_\+base Class Reference}
+\label{class_places__base}\index{Places\_base@{Places\_base}}
+Inheritance diagram for Places\+\_\+base\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_places__base}
+\end{center}
+\end{figure}
+\doxysubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{struct_places__base_1_1_exchange_send_message}{Exchange\+Send\+Message}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_places__base_a8a9f9fbe285c3d25668bedf709c4f8f2}{Places\+\_\+base}} (int handle, string class\+Name, int \mbox{\hyperlink{class_places__base_a8ffb54e973c483bc8eebaa27449bf91b}{boundary\+\_\+width}}, void $\ast$argument, int argument\+\_\+size, int dim, int \mbox{\hyperlink{class_places__base_a34d4846363004add15be7a4ef9870c39}{size}}\mbox{[}$\,$\mbox{]})
+\item 
+\mbox{\hyperlink{class_places__base_ae3ff11c43531f10c6cbb23868758dcfa}{$\sim$\+Places\+\_\+base}} ()
+\item 
+void \mbox{\hyperlink{class_places__base_ae0d1fe9e9bbf38dc23a2d05a34741852}{call\+All}} (int function\+Id, void $\ast$argument, int tid)
+\item 
+void $\ast$$\ast$ \mbox{\hyperlink{class_places__base_a0319168b3beba4cf9f2629ba5dd4def1}{call\+All}} (int function\+Id, void $\ast$argument, int arg\+\_\+size, int ret\+\_\+size, int tid)
+\item 
+\mbox{\Hypertarget{class_places__base_af4324d1bdd70fd852d446ded215ae179}\label{class_places__base_af4324d1bdd70fd852d446ded215ae179}} 
+void {\bfseries exchange\+All} (\mbox{\hyperlink{class_places__base}{Places\+\_\+base}} $\ast$dst\+Places, int function\+Id, vector$<$ int $\ast$ $>$ $\ast$destinations, int tid)
+\item 
+void \mbox{\hyperlink{class_places__base_a54adb8fbb267e14717dc1e13cd14c704}{exchange\+All}} (\mbox{\hyperlink{class_places__base}{Places\+\_\+base}} $\ast$dst\+Places, int function\+Id, int tid)
+\item 
+\mbox{\Hypertarget{class_places__base_aadbac877020039001d26f56456eabe4e}\label{class_places__base_aadbac877020039001d26f56456eabe4e}} 
+void {\bfseries exchange\+Boundary} ()
+\item 
+void \mbox{\hyperlink{class_places__base_a90f71609f9743af132c35a5e48a534f6}{set\+All\+Places\+Neighbors}} (\mbox{\hyperlink{class_places__base}{Places\+\_\+base}} $\ast$dst\+Places, vector$<$ int $\ast$ $>$ $\ast$destinations, int tid)
+\item 
+\mbox{\Hypertarget{class_places__base_a6642e9fe3bebe341b3bc8f9201c691a7}\label{class_places__base_a6642e9fe3bebe341b3bc8f9201c691a7}} 
+int {\bfseries get\+Handle} ()
+\item 
+\mbox{\Hypertarget{class_places__base_a086868cd9f5593cee770bdcf9b38f694}\label{class_places__base_a086868cd9f5593cee770bdcf9b38f694}} 
+int {\bfseries get\+Places\+Size} ()
+\end{DoxyCompactItemize}
+\doxysubsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{class_places__base_a258ed49f520a24727db5fc07e331f2d1}{init\+\_\+all}} (void $\ast$argument, int argument\+\_\+size)
+\item 
+vector$<$ int $>$ \mbox{\hyperlink{class_places__base_acc4cdcd93afaca0ad943aa3c1332ec68}{get\+Global\+Array\+Index}} (int single\+Index)
+\item 
+vector$<$ int $>$ \mbox{\hyperlink{class_places__base_aa4785946047f4be24b4508012e3dc423}{get\+Global\+Array\+Index}} (int index, int dim)
+\item 
+void \mbox{\hyperlink{class_places__base_ad56c1f40099e8dd61e5c84bd058303e6}{get\+Local\+Range}} (int range\mbox{[}$\,$\mbox{]}, int tid)
+\item 
+\mbox{\Hypertarget{class_places__base_a6dc50908f4626dbb5ed19dafd404881f}\label{class_places__base_a6dc50908f4626dbb5ed19dafd404881f}} 
+void {\bfseries get\+Global\+Neighbor\+Array\+Index} (vector$<$ int $>$ src\+\_\+index, int offset\mbox{[}$\,$\mbox{]}, int dst\+\_\+size\mbox{[}$\,$\mbox{]}, int dst\+\_\+dimension, int $\ast$dest\+\_\+index)
+\item 
+\mbox{\Hypertarget{class_places__base_aa358a85541861011e9c5fc0b3d3031a5}\label{class_places__base_aa358a85541861011e9c5fc0b3d3031a5}} 
+int {\bfseries get\+Global\+Linear\+Index\+From\+Global\+Array\+Index} (int dest\+\_\+index\mbox{[}$\,$\mbox{]}, int dest\+\_\+size\mbox{[}$\,$\mbox{]}, int dest\+\_\+dimension)
+\item 
+\mbox{\Hypertarget{class_places__base_a028ecd0191d1d636822825c899a06582}\label{class_places__base_a028ecd0191d1d636822825c899a06582}} 
+int {\bfseries get\+Rank\+From\+Global\+Linear\+Index} (int global\+Linear\+Index)
+\end{DoxyCompactItemize}
+\doxysubsection*{Static Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static void $\ast$ \mbox{\hyperlink{class_places__base_aff205a6972bca1c4582475c6e30ed06b}{process\+Remote\+Exchange\+Request}} (void $\ast$param)
+\item 
+\mbox{\Hypertarget{class_places__base_a3ed20656dfb647fe04e3a37f68e0b00a}\label{class_places__base_a3ed20656dfb647fe04e3a37f68e0b00a}} 
+static void $\ast$ {\bfseries exchange\+Boundary\+\_\+helper} (void $\ast$param)
+\item 
+\mbox{\Hypertarget{class_places__base_a3aff0746f2d35691529a173e7a5bed23}\label{class_places__base_a3aff0746f2d35691529a173e7a5bed23}} 
+static void $\ast$ {\bfseries send\+Message\+By\+Child} (void $\ast$param)
+\end{DoxyCompactItemize}
+\doxysubsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_places__base_a05d0f49d63da582839f705c17581d30f}\label{class_places__base_a05d0f49d63da582839f705c17581d30f}} 
+const int {\bfseries handle}
+\item 
+\mbox{\Hypertarget{class_places__base_aa1e22d2f2b563d444ced873fb8c1d0a3}\label{class_places__base_aa1e22d2f2b563d444ced873fb8c1d0a3}} 
+const string {\bfseries class\+Name}
+\item 
+\mbox{\Hypertarget{class_places__base_a007d540d37c687dc001f064977d84aa1}\label{class_places__base_a007d540d37c687dc001f064977d84aa1}} 
+const int {\bfseries dimension}
+\item 
+int \mbox{\hyperlink{class_places__base_a9d9fa4e76b861c544c9fb72c70f3cc91}{lower\+\_\+boundary}}
+\item 
+int \mbox{\hyperlink{class_places__base_a594d58eafb6c26ac831f0d9dccffeba0}{upper\+\_\+boundary}}
+\item 
+int \mbox{\hyperlink{class_places__base_a20a1b88df875d22abd4fdd9f8566cb3f}{places\+\_\+size}}
+\item 
+int $\ast$ \mbox{\hyperlink{class_places__base_a34d4846363004add15be7a4ef9870c39}{size}}
+\item 
+int \mbox{\hyperlink{class_places__base_adbfecfdf7d6c7feba5faa39ff026d489}{shadow\+\_\+size}}
+\item 
+int \mbox{\hyperlink{class_places__base_a8ffb54e973c483bc8eebaa27449bf91b}{boundary\+\_\+width}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Friends}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_places__base_a0c3311519772b279059d3c0acad032ac}\label{class_places__base_a0c3311519772b279059d3c0acad032ac}} 
+class {\bfseries M\+Process}
+\item 
+\mbox{\Hypertarget{class_places__base_ac5255c2aa2d0a38a7a3f9e7c98cec3a2}\label{class_places__base_ac5255c2aa2d0a38a7a3f9e7c98cec3a2}} 
+class {\bfseries Agents\+\_\+base}
+\item 
+\mbox{\Hypertarget{class_places__base_a0312c0cac4befa7a5fc59b01b5e597e7}\label{class_places__base_a0312c0cac4befa7a5fc59b01b5e597e7}} 
+class {\bfseries Place}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_places__base_a8a9f9fbe285c3d25668bedf709c4f8f2}\label{class_places__base_a8a9f9fbe285c3d25668bedf709c4f8f2}} 
+\index{Places\_base@{Places\_base}!Places\_base@{Places\_base}}
+\index{Places\_base@{Places\_base}!Places\_base@{Places\_base}}
+\doxysubsubsection{\texorpdfstring{Places\_base()}{Places\_base()}}
+{\footnotesize\ttfamily Places\+\_\+base\+::\+Places\+\_\+base (\begin{DoxyParamCaption}\item[{int}]{handle,  }\item[{string}]{class\+Name,  }\item[{int}]{boundary\+\_\+width,  }\item[{void $\ast$}]{argument,  }\item[{int}]{argument\+\_\+size,  }\item[{int}]{dim,  }\item[{int}]{size\mbox{[}$\,$\mbox{]} }\end{DoxyParamCaption})}
+
+Constructor for \mbox{\hyperlink{class_places__base}{Places\+\_\+base}} Objects. These Objects encompass the basic features that are found in all \mbox{\hyperlink{class_places}{Places}} Objects, enabling \mbox{\hyperlink{class_m_a_s_s}{M\+A\+SS}} to be able to operate across all \mbox{\hyperlink{class_places}{Places}} in a unified manner, regardless of each individual \mbox{\hyperlink{class_place}{Place}} instantiation.
+
+
+\begin{DoxyParams}{Parameters}
+{\em handle} & a unique identifer (int) that designates a group of places. Must be unique over all machines. \\
+\hline
+{\em class\+Name} & name of the user-\/created \mbox{\hyperlink{class_place}{Place}} classes to load \\
+\hline
+{\em boundary\+\_\+width} & width of the boundary to place between stripes \\
+\hline
+{\em argument} & array of arguments to pass into each \mbox{\hyperlink{class_place}{Place}} constructor \\
+\hline
+{\em argument\+\_\+size} & size of each argument (e.\+g. -\/ sizeof( int ) ) \\
+\hline
+{\em dim} & how many dimensions this simulation encompasses \\
+\hline
+{\em size} & array of numbers (int), representing the size of each corresponding dimension in the simulation space \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_places__base_ae3ff11c43531f10c6cbb23868758dcfa}\label{class_places__base_ae3ff11c43531f10c6cbb23868758dcfa}} 
+\index{Places\_base@{Places\_base}!````~Places\_base@{$\sim$Places\_base}}
+\index{````~Places\_base@{$\sim$Places\_base}!Places\_base@{Places\_base}}
+\doxysubsubsection{\texorpdfstring{$\sim$Places\_base()}{~Places\_base()}}
+{\footnotesize\ttfamily Places\+\_\+base\+::$\sim$\+Places\+\_\+base (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Destructor for core \mbox{\hyperlink{class_places__base}{Places\+\_\+base}} Objects. Frees dynamic space set up to store all \mbox{\hyperlink{class_places}{Places}} in this stripe, in addition to any shadow \mbox{\hyperlink{class_places}{Places}} that may have been created at runtime for this stripe. 
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_places__base_a0319168b3beba4cf9f2629ba5dd4def1}\label{class_places__base_a0319168b3beba4cf9f2629ba5dd4def1}} 
+\index{Places\_base@{Places\_base}!callAll@{callAll}}
+\index{callAll@{callAll}!Places\_base@{Places\_base}}
+\doxysubsubsection{\texorpdfstring{callAll()}{callAll()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily void $\ast$$\ast$ Places\+\_\+base\+::call\+All (\begin{DoxyParamCaption}\item[{int}]{function\+Id,  }\item[{void $\ast$}]{argument,  }\item[{int}]{arg\+\_\+size,  }\item[{int}]{ret\+\_\+size,  }\item[{int}]{tid }\end{DoxyParamCaption})}
+
+Calls the referenced function, passing along a related argument, at each \mbox{\hyperlink{class_place}{Place}} contained within the simulation space (\mbox{\hyperlink{class_places}{Places}}). Any return values generated from individual function calls are stored in an array, a pointer to the address (pointer to a pointer) of which is returned as a result of this call.
+
+
+\begin{DoxyParams}{Parameters}
+{\em function\+Id} & the id of the function to call at each \mbox{\hyperlink{class_place}{Place}} \\
+\hline
+{\em argument} & the address (pointer) of an array of arguments to send to the function called at each \mbox{\hyperlink{class_place}{Place}} \\
+\hline
+{\em arg\+\_\+size} & the size (int) of each argument \\
+\hline
+{\em ret\+\_\+size} & the size (int) of each return value \\
+\hline
+{\em tid} & the id of the thread \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the address of the address of (pointer to a pointer) the return values stored from each function call 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_places__base_ae0d1fe9e9bbf38dc23a2d05a34741852}\label{class_places__base_ae0d1fe9e9bbf38dc23a2d05a34741852}} 
+\index{Places\_base@{Places\_base}!callAll@{callAll}}
+\index{callAll@{callAll}!Places\_base@{Places\_base}}
+\doxysubsubsection{\texorpdfstring{callAll()}{callAll()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily void Places\+\_\+base\+::call\+All (\begin{DoxyParamCaption}\item[{int}]{function\+Id,  }\item[{void $\ast$}]{argument,  }\item[{int}]{tid }\end{DoxyParamCaption})}
+
+Calls the referenced function, passing along a related argument, at each \mbox{\hyperlink{class_place}{Place}} contained within the simulation space (\mbox{\hyperlink{class_places}{Places}}).
+
+
+\begin{DoxyParams}{Parameters}
+{\em function\+Id} & the id of the function to call at each \mbox{\hyperlink{class_place}{Place}} \\
+\hline
+{\em argument} & the address (pointer) of an argument to send to the function called at each \mbox{\hyperlink{class_place}{Place}} \\
+\hline
+{\em arg\+\_\+size} & the total size of the argument \\
+\hline
+{\em tid} & the id of the thread \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the address of the address of (pointer to a pointer) the return values stored from each function call 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_places__base_a54adb8fbb267e14717dc1e13cd14c704}\label{class_places__base_a54adb8fbb267e14717dc1e13cd14c704}} 
+\index{Places\_base@{Places\_base}!exchangeAll@{exchangeAll}}
+\index{exchangeAll@{exchangeAll}!Places\_base@{Places\_base}}
+\doxysubsubsection{\texorpdfstring{exchangeAll()}{exchangeAll()}}
+{\footnotesize\ttfamily void Places\+\_\+base\+::exchange\+All (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_places__base}{Places\+\_\+base}} $\ast$}]{dst\+Places,  }\item[{int}]{function\+Id,  }\item[{int}]{tid }\end{DoxyParamCaption})}
+
+exchange\+All for neighbors functionality, exactly the same as above except it references each place\textquotesingle{}s neighbor vector instead of a static destination vector
+
+Replicates the original exchange\+All which acted upon destinations included in the parameters. This version now performs sanity checks on the destinations. 
+\begin{DoxyParams}{Parameters}
+{\em dst\+Places} & \\
+\hline
+{\em function\+Id} & \\
+\hline
+{\em destinations} & \\
+\hline
+{\em tid} & \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_places__base_aa4785946047f4be24b4508012e3dc423}\label{class_places__base_aa4785946047f4be24b4508012e3dc423}} 
+\index{Places\_base@{Places\_base}!getGlobalArrayIndex@{getGlobalArrayIndex}}
+\index{getGlobalArrayIndex@{getGlobalArrayIndex}!Places\_base@{Places\_base}}
+\doxysubsubsection{\texorpdfstring{getGlobalArrayIndex()}{getGlobalArrayIndex()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily vector$<$ int $>$ Places\+\_\+base\+::get\+Global\+Array\+Index (\begin{DoxyParamCaption}\item[{int}]{index,  }\item[{int}]{dim }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+Converts a given plain single index into a multi-\/dimensional index. This allows absolute index values that would correspond to a single \mbox{\hyperlink{class_place}{Place}} within the global simulation space (ordering in a one dimensional array) to be referenced by the actual index, according to the number of dimensions and size of each dimension in the simulation space.
+
+While the other \mbox{\hyperlink{class_places__base_acc4cdcd93afaca0ad943aa3c1332ec68}{Places\+\_\+base\+::get\+Global\+Array\+Index( int single\+Index)}} method assumes that the starting index is based on a flattening algorithm that assumes first dimension-\/priority in the global array (e.\+g. -\/ \textquotesingle{}x\textquotesingle{} dimension is evaluated first, then \textquotesingle{}y\textquotesingle{} dimension, so that the single\+Index of 4 would correspond to \{4, 0\} in a two dimensional array), this method allows the user to specify the dimension that should take priority.
+
+
+\begin{DoxyParams}{Parameters}
+{\em index} & an index into a single dimension ordering of places that will be converted to a multi-\/dimensional coordinate index \\
+\hline
+{\em dim} & the dimension that will take priority in the resulting indexing algorithm. Since dimension numbering is zero-\/based (\textquotesingle{}x\textquotesingle{} dimension is 0), the value of dim should be less than the number of dimensions (Places\+\_\+base\+::dimension) in the simulation space. Large values will wrap around, so no out of bounds exception will be thrown, but the result will not match with expectations at runtime (unpredictable) \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+a multi-\/dimensional index 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_places__base_acc4cdcd93afaca0ad943aa3c1332ec68}\label{class_places__base_acc4cdcd93afaca0ad943aa3c1332ec68}} 
+\index{Places\_base@{Places\_base}!getGlobalArrayIndex@{getGlobalArrayIndex}}
+\index{getGlobalArrayIndex@{getGlobalArrayIndex}!Places\_base@{Places\_base}}
+\doxysubsubsection{\texorpdfstring{getGlobalArrayIndex()}{getGlobalArrayIndex()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily vector$<$ int $>$ Places\+\_\+base\+::get\+Global\+Array\+Index (\begin{DoxyParamCaption}\item[{int}]{single\+Index }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+Converts a given plain single index into a multi-\/dimensional index. This allows absolute index values that would correspond to a single \mbox{\hyperlink{class_place}{Place}} within the global simulation space (ordering in a one dimensional array) to be referenced by the actual index, according to the number of dimensions and size of each dimension in the simulation space.
+
+
+\begin{DoxyParams}{Parameters}
+{\em single\+Index} & an index in a plain single dimension that will be converted to a multi-\/dimensional index. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+a multi-\/dimensional index 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_places__base_ad56c1f40099e8dd61e5c84bd058303e6}\label{class_places__base_ad56c1f40099e8dd61e5c84bd058303e6}} 
+\index{Places\_base@{Places\_base}!getLocalRange@{getLocalRange}}
+\index{getLocalRange@{getLocalRange}!Places\_base@{Places\_base}}
+\doxysubsubsection{\texorpdfstring{getLocalRange()}{getLocalRange()}}
+{\footnotesize\ttfamily void Places\+\_\+base\+::get\+Local\+Range (\begin{DoxyParamCaption}\item[{int}]{range\mbox{[}$\,$\mbox{]},  }\item[{int}]{tid }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+Returns the first and last of the range that should be allocated to a given thread.
+
+
+\begin{DoxyParams}{Parameters}
+{\em tid} & an id of the thread that calls this function \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+an array of two integers\+: element 0 = the first and element 1 = the last 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_places__base_a258ed49f520a24727db5fc07e331f2d1}\label{class_places__base_a258ed49f520a24727db5fc07e331f2d1}} 
+\index{Places\_base@{Places\_base}!init\_all@{init\_all}}
+\index{init\_all@{init\_all}!Places\_base@{Places\_base}}
+\doxysubsubsection{\texorpdfstring{init\_all()}{init\_all()}}
+{\footnotesize\ttfamily void Places\+\_\+base\+::init\+\_\+all (\begin{DoxyParamCaption}\item[{void $\ast$}]{argument,  }\item[{int}]{argument\+\_\+size }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+Creates the individual \mbox{\hyperlink{class_place}{Place}} Objects that live within this stripe -\/ contained within this \mbox{\hyperlink{class_places}{Places}} collection. This method also sets up any shadows across boundaries in the simulation space -\/ enabling cross boundary communication to occur during the course of a simulation.
+
+
+\begin{DoxyParams}{Parameters}
+{\em argument} & argument to pass into each \mbox{\hyperlink{class_place}{Place}} constructor \\
+\hline
+{\em argument\+\_\+size} & total size of the argument \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_places__base_aff205a6972bca1c4582475c6e30ed06b}\label{class_places__base_aff205a6972bca1c4582475c6e30ed06b}} 
+\index{Places\_base@{Places\_base}!processRemoteExchangeRequest@{processRemoteExchangeRequest}}
+\index{processRemoteExchangeRequest@{processRemoteExchangeRequest}!Places\_base@{Places\_base}}
+\doxysubsubsection{\texorpdfstring{processRemoteExchangeRequest()}{processRemoteExchangeRequest()}}
+{\footnotesize\ttfamily void $\ast$ Places\+\_\+base\+::process\+Remote\+Exchange\+Request (\begin{DoxyParamCaption}\item[{void $\ast$}]{param }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [protected]}}
+
+
+\begin{DoxyParams}{Parameters}
+{\em param} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+
+\end{DoxyReturn}
+
+\begin{DoxyParams}{Parameters}
+{\em param} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+N\+U\+LL
+\end{DoxyReturn}
+
+\begin{DoxyParams}{Parameters}
+{\em param} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+
+\end{DoxyReturn}
+This method takes the coordinates of a given \mbox{\hyperlink{class_place}{Place}} in the simulation and determines the coordinates of a neighbor, based on the offset values. The neighbor coordinates are stored within the dest\+\_\+index argument, which allows for multi-\/dimensional array support (e.\+g. -\/ x, y, and z axis coordinates). 
+\begin{DoxyParams}{Parameters}
+{\em src\+\_\+index} & coordinates of source index \\
+\hline
+{\em offset} & coordinate offsets from source index \\
+\hline
+{\em dst\+\_\+size} & size of each dimension in simulation space \\
+\hline
+{\em dest\+\_\+dimension} & number of dimensions the destination simulation space contains (likely equivalent to number of dimensions in source simulation) \\
+\hline
+{\em dest\+\_\+index} & storage for the destination index values (can\textquotesingle{}t simply return a single value and easily support multi-\/dimensional coordinates)\\
+\hline
+\end{DoxyParams}
+Retrieves the absolute index within the global array of \mbox{\hyperlink{class_places}{Places}} in this simulation. This method will convert the index array passed in, which may refer to specific locations within a multi-\/dimensional array, into a single index value that refers to the same \mbox{\hyperlink{class_place}{Place}} within the global (single dimensional) collection of \mbox{\hyperlink{class_places}{Places}} for a simulation.
+
+
+\begin{DoxyParams}{Parameters}
+{\em index} & multi-\/dimensional indexes to a specific \mbox{\hyperlink{class_place}{Place}} within your \mbox{\hyperlink{class_places}{Places}} collection \\
+\hline
+{\em size} & sizes for each dimension in your simulation \\
+\hline
+{\em dimension} & the number of dimensions in your simulation \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the global linear index (single dimensional index) to a \mbox{\hyperlink{class_place}{Place}} -\/ or, I\+N\+T\+\_\+\+M\+IN if location does not exist (out of bounds, etc)
+\end{DoxyReturn}
+This method returns the rank of the node that contains the \mbox{\hyperlink{class_place}{Place}} indicated by the index passed in (global\+Linear\+Index).
+
+
+\begin{DoxyParams}{Parameters}
+{\em global\+Linear\+Index} & the absolute, single-\/dimensional index of a \mbox{\hyperlink{class_place}{Place}} \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the rank of the node that contains this \mbox{\hyperlink{class_place}{Place}}
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_places__base_a90f71609f9743af132c35a5e48a534f6}\label{class_places__base_a90f71609f9743af132c35a5e48a534f6}} 
+\index{Places\_base@{Places\_base}!setAllPlacesNeighbors@{setAllPlacesNeighbors}}
+\index{setAllPlacesNeighbors@{setAllPlacesNeighbors}!Places\_base@{Places\_base}}
+\doxysubsubsection{\texorpdfstring{setAllPlacesNeighbors()}{setAllPlacesNeighbors()}}
+{\footnotesize\ttfamily void Places\+\_\+base\+::set\+All\+Places\+Neighbors (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_places__base}{Places\+\_\+base}} $\ast$}]{dst\+Places,  }\item[{vector$<$ int $\ast$ $>$ $\ast$}]{destinations,  }\item[{int}]{tid }\end{DoxyParamCaption})}
+
+Set the neighbors for a set of places. 
+\begin{DoxyParams}{Parameters}
+{\em dst\+Places} & -\/ places whose neighbors we are setting \\
+\hline
+{\em destinations} & -\/ coordinates of the neighboring places \\
+\hline
+{\em tid} & \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{class_places__base_a8ffb54e973c483bc8eebaa27449bf91b}\label{class_places__base_a8ffb54e973c483bc8eebaa27449bf91b}} 
+\index{Places\_base@{Places\_base}!boundary\_width@{boundary\_width}}
+\index{boundary\_width@{boundary\_width}!Places\_base@{Places\_base}}
+\doxysubsubsection{\texorpdfstring{boundary\_width}{boundary\_width}}
+{\footnotesize\ttfamily int Places\+\_\+base\+::boundary\+\_\+width\hspace{0.3cm}{\ttfamily [protected]}}
+
+Width of any boundaries between stripes in simulation \mbox{\Hypertarget{class_places__base_a9d9fa4e76b861c544c9fb72c70f3cc91}\label{class_places__base_a9d9fa4e76b861c544c9fb72c70f3cc91}} 
+\index{Places\_base@{Places\_base}!lower\_boundary@{lower\_boundary}}
+\index{lower\_boundary@{lower\_boundary}!Places\_base@{Places\_base}}
+\doxysubsubsection{\texorpdfstring{lower\_boundary}{lower\_boundary}}
+{\footnotesize\ttfamily int Places\+\_\+base\+::lower\+\_\+boundary\hspace{0.3cm}{\ttfamily [protected]}}
+
+The smallest, valid index present in a given stripe of the simulation space \mbox{\Hypertarget{class_places__base_a20a1b88df875d22abd4fdd9f8566cb3f}\label{class_places__base_a20a1b88df875d22abd4fdd9f8566cb3f}} 
+\index{Places\_base@{Places\_base}!places\_size@{places\_size}}
+\index{places\_size@{places\_size}!Places\_base@{Places\_base}}
+\doxysubsubsection{\texorpdfstring{places\_size}{places\_size}}
+{\footnotesize\ttfamily int Places\+\_\+base\+::places\+\_\+size\hspace{0.3cm}{\ttfamily [protected]}}
+
+The total number of \mbox{\hyperlink{class_places}{Places}} that exist within this stripe of the simulation \mbox{\Hypertarget{class_places__base_adbfecfdf7d6c7feba5faa39ff026d489}\label{class_places__base_adbfecfdf7d6c7feba5faa39ff026d489}} 
+\index{Places\_base@{Places\_base}!shadow\_size@{shadow\_size}}
+\index{shadow\_size@{shadow\_size}!Places\_base@{Places\_base}}
+\doxysubsubsection{\texorpdfstring{shadow\_size}{shadow\_size}}
+{\footnotesize\ttfamily int Places\+\_\+base\+::shadow\+\_\+size\hspace{0.3cm}{\ttfamily [protected]}}
+
+Function of the simulation size and the boundary\+\_\+width defined. This value stores the total number of \mbox{\hyperlink{class_place}{Place}} Objects that constitute the shadow for boundaries (can think of as overlap) \mbox{\Hypertarget{class_places__base_a34d4846363004add15be7a4ef9870c39}\label{class_places__base_a34d4846363004add15be7a4ef9870c39}} 
+\index{Places\_base@{Places\_base}!size@{size}}
+\index{size@{size}!Places\_base@{Places\_base}}
+\doxysubsubsection{\texorpdfstring{size}{size}}
+{\footnotesize\ttfamily int$\ast$ Places\+\_\+base\+::size\hspace{0.3cm}{\ttfamily [protected]}}
+
+Defines the size of each dimension in the simulation space. Intuitively, size\mbox{[}0\mbox{]}, size\mbox{[}1\mbox{]}, and size\mbox{[}2\mbox{]} correspond to the size of x, y, and z, or that of i, j, and k. \mbox{\Hypertarget{class_places__base_a594d58eafb6c26ac831f0d9dccffeba0}\label{class_places__base_a594d58eafb6c26ac831f0d9dccffeba0}} 
+\index{Places\_base@{Places\_base}!upper\_boundary@{upper\_boundary}}
+\index{upper\_boundary@{upper\_boundary}!Places\_base@{Places\_base}}
+\doxysubsubsection{\texorpdfstring{upper\_boundary}{upper\_boundary}}
+{\footnotesize\ttfamily int Places\+\_\+base\+::upper\+\_\+boundary\hspace{0.3cm}{\ttfamily [protected]}}
+
+The largest, valid index present in a given stripe (any remainders from stripe calculation will be included in final stripe -\/ may be larger than other stripes) 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+Places\+\_\+base.\+h\item 
+Places\+\_\+base.\+cpp\end{DoxyCompactItemize}

@@ -1,0 +1,76 @@
+\hypertarget{class_utilities}{}\doxysection{Utilities Class Reference}
+\label{class_utilities}\index{Utilities@{Utilities}}
+
+
+{\ttfamily \#include $<$Utilities.\+h$>$}
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_ssh2_connection}{Ssh2\+Connection}} $\ast$ \mbox{\hyperlink{class_utilities_a62c207bd931f4b869ee34cd5f435b311}{establish\+Connection}} (const char host\mbox{[}$\,$\mbox{]}, const int port, const char username\mbox{[}$\,$\mbox{]}, const char password\mbox{[}$\,$\mbox{]})
+\item 
+bool \mbox{\hyperlink{class_utilities_a539b49870168663e445470fecf3978fc}{launch\+Remote\+Process}} (const \mbox{\hyperlink{class_ssh2_connection}{Ssh2\+Connection}} $\ast$ssh2connection, const char cmd\mbox{[}$\,$\mbox{]})
+\item 
+void \mbox{\hyperlink{class_utilities_a43c2acc2543083ecab80e5807dfd2507}{shutdown}} (const \mbox{\hyperlink{class_ssh2_connection}{Ssh2\+Connection}} $\ast$ssh2connection, const char msg\mbox{[}$\,$\mbox{]})
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\mbox{\hyperlink{class_utilities}{Utilities}} for the \mbox{\hyperlink{class_m_a_s_s}{M\+A\+SS}} library. Includes use of sockets and S\+S\+H2 Mostly focuses on providing S\+S\+H2 connections between M\+Processes. 
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_utilities_a62c207bd931f4b869ee34cd5f435b311}\label{class_utilities_a62c207bd931f4b869ee34cd5f435b311}} 
+\index{Utilities@{Utilities}!establishConnection@{establishConnection}}
+\index{establishConnection@{establishConnection}!Utilities@{Utilities}}
+\doxysubsubsection{\texorpdfstring{establishConnection()}{establishConnection()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_ssh2_connection}{Ssh2\+Connection}} $\ast$ Utilities\+::establish\+Connection (\begin{DoxyParamCaption}\item[{const char}]{host\mbox{[}$\,$\mbox{]},  }\item[{const int}]{port,  }\item[{const char}]{username\mbox{[}$\,$\mbox{]},  }\item[{const char}]{password\mbox{[}$\,$\mbox{]} }\end{DoxyParamCaption})}
+
+
+\begin{DoxyParams}{Parameters}
+{\em host} & \\
+\hline
+{\em port} & \\
+\hline
+{\em username} & \\
+\hline
+{\em password} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_utilities_a539b49870168663e445470fecf3978fc}\label{class_utilities_a539b49870168663e445470fecf3978fc}} 
+\index{Utilities@{Utilities}!launchRemoteProcess@{launchRemoteProcess}}
+\index{launchRemoteProcess@{launchRemoteProcess}!Utilities@{Utilities}}
+\doxysubsubsection{\texorpdfstring{launchRemoteProcess()}{launchRemoteProcess()}}
+{\footnotesize\ttfamily bool Utilities\+::launch\+Remote\+Process (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{class_ssh2_connection}{Ssh2\+Connection}} $\ast$}]{ssh2connection,  }\item[{const char}]{cmd\mbox{[}$\,$\mbox{]} }\end{DoxyParamCaption})}
+
+
+\begin{DoxyParams}{Parameters}
+{\em ssh2connection} & \\
+\hline
+{\em cmd} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_utilities_a43c2acc2543083ecab80e5807dfd2507}\label{class_utilities_a43c2acc2543083ecab80e5807dfd2507}} 
+\index{Utilities@{Utilities}!shutdown@{shutdown}}
+\index{shutdown@{shutdown}!Utilities@{Utilities}}
+\doxysubsubsection{\texorpdfstring{shutdown()}{shutdown()}}
+{\footnotesize\ttfamily void Utilities\+::shutdown (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{class_ssh2_connection}{Ssh2\+Connection}} $\ast$}]{ssh2connection,  }\item[{const char}]{msg\mbox{[}$\,$\mbox{]} }\end{DoxyParamCaption})}
+
+
+\begin{DoxyParams}{Parameters}
+{\em ssh2connection} & \\
+\hline
+{\em msg} & \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+Utilities.\+h\item 
+Utilities.\+cpp\end{DoxyCompactItemize}

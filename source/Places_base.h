@@ -49,9 +49,12 @@ class Places_base {
     void exchangeAll(Places_base *dstPlaces, int functionId, int tid);
     void exchangeBoundary();  // called from Places.exchangeBoundary( )
     void setAllPlacesNeighbors(Places_base *dstPlaces,
-                               vector<int *> *destinations, int tid);
+                               vector<int *> destinations, int tid);
     int getHandle() { return handle; };
     int getPlacesSize() { return places_size; };
+    void callSome(int functionId, void *argument, int tid);
+    void **callSome(int functionId, void *argument, int arg_size, int ret_size,
+                    int tid);
 
    protected:
     const int handle;  // handle
