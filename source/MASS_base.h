@@ -36,6 +36,7 @@
 #include "RemoteExchangeRequest.h"
 #define CUR_SIZE 256
 #define MASS_LOGS "MASS_logs"
+//#define LOGGING
 
 using namespace std;
 

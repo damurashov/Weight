@@ -2,16 +2,16 @@
 # libssh2 installation details
 ###########################################################################
 
-prefix=/net/metis/home3/dslab/MASS/c++/ubuntu/ssh2
+prefix=/CSSDIV/research/dslab/jlandron_mass/mass_cpp_core/ubuntu/ssh2
 exec_prefix=${prefix}
 libdir=${exec_prefix}/lib
 includedir=${prefix}/include
 
 Name: libssh2
-URL: http://www.libssh2.org/
+URL: https://www.libssh2.org/
 Description: Library for SSH-based communication
-Version: 1.4.2
-Requires.private: libssl,libcrypto
-Libs: -L${libdir} -lssh2  
+Version: 1.9.0
+Requires.private: libssl libcrypto zlib
+Libs: -L${libdir} -lssh2 
 Libs.private: 
 Cflags: -I${includedir}

@@ -32,6 +32,7 @@
 #include "Agents.h"
 
 #define LIBSSH2_PORT 22
+//#define LOGGING
 
 class MASS : public MASS_base {
 	friend class Places;

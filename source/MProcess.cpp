@@ -29,6 +29,7 @@
 #include "MProcess.h"
 #include "MASS_base.h"
 #include "Mthread.h"
+#define LOGGING
 
 //Toggles output for MProcess
 #ifndef LOGGING
@@ -38,6 +39,8 @@ const bool printOutput = true;
 #endif
 
 MProcess::MProcess(char *name, int myPid, int nProc, int nThr, int port) {
+
+  system("touch a");
 	this->hostName = new string(name);
 	this->myPid = myPid;
 	this->nProc = nProc;
