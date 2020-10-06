@@ -49,8 +49,8 @@ void MNode::closeMainConnection() { close(sd); }
  */
 void MNode::sendMessage(Message *m) {
     int size;
-    char *buf = m->serialize(size);
-    if (printOutput) cerr << "size = " << size << endl;
+    char *buf = m->serialize(size);     
+    if (printOutput) cerr << "MNode::sendMessage: size = " << size << endl;
     if (write(sd, (char *)&size, sizeof(int)) > 0) {
         if (write(sd, buf, size) > 0) {
             return;

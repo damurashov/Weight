@@ -26,19 +26,41 @@
 
 #include <string>
 #include <vector>
+#include <algorithm>
+
 #include "Place.h"
+#include "VertexPlace.h"
+#include "FileParser.h"
 
 using namespace std;
 
-class Places_base {
+class Places_base{
     friend class MProcess;
     friend class Agents_base;
     friend class Place;
+    friend class VertexPlace;
 
    public:
-    Places_base(int handle, string className, int boundary_width,
-                void *argument, int argument_size, int dim, int size[]);
-    ~Places_base();
+
+
+    /*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+     **-------------------Elias: Added for graph features-------------------------------------------------------
+     *+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+    Places_base(int handle, string className,int boundary_width,int dimension, string filename,
+                     FILE_TYPE_ENUMS type, void* argument, int arg_size);
+
+  
+    Places_base (int handle, string className, int boundary_width, int dimension,void* argument, int arg_size, int nVertices);
+
+    //Places_base(int handle, string className, int boundary_width, int dimension, void* argument, int argument_size);
+    
+    /*--------------------------------------------------------------------------------------------------------------
+     +++++++++++++++++ End of graph feature constructors ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+     ----------------------------------------------------------------------------------------------------------------*/
+
+    Places_base(int handle, string className, int boundary_width, void *argument, int argument_size,
+                     int dim, int size[]);
+    virtual ~Places_base();
 
     void callAll(int functionId, void *argument, int tid);
     void **callAll(int functionId, void *argument, int arg_size, int ret_size,
@@ -55,11 +77,46 @@ class Places_base {
     void callSome(int functionId, void *argument, int tid);
     void **callSome(int functionId, void *argument, int arg_size, int ret_size,
                     int tid);
+    int* getSize(){return this->size;};
+    int getLowerBoundary(){return lower_boundary;};
+    int getDimension(){return dimension;};
+
+    /*@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+     *----Elias --> Added for parallel I/O to calculate total places -----------------
+     @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
+    int getTotalPlaces(){
+        int total = 1;
+        for(int i = 0; i < dimension; i++){
+            total *= size[i];
+        }
+        return total;
+
+    };
 
    protected:
     const int handle;  // handle
     const string className;
     const int dimension;
+
+    /**
+     * contains map of vertices  
+     */
+    std::unordered_map<string, int>* places_base_distributed_map = NULL;
+
+    //seter of the map
+    void setDistributedMap(std::unordered_map<string, int> *my_dist_map){
+        places_base_distributed_map = my_dist_map;
+    };
+
+    //getter of the map
+     std::unordered_map<string, int>* getDistributedMap(){
+        return places_base_distributed_map;
+    };
+
+    int getPlaces_Size(){
+        return places_size;
+    };
+
 
     /**
      * The smallest, valid index present in a given stripe of the simulation
@@ -87,6 +144,11 @@ class Places_base {
      */
     int *size;
 
+    /*this member variable holds the last index taken by the place object.
+    the next place should have an index after this one in the simulation space there for
+    each places have a distict index in the global simulation space. */
+    int nextIndex [];//Note--> not used yet
+
     /**
      * Function of the simulation size and the boundary_width defined. This
      * value stores the total number of Place Objects that constitute the shadow
@@ -99,17 +161,33 @@ class Places_base {
      */
     int boundary_width;
 
+
+    
+    /*======================================================================================================
+     * +++++++++++++++++++++++++++++ Elias-->Added for Graph feature +++++++++++++++++++++++++++++++++++++++
+     *======================================================================================================*/
+    
+    //memebers for Graph Features
+    const FILE_TYPE_ENUMS fileType;
+    const std::string filename;
+    const int numVertices;//number of vertices
+    int nextPlaceIndex = 0;
+    std::vector<std::vector<VertexPlace*> > placesVector; // Graph maintenance
+
+    
+    void init_all_graph(string filename, FILE_TYPE_ENUMS type, void* argument);
+    void init_all_graph_for_worker_nodes(std::string filename, FILE_TYPE_ENUMS filetype, void* argument);
+    void clearGraphOnTheCluster();    
+    int* getPlacesIndex();
+    unordered_map<string, int>* getThisDistributedMap(int handle);
+    
     void init_all(void *argument, int argument_size);
     vector<int> getGlobalArrayIndex(int singleIndex);
     vector<int> getGlobalArrayIndex(int index, int dim);
     void getLocalRange(int range[], int tid);
     static void *processRemoteExchangeRequest(void *param);
-    void getGlobalNeighborArrayIndex(vector<int> src_index, int offset[],
-                                     int dst_size[], int dst_dimension,
-                                     int *dest_index);
-    int getGlobalLinearIndexFromGlobalArrayIndex(int dest_index[],
-                                                 int dest_size[],
-                                                 int dest_dimension);
+    void getGlobalNeighborArrayIndex(vector<int> src_index, int offset[],int dst_size[], int dst_dimension,int *dest_index);
+    int getGlobalLinearIndexFromGlobalArrayIndex(int dest_index[],int dest_size[], int dest_dimension);
     int getRankFromGlobalLinearIndex(int globalLinearIndex);
     static void *exchangeBoundary_helper(void *param);
     static void *sendMessageByChild(void *param);
@@ -117,6 +195,25 @@ class Places_base {
         int rank;
         void *message;
     };
+
+
+private:
+     /*======================================================================================================
+     *+++++++++++++++++++++++++++++ Elias-->Added for Graph feature addition +++++++++++++++++++++++++++++++++
+     *======================================================================================================*/
+    
+    int addPlaceLocally(string vertexId, void* argument, int arg_size);
+    bool addEdgeLocally(std::string vertexId, std::string neighborId, double weight);
+    bool removeVertexLocally(string vertexId);
+    bool removeEdgeLocally(std::string vertexId, std::string neighborId);
+    void* exchangeNeighbor(int functionId, vector<int> neighbor, void*argument);
+    VertexPlace* getPlaceFromVertexName(string vertexname);
+    void deleteAndRenitializeGraph();
+
+    /*======================================================================================================
+     * +++++++++++++++++++++++++++++ Elias-->end of  Graph feature addition +++++++++++++++++++++++++++++++++
+     *======================================================================================================*/
+
 };
 
 #endif

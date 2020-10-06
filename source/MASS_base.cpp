@@ -23,9 +23,10 @@
 #include "MASS_base.h"
 #include <sstream>  // ostringstream
 
+
 // Used to toggle output for MASS_base
 #ifndef LOGGING
-const bool printOutput = false;
+const bool printOutput = true;
 #else
 const bool printOutput = true;
 #endif
@@ -78,6 +79,36 @@ pthread_mutex_t MASS_base::request_lock;
 /**
  * Associative container that stores all Places collections for a given handle
  */
+
+/* +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ *====================== Graph support ===================================================*
+ *----------------------------------------------------------------------------------------*/
+//clear map contents
+void MASS_base::reinitializeMap(){
+    for(auto it = distributed_map.begin(); it != distributed_map.end(); it++){
+        auto dist_map = it->second;
+        dist_map->clear();
+    }
+}
+unordered_map<int, unordered_map<std::string,int>*> MASS_base::distributed_map;
+
+/*return the map of vertices given a handle*/
+std::unordered_map<string, int>* MASS_base::getDistributedMap(int handle){
+    unordered_map<int,unordered_map<string,int>*>::iterator it = distributed_map.find(handle);
+    if(it != distributed_map.end()){
+        return it->second;
+    }
+
+    else{
+        if(printOutput){
+            ostringstream container;
+            container << "no map associated with the handle: " << handle << endl;
+            log(container.str());
+        }
+        return NULL;
+    }
+}
+
 map<int, Places_base *> MASS_base::placesMap;
 /**
  * Associative container that stores all Agents collections for a given handle
@@ -261,6 +292,7 @@ void MASS_base::log(string msg) {
             logger.open(filename.c_str(), ofstream::out);
         }
         logger << msg << endl;
+	logger.flush();
     }
     pthread_mutex_unlock(&log_lock);
 }

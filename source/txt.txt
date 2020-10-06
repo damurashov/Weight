@@ -1,0 +1,18 @@
+<network>
+	<nodes>
+		<node id="1" x="665498.5915828889" y="6600721.058093354" ></node>
+		<node id="10" x="658803.7360160261" y="6575644.324923517"></node>
+		<node id="100" x="566282.7735573719" y="6454558.626888261"></node>
+		<node id="10000" x="408774.9462956431" y="6233917.802557087"></node>
+		<node id="10001" x="408772.02211252623" y="6234167.648466459"></node>
+	</nodes>
+
+	<links>
+		<link id="pt_99992" from="pt_740057809" to="pt_740057653" length="257.27792215211286" freespeed="8.333333333333334" capacity="500.0" permlanes="1.0" oneway="1" modes="pt" ></link>
+		<link id="pt_99996" from="pt_740057599" to="pt_740057756" length="157.21884660387735" freespeed="8.333333333333334" capacity="500.0" permlanes="1.0" oneway="1" modes="pt" ></link>
+		<link id="pt_99997" from="pt_740057688" to="pt_740057647" length="207.21244492773178" freespeed="8.333333333333334" capacity="500.0" permlanes="1.0" oneway="1" modes="pt" ></link>
+		<link id="pt_99998" from="pt_740057647" to="pt_740057623" length="378.77959250564095" freespeed="8.333333333333334" capacity="500.0" permlanes="1.0" oneway="1" modes="pt" ></link>
+		<link id="pt_99999" from="pt_740057623" to="pt_740057686" length="292.07787848782823" freespeed="8.333333333333334" capacity="500.0" permlanes="1.0" oneway="1" modes="pt" ></link>
+	</links>
+
+</network>

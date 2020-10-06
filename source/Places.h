@@ -27,22 +27,34 @@
 #include <string>
 #include "Message.h"
 #include "Places_base.h"
+#include "FileParser.h"
 
 using namespace std;
 
 class Places : public Places_base {
    public:
-    Places(int handle, string className, void *argument, int argument_size,
-           int dim, ...);
-    Places(int handle, string className, void *argument, int argument_size,
-           int dim, int size[]);
 
-    Places(int handle, string className, int boundary_width, void *argument,
-           int argument_size, int dim, ...);
-    Places(int handle, string className, int boundary_width, void *argument,
-           int argument_size, int dim, int size[]);
+    /*Elias --> this is added for graph feature of MASS lib
+    ----------------------------------------------------------------------------------------------------------------
+    ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
 
-    ~Places();
+    Places(int handle,string className,int boundary_width,int dimension, string filename,
+                     FILE_TYPE_ENUMS type, void* argument, int arg_size);
+    Places(int handle,string className,int boundary_width,int dimension,void* argument,int argSize,int nVertices);
+   // Places(int handle,string className,int boundary_width, int dimension, int size); 
+
+    /*-----------------------------------------------------------------------------------------------------------------
+     +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+    
+    Places(int handle, string className, void *argument, int argument_size,int dim, ...);
+
+    Places(int handle, string className, void *argument, int argument_size, int dim, int size[]);
+
+    Places(int handle, string className, int boundary_width, void *argument, int argument_size, int dim, ...);
+
+    Places(int handle, string className, int boundary_width, void *argument, int argument_size, int dim, int size[]);
+
+    virtual ~Places(){};
 
     void callAll(int functionId);
     void callAll(int functionId, void *argument, int arg_size);
@@ -58,7 +70,19 @@ class Places : public Places_base {
     void exchangeBoundary();
     void init_master(void *argument, int argument_size, int boundary_width);
 
+
+    /*Elias-->added for graph feature +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+     *-----------------------------------------------------------------------------------------------------*/
+    void init_master_base(void* argument, int arg_size, int boundary_width);
+    vector<string>* getHosts();
+
+    /*-----------------------------------------------------------------------------------------------------
+     +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+    
    private:
+    std::string filename;
+    FILE_TYPE_ENUMS fileType = FILE_TYPE_ENUMS::HIPPIE;//DEFAULT FILE TYPE ENUM
+
     void *ca_setup(int functionId, void *argument, int arg_size, int ret_size,
                    Message::ACTION_TYPE type);
     void *cs_setup(int functionId, void *arguments, int arg_size, int ret_size,

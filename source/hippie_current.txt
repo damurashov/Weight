@@ -1,0 +1,784 @@
+SNX12_HUMAN	29934	FYN_HUMAN	2534	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT
+ELK3_HUMAN	2004	GRB2_HUMAN	2885	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,I2D
+GRB2_HUMAN	2885	PRIC3_HUMAN	4007	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,I2D
+RL13_HUMAN	6137	GRB2_HUMAN	2885	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,I2D
+GRB2_HUMAN	2885	SP1_HUMAN	6667	0.63	experiments:peptide array;pmids:17474147;sources:IntAct
+MYLK_HUMAN	4638	GRB2_HUMAN	2885	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,I2D
+SHRM2_HUMAN	357	GRB2_HUMAN	2885	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT
+MED8_HUMAN	112950	RBX1_HUMAN	9978	0.72	experiments:coimmunoprecipitation,affinity chromatography technology;pmids:12149480;sources:IntAct,I2D,BioGRID
+RBX1_HUMAN	9978	ELOC_HUMAN	6921	0.72	experiments:coimmunoprecipitation,affinity chromatography technology;pmids:12149480;sources:IntAct,I2D,BioGRID
+RBX1_HUMAN	9978	ELOB_HUMAN	6923	0.82	experiments:coimmunoprecipitation,affinity chromatography technology;pmids:12149480,12048197;sources:IntAct,I2D,BioGRID
+CO6_HUMAN	729	GRB2_HUMAN	2885	0.63	experiments:peptide array;pmids:17474147;sources:IntAct
+DOCK3_HUMAN	1795	GRB2_HUMAN	2885	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT,I2D
+DUS15_HUMAN	128853	GRB2_HUMAN	2885	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT,I2D
+SUV92_HUMAN	79723	GRB2_HUMAN	2885	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT,I2D
+SREC2_HUMAN	91179	GRB2_HUMAN	2885	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,I2D
+GRB2_HUMAN	2885	CDC27_HUMAN	996	0.63	experiments:peptide array;pmids:17474147;sources:IntAct
+GRB2_HUMAN	2885	M4K3_HUMAN	8491	0.89	experiments:peptide array,anti tag coimmunoprecipitation,Two-hybrid,affinity chromatography technology;pmids:17474147,20936779,21706016;sources:IntAct,I2D,BioGRID
+TGON2_HUMAN	10618	GRB2_HUMAN	2885	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT
+GRB2_HUMAN	2885	FLNC_HUMAN	2318	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT,I2D
+GRB2_HUMAN	2885	FCG2B_HUMAN	2213	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,I2D
+GRB2_HUMAN	2885	FCG2C_HUMAN	9103	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,I2D
+MRGBP_HUMAN	55257	KAT5_HUMAN	10524	0.87	experiments:anti tag coimmunoprecipitation,anti bait coimmunoprecipitation,affinity chromatography technology;pmids:12963728,15647280,16230350,18218781,17573780,26186194,28514442;sources:IntAct,I2D,BioGRID
+MRGBP_HUMAN	55257	HS71L_HUMAN	3305	0.63	experiments:anti tag coimmunoprecipitation;pmids:12963728;sources:IntAct,I2D
+MRGBP_HUMAN	55257	RL1D1_HUMAN	26156	0.72	experiments:anti tag coimmunoprecipitation,affinity chromatography technology;pmids:12963728;sources:IntAct,I2D,BioGRID
+MRGBP_HUMAN	55257	RUVB2_HUMAN	10856	0.87	experiments:anti tag coimmunoprecipitation,anti bait coimmunoprecipitation,affinity chromatography technology;pmids:12963728,15647280,16230350,17573780,28514442;sources:IntAct,I2D,BioGRID
+MRGBP_HUMAN	55257	VPS72_HUMAN	6944	0.87	experiments:anti tag coimmunoprecipitation,anti bait coimmunoprecipitation,affinity chromatography technology;pmids:12963728,15647280,16230350,18218781,28514442;sources:IntAct,I2D,BioGRID
+MRGBP_HUMAN	55257	EP400_HUMAN	57634	0.83	experiments:anti tag coimmunoprecipitation,affinity chromatography technology;pmids:12963728,28514442,29028833,15647280;sources:IntAct,I2D,BioGRID
+PTN_HUMAN	5764	GASP2_HUMAN	114928	0.73	experiments:Two-hybrid;pmids:15383276,16713569;sources:IntAct,MINT,I2D,Goehler04,Lim06,BioGRID
+ACL6A_HUMAN	86	BRD8_HUMAN	10902	0.77	experiments:molecular sieving,affinity chromatography technology;pmids:12963728,15647280;sources:IntAct,I2D
+ACL6A_HUMAN	86	DMAP1_HUMAN	55929	0.78	experiments:molecular sieving,affinity chromatography technology;pmids:12963728,15647280,14966270,29028833;sources:IntAct,I2D,BioGRID
+ACL6A_HUMAN	86	MO4L1_HUMAN	10933	0.78	experiments:molecular sieving,affinity chromatography technology;pmids:12963728,15647280,14966270,17573780;sources:IntAct,I2D,BioGRID
+ACL6A_HUMAN	86	MO4L2_HUMAN	9643	0.78	experiments:molecular sieving,affinity chromatography technology;pmids:12963728,15647280,17573780;sources:IntAct,I2D,BioGRID
+BRD8_HUMAN	10902	EP400_HUMAN	57634	0.73	experiments:affinity chromatography technology;pmids:12963728,29028833;sources:IntAct,I2D,BioGRID
+BRD8_HUMAN	10902	MO4L1_HUMAN	10933	0.74	experiments:affinity chromatography technology;pmids:12963728,20332121,19553677,17573780,26186194,26344197,28514442;sources:IntAct,I2D,BioGRID
+BRD8_HUMAN	10902	MO4L2_HUMAN	9643	0.74	experiments:affinity chromatography technology;pmids:12963728,20332121,17573780,28514442;sources:IntAct,I2D,BioGRID
+NCBP1_HUMAN	4686	IF4G3_HUMAN	8672	0.63	experiments:coimmunoprecipitation;pmids:15361857;sources:IntAct,I2D
+IF4A3_HUMAN	9775	REN3B_HUMAN	65109	0.9	experiments:coimmunoprecipitation,anti bait coimmunoprecipitation,anti tag coimmunoprecipitation,affinity chromatography technology,molecular sieving,pull down,tandem affinity purification;pmids:15361857,19410547,16209946,16601204,19884259,23084401,22961380,18066079,19478851;sources:IntAct,I2D,BioGRID
+IF4A3_HUMAN	9775	IF4G1_HUMAN	1981	0.7	experiments:coimmunoprecipitation;pmids:15361857;species:Saccharomyces cerevisiae (Baker's yeast);sources:IntAct,I2D,Ortho
+IF4G1_HUMAN	1981	REN3B_HUMAN	65109	0.63	experiments:coimmunoprecipitation;pmids:15361857;sources:IntAct,I2D
+M3K5_HUMAN	4217	1433B_HUMAN	7529	0.82	experiments:Two-hybrid,anti bait coimmunoprecipitation;pmids:15023544,21771788;sources:IntAct
+FYN_HUMAN	2534	SF3B4_HUMAN	10262	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT,I2D
+NFASC_HUMAN	23114	FYN_HUMAN	2534	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT
+CO6_HUMAN	729	FYN_HUMAN	2534	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT
+CP4F2_HUMAN	8529	FYN_HUMAN	2534	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT
+PPR3D_HUMAN	5509	FYN_HUMAN	2534	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT,I2D
+FYN_HUMAN	2534	PKD1_HUMAN	5310	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT,I2D
+FYN_HUMAN	2534	BAZ2A_HUMAN	11176	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT,I2D
+FYN_HUMAN	2534	AIRE_HUMAN	326	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT
+FYN_HUMAN	2534	KI67_HUMAN	4288	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT,I2D
+FYN_HUMAN	2534	CCR10_HUMAN	2826	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT,I2D
+FYN_HUMAN	2534	DDX41_HUMAN	51428	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT
+DPOD1_HUMAN	5424	FYN_HUMAN	2534	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT,I2D
+MED10_HUMAN	84246	RECQ5_HUMAN	9400	0.63	experiments:anti tag coimmunoprecipitation;pmids:15175163;sources:IntAct,I2D,BIND
+MED10_HUMAN	84246	HS71L_HUMAN	3305	0.63	experiments:anti tag coimmunoprecipitation;pmids:15175163;sources:IntAct,I2D,BIND
+MED10_HUMAN	84246	IF4A1_HUMAN	1973	0.63	experiments:anti tag coimmunoprecipitation;pmids:15175163;sources:IntAct,I2D,BIND
+MED10_HUMAN	84246	NPM_HUMAN	4869	0.63	experiments:anti tag coimmunoprecipitation;pmids:15175163;sources:IntAct,I2D,BIND
+MED10_HUMAN	84246	NONO_HUMAN	4841	0.63	experiments:anti tag coimmunoprecipitation;pmids:15175163;sources:IntAct,I2D,BIND
+MED10_HUMAN	84246	EF1A1_HUMAN	1915	0.63	experiments:anti tag coimmunoprecipitation;pmids:15175163;sources:IntAct,I2D,BIND
+MED10_HUMAN	84246	ELL2_HUMAN	22936	0.63	experiments:anti tag coimmunoprecipitation;pmids:15175163;sources:IntAct,I2D,BIND
+MED10_HUMAN	84246	AFF4_HUMAN	27125	0.63	experiments:anti tag coimmunoprecipitation;pmids:15175163;sources:IntAct,I2D,BIND
+MED10_HUMAN	84246	DDX3X_HUMAN	1654	0.63	experiments:anti tag coimmunoprecipitation;pmids:15175163;sources:IntAct,I2D,BIND
+MED10_HUMAN	84246	PTBP1_HUMAN	5725	0.63	experiments:anti tag coimmunoprecipitation;pmids:15175163;sources:IntAct,I2D,BIND
+MED10_HUMAN	84246	RBM39_HUMAN	9584	0.63	experiments:anti tag coimmunoprecipitation;pmids:15175163;sources:IntAct,I2D,BIND
+MED10_HUMAN	84246	HDAC6_HUMAN	10013	0.63	experiments:anti tag coimmunoprecipitation;pmids:15175163;sources:IntAct,I2D,BIND
+MOB1A_HUMAN	55233	S10A8_HUMAN	6279	0.72	experiments:anti bait coimmunoprecipitation,affinity chromatography technology;pmids:17353931;sources:IntAct,BioGRID
+MED10_HUMAN	84246	TMLH_HUMAN	55217	0.63	experiments:anti tag coimmunoprecipitation;pmids:15175163;sources:IntAct,I2D,BIND
+MED10_HUMAN	84246	CCAR1_HUMAN	55749	0.63	experiments:anti tag coimmunoprecipitation;pmids:15175163;sources:IntAct,I2D
+MED10_HUMAN	84246	TADBP_HUMAN	23435	0.63	experiments:anti tag coimmunoprecipitation;pmids:15175163;sources:IntAct,I2D,BIND
+MED10_HUMAN	84246	TITIN_HUMAN	7273	0.63	experiments:anti tag coimmunoprecipitation;pmids:15175163;sources:IntAct,I2D
+MED9_HUMAN	55090	SR140_HUMAN	23350	0.63	experiments:anti tag coimmunoprecipitation;pmids:15175163;sources:IntAct,I2D
+MED9_HUMAN	55090	DDX52_HUMAN	11056	0.63	experiments:anti tag coimmunoprecipitation;pmids:15175163;sources:IntAct,I2D
+MED9_HUMAN	55090	BAG2_HUMAN	9532	0.63	experiments:anti tag coimmunoprecipitation;pmids:15175163;sources:IntAct,I2D,BIND
+MED9_HUMAN	55090	NOP58_HUMAN	51602	0.63	experiments:anti tag coimmunoprecipitation;pmids:15175163;sources:IntAct,I2D,BIND
+MED9_HUMAN	55090	HDAC6_HUMAN	10013	0.63	experiments:anti tag coimmunoprecipitation;pmids:15175163;sources:IntAct,I2D,BIND
+G3BP2_HUMAN	9908	ASCC3_HUMAN	10973	0.72	experiments:anti tag coimmunoprecipitation,affinity chromatography technology;pmids:19615732;sources:IntAct,BioGRID
+MED9_HUMAN	55090	TMLH_HUMAN	55217	0.63	experiments:anti tag coimmunoprecipitation;pmids:15175163;sources:IntAct,I2D,BIND
+MED9_HUMAN	55090	SMD1_HUMAN	6632	0.63	experiments:anti tag coimmunoprecipitation;pmids:15175163;sources:IntAct,I2D,BIND
+MED9_HUMAN	55090	NPM_HUMAN	4869	0.63	experiments:anti tag coimmunoprecipitation;pmids:15175163;sources:IntAct,I2D,BIND
+MED9_HUMAN	55090	NONO_HUMAN	4841	0.63	experiments:anti tag coimmunoprecipitation;pmids:15175163;sources:IntAct,I2D,BIND
+MED9_HUMAN	55090	EF1A1_HUMAN	1915	0.63	experiments:anti tag coimmunoprecipitation;pmids:15175163;sources:IntAct,I2D,BIND
+MED9_HUMAN	55090	GPN3_HUMAN	51184	0.63	experiments:anti tag coimmunoprecipitation;pmids:15175163;sources:IntAct,I2D,BIND
+MED9_HUMAN	55090	GRP75_HUMAN	3313	0.82	experiments:anti tag coimmunoprecipitation,affinity chromatography technology;pmids:15175163,27684187;sources:IntAct,I2D,BIND,BioGRID
+MED9_HUMAN	55090	CH60_HUMAN	3329	0.63	experiments:anti tag coimmunoprecipitation;pmids:15175163;sources:IntAct,I2D,BIND
+MED9_HUMAN	55090	NUMA1_HUMAN	4926	0.63	experiments:anti tag coimmunoprecipitation;pmids:15175163;sources:IntAct,I2D,BIND
+MED9_HUMAN	55090	DICER_HUMAN	23405	0.63	experiments:anti tag coimmunoprecipitation;pmids:15175163;sources:IntAct,I2D,BIND
+MED9_HUMAN	55090	TCPG_HUMAN	7203	0.63	experiments:anti tag coimmunoprecipitation;pmids:15175163;sources:IntAct,I2D,BIND
+MED9_HUMAN	55090	TCPD_HUMAN	10575	0.63	experiments:anti tag coimmunoprecipitation;pmids:15175163;sources:IntAct,I2D,BIND
+MED9_HUMAN	55090	MSH6_HUMAN	2956	0.63	experiments:anti tag coimmunoprecipitation;pmids:15175163;sources:IntAct,I2D,BIND
+MED29_HUMAN	55588	NPM_HUMAN	4869	0.63	experiments:anti tag coimmunoprecipitation;pmids:15175163;sources:IntAct,I2D
+MED29_HUMAN	55588	NONO_HUMAN	4841	0.63	experiments:anti tag coimmunoprecipitation;pmids:15175163;sources:IntAct,I2D
+MED29_HUMAN	55588	EF1A1_HUMAN	1915	0.63	experiments:anti tag coimmunoprecipitation;pmids:15175163;sources:IntAct,I2D
+MED29_HUMAN	55588	IDLC_HUMAN	7802	0.63	experiments:anti tag coimmunoprecipitation;pmids:15175163;sources:IntAct,I2D
+MED29_HUMAN	55588	HNRPM_HUMAN	4670	0.63	experiments:anti tag coimmunoprecipitation;pmids:15175163;sources:IntAct,I2D
+MED29_HUMAN	55588	SR140_HUMAN	23350	0.63	experiments:anti tag coimmunoprecipitation;pmids:15175163;sources:IntAct,I2D
+MED29_HUMAN	55588	DDX52_HUMAN	11056	0.63	experiments:anti tag coimmunoprecipitation;pmids:15175163;sources:IntAct,I2D
+MED29_HUMAN	55588	BAG2_HUMAN	9532	0.63	experiments:anti tag coimmunoprecipitation;pmids:15175163;sources:IntAct,I2D
+MED29_HUMAN	55588	SMD1_HUMAN	6632	0.63	experiments:anti tag coimmunoprecipitation;pmids:15175163;sources:IntAct,I2D
+MED29_HUMAN	55588	NOP58_HUMAN	51602	0.63	experiments:anti tag coimmunoprecipitation;pmids:15175163;sources:IntAct,I2D
+MED29_HUMAN	55588	DDX3X_HUMAN	1654	0.63	experiments:anti tag coimmunoprecipitation;pmids:15175163;sources:IntAct,I2D
+MED29_HUMAN	55588	PTBP1_HUMAN	5725	0.63	experiments:anti tag coimmunoprecipitation;pmids:15175163;sources:IntAct,I2D
+MED29_HUMAN	55588	RBM39_HUMAN	9584	0.63	experiments:anti tag coimmunoprecipitation;pmids:15175163;sources:IntAct,I2D
+MED29_HUMAN	55588	TADBP_HUMAN	23435	0.63	experiments:anti tag coimmunoprecipitation;pmids:15175163;sources:IntAct,I2D
+HCFC2_HUMAN	29915	SIR1_HUMAN	23411	0.63	experiments:anti tag coimmunoprecipitation;pmids:21909281;sources:IntAct
+MED29_HUMAN	55588	TMLH_HUMAN	55217	0.63	experiments:anti tag coimmunoprecipitation;pmids:15175163;sources:IntAct,I2D
+MED29_HUMAN	55588	CC026_HUMAN	84319	0.63	experiments:anti tag coimmunoprecipitation;pmids:15175163;sources:IntAct,I2D
+MED29_HUMAN	55588	DDX20_HUMAN	11218	0.63	experiments:anti tag coimmunoprecipitation;pmids:15175163;sources:IntAct,I2D
+MED29_HUMAN	55588	DDX31_HUMAN	64794	0.63	experiments:anti tag coimmunoprecipitation;pmids:15175163;sources:IntAct,I2D
+MED29_HUMAN	55588	LC7L3_HUMAN	51747	0.63	experiments:anti tag coimmunoprecipitation;pmids:15175163;sources:IntAct,I2D
+MED29_HUMAN	55588	DNJA1_HUMAN	3301	0.63	experiments:anti tag coimmunoprecipitation;pmids:15175163;sources:IntAct,I2D
+MED29_HUMAN	55588	DYN2_HUMAN	1785	0.63	experiments:anti tag coimmunoprecipitation;pmids:15175163;sources:IntAct,I2D
+MED29_HUMAN	55588	MBB1A_HUMAN	10514	0.63	experiments:anti tag coimmunoprecipitation;pmids:15175163;sources:IntAct,I2D
+MED29_HUMAN	55588	DICER_HUMAN	23405	0.63	experiments:anti tag coimmunoprecipitation;pmids:15175163;sources:IntAct,I2D
+MED29_HUMAN	55588	TCPG_HUMAN	7203	0.63	experiments:anti tag coimmunoprecipitation;pmids:15175163;sources:IntAct,I2D
+MED29_HUMAN	55588	HAUS7_HUMAN	55559	0.63	experiments:anti tag coimmunoprecipitation;pmids:15175163;sources:IntAct,I2D
+MED29_HUMAN	55588	AIFM1_HUMAN	9131	0.63	experiments:anti tag coimmunoprecipitation;pmids:15175163;sources:IntAct,I2D
+MED29_HUMAN	55588	EXOC4_HUMAN	60412	0.63	experiments:anti tag coimmunoprecipitation;pmids:15175163;sources:IntAct,I2D
+MED29_HUMAN	55588	PRP19_HUMAN	27339	0.63	experiments:anti tag coimmunoprecipitation;pmids:15175163;sources:IntAct,I2D
+MED29_HUMAN	55588	TR112_HUMAN	51504	0.63	experiments:anti tag coimmunoprecipitation;pmids:15175163;sources:IntAct,I2D
+MED29_HUMAN	55588	ZBTB9_HUMAN	221504	0.63	experiments:anti tag coimmunoprecipitation;pmids:15175163;sources:IntAct,I2D
+MED29_HUMAN	55588	TITIN_HUMAN	7273	0.63	experiments:anti tag coimmunoprecipitation;pmids:15175163;sources:IntAct,I2D
+MED26_HUMAN	9441	HS71L_HUMAN	3305	0.63	experiments:anti tag coimmunoprecipitation;pmids:15175163;sources:IntAct,I2D
+MED26_HUMAN	9441	LAP2A_HUMAN	7112	0.63	experiments:anti tag coimmunoprecipitation;pmids:15175163;sources:IntAct,I2D
+MED26_HUMAN	9441	IF4A1_HUMAN	1973	0.63	experiments:anti tag coimmunoprecipitation;pmids:15175163;sources:IntAct,I2D
+MED26_HUMAN	9441	HNRPM_HUMAN	4670	0.63	experiments:anti tag coimmunoprecipitation;pmids:15175163;sources:IntAct,I2D
+MED26_HUMAN	9441	SMN_HUMAN	6606	0.63	experiments:anti tag coimmunoprecipitation;pmids:15175163;sources:IntAct,I2D
+MED26_HUMAN	9441	SMN_HUMAN	6607	0.63	experiments:anti tag coimmunoprecipitation;pmids:15175163;sources:IntAct,I2D
+MED26_HUMAN	9441	ELL2_HUMAN	22936	0.82	experiments:anti tag coimmunoprecipitation,affinity chromatography technology;pmids:15175163,21729782;sources:IntAct,I2D,BioGRID
+MED26_HUMAN	9441	AFF4_HUMAN	27125	0.82	experiments:anti tag coimmunoprecipitation,affinity chromatography technology;pmids:15175163,21729782;sources:IntAct,I2D,BioGRID
+MED26_HUMAN	9441	DDX50_HUMAN	79009	0.63	experiments:anti tag coimmunoprecipitation;pmids:15175163;sources:IntAct,I2D
+MED26_HUMAN	9441	RPAP2_HUMAN	79871	0.63	experiments:anti tag coimmunoprecipitation;pmids:15175163;sources:IntAct,I2D
+MED26_HUMAN	9441	UBR5_HUMAN	51366	0.63	experiments:anti tag coimmunoprecipitation;pmids:15175163;sources:IntAct,I2D
+MED26_HUMAN	9441	DCD_HUMAN	117159	0.63	experiments:anti tag coimmunoprecipitation;pmids:15175163;sources:IntAct,I2D
+MED26_HUMAN	9441	GPN3_HUMAN	51184	0.63	experiments:anti tag coimmunoprecipitation;pmids:15175163;sources:IntAct,I2D
+MED26_HUMAN	9441	RECQ5_HUMAN	9400	0.63	experiments:anti tag coimmunoprecipitation;pmids:15175163;sources:IntAct,I2D
+MED26_HUMAN	9441	PDIA1_HUMAN	5034	0.63	experiments:anti tag coimmunoprecipitation;pmids:15175163;sources:IntAct,I2D
+MED26_HUMAN	9441	P3H1_HUMAN	64175	0.63	experiments:anti tag coimmunoprecipitation;pmids:15175163;sources:IntAct,I2D
+MED26_HUMAN	9441	TITIN_HUMAN	7273	0.63	experiments:anti tag coimmunoprecipitation;pmids:15175163;sources:IntAct,I2D
+FYN_HUMAN	2534	HDAC6_HUMAN	10013	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT,I2D
+SNX3_HUMAN	8724	FYN_HUMAN	2534	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT
+FYN_HUMAN	2534	BRPF3_HUMAN	27154	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT,I2D
+IL3RA_HUMAN	3563	FYN_HUMAN	2534	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT,I2D
+FYN_HUMAN	2534	XRCC1_HUMAN	7515	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT
+DAB2_HUMAN	1601	FYN_HUMAN	2534	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT,STRING
+M4K5_HUMAN	11183	FYN_HUMAN	2534	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT,I2D
+LTBP2_HUMAN	4053	FYN_HUMAN	2534	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT,I2D
+FYN_HUMAN	2534	HCN4_HUMAN	10021	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT
+FYN_HUMAN	2534	STF1_HUMAN	2516	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT,I2D
+RP1L1_HUMAN	94137	GRB2_HUMAN	2885	0.63	experiments:peptide array;pmids:17474147;sources:IntAct
+PANX2_HUMAN	56666	GRB2_HUMAN	2885	0.63	experiments:peptide array;pmids:17474147;sources:IntAct
+GRB2_HUMAN	2885	CP4F2_HUMAN	8529	0.63	experiments:peptide array;pmids:17474147;sources:IntAct
+MED14_HUMAN	9282	GRB2_HUMAN	2885	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,I2D
+ACAP1_HUMAN	9744	GRB2_HUMAN	2885	0.82	experiments:peptide array,Two-hybrid;pmids:17474147,25814554;sources:IntAct,BioGRID
+TPX2_HUMAN	22974	GRB2_HUMAN	2885	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,I2D
+NKX21_HUMAN	7080	GRB2_HUMAN	2885	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT
+RIN3_HUMAN	79890	GRB2_HUMAN	2885	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT,I2D
+HXC8_HUMAN	3224	GRB2_HUMAN	2885	0.63	experiments:peptide array;pmids:17474147;sources:IntAct
+GRB2_HUMAN	2885	PAX3_HUMAN	5077	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT
+GRB2_HUMAN	2885	ASB16_HUMAN	92591	0.63	experiments:peptide array;pmids:17474147;sources:IntAct
+GRB2_HUMAN	2885	CNTFR_HUMAN	1271	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,I2D
+GRB2_HUMAN	2885	SYDC_HUMAN	1615	0.86	experiments:peptide array,tandem affinity purification,affinity chromatography technology;pmids:17474147,19380743;sources:IntAct,BioGRID
+GRB2_HUMAN	2885	CELR3_HUMAN	1951	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,I2D
+GRB2_HUMAN	2885	RNC_HUMAN	29102	0.63	experiments:peptide array;pmids:17474147;sources:IntAct
+CNTP1_HUMAN	8506	GRB2_HUMAN	2885	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,I2D
+TNF10_HUMAN	8743	FADD_HUMAN	8772	0.88	experiments:coimmunoprecipitation,pull down,anti tag coimmunoprecipitation,affinity chromatography technology;pmids:12198154,10894160,19427028,21459798,20097879,21822306,21525171,22266862,22585859,25551360,16801533;sources:IntAct,I2D,BioGRID,STRING
+TNF10_HUMAN	8743	CASPA_HUMAN	843	0.68	experiments:coimmunoprecipitation,pull down;pmids:12198154;sources:IntAct,I2D
+TNF10_HUMAN	8743	CASP8_HUMAN	841	0.89	experiments:coimmunoprecipitation,pull down,anti tag coimmunoprecipitation,affinity chromatography technology,fluorescence microscopy;pmids:12198154,10894160,19427028,21459798,20097879,21822306,21525171,22266862,22585859,23142077,24287696,25551360,16801533;sources:IntAct,I2D,BioGRID
+MDC1_HUMAN	9656	FACD2_HUMAN	2177	0.82	experiments:coimmunoprecipitation,affinity chromatography technology;pmids:12607005,29656893;sources:IntAct,I2D,BioGRID
+GRB2_HUMAN	2885	RAGE_HUMAN	177	0.86	experiments:peptide array,anti tag coimmunoprecipitation,affinity chromatography technology;pmids:17474147,21706016;sources:IntAct,I2D,BioGRID
+DDX23_HUMAN	9416	SNR40_HUMAN	9410	0.83	experiments:anti bait coimmunoprecipitation,affinity chromatography technology;pmids:9774689,26186194,28514442;sources:IntAct,I2D,BioGRID
+GRB2_HUMAN	2885	RPA2_HUMAN	84172	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT
+TSKS_HUMAN	60385	GRB2_HUMAN	2885	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,I2D
+GRB2_HUMAN	2885	PLCG2_HUMAN	5336	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,I2D
+GASR_HUMAN	887	GRB2_HUMAN	2885	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,I2D
+ARHGB_HUMAN	9826	GRB2_HUMAN	2885	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT,I2D
+BRD4_HUMAN	23476	GRB2_HUMAN	2885	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,I2D
+MINT_HUMAN	23013	GRB2_HUMAN	2885	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,I2D
+IL3RA_HUMAN	3563	GRB2_HUMAN	2885	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,I2D
+PRP8_HUMAN	10594	U520_HUMAN	23020	0.96	experiments:cosedimentation,Two-hybrid,x-ray crystallography,affinity chromatography technology,molecular sieving;pmids:9774689,16723661,22939629,23704370,17317632,26344197,27173435,28515276;species:Saccharomyces cerevisiae (Baker's yeast);sources:IntAct,HomoMINT,I2D,BioGRID
+GRB2_HUMAN	2885	TRY1_HUMAN	5644	0.63	experiments:peptide array;pmids:17474147;sources:IntAct
+GRB2_HUMAN	2885	TNR14_HUMAN	8764	0.63	experiments:peptide array;pmids:17474147;sources:IntAct
+GRB2_HUMAN	2885	TNPO1_HUMAN	3842	0.63	experiments:peptide array;pmids:17474147;sources:IntAct
+CYH2_HUMAN	9266	GRB2_HUMAN	2885	0.63	experiments:peptide array;pmids:17474147;sources:IntAct
+SO2A1_HUMAN	6578	GRB2_HUMAN	2885	0.63	experiments:peptide array;pmids:17474147;sources:IntAct
+GRB2_HUMAN	2885	KCNQ1_HUMAN	3784	0.63	experiments:peptide array;pmids:17474147;sources:IntAct
+NEC2_HUMAN	5126	NEC2_HUMAN	5126	0.55	experiments:molecular sieving;pmids:3597357;sources:IntAct,I2D
+TNFA_HUMAN	7124	RIPK1_HUMAN	8737	0.88	experiments:anti tag coimmunoprecipitation,pull down,affinity chromatography technology,tandem affinity purification;pmids:12887920,12753742,16603398,20005846,21620750,22099304,21331077,22028622,23032187,23104095,22675546,24726327,24980434,25911380,27307491,26670046,27560715,27545878,27458237,23955153;sources:IntAct,I2D,BioGRID
+TNFA_HUMAN	7124	BIRC2_HUMAN	329	0.88	experiments:anti tag coimmunoprecipitation,affinity chromatography technology,tandem affinity purification,pull down;pmids:12887920,20005846,21822306,25911380,27307491;sources:IntAct,I2D,BioGRID
+KPCD1_HUMAN	5587	CADH1_HUMAN	999	0.75	experiments:anti bait coimmunoprecipitation,confocal microscopy,protein kinase assay;pmids:15695390;sources:IntAct,I2D
+GRB2_HUMAN	2885	MYRIP_HUMAN	25924	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,I2D
+GRB2_HUMAN	2885	IL5RA_HUMAN	3568	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,I2D
+GRB2_HUMAN	2885	ANK2_HUMAN	287	0.63	experiments:peptide array;pmids:17474147;sources:IntAct
+GRB2_HUMAN	2885	FANCA_HUMAN	2175	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT
+AIRE_HUMAN	326	GRB2_HUMAN	2885	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT
+STF1_HUMAN	2516	GRB2_HUMAN	2885	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,I2D
+CKAP5_HUMAN	9793	GRB2_HUMAN	2885	0.63	experiments:peptide array;pmids:17474147;sources:IntAct
+GRB2_HUMAN	2885	SNX3_HUMAN	8724	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT
+GRB2_HUMAN	2885	NFASC_HUMAN	23114	0.63	experiments:peptide array;pmids:17474147;sources:IntAct
+PP2BB_HUMAN	5532	GRB2_HUMAN	2885	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,I2D
+BAIP2_HUMAN	10458	ABI1_HUMAN	10006	0.87	experiments:anti bait coimmunoprecipitation,affinity chromatography technology,anti tag coimmunoprecipitation;pmids:15289329,26186194,26496610,28514442;sources:IntAct,I2D,BioGRID
+ITF2_HUMAN	6925	BCL9_HUMAN	607	0.56	experiments:pull down;pmids:11955446;sources:IntAct,I2D
+B2CL1_HUMAN	598	DLRB1_HUMAN	83658	0.63	experiments:anti tag coimmunoprecipitation;pmids:10198631;sources:IntAct,I2D
+DLRB1_HUMAN	83658	B2L11_HUMAN	10018	0.63	experiments:anti bait coimmunoprecipitation;pmids:10198631;sources:IntAct,I2D
+ORC1_HUMAN	4998	CCNA1_HUMAN	8900	0.63	experiments:coimmunoprecipitation;pmids:11931757;sources:IntAct,I2D
+ORC2_HUMAN	4999	CCNA1_HUMAN	8900	0.63	experiments:coimmunoprecipitation;pmids:11931757;sources:IntAct,I2D
+TRI17_HUMAN	51127	LRSM1_HUMAN	90678	0.63	experiments:Two-hybrid;pmids:22493164;sources:IntAct,BioGRID
+GRB2_HUMAN	2885	NCKP5_HUMAN	344148	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,I2D
+MLL4_HUMAN	9757	GRB2_HUMAN	2885	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,I2D
+GRB2_HUMAN	2885	EFS_HUMAN	10278	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT,I2D
+GRB2_HUMAN	2885	KI13A_HUMAN	63971	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT
+HCN2_HUMAN	610	GRB2_HUMAN	2885	0.63	experiments:peptide array;pmids:17474147;sources:IntAct
+DCE1_HUMAN	2571	GRB2_HUMAN	2885	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,I2D
+GRB2_HUMAN	2885	AFF2_HUMAN	2334	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT
+MD2L2_HUMAN	10459	CDC27_HUMAN	996	0.82	experiments:anti bait coimmunoprecipitation,affinity chromatography technology;pmids:17719540,23007861;sources:IntAct,I2D,BioGRID,KEGG
+ACTN4_HUMAN	81	CTNB1_HUMAN	1499	0.84	experiments:confocal microscopy,Two-hybrid,anti bait coimmunoprecipitation,imaging technique;pmids:16204054,25241761;sources:IntAct,I2D,STRING,BioGRID
+ARAF_HUMAN	369	TIM50_HUMAN	92609	0.86	experiments:Two-hybrid,affinity chromatography technology,anti tag coimmunoprecipitation;pmids:12620389,25852190;sources:IntAct,I2D,BioGRID
+GRB2_HUMAN	2885	LAP2B_HUMAN	7112	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,I2D
+GRB2_HUMAN	2885	ASXL1_HUMAN	171023	0.63	experiments:peptide array;pmids:17474147;sources:IntAct
+GRB2_HUMAN	2885	SNX7_HUMAN	51375	0.63	experiments:peptide array;pmids:17474147;sources:IntAct
+GRB2_HUMAN	2885	NCKX1_HUMAN	9187	0.63	experiments:peptide array;pmids:17474147;sources:IntAct
+GRB2_HUMAN	2885	RYR1_HUMAN	6261	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,I2D
+GRB2_HUMAN	2885	I20L2_HUMAN	81875	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT
+GRB2_HUMAN	2885	AKAP2_HUMAN	11217	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT,I2D
+GRB2_HUMAN	2885	AKAP2_HUMAN	445815	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT,I2D
+GRB2_HUMAN	2885	SF3B4_HUMAN	10262	0.88	experiments:peptide array,Two-hybrid;pmids:17474147,21988832;species:Drosophila melanogaster (Fruit fly);sources:IntAct,I2D,Ortho,BioGRID
+GRB2_HUMAN	2885	SNX17_HUMAN	9784	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,I2D
+GRB2_HUMAN	2885	NEK8_HUMAN	284086	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,I2D
+GRB2_HUMAN	2885	GRIP2_HUMAN	80852	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,I2D
+CDKL5_HUMAN	6792	GRB2_HUMAN	2885	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,I2D
+MP2K1_HUMAN	5604	TRIB3_HUMAN	57761	0.63	experiments:anti tag coimmunoprecipitation;pmids:15299019;sources:IntAct,I2D
+MP2K7_HUMAN	5609	TRIB3_HUMAN	57761	0.63	experiments:anti tag coimmunoprecipitation;pmids:15299019;sources:IntAct,I2D
+FADD_HUMAN	8772	FADD_HUMAN	8772	0.83	experiments:Two-hybrid,affinity chromatography technology;pmids:8681376,7536190,27321185;sources:IntAct,I2D,BioGRID
+GRB2_HUMAN	2885	S23A1_HUMAN	9963	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT
+GRB2_HUMAN	2885	AKAP6_HUMAN	9472	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,I2D
+RNC_HUMAN	29102	RNC_HUMAN	29102	0.63	experiments:anti tag coimmunoprecipitation;pmids:15574589;sources:IntAct,I2D
+DGCR8_HUMAN	54487	DGCR8_HUMAN	54487	0.77	experiments:anti tag coimmunoprecipitation,molecular sieving;pmids:15574589,17159994;sources:IntAct,DIP,I2D
+AGO2_HUMAN	27161	HS90A_HUMAN	3320	0.78	experiments:cosedimentation through density gradient,affinity chromatography technology;pmids:14749716,19716330,16357216;sources:IntAct,BioGRID
+AGO2_HUMAN	27161	PIWL4_HUMAN	143689	0.55	experiments:cosedimentation through density gradient;pmids:14749716;sources:IntAct
+DDX21_HUMAN	9188	DHX9_HUMAN	1660	0.52	experiments:chromatography technology;pmids:15034300;sources:IntAct,I2D
+DDX21_HUMAN	9188	HNRPC_HUMAN	3183	0.75	experiments:chromatography technology,cross-linking study;pmids:15034300,30021884;sources:IntAct,I2D
+DDX21_HUMAN	9188	PRP8_HUMAN	10594	0.52	experiments:chromatography technology;pmids:15034300;sources:IntAct,I2D
+DDX21_HUMAN	9188	SRPK1_HUMAN	6732	0.52	experiments:chromatography technology;pmids:15034300;sources:IntAct,I2D
+DDX21_HUMAN	9188	SSRP1_HUMAN	6749	0.52	experiments:chromatography technology;pmids:15034300;sources:IntAct,I2D
+DDX21_HUMAN	9188	TOP2A_HUMAN	7153	0.52	experiments:chromatography technology;pmids:15034300;sources:IntAct,I2D
+TNR27_HUMAN	60401	CASPA_HUMAN	843	0.63	experiments:coimmunoprecipitation;pmids:15280356;sources:IntAct,I2D
+NR1H4_HUMAN	9971	GRB2_HUMAN	2885	0.63	experiments:peptide array;pmids:17474147;sources:IntAct
+BIN1_HUMAN	274	GRB2_HUMAN	2885	0.63	experiments:peptide array;pmids:17474147;sources:IntAct
+FUBP2_HUMAN	8570	GRB2_HUMAN	2885	0.63	experiments:peptide array;pmids:17474147;sources:IntAct
+FUBP3_HUMAN	8939	GRB2_HUMAN	2885	0.63	experiments:peptide array;pmids:17474147;sources:IntAct
+GCDH_HUMAN	2639	GRB2_HUMAN	2885	0.63	experiments:peptide array;pmids:17474147;sources:IntAct
+GRB2_HUMAN	2885	GRB10_HUMAN	2887	0.63	experiments:peptide array;pmids:17474147;sources:IntAct
+FOXJ1_HUMAN	2302	GRB2_HUMAN	2885	0.63	experiments:peptide array;pmids:17474147;sources:IntAct
+CELF2_HUMAN	10659	GRB2_HUMAN	2885	0.63	experiments:peptide array;pmids:17474147;sources:IntAct
+GRB2_HUMAN	2885	ZNF32_HUMAN	7580	0.63	experiments:peptide array;pmids:17474147;sources:IntAct
+GRB2_HUMAN	2885	KCNN1_HUMAN	3780	0.63	experiments:peptide array;pmids:17474147;sources:IntAct
+GRB2_HUMAN	2885	KCNB2_HUMAN	9312	0.63	experiments:peptide array;pmids:17474147;sources:IntAct
+GRB2_HUMAN	2885	PRG4_HUMAN	10216	0.63	experiments:peptide array;pmids:17474147;sources:IntAct
+UBQL4_HUMAN	56893	STMN1_HUMAN	3925	0.63	experiments:Two-hybrid;pmids:16713569;sources:IntAct,MINT,I2D,BioGRID
+AFF2_HUMAN	2334	PLCG1_HUMAN	5335	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT
+AIRE_HUMAN	326	PLCG1_HUMAN	5335	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT
+SHAN2_HUMAN	22941	PLCG1_HUMAN	5335	0.7	experiments:peptide array,pull down,fluorescence technology;pmids:17474147;sources:IntAct,MINT,I2D
+DNLI3_HUMAN	3980	PLCG1_HUMAN	5335	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT,I2D
+PLCG1_HUMAN	5335	NELFB_HUMAN	25920	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT
+RIN3_HUMAN	79890	PLCG1_HUMAN	5335	0.7	experiments:peptide array,pull down,fluorescence technology;pmids:17474147;sources:IntAct,MINT,I2D
+SNX7_HUMAN	51375	PLCG1_HUMAN	5335	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT
+RAG1_HUMAN	5896	PLCG1_HUMAN	5335	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT,I2D
+PLCG1_HUMAN	5335	DTBP1_HUMAN	84062	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT,I2D
+ABL2_HUMAN	27	PLCG1_HUMAN	5335	0.7	experiments:peptide array,pull down,fluorescence technology;pmids:17474147;sources:IntAct,MINT,I2D
+AKAP2_HUMAN	11217	PLCG1_HUMAN	5335	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT,I2D
+AKAP2_HUMAN	445815	PLCG1_HUMAN	5335	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT,I2D
+PERE_HUMAN	8288	PLCG1_HUMAN	5335	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT
+FLNC_HUMAN	2318	PLCG1_HUMAN	5335	0.82	experiments:peptide array,Two-hybrid;pmids:17474147,19293945;sources:IntAct,MINT,I2D,Bell09,STRING
+PLCG1_HUMAN	5335	MEPE_HUMAN	56955	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT
+DLGP1_HUMAN	9229	PLCG1_HUMAN	5335	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT,I2D
+PLCG1_HUMAN	5335	MINT_HUMAN	23013	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT,I2D
+GSCR1_HUMAN	29998	PLCG1_HUMAN	5335	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT
+P85A_HUMAN	5295	SHAN3_HUMAN	85358	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT,I2D
+DAB2_HUMAN	1601	P85A_HUMAN	5295	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT
+P85A_HUMAN	5295	CDC27_HUMAN	996	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT
+P85A_HUMAN	5295	DUS15_HUMAN	128853	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT,I2D
+P85A_HUMAN	5295	FLNA_HUMAN	2316	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT,I2D
+P85A_HUMAN	5295	SYNJ2_HUMAN	8871	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT,I2D,KEGG,STRING
+P85A_HUMAN	5295	ID4_HUMAN	3400	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT,I2D
+P85A_HUMAN	5295	CSDE1_HUMAN	7812	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT
+ZN365_HUMAN	22891	NDE1_HUMAN	54820	0.73	experiments:anti tag coimmunoprecipitation,fluorescence microscopy,Two-hybrid;pmids:16682949;sources:IntAct,I2D
+NDEL1_HUMAN	81565	ZN365_HUMAN	22891	0.63	experiments:anti tag coimmunoprecipitation;pmids:16682949;sources:IntAct,I2D
+FCG2B_HUMAN	2213	IGHG1_HUMAN	3500	0.78	experiments:isothermal titration calorimetry,surface plasmon resonance;pmids:11567028;sources:IntAct,I2D
+KDM4A_HUMAN	9682	H31_HUMAN	8350	0.9	experiments:fluorescence microscopy,far western blotting,pull down,surface plasmon resonance,enzymatic study,x-ray crystallography;pmids:16603238,16415788,16732292,16601153;sources:IntAct,MINT,I2D,BioGRID
+KDM4A_HUMAN	9682	H31_HUMAN	8351	0.9	experiments:fluorescence microscopy,far western blotting,pull down,surface plasmon resonance,enzymatic study,x-ray crystallography;pmids:16603238,16415788,16732292,16601153;sources:IntAct,MINT,I2D,BioGRID
+KDM4A_HUMAN	9682	H31_HUMAN	8352	0.9	experiments:fluorescence microscopy,far western blotting,pull down,surface plasmon resonance,enzymatic study,x-ray crystallography;pmids:16603238,16415788,16732292,16601153;sources:IntAct,MINT,I2D,BioGRID
+KDM4A_HUMAN	9682	H31_HUMAN	8353	0.9	experiments:fluorescence microscopy,far western blotting,pull down,surface plasmon resonance,enzymatic study,x-ray crystallography;pmids:16603238,16415788,16732292,16601153;sources:IntAct,MINT,I2D,BioGRID
+KDM4A_HUMAN	9682	H31_HUMAN	8354	0.9	experiments:fluorescence microscopy,far western blotting,pull down,surface plasmon resonance,enzymatic study,x-ray crystallography;pmids:16603238,16415788,16732292,16601153;sources:IntAct,MINT,I2D,BioGRID
+KDM4A_HUMAN	9682	H31_HUMAN	8355	0.9	experiments:fluorescence microscopy,far western blotting,pull down,surface plasmon resonance,enzymatic study,x-ray crystallography;pmids:16603238,16415788,16732292,16601153;sources:IntAct,MINT,I2D,BioGRID
+KDM4A_HUMAN	9682	H31_HUMAN	8356	0.9	experiments:fluorescence microscopy,far western blotting,pull down,surface plasmon resonance,enzymatic study,x-ray crystallography;pmids:16603238,16415788,16732292,16601153;sources:IntAct,MINT,I2D,BioGRID
+KDM4A_HUMAN	9682	H31_HUMAN	8357	0.9	experiments:fluorescence microscopy,far western blotting,pull down,surface plasmon resonance,enzymatic study,x-ray crystallography;pmids:16603238,16415788,16732292,16601153;sources:IntAct,MINT,I2D,BioGRID
+KDM4A_HUMAN	9682	H31_HUMAN	8358	0.9	experiments:fluorescence microscopy,far western blotting,pull down,surface plasmon resonance,enzymatic study,x-ray crystallography;pmids:16603238,16415788,16732292,16601153;sources:IntAct,MINT,I2D,BioGRID
+KDM4A_HUMAN	9682	H31_HUMAN	8968	0.9	experiments:fluorescence microscopy,far western blotting,pull down,surface plasmon resonance,enzymatic study,x-ray crystallography;pmids:16603238,16415788,16732292,16601153;sources:IntAct,MINT,I2D,BioGRID
+LIPA4_HUMAN	8497	PLCG1_HUMAN	5335	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT,I2D
+PLCG1_HUMAN	5335	ADNP_HUMAN	23394	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT
+PAR3_HUMAN	2151	PLCG1_HUMAN	5335	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT,I2D
+PLCG1_HUMAN	5335	DLGP3_HUMAN	58512	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT,I2D
+SKP1_HUMAN	6500	FBXL7_HUMAN	23194	0.83	experiments:anti tag coimmunoprecipitation,affinity chromatography technology;pmids:15070733,17704768,28614300,25654763;sources:IntAct,I2D,BioGRID
+HXC8_HUMAN	3224	NCK1_HUMAN	4690	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT
+NCK1_HUMAN	4690	NPA1P_HUMAN	9875	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT,I2D
+NCK1_HUMAN	4690	PAX7_HUMAN	5081	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT
+NCK1_HUMAN	4690	IL3RA_HUMAN	3563	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT,I2D
+NCK1_HUMAN	4690	FLNC_HUMAN	2318	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT,I2D,STRING
+NCK1_HUMAN	4690	NFASC_HUMAN	23114	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT
+NCK1_HUMAN	4690	RP1L1_HUMAN	94137	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT
+RPA1_HUMAN	25885	RPA2_HUMAN	84172	0.94	experiments:anti bait coimmunoprecipitation,chromatography technology,affinity chromatography technology,anti tag coimmunoprecipitation;pmids:16514417,19214185,22939629,26496610,26344197,26399832;species:Saccharomyces cerevisiae (Baker's yeast);sources:IntAct,I2D,Ortho,MINT,BioGRID
+BTBD1_HUMAN	53339	BTBD2_HUMAN	55643	0.75	experiments:fluorescence microscopy,affinity chromatography technology;pmids:12878161,28514442;sources:IntAct,I2D,BioGRID
+BTBD2_HUMAN	55643	BTBD2_HUMAN	55643	0.52	experiments:fluorescence microscopy;pmids:12878161;sources:IntAct,I2D
+MP2K5_HUMAN	5607	GRB2_HUMAN	2885	0.63	experiments:peptide array;pmids:17474147;sources:IntAct
+SUV92_HUMAN	79723	P85A_HUMAN	5295	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT,I2D
+VP13A_HUMAN	23230	P85A_HUMAN	5295	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT
+FLNB_HUMAN	2317	P85A_HUMAN	5295	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT,I2D
+ABL2_HUMAN	27	P85A_HUMAN	5295	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT,I2D,STRING
+SHAN2_HUMAN	22941	P85A_HUMAN	5295	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT,I2D
+S23A1_HUMAN	9963	P85A_HUMAN	5295	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT
+P85A_HUMAN	5295	DLGP1_HUMAN	9229	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT,I2D
+SOS1_HUMAN	6654	P85A_HUMAN	5295	0.84	experiments:peptide array,affinity chromatography technology,imaging technique;pmids:17474147,10025673,25241761;sources:IntAct,MINT,I2D,BioGRID
+P85A_HUMAN	5295	ASAP2_HUMAN	8853	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT,I2D
+LIPA3_HUMAN	8541	P85A_HUMAN	5295	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT,I2D
+AKAP2_HUMAN	11217	P85A_HUMAN	5295	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT,I2D
+AKAP2_HUMAN	445815	P85A_HUMAN	5295	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT,I2D
+ARHGB_HUMAN	9826	P85A_HUMAN	5295	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT,I2D
+P85A_HUMAN	5295	PHAR2_HUMAN	9749	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT
+DLGP4_HUMAN	22839	P85A_HUMAN	5295	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT,I2D
+P85A_HUMAN	5295	ELK3_HUMAN	2004	0.83	experiments:peptide array,mammalian protein protein interaction trap;pmids:17474147,25416956;sources:IntAct,MINT,I2D
+RL13_HUMAN	6137	P85A_HUMAN	5295	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT,I2D
+P85A_HUMAN	5295	AIRE_HUMAN	326	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT
+P85A_HUMAN	5295	BRCA1_HUMAN	672	0.78	experiments:peptide array,pull down;pmids:17474147,16135792;sources:IntAct,MINT,I2D,BioGRID
+TPX2_HUMAN	22974	P85A_HUMAN	5295	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT,I2D
+EXTL3_HUMAN	2137	P85A_HUMAN	5295	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT
+SYDC_HUMAN	1615	P85A_HUMAN	5295	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT
+CKAP5_HUMAN	9793	P85A_HUMAN	5295	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT
+RRAS_HUMAN	6237	P85A_HUMAN	5295	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT,I2D,KEGG,STRING
+ECT2_HUMAN	1894	P85A_HUMAN	5295	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT,I2D
+P85A_HUMAN	5295	NCKX1_HUMAN	9187	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT
+ASAP1_HUMAN	50807	P85A_HUMAN	5295	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT,I2D
+FLNC_HUMAN	2318	P85A_HUMAN	5295	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT,I2D,STRING
+P85A_HUMAN	5295	DNLI3_HUMAN	3980	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT,I2D
+ATX1_HUMAN	6310	PKHA5_HUMAN	54477	0.68	experiments:Two-hybrid,pull down;pmids:16713569;sources:IntAct,I2D
+ATN1_HUMAN	1822	ZN862_HUMAN	643641	0.63	experiments:Two-hybrid;pmids:16713569;sources:IntAct,MINT,I2D
+P85A_HUMAN	5295	TGON2_HUMAN	10618	0.73	experiments:peptide array;pmids:17474147,29568061;sources:IntAct,MINT
+NELFB_HUMAN	25920	P85A_HUMAN	5295	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT
+KI13A_HUMAN	63971	P85A_HUMAN	5295	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT
+ABCG5_HUMAN	64240	P85A_HUMAN	5295	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT,I2D
+BRPF3_HUMAN	27154	P85A_HUMAN	5295	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT,I2D
+P85A_HUMAN	5295	PDIA2_HUMAN	64714	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT
+TULP4_HUMAN	56995	P85A_HUMAN	5295	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT
+P85A_HUMAN	5295	MYRIP_HUMAN	25924	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT,I2D
+ZC4H2_HUMAN	55906	P85A_HUMAN	5295	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT,I2D
+P85A_HUMAN	5295	CSDC2_HUMAN	27254	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT,I2D
+CHRD_HUMAN	8646	NCK1_HUMAN	4690	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT
+GHR_HUMAN	2690	NCK1_HUMAN	4690	0.75	experiments:peptide array,imaging technique;pmids:17474147,25241761;sources:IntAct,MINT,I2D,STRING,BioGRID
+AKAP6_HUMAN	9472	NCK1_HUMAN	4690	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT,I2D
+NCK1_HUMAN	4690	CCR10_HUMAN	2826	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT,I2D
+PRIC3_HUMAN	4007	NCK1_HUMAN	4690	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT,I2D
+ICAL_HUMAN	831	NCK1_HUMAN	4690	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT
+ANR28_HUMAN	23243	PPP6_HUMAN	5537	0.87	experiments:molecular sieving,anti tag coimmunoprecipitation,affinity chromatography technology,pull down;pmids:18186651,21187329,24255178,28330616,27880917,27684187;sources:IntAct,BioGRID,MINT
+GFI1B_HUMAN	8328	GRIP2_HUMAN	80852	0.63	experiments:Two-hybrid;pmids:16713569;sources:IntAct,MINT,I2D,Lim06,BioGRID
+RIT1_HUMAN	6016	GRB2_HUMAN	2885	0.63	experiments:peptide array;pmids:17474147;sources:IntAct
+GRB2_HUMAN	2885	RIT2_HUMAN	6014	0.63	experiments:peptide array;pmids:17474147;sources:IntAct
+GRB2_HUMAN	2885	CRBB3_HUMAN	1417	0.63	experiments:peptide array;pmids:17474147;sources:IntAct
+GRB2_HUMAN	2885	SNPC3_HUMAN	6619	0.63	experiments:peptide array;pmids:17474147;sources:IntAct
+GRB2_HUMAN	2885	PEX13_HUMAN	5194	0.63	experiments:peptide array;pmids:17474147;sources:IntAct
+GRB2_HUMAN	2885	ZN274_HUMAN	10782	0.63	experiments:peptide array;pmids:17474147;sources:IntAct
+ZNF7_HUMAN	7553	GRB2_HUMAN	2885	0.63	experiments:peptide array;pmids:17474147;sources:IntAct
+GRB2_HUMAN	2885	ZN311_HUMAN	282890	0.63	experiments:peptide array;pmids:17474147;sources:IntAct
+A4_HUMAN	351	DYN1_HUMAN	1759	0.63	experiments:anti bait coimmunoprecipitation;pmids:16049941;sources:IntAct,I2D
+A4_HUMAN	351	NSF_HUMAN	4905	0.63	experiments:anti bait coimmunoprecipitation;pmids:16049941;sources:IntAct,I2D
+A4_HUMAN	351	STXB1_HUMAN	6812	0.78	experiments:anti bait coimmunoprecipitation,pull down;pmids:16049941,21832049;sources:IntAct,I2D,BioGRID
+A4_HUMAN	351	HS90A_HUMAN	3320	0.82	experiments:anti bait coimmunoprecipitation,affinity chromatography technology;pmids:16049941,17317785;sources:IntAct,I2D,BioGRID
+A4_HUMAN	351	ACTB_HUMAN	60	0.63	experiments:anti bait coimmunoprecipitation;pmids:16049941;sources:IntAct,I2D
+A4_HUMAN	351	HSP7C_HUMAN	3312	0.82	experiments:anti bait coimmunoprecipitation,affinity chromatography technology;pmids:16049941,21150129;sources:IntAct,I2D,BioGRID
+A4_HUMAN	351	MBP_HUMAN	4155	0.63	experiments:anti bait coimmunoprecipitation;pmids:16049941;sources:IntAct,I2D
+A4_HUMAN	351	MYH9_HUMAN	4627	0.63	experiments:anti bait coimmunoprecipitation;pmids:16049941;sources:IntAct,I2D
+A4_HUMAN	351	DYH1_HUMAN	25981	0.63	experiments:anti bait coimmunoprecipitation;pmids:16049941;sources:IntAct,I2D
+A4_HUMAN	351	TBB5_HUMAN	203068	0.78	experiments:anti bait coimmunoprecipitation,pull down;pmids:16049941,21832049;sources:IntAct,I2D,BioGRID
+A4_HUMAN	351	GFAP_HUMAN	2670	0.78	experiments:anti bait coimmunoprecipitation,pull down;pmids:16049941,21832049;sources:IntAct,I2D,BioGRID
+A4_HUMAN	351	NFL_HUMAN	4747	0.75	experiments:anti bait coimmunoprecipitation,imaging technique;pmids:16049941,25241761;sources:IntAct,I2D,BioGRID
+A4_HUMAN	351	M3K5_HUMAN	4217	0.75	experiments:anti bait coimmunoprecipitation,imaging technique;pmids:16049941,25241761;sources:IntAct,I2D,BioGRID
+A4_HUMAN	351	PPIA_HUMAN	5478	0.78	experiments:anti bait coimmunoprecipitation,pull down;pmids:16049941,21832049;sources:IntAct,I2D,BioGRID
+A4_HUMAN	351	UCHL1_HUMAN	7345	0.82	experiments:anti bait coimmunoprecipitation,affinity chromatography technology;pmids:16049941,25466238;sources:IntAct,I2D,BioGRID
+A4_HUMAN	351	1433Z_HUMAN	7534	0.78	experiments:anti bait coimmunoprecipitation,pull down;pmids:16049941,21832049;sources:IntAct,I2D,BioGRID
+A4_HUMAN	351	PGAM1_HUMAN	5223	0.63	experiments:anti bait coimmunoprecipitation;pmids:16049941;sources:IntAct,I2D
+RAP1A_HUMAN	5906	RASF5_HUMAN	83593	0.84	experiments:anti tag coimmunoprecipitation,Two-hybrid,pull down;pmids:15569673,12845325;sources:IntAct,I2D
+P85A_HUMAN	5295	DAG1_HUMAN	1605	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT,I2D
+STF1_HUMAN	2516	P85A_HUMAN	5295	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT,I2D
+P3C2B_HUMAN	5287	P85A_HUMAN	5295	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT,I2D,STRING
+SNX8_HUMAN	29886	P85A_HUMAN	5295	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT
+TAF9_HUMAN	6880	NC2A_HUMAN	10589	0.74	experiments:Two-hybrid;pmids:16713569,16189514,25416956;sources:IntAct,MINT,I2D
+TAF9_HUMAN	6880	IMA7_HUMAN	23633	0.68	experiments:pull down,Two-hybrid;pmids:16713569;sources:IntAct,MINT,I2D
+BRD4_HUMAN	23476	P85A_HUMAN	5295	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT,I2D
+AL2SB_HUMAN	130540	P85A_HUMAN	5295	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT
+P85A_HUMAN	5295	DLGP3_HUMAN	58512	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT,I2D
+GSCR1_HUMAN	29998	P85A_HUMAN	5295	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT
+P85A_HUMAN	5295	MINT_HUMAN	23013	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT,I2D
+SCG2_HUMAN	7857	P85A_HUMAN	5295	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT
+PERE_HUMAN	8288	P85A_HUMAN	5295	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT
+GBRA3_HUMAN	2556	P85A_HUMAN	5295	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT,I2D
+TGDS_HUMAN	23483	P85A_HUMAN	5295	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT
+MAP4_HUMAN	4134	P85A_HUMAN	5295	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT,I2D
+GABR1_HUMAN	2550	P85A_HUMAN	5295	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT,I2D
+MYLK_HUMAN	4638	P85A_HUMAN	5295	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT,I2D
+P85A_HUMAN	5295	PEBP1_HUMAN	5037	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT,I2D
+TERA_HUMAN	7415	CUL1_HUMAN	8454	0.89	experiments:anti tag coimmunoprecipitation,affinity chromatography technology;pmids:18775313,22466964,26112410;species:Saccharomyces cerevisiae (Baker's yeast);sources:IntAct,I2D,BioGRID
+TERA_HUMAN	7415	CUL2_HUMAN	8453	0.83	experiments:anti tag coimmunoprecipitation,affinity chromatography technology;pmids:18775313,21145461,22466964;sources:IntAct,BioGRID
+FAF1_HUMAN	11124	VCIP1_HUMAN	80124	0.72	experiments:anti tag coimmunoprecipitation,affinity chromatography technology;pmids:18775313;sources:IntAct,BioGRID
+CDC73_HUMAN	79577	PYGO2_HUMAN	90780	0.63	experiments:anti bait coimmunoprecipitation;pmids:16630820;sources:IntAct,I2D
+PA2G4_HUMAN	5036	NUCL_HUMAN	4691	0.85	experiments:anti tag coimmunoprecipitation,pull down,affinity chromatography technology;pmids:15064750,19946338,19037095;sources:IntAct,I2D,BioGRID
+PA2G4_HUMAN	5036	TOP1_HUMAN	7150	0.72	experiments:anti tag coimmunoprecipitation,affinity chromatography technology;pmids:15064750;sources:IntAct,I2D,BioGRID
+PA2G4_HUMAN	5036	RLA0_HUMAN	6175	0.72	experiments:anti tag coimmunoprecipitation,affinity chromatography technology;pmids:15064750;sources:IntAct,I2D,BioGRID
+PA2G4_HUMAN	5036	H11_HUMAN	3024	0.72	experiments:anti tag coimmunoprecipitation,affinity chromatography technology;pmids:15064750;sources:IntAct,I2D,BioGRID
+PA2G4_HUMAN	5036	RL8_HUMAN	6132	0.72	experiments:anti tag coimmunoprecipitation,affinity chromatography technology;pmids:15064750;sources:IntAct,I2D,BioGRID
+PA2G4_HUMAN	5036	RL4_HUMAN	6124	0.82	experiments:anti tag coimmunoprecipitation,affinity chromatography technology;pmids:15064750,19946338;sources:IntAct,I2D,BioGRID
+PA2G4_HUMAN	5036	RL18_HUMAN	6141	0.82	experiments:anti tag coimmunoprecipitation,affinity chromatography technology;pmids:15064750,19946338;sources:IntAct,I2D,BioGRID
+PA2G4_HUMAN	5036	RL15_HUMAN	6138	0.82	experiments:anti tag coimmunoprecipitation,affinity chromatography technology;pmids:15064750,19946338;sources:IntAct,I2D,BioGRID
+PA2G4_HUMAN	5036	RL21_HUMAN	6144	0.72	experiments:anti tag coimmunoprecipitation,affinity chromatography technology;pmids:15064750;sources:IntAct,I2D,BioGRID
+PA2G4_HUMAN	5036	RL11_HUMAN	6135	0.72	experiments:anti tag coimmunoprecipitation,affinity chromatography technology;pmids:15064750;sources:IntAct,I2D,BioGRID
+PA2G4_HUMAN	5036	RL27_HUMAN	6155	0.72	experiments:anti tag coimmunoprecipitation,affinity chromatography technology;pmids:15064750;sources:IntAct,I2D,BioGRID
+PA2G4_HUMAN	5036	RL28_HUMAN	6158	0.72	experiments:anti tag coimmunoprecipitation,affinity chromatography technology;pmids:15064750;sources:IntAct,I2D,BioGRID
+PA2G4_HUMAN	5036	RL12_HUMAN	6136	0.72	experiments:anti tag coimmunoprecipitation,affinity chromatography technology;pmids:15064750;sources:IntAct,I2D,BioGRID
+PA2G4_HUMAN	5036	RLA2_HUMAN	6181	0.72	experiments:anti tag coimmunoprecipitation,affinity chromatography technology;pmids:15064750;sources:IntAct,I2D,BioGRID
+PA2G4_HUMAN	5036	RL24_HUMAN	6152	0.63	experiments:anti tag coimmunoprecipitation;pmids:15064750;sources:IntAct,I2D
+PA2G4_HUMAN	5036	PABP2_HUMAN	8106	0.63	experiments:anti tag coimmunoprecipitation;pmids:15064750;sources:IntAct,I2D
+ATX1_HUMAN	6310	UNK_HUMAN	85451	0.63	experiments:Two-hybrid;pmids:16713569;sources:IntAct,MINT,I2D,Lim06,BioGRID
+DISC1_HUMAN	27185	ANKH1_HUMAN	404734	0.72	experiments:anti tag coimmunoprecipitation,Two-hybrid;pmids:12812986;sources:IntAct,I2D
+DISC1_HUMAN	27185	ANKH1_HUMAN	54882	0.72	experiments:anti tag coimmunoprecipitation,Two-hybrid;pmids:12812986;sources:IntAct,I2D
+AKAP6_HUMAN	9472	P85A_HUMAN	5295	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT,I2D
+P85A_HUMAN	5295	FANCA_HUMAN	2175	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT
+FOXH1_HUMAN	8928	P85A_HUMAN	5295	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT,I2D
+M4K1_HUMAN	11184	P85A_HUMAN	5295	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT,I2D,STRING
+RPGF1_HUMAN	2889	P85A_HUMAN	5295	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT,I2D,STRING
+APOL5_HUMAN	80831	P85A_HUMAN	5295	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT,I2D
+TRYB1_HUMAN	7177	P85A_HUMAN	5295	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT
+P85A_HUMAN	5295	TRYB2_HUMAN	64499	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT
+P85A_HUMAN	5295	TRYB2_HUMAN	7177	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT
+RPA2_HUMAN	84172	P85A_HUMAN	5295	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT
+NCK1_HUMAN	4690	ACAP1_HUMAN	9744	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT
+UBC9_HUMAN	7329	AP2A_HUMAN	7020	0.84	experiments:Two-hybrid,anti tag coimmunoprecipitation,pull down;pmids:12072434,24835590;sources:IntAct,I2D,BioGRID
+P85A_HUMAN	5295	EFS_HUMAN	10278	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT,I2D
+P85A_HUMAN	5295	CAF1A_HUMAN	10036	0.86	experiments:peptide array,affinity chromatography technology,anti tag coimmunoprecipitation;pmids:17474147,26496610;sources:IntAct,MINT,I2D,BioGRID
+NFKB1_HUMAN	4790	SARAF_HUMAN	51669	0.49	pmids:20195357;sources:IntAct
+P85A_HUMAN	5295	DTBP1_HUMAN	84062	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT,I2D
+UGPA_HUMAN	7360	GRB2_HUMAN	2885	0.63	experiments:peptide array;pmids:17474147;sources:IntAct
+IL2RG_HUMAN	3561	GRB2_HUMAN	2885	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,I2D
+GRB2_HUMAN	2885	DPOD1_HUMAN	5424	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,I2D
+GRB2_HUMAN	2885	NFS1_HUMAN	9054	0.63	experiments:peptide array;pmids:17474147;sources:IntAct
+GRB2_HUMAN	2885	RRAS_HUMAN	6237	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT,I2D
+GRB2_HUMAN	2885	APOL5_HUMAN	80831	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT,I2D
+GRB2_HUMAN	2885	FOXH1_HUMAN	8928	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,I2D
+EHMT2_HUMAN	10919	GRB2_HUMAN	2885	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,I2D
+GRB2_HUMAN	2885	BRCA2_HUMAN	675	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,I2D
+RIMS1_HUMAN	22999	GRB2_HUMAN	2885	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,I2D
+GRB2_HUMAN	2885	CCR10_HUMAN	2826	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,I2D
+BCL3_HUMAN	602	BCL10_HUMAN	8915	0.75	experiments:anti bait coimmunoprecipitation,pull down,affinity chromatography technology;pmids:16280327;sources:IntAct,I2D,BioGRID
+PLCG1_HUMAN	5335	ICAL_HUMAN	831	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT
+DUS15_HUMAN	128853	PLCG1_HUMAN	5335	0.65	experiments:peptide array,fluorescence technology;pmids:17474147;sources:IntAct,MINT,I2D
+PLCG1_HUMAN	5335	DLX4_HUMAN	1748	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT
+PLCG1_HUMAN	5335	TRAIP_HUMAN	10293	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT,I2D
+SNX17_HUMAN	9784	PLCG1_HUMAN	5335	0.65	experiments:peptide array,fluorescence technology;pmids:17474147;sources:IntAct,MINT,I2D
+PDIA2_HUMAN	64714	PLCG1_HUMAN	5335	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT
+KCNH7_HUMAN	90134	GRB2_HUMAN	2885	0.63	experiments:peptide array;pmids:17474147;sources:IntAct
+EIF3D_HUMAN	8664	GRB2_HUMAN	2885	0.63	experiments:peptide array;pmids:17474147;sources:IntAct
+GASR_HUMAN	887	NCK1_HUMAN	4690	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT,I2D
+TLR9_HUMAN	54106	NCK1_HUMAN	4690	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT,I2D
+FANCA_HUMAN	2175	NCK1_HUMAN	4690	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT
+EHMT2_HUMAN	10919	NCK1_HUMAN	4690	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT,I2D
+NCK1_HUMAN	4690	CNTFR_HUMAN	1271	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT,I2D,STRING
+NCK1_HUMAN	4690	ANK2_HUMAN	287	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT
+NCK1_HUMAN	4690	AFF2_HUMAN	2334	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT
+SF3B4_HUMAN	10262	NCK1_HUMAN	4690	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT,I2D
+RNC_HUMAN	29102	NCK1_HUMAN	4690	0.86	experiments:peptide array,affinity chromatography technology,anti tag coimmunoprecipitation;pmids:17474147,26496610;sources:IntAct,MINT,BioGRID
+NXPH3_HUMAN	11248	NCK1_HUMAN	4690	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT,I2D
+NCK1_HUMAN	4690	NEU1_HUMAN	5020	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT,I2D
+STF1_HUMAN	2516	NCK1_HUMAN	4690	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT,I2D
+RL13_HUMAN	6137	NCK1_HUMAN	4690	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT,I2D
+MED14_HUMAN	9282	NCK1_HUMAN	4690	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT,I2D
+NCK1_HUMAN	4690	RPA2_HUMAN	84172	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT
+MYRIP_HUMAN	25924	NCK1_HUMAN	4690	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT,I2D
+LMTK1_HUMAN	9625	CD5R1_HUMAN	8851	0.77	experiments:Two-hybrid,protein kinase assay,anti bait coimmunoprecipitation;pmids:14521924;sources:IntAct
+TEANC_HUMAN	170082	ATX1_HUMAN	6310	0.63	experiments:Two-hybrid;pmids:16713569;sources:IntAct,MINT,I2D,Lim06,BioGRID
+RN138_HUMAN	51444	TAF9_HUMAN	6880	0.63	experiments:Two-hybrid;pmids:16713569;sources:IntAct,MINT,I2D
+RS14_HUMAN	6208	TAF9_HUMAN	6880	0.73	experiments:Two-hybrid;pmids:16713569,16189514;sources:IntAct,MINT,I2D
+TAF6L_HUMAN	10629	TAF9_HUMAN	6880	0.79	experiments:pull down,Two-hybrid;pmids:16713569,9674425,25416956;sources:IntAct,MINT,I2D
+UBA1_HUMAN	7317	TAF9_HUMAN	6880	0.63	experiments:Two-hybrid;pmids:16713569;sources:IntAct,MINT,I2D
+BAZ2A_HUMAN	11176	FBRL_HUMAN	2091	0.52	experiments:fluorescence microscopy;pmids:16514417;sources:IntAct,I2D
+MYO1C_HUMAN	4641	FBRL_HUMAN	2091	0.52	experiments:fluorescence microscopy;pmids:16514417;sources:IntAct,I2D
+MYO1C_HUMAN	4641	RPA49_HUMAN	64425	0.65	experiments:fluorescence microscopy,electron microscopy;pmids:16514417;sources:IntAct,I2D
+RPA2_HUMAN	84172	MYO1C_HUMAN	4641	0.75	experiments:fluorescence microscopy,affinity chromatography technology;pmids:16514417,15558034;sources:IntAct,I2D,BioGRID
+BAZ1B_HUMAN	9031	RPA2_HUMAN	84172	0.52	experiments:fluorescence microscopy;pmids:16514417;sources:IntAct,I2D
+SMCA5_HUMAN	8467	RPA2_HUMAN	84172	0.59	experiments:fluorescence microscopy;pmids:16514417;species:Saccharomyces cerevisiae (Baker's yeast);sources:IntAct,I2D
+BAZ1B_HUMAN	9031	MYH1_HUMAN	4619	0.67	experiments:molecular sieving,anti bait coimmunoprecipitation;pmids:16514417;sources:IntAct,I2D
+BAZ1B_HUMAN	9031	BAZ2A_HUMAN	11176	0.55	experiments:molecular sieving;pmids:16514417;sources:IntAct,I2D
+PLCG1_HUMAN	5335	S23A1_HUMAN	9963	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT
+ASAP2_HUMAN	8853	PLCG1_HUMAN	5335	0.7	experiments:peptide array,pull down,fluorescence technology;pmids:17474147;sources:IntAct,MINT,I2D
+PLCG1_HUMAN	5335	ARHGB_HUMAN	9826	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT,I2D
+EXTL3_HUMAN	2137	PLCG1_HUMAN	5335	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT
+RL13_HUMAN	6137	PLCG1_HUMAN	5335	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT,I2D
+ASAP1_HUMAN	50807	PLCG1_HUMAN	5335	0.73	experiments:peptide array,anti bait coimmunoprecipitation,fluorescence technology;pmids:17474147;sources:IntAct,MINT,I2D
+PLCG1_HUMAN	5335	RRAS_HUMAN	6237	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT,I2D,STRING
+PLCG1_HUMAN	5335	M4K1_HUMAN	11184	0.78	experiments:peptide array,fluorescence technology,pull down,anti tag coimmunoprecipitation,anti bait coimmunoprecipitation;pmids:17474147;sources:IntAct,MINT,I2D,STRING
+EFS_HUMAN	10278	PLCG1_HUMAN	5335	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT,I2D
+RYR1_HUMAN	6261	PLCG1_HUMAN	5335	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT,I2D
+RGS7_HUMAN	6000	PLCG1_HUMAN	5335	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT,I2D
+CNRP1_HUMAN	25927	GCH1_HUMAN	2643	0.63	experiments:Two-hybrid;pmids:16696853;sources:IntAct,I2D,BioGRID
+SP3_HUMAN	6670	GCH1_HUMAN	2643	0.63	experiments:Two-hybrid;pmids:16696853;sources:IntAct,I2D,BioGRID
+LEPR_HUMAN	3953	GRB2_HUMAN	2885	0.63	experiments:peptide array;pmids:17474147;sources:IntAct
+GRB2_HUMAN	2885	SMRC1_HUMAN	6599	0.63	experiments:peptide array;pmids:17474147;sources:IntAct
+SMRC2_HUMAN	6601	GRB2_HUMAN	2885	0.63	experiments:peptide array;pmids:17474147;sources:IntAct
+GRB2_HUMAN	2885	SMRD1_HUMAN	6602	0.63	experiments:peptide array;pmids:17474147;sources:IntAct
+GRB2_HUMAN	2885	SMRD2_HUMAN	6603	0.63	experiments:peptide array;pmids:17474147;sources:IntAct
+GRB2_HUMAN	2885	SMRD3_HUMAN	6604	0.63	experiments:peptide array;pmids:17474147;sources:IntAct
+RAB1B_HUMAN	81876	GRB2_HUMAN	2885	0.63	experiments:peptide array;pmids:17474147;sources:IntAct
+RAB1C_HUMAN	441400	GRB2_HUMAN	2885	0.63	experiments:peptide array;pmids:17474147;sources:IntAct
+GRB2_HUMAN	2885	RAB6B_HUMAN	51560	0.63	experiments:peptide array;pmids:17474147;sources:IntAct
+P2RX7_HUMAN	5027	NCK1_HUMAN	4690	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT,I2D
+NCK1_HUMAN	4690	RYR1_HUMAN	6261	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT,I2D,STRING
+PLCG1_HUMAN	5335	SUV92_HUMAN	79723	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT,I2D
+PLCG1_HUMAN	5335	SC24B_HUMAN	10427	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT
+ZP2_HUMAN	7783	PLCG1_HUMAN	5335	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT,I2D
+FCG2B_HUMAN	2213	PLCG1_HUMAN	5335	0.65	experiments:peptide array,fluorescence technology;pmids:17474147;sources:IntAct,MINT,I2D
+FCG2C_HUMAN	9103	PLCG1_HUMAN	5335	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT,I2D
+PLCG1_HUMAN	5335	PHAR2_HUMAN	9749	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT
+PLCG1_HUMAN	5335	CSMD2_HUMAN	114784	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT,I2D
+PLCG1_HUMAN	5335	ANT3_HUMAN	462	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT,I2D
+FANCA_HUMAN	2175	PLCG1_HUMAN	5335	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT
+PLCG1_HUMAN	5335	TGON2_HUMAN	10618	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT
+PLCG1_HUMAN	5335	SHAN3_HUMAN	85358	0.65	experiments:peptide array,fluorescence technology;pmids:17474147;sources:IntAct,MINT,I2D
+DPOD2_HUMAN	5425	DPOD4_HUMAN	57804	0.84	experiments:Two-hybrid,pull down,affinity chromatography technology;pmids:16510448,28514442;sources:IntAct,BioGRID
+DPOD4_HUMAN	57804	DPOD1_HUMAN	5424	0.99	experiments:Two-hybrid,pull down,ion exchange chromatography,molecular sieving,cosedimentation through density gradient,anti bait coimmunoprecipitation,inferred by curator,chromatography technology,affinity chromatography technology,anti tag coimmunoprecipitation;pmids:16510448,12403614,14681455,26496610;species:Mus musculus (Mouse),Rattus norvegicus (Rat);sources:IntAct,I2D,BioGRID
+SEPT5_HUMAN	5413	SEP11_HUMAN	55752	0.88	experiments:Two-hybrid,affinity technology,fluorescent resonance energy transfer;pmids:16767699,22939629,18330356,26344197;sources:IntAct,I2D,BioGRID
+APOL5_HUMAN	80831	NCK1_HUMAN	4690	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT,I2D
+NCK1_HUMAN	4690	PAX3_HUMAN	5077	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT
+NCK1_HUMAN	4690	NOTC3_HUMAN	4854	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT
+JAK2_HUMAN	3717	NCK1_HUMAN	4690	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT,I2D
+MKRN2_HUMAN	23609	HOIL1_HUMAN	10616	0.63	experiments:Two-hybrid;pmids:22493164;sources:IntAct,BioGRID
+NCK1_HUMAN	4690	DOCK1_HUMAN	1793	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT,I2D
+LMTK1_HUMAN	9625	CDK5_HUMAN	1020	0.63	experiments:anti bait coimmunoprecipitation;pmids:14521924;sources:IntAct
+ATN1_HUMAN	1822	PKHA5_HUMAN	54477	0.68	experiments:pull down,Two-hybrid;pmids:16713569;sources:IntAct,I2D
+ZKSC3_HUMAN	80317	GRB2_HUMAN	2885	0.63	experiments:peptide array;pmids:17474147;sources:IntAct
+CKAP5_HUMAN	9793	PLCG1_HUMAN	5335	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT
+PLCG1_HUMAN	5335	JAK2_HUMAN	3717	0.91	experiments:peptide array,affinity chromatography technology;pmids:17474147,14978237;species:Mus musculus (Mouse),Rattus norvegicus (Rat);sources:IntAct,MINT,HomoMINT,I2D,BioGRID
+FLNB_HUMAN	2317	PLCG1_HUMAN	5335	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT,I2D
+ID4_HUMAN	3400	PLCG1_HUMAN	5335	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT,I2D
+PLCG1_HUMAN	5335	FLNA_HUMAN	2316	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT,I2D
+IL3RA_HUMAN	3563	PLCG1_HUMAN	5335	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT,I2D
+GRB2_HUMAN	2885	RAB8B_HUMAN	51762	0.63	experiments:peptide array;pmids:17474147;sources:IntAct
+GRB2_HUMAN	2885	HIBCH_HUMAN	26275	0.63	experiments:peptide array;pmids:17474147;sources:IntAct
+GRB2_HUMAN	2885	PTPR2_HUMAN	5799	0.63	experiments:peptide array;pmids:17474147;sources:IntAct
+LY6D_HUMAN	8581	GRB2_HUMAN	2885	0.63	experiments:peptide array;pmids:17474147;sources:IntAct
+BAD_HUMAN	572	GRB2_HUMAN	2885	0.63	experiments:peptide array;pmids:17474147;sources:IntAct
+EXTL1_HUMAN	2134	GRB2_HUMAN	2885	0.63	experiments:peptide array;pmids:17474147;sources:IntAct
+RUSD2_HUMAN	27079	GRB2_HUMAN	2885	0.63	experiments:peptide array;pmids:17474147;sources:IntAct
+SMAD3_HUMAN	4088	GRB2_HUMAN	2885	0.63	experiments:peptide array;pmids:17474147;sources:IntAct
+GRB2_HUMAN	2885	DLG4_HUMAN	1742	0.63	experiments:peptide array;pmids:17474147;sources:IntAct
+CDC73_HUMAN	79577	BCL9_HUMAN	607	0.82	experiments:anti bait coimmunoprecipitation,anti tag coimmunoprecipitation;pmids:16630820,17113272;sources:IntAct,I2D
+PCBP1_HUMAN	5093	WBP11_HUMAN	51729	0.68	experiments:Two-hybrid,pull down;pmids:16713569;sources:IntAct,I2D
+TBG1_HUMAN	7283	DISC1_HUMAN	27185	0.58	experiments:fluorescence microscopy,cosedimentation;pmids:12812986;sources:IntAct,I2D
+ASXL1_HUMAN	171023	NCK1_HUMAN	4690	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT
+BRCA1_HUMAN	672	NCK1_HUMAN	4690	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT,I2D
+ASCL1_HUMAN	429	TFE2_HUMAN	6929	0.84	experiments:Two-hybrid,pull down,affinity chromatography technology;pmids:10903890,15318167;sources:IntAct,I2D,BioGRID
+S22A3_HUMAN	6581	NCK1_HUMAN	4690	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT
+SOS2_HUMAN	6655	P85A_HUMAN	5295	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT,I2D
+PTN4_HUMAN	5775	P85A_HUMAN	5295	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT,I2D
+DLX4_HUMAN	1748	P85A_HUMAN	5295	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT
+DOCK3_HUMAN	1795	P85A_HUMAN	5295	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT,I2D
+P85A_HUMAN	5295	ICAL_HUMAN	831	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT
+MEPE_HUMAN	56955	P85A_HUMAN	5295	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT
+SNX17_HUMAN	9784	P85A_HUMAN	5295	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT,I2D
+P85A_HUMAN	5295	DLGP2_HUMAN	9228	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT,I2D
+CAF1A_HUMAN	10036	PLCG1_HUMAN	5335	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT,I2D
+PLCG1_HUMAN	5335	MAP4_HUMAN	4134	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT,I2D
+PLCG1_HUMAN	5335	I20L2_HUMAN	81875	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT
+TDRD1_HUMAN	56165	PLCG1_HUMAN	5335	0.63	experiments:peptide array;pmids:17474147;sources:IntAct,MINT,I2D
+CALM_HUMAN	801	DIRA2_HUMAN	54769	0.63	experiments:affinity chromatography technology;pmids:16512683;sources:IntAct,I2D
+CALM_HUMAN	805	DIRA2_HUMAN	54769	0.63	experiments:affinity chromatography technology;pmids:16512683;sources:IntAct,I2D
+CALM_HUMAN	808	DIRA2_HUMAN	54769	0.63	experiments:affinity chromatography technology;pmids:16512683;sources:IntAct,I2D
+KCIP2_HUMAN	30819	KCIP2_HUMAN	30819	0.75	experiments:pull down,cross-linking study;pmids:15358149;species:Saccharomyces cerevisiae (Baker's yeast);sources:IntAct,HomoMINT,BioGRID
+EGFR_HUMAN	1956	RABX5_HUMAN	27342	0.86	experiments:anti bait coimmunoprecipitation,anti tag coimmunoprecipitation,fluorescence microscopy,affinity chromatography technology;pmids:16499958,28065597;sources:IntAct,I2D,BioGRID
+RABX5_HUMAN	27342	RABX5_HUMAN	27342	0.81	experiments:pull down,enzymatic study,Two-hybrid;pmids:16499958,17341663,25416956;sources:IntAct,I2D,BioGRID
+CO6A2_HUMAN	1292	DISC1_HUMAN	27185	0.63	experiments:Two-hybrid;pmids:12812986;sources:IntAct,I2D
+PSA2_HUMAN	5683	PSB8_HUMAN	5696	0.92	experiments:anti bait coimmunoprecipitation,affinity chromatography technology;pmids:15887188,20937868,19193609,22863883,22939629,26344197;species:Saccharomyces cerevisiae (Baker's yeast),Caenorhabditis elegans;sources:IntAct,HomoMINT,I2D,Ortho,BioGRID
+PSA2_HUMAN	5683	PSB9_HUMAN	5698	0.89	experiments:anti bait coimmunoprecipitation,affinity chromatography technology;pmids:15887188,20937868,19193609,26186194,28514442;species:Saccharomyces cerevisiae (Baker's yeast);sources:IntAct,HomoMINT,I2D,Ortho,BioGRID
+PSA2_HUMAN	5683	PSB7_HUMAN	5695	0.89	experiments:anti bait coimmunoprecipitation,affinity chromatography technology;pmids:15887188,12376572,19193609,22863883,22939629,26186194,26344197,28514442;species:Saccharomyces cerevisiae (Baker's yeast);sources:IntAct,HomoMINT,I2D,Ortho,BioGRID
+PSA2_HUMAN	5683	PSB4_HUMAN	5692	0.92	experiments:anti bait coimmunoprecipitation,affinity chromatography technology;pmids:15887188,12376572,15660529,19193609,22863883,22939629,26186194,26344197,28514442;species:Saccharomyces cerevisiae (Baker's yeast),Caenorhabditis elegans;sources:IntAct,HomoMINT,I2D,Ortho,BioGRID
+PSA2_HUMAN	5683	PSB10_HUMAN	5699	0.94	experiments:anti bait coimmunoprecipitation,Two-hybrid,affinity chromatography technology;pmids:15887188,20937868,17948026,19193609;species:Saccharomyces cerevisiae (Baker's yeast);sources:IntAct,HomoMINT,I2D,Ortho,BioGRID
+PSA2_HUMAN	5683	PSA5_HUMAN	5686	0.89	experiments:anti bait coimmunoprecipitation,affinity chromatography technology;pmids:15887188,12376572,19193609,22863883,22939629,26344197;species:Saccharomyces cerevisiae (Baker's yeast);sources:IntAct,HomoMINT,I2D,Ortho,BioGRID
+PSA2_HUMAN	5683	PSB1_HUMAN	5689	0.89	experiments:anti bait coimmunoprecipitation,affinity chromatography technology;pmids:15887188,12376572,19193609,22863883,22939629,26344197,28514442;species:Saccharomyces cerevisiae (Baker's yeast);sources:IntAct,HomoMINT,I2D,Ortho,BioGRID
+PSA2_HUMAN	5683	PSB3_HUMAN	5691	0.92	experiments:anti bait coimmunoprecipitation,affinity chromatography technology;pmids:15887188,12376572,19193609,22863883,22939629,26344197,28514442;species:Saccharomyces cerevisiae (Baker's yeast),Caenorhabditis elegans;sources:IntAct,HomoMINT,I2D,Ortho,BioGRID
+PSA2_HUMAN	5683	PSB6_HUMAN	5694	0.89	experiments:anti bait coimmunoprecipitation,affinity chromatography technology;pmids:15887188,12376572,19193609,22863883,22939629,26344197;species:Saccharomyces cerevisiae (Baker's yeast);sources:IntAct,HomoMINT,I2D,Ortho,BioGRID
+PSA2_HUMAN	5683	PSB2_HUMAN	5690	0.96	experiments:anti bait coimmunoprecipitation,affinity chromatography technology,Two-hybrid;pmids:15887188,12376572,17948026,19193609,22863883,22939629,26344197,28514442;species:Saccharomyces cerevisiae (Baker's yeast),Caenorhabditis elegans;sources:IntAct,HomoMINT,I2D,Ortho,BioGRID
+ANM6_HUMAN	55170	HMGA2_HUMAN	8091	0.75	experiments:far western blotting,methyltransferase radiometric assay,enzymatic study;pmids:16293633;sources:IntAct,I2D,BioGRID
+ANM1_HUMAN	3276	HMGA2_HUMAN	8091	0.68	experiments:methyltransferase radiometric assay;pmids:16293633;sources:IntAct,I2D
+NLK_HUMAN	51701	M3K7_HUMAN	6885	0.88	experiments:anti tag coimmunoprecipitation,anti bait coimmunoprecipitation,affinity chromatography technology,imaging technique;pmids:15764709,20194509,25241761;sources:IntAct,I2D,BioGRID,BioCarta,KEGG,STRING
+ARHG5_HUMAN	7984	RHOA_HUMAN	387	0.52	experiments:enzymatic study;pmids:12006984;sources:IntAct,I2D
+ASH2L_HUMAN	9070	UTP18_HUMAN	51096	0.55	experiments:molecular sieving;pmids:15199122;sources:IntAct,I2D
+FBX41_HUMAN	150726	SKP1_HUMAN	6500	0.63	experiments:anti tag coimmunoprecipitation;pmids:15070733;sources:IntAct,I2D
+SKP1_HUMAN	6500	KDM2A_HUMAN	22992	0.9	experiments:anti tag coimmunoprecipitation,affinity chromatography technology,x-ray crystallography,tandem affinity purification;pmids:15070733,17463251,30033217,27705803;sources:IntAct,I2D,BioGRID
+PKN1_HUMAN	5585	MK14_HUMAN	1432	0.63	experiments:anti tag coimmunoprecipitation;pmids:12761180;sources:IntAct,I2D
+MP2K3_HUMAN	5606	PKN1_HUMAN	5585	0.72	experiments:anti tag coimmunoprecipitation,affinity chromatography technology;pmids:12761180;sources:IntAct,I2D,BioGRID
+MLTK_HUMAN	51776	PKN1_HUMAN	5585	0.63	experiments:anti tag coimmunoprecipitation;pmids:12761180;sources:IntAct,I2D
+REST_HUMAN	5978	SMCE1_HUMAN	6605	0.72	experiments:anti bait coimmunoprecipitation,affinity chromatography technology;pmids:12192000;sources:IntAct,I2D,BioGRID
+SMCA4_HUMAN	6597	REST_HUMAN	5978	0.82	experiments:anti bait coimmunoprecipitation,affinity chromatography technology;pmids:12192000,17023429;sources:IntAct,I2D,BioGRID
+SMRC2_HUMAN	6601	REST_HUMAN	5978	0.72	experiments:anti bait coimmunoprecipitation,affinity chromatography technology;pmids:12192000;sources:IntAct,I2D,BioGRID
+SMCA4_HUMAN	6597	RCOR1_HUMAN	23186	0.72	experiments:anti bait coimmunoprecipitation,affinity chromatography technology;pmids:12192000;sources:IntAct,I2D,BioGRID
+SMRC2_HUMAN	6601	RCOR1_HUMAN	23186	0.72	experiments:anti bait coimmunoprecipitation,affinity chromatography technology;pmids:12192000;sources:IntAct,I2D,BioGRID
+SMCE1_HUMAN	6605	HDAC1_HUMAN	3065	0.72	experiments:anti bait coimmunoprecipitation,affinity chromatography technology;pmids:12192000;sources:IntAct,I2D,BioGRID
+SMCE1_HUMAN	6605	HDAC2_HUMAN	3066	0.79	experiments:anti bait coimmunoprecipitation,affinity chromatography technology;pmids:12192000;species:Mus musculus (Mouse);sources:IntAct,I2D,BioGRID
+SMCA4_HUMAN	6597	HDAC1_HUMAN	3065	0.83	experiments:anti bait coimmunoprecipitation,affinity chromatography technology;pmids:12192000,19081374,20596014;sources:IntAct,I2D,BioGRID
+SMRC2_HUMAN	6601	HDAC2_HUMAN	3066	0.72	experiments:anti bait coimmunoprecipitation,affinity chromatography technology;pmids:12192000;sources:IntAct,I2D,BioGRID
+SMRC2_HUMAN	6601	HDAC1_HUMAN	3065	0.72	experiments:anti bait coimmunoprecipitation,affinity chromatography technology;pmids:12192000;sources:IntAct,I2D,BioGRID
+DISC1_HUMAN	27185	MYH7_HUMAN	4625	0.63	experiments:Two-hybrid;pmids:12812986;sources:IntAct,I2D,BioGRID
+KIF1B_HUMAN	23095	MAGI1_HUMAN	9223	0.68	experiments:Two-hybrid,pull down;pmids:12097473;sources:IntAct,I2D
+PA2G4_HUMAN	5036	E2F1_HUMAN	1869	0.56	experiments:pull down;pmids:11268000;sources:IntAct,I2D
+GBRAP_HUMAN	11337	OPRK_HUMAN	4986	0.63	experiments:Two-hybrid;pmids:16431922;sources:IntAct,I2D
+CD2A2_HUMAN	1029	HUWE1_HUMAN	10075	0.84	experiments:anti tag coimmunoprecipitation,pull down,anti bait coimmunoprecipitation;pmids:15989956,26496610;sources:IntAct,I2D
+CD2A2_HUMAN	1029	NPM_HUMAN	4869	0.83	experiments:anti tag coimmunoprecipitation,anti bait coimmunoprecipitation;pmids:15989956,16957780,23851489;sources:IntAct,MINT,I2D
+CREB3_HUMAN	10488	CREB3_HUMAN	10488	0.84	experiments:Two-hybrid,fluorescent resonance energy transfer;pmids:10675342,16189514,21516116,23661758;sources:IntAct,I2D,Rual05,MINT,BioGRID
+INP5K_HUMAN	51763	LNX1_HUMAN	84708	0.73	experiments:Two-hybrid,anti tag coimmunoprecipitation,fluorescence microscopy;pmids:16002321;sources:IntAct,I2D
+RMI1_HUMAN	80010	BLM_HUMAN	641	0.89	experiments:fluorescence microscopy,anti bait coimmunoprecipitation,molecular sieving,tandem affinity purification,affinity chromatography technology,anti tag coimmunoprecipitation;pmids:15775963,20360068,20064461,20711169,24239288,26496610,20826342;sources:IntAct,I2D,MINT,BioGRID
+BLM_HUMAN	641	RFA2_HUMAN	6118	0.87	experiments:anti bait coimmunoprecipitation,affinity chromatography technology,tandem affinity purification;pmids:15775963,12724401,24332808,24126761,30279242;sources:IntAct,I2D,BioGRID
+RMI1_HUMAN	80010	RFA1_HUMAN	6117	0.87	experiments:anti bait coimmunoprecipitation,affinity chromatography technology,tandem affinity purification;pmids:15775963,24332808,24126761;sources:IntAct,I2D,BioGRID
+RMI1_HUMAN	80010	TOP3A_HUMAN	7156	0.9	experiments:anti bait coimmunoprecipitation,tandem affinity purification,molecular sieving,affinity chromatography technology,x-ray crystallography,pull down,far western blotting,anti tag coimmunoprecipitation,transmission electron microscopy;pmids:15775963,20360068,20064461,20711169,26186194,24509834,28514442,16537486,20826342;sources:IntAct,I2D,MINT,BioGRID
+RMI1_HUMAN	80010	RFA2_HUMAN	6118	0.87	experiments:anti bait coimmunoprecipitation,affinity chromatography technology,tandem affinity purification;pmids:15775963,24332808,24126761;sources:IntAct,I2D,BioGRID
+BLM_HUMAN	641	RFA3_HUMAN	6119	0.87	experiments:anti bait coimmunoprecipitation,affinity chromatography technology,tandem affinity purification;pmids:15775963,12724401,24332808,24126761,30279242;sources:IntAct,I2D,BioGRID
+FBW1A_HUMAN	8945	WWTR1_HUMAN	25937	0.84	experiments:anti bait coimmunoprecipitation,affinity chromatography technology,imaging technique;pmids:22078877,21189257,26186194,25900982,20412773,26091241,28018973,28514442,26116754;sources:IntAct,BioGRID
+CDN1B_HUMAN	1027	NTF2_HUMAN	10204	0.49	pmids:15057270;sources:IntAct,I2D
+CDN1B_HUMAN	1027	RAN_HUMAN	5901	0.49	pmids:15057270;sources:IntAct,I2D
+IF4A3_HUMAN	9775	THOC4_HUMAN	10189	0.87	experiments:pull down,anti tag coimmunoprecipitation,anti bait coimmunoprecipitation,affinity chromatography technology;pmids:14730019,23084401;sources:IntAct,I2D,BioGRID
+IF4A3_HUMAN	9775	NXF1_HUMAN	10482	0.56	experiments:pull down;pmids:14730019;sources:IntAct,I2D,BioGRID
+IF4A3_HUMAN	9775	HNRPC_HUMAN	3183	0.84	experiments:pull down,anti tag coimmunoprecipitation,affinity chromatography technology;pmids:14730019,23084401;sources:IntAct,I2D,BioGRID
+IF4A3_HUMAN	9775	ROA1_HUMAN	3178	0.88	experiments:pull down,anti tag coimmunoprecipitation,affinity chromatography technology,anti bait coimmunoprecipitation;pmids:14730019,23084401,25324306,23085716;sources:IntAct,I2D,BioGRID
+CCR5_HUMAN	1234	CREB3_HUMAN	10488	0.63	experiments:Two-hybrid;pmids:15001559;sources:IntAct,I2D
+ZXDC_HUMAN	79364	ZXDC_HUMAN	79364	0.63	experiments:anti tag coimmunoprecipitation;pmids:17493635;sources:IntAct,I2D
+ZXDA_HUMAN	7789	ZXDA_HUMAN	7789	0.63	experiments:anti tag coimmunoprecipitation;pmids:17493635;sources:IntAct,I2D
+WASP_HUMAN	7454	ARP2_HUMAN	10097	0.56	experiments:pull down;pmids:12769847;sources:IntAct,I2D
+WASP_HUMAN	7454	ARP3_HUMAN	10096	0.56	experiments:pull down;pmids:12769847;sources:IntAct,I2D
+WASP_HUMAN	7454	ARPC4_HUMAN	10093	0.68	experiments:pull down,affinity chromatography technology;pmids:12769847;sources:IntAct,I2D,BioGRID
+RFX5_HUMAN	5993	SIN3B_HUMAN	23309	0.63	experiments:anti tag coimmunoprecipitation;pmids:16464847;sources:IntAct,I2D
+HDAC2_HUMAN	3066	SIN3B_HUMAN	23309	0.87	experiments:anti tag coimmunoprecipitation,anti bait coimmunoprecipitation,affinity chromatography technology;pmids:16464847,21258344,15935060;sources:IntAct,I2D,BioGRID
+HDAC1_HUMAN	3065	RFX1_HUMAN	5989	0.83	experiments:anti bait coimmunoprecipitation,affinity chromatography technology;pmids:16464847,17630394,27173435;sources:IntAct,I2D,BioGRID
+UBXN7_HUMAN	26043	DDB1_HUMAN	1642	0.72	experiments:anti tag coimmunoprecipitation,affinity chromatography technology;pmids:18775313;sources:IntAct,BioGRID
+UBXN7_HUMAN	26043	BRWD3_HUMAN	254065	0.82	experiments:anti tag coimmunoprecipitation,affinity chromatography technology;pmids:18775313,26389662;sources:IntAct,BioGRID
+UBXN7_HUMAN	26043	UBR2_HUMAN	23304	0.72	experiments:anti tag coimmunoprecipitation,affinity chromatography technology;pmids:18775313;sources:IntAct,BioGRID
+UBXN7_HUMAN	26043	CUL4B_HUMAN	8450	0.82	experiments:anti tag coimmunoprecipitation,affinity chromatography technology;pmids:18775313,22466964;sources:IntAct,BioGRID
+UBXN7_HUMAN	26043	SKP1_HUMAN	6500	0.72	experiments:anti tag coimmunoprecipitation,affinity chromatography technology;pmids:18775313;sources:IntAct,BioGRID
+UBXN7_HUMAN	26043	KLH22_HUMAN	84861	0.72	experiments:anti tag coimmunoprecipitation,affinity chromatography technology;pmids:18775313;sources:IntAct,BioGRID
+UBXN7_HUMAN	26043	AMFR2_HUMAN	267	0.63	experiments:anti tag coimmunoprecipitation;pmids:18775313;sources:IntAct
+UBXN7_HUMAN	26043	UBR4_HUMAN	23352	0.72	experiments:anti tag coimmunoprecipitation,affinity chromatography technology;pmids:18775313;sources:IntAct,BioGRID
+UBXN7_HUMAN	26043	WDR26_HUMAN	80232	0.72	experiments:anti tag coimmunoprecipitation,affinity chromatography technology;pmids:18775313;sources:IntAct,BioGRID
+UBXN7_HUMAN	26043	CUL4A_HUMAN	8451	0.82	experiments:anti tag coimmunoprecipitation,affinity chromatography technology;pmids:18775313,22466964;sources:IntAct,BioGRID
+UBXN7_HUMAN	26043	ELOB_HUMAN	6923	0.72	experiments:anti tag coimmunoprecipitation,affinity chromatography technology;pmids:18775313;sources:IntAct,BioGRID
+UBXN7_HUMAN	26043	PJA2_HUMAN	9867	0.72	experiments:anti tag coimmunoprecipitation,affinity chromatography technology;pmids:18775313;sources:IntAct,BioGRID
+UBXN7_HUMAN	26043	BIRC2_HUMAN	329	0.72	experiments:anti tag coimmunoprecipitation,affinity chromatography technology;pmids:18775313;sources:IntAct,BioGRID
+UBXN7_HUMAN	26043	BRWD1_HUMAN	54014	0.82	experiments:anti tag coimmunoprecipitation,affinity chromatography technology;pmids:18775313,26389662;sources:IntAct,BioGRID
+UBXN7_HUMAN	26043	KLH12_HUMAN	59349	0.82	experiments:anti tag coimmunoprecipitation,affinity chromatography technology;pmids:18775313,26389662;sources:IntAct,BioGRID
+UBXN7_HUMAN	26043	KLDC2_HUMAN	23588	0.82	experiments:anti tag coimmunoprecipitation,affinity chromatography technology;pmids:18775313,26389662;sources:IntAct,BioGRID
+UBXN7_HUMAN	26043	KLDC3_HUMAN	116138	0.82	experiments:anti tag coimmunoprecipitation,affinity chromatography technology;pmids:18775313,26389662;sources:IntAct,BioGRID
+UBXN7_HUMAN	26043	KBTB7_HUMAN	84078	0.72	experiments:anti tag coimmunoprecipitation,affinity chromatography technology;pmids:18775313;sources:IntAct,BioGRID
+UBXN7_HUMAN	26043	KLH13_HUMAN	90293	0.72	experiments:anti tag coimmunoprecipitation,affinity chromatography technology;pmids:18775313;sources:IntAct,BioGRID
+UBXN7_HUMAN	26043	RBX1_HUMAN	9978	0.82	experiments:anti tag coimmunoprecipitation,affinity chromatography technology;pmids:18775313,22537386;sources:IntAct,BioGRID
+UBXN7_HUMAN	26043	UBR5_HUMAN	51366	0.72	experiments:anti tag coimmunoprecipitation,affinity chromatography technology;pmids:18775313;sources:IntAct,BioGRID
+UBXN7_HUMAN	26043	TOPRS_HUMAN	10210	0.82	experiments:anti tag coimmunoprecipitation,affinity chromatography technology;pmids:18775313,26389662;sources:IntAct,BioGRID
+UBXN7_HUMAN	26043	VPRBP_HUMAN	9730	0.72	experiments:anti tag coimmunoprecipitation,affinity chromatography technology;pmids:18775313;sources:IntAct,BioGRID
+UBXN7_HUMAN	26043	ELOC_HUMAN	6921	0.82	experiments:anti tag coimmunoprecipitation,affinity chromatography technology;pmids:18775313,22537386;sources:IntAct,BioGRID
+FAF2_HUMAN	23197	ELOC_HUMAN	6921	0.72	experiments:anti tag coimmunoprecipitation,affinity chromatography technology;pmids:18775313;sources:IntAct,BioGRID
+FAF2_HUMAN	23197	WDR26_HUMAN	80232	0.72	experiments:anti tag coimmunoprecipitation,affinity chromatography technology;pmids:18775313;sources:IntAct,BioGRID
+FAF2_HUMAN	23197	DDB1_HUMAN	1642	0.72	experiments:anti tag coimmunoprecipitation,affinity chromatography technology;pmids:18775313;sources:IntAct,BioGRID
+FAF2_HUMAN	23197	UBR5_HUMAN	51366	0.72	experiments:anti tag coimmunoprecipitation,affinity chromatography technology;pmids:18775313;sources:IntAct,BioGRID
+FAF2_HUMAN	23197	PJA2_HUMAN	9867	0.72	experiments:anti tag coimmunoprecipitation,affinity chromatography technology;pmids:18775313;sources:IntAct,BioGRID
+FAF2_HUMAN	23197	UBR2_HUMAN	23304	0.72	experiments:anti tag coimmunoprecipitation,affinity chromatography technology;pmids:18775313;sources:IntAct,BioGRID
+FAF2_HUMAN	23197	UBR4_HUMAN	23352	0.72	experiments:anti tag coimmunoprecipitation,affinity chromatography technology;pmids:18775313;sources:IntAct,BioGRID
+FAF2_HUMAN	23197	LG3BP_HUMAN	3959	0.72	experiments:anti tag coimmunoprecipitation,affinity chromatography technology;pmids:18775313;sources:IntAct,BioGRID
+FAF2_HUMAN	23197	AMFR2_HUMAN	267	0.63	experiments:anti tag coimmunoprecipitation;pmids:18775313;sources:IntAct
+FAF2_HUMAN	23197	HUWE1_HUMAN	10075	0.82	experiments:anti tag coimmunoprecipitation,affinity chromatography technology;pmids:18775313,25147182;sources:IntAct,BioGRID
+FAF2_HUMAN	23197	RN126_HUMAN	55658	0.72	experiments:anti tag coimmunoprecipitation,affinity chromatography technology;pmids:18775313;sources:IntAct,BioGRID
+FAF2_HUMAN	23197	UBE3A_HUMAN	7337	0.83	experiments:anti tag coimmunoprecipitation,affinity chromatography technology,enzymatic study;pmids:18775313,29263404;sources:IntAct,BioGRID
+FAF1_HUMAN	11124	KBTB7_HUMAN	84078	0.72	experiments:anti tag coimmunoprecipitation,affinity chromatography technology;pmids:18775313;sources:IntAct,BioGRID
+FAF1_HUMAN	11124	PJA2_HUMAN	9867	0.72	experiments:anti tag coimmunoprecipitation,affinity chromatography technology;pmids:18775313;sources:IntAct,BioGRID
+FAF1_HUMAN	11124	KLH22_HUMAN	84861	0.72	experiments:anti tag coimmunoprecipitation,affinity chromatography technology;pmids:18775313;sources:IntAct,BioGRID
+FAF1_HUMAN	11124	AMFR2_HUMAN	267	0.63	experiments:anti tag coimmunoprecipitation;pmids:18775313;sources:IntAct
+FAF1_HUMAN	11124	UBR2_HUMAN	23304	0.72	experiments:anti tag coimmunoprecipitation,affinity chromatography technology;pmids:18775313;sources:IntAct,BioGRID
+FAF1_HUMAN	11124	SKP1_HUMAN	6500	0.82	experiments:anti tag coimmunoprecipitation,affinity chromatography technology;pmids:18775313,22730322;sources:IntAct,BioGRID
+FAF1_HUMAN	11124	UBR4_HUMAN	23352	0.72	experiments:anti tag coimmunoprecipitation,affinity chromatography technology;pmids:18775313;sources:IntAct,BioGRID
+FAF1_HUMAN	11124	FBW1B_HUMAN	23291	0.82	experiments:anti tag coimmunoprecipitation,affinity chromatography technology;pmids:18775313,22730322;sources:IntAct,BioGRID
+FAF1_HUMAN	11124	WDR26_HUMAN	80232	0.72	experiments:anti tag coimmunoprecipitation,affinity chromatography technology;pmids:18775313;sources:IntAct,BioGRID
+UBXN1_HUMAN	51035	AMFR2_HUMAN	267	0.63	experiments:anti tag coimmunoprecipitation;pmids:18775313;sources:IntAct
+UBXN1_HUMAN	51035	UBR4_HUMAN	23352	0.72	experiments:anti tag coimmunoprecipitation,affinity chromatography technology;pmids:18775313;sources:IntAct,BioGRID
+UBXN1_HUMAN	51035	PJA2_HUMAN	9867	0.72	experiments:anti tag coimmunoprecipitation,affinity chromatography technology;pmids:18775313;sources:IntAct,BioGRID
+UBXN1_HUMAN	51035	UBR2_HUMAN	23304	0.72	experiments:anti tag coimmunoprecipitation,affinity chromatography technology;pmids:18775313;sources:IntAct,BioGRID
+UBXN1_HUMAN	51035	CUL3_HUMAN	8452	0.72	experiments:anti tag coimmunoprecipitation,affinity chromatography technology;pmids:18775313;sources:IntAct,BioGRID
+UBXN1_HUMAN	51035	UBE4B_HUMAN	10277	0.72	experiments:anti tag coimmunoprecipitation,affinity chromatography technology;pmids:18775313;sources:IntAct,BioGRID
+UBXN1_HUMAN	51035	UBR5_HUMAN	51366	0.72	experiments:anti tag coimmunoprecipitation,affinity chromatography technology;pmids:18775313;sources:IntAct,BioGRID
+UBXN1_HUMAN	51035	BTBD2_HUMAN	55643	0.72	experiments:anti tag coimmunoprecipitation,affinity chromatography technology;pmids:18775313;sources:IntAct,BioGRID
+UBXN1_HUMAN	51035	KLH12_HUMAN	59349	0.72	experiments:anti tag coimmunoprecipitation,affinity chromatography technology;pmids:18775313;sources:IntAct,BioGRID
+UBXN1_HUMAN	51035	UBR1_HUMAN	197131	0.72	experiments:anti tag coimmunoprecipitation,affinity chromatography technology;pmids:18775313;sources:IntAct,BioGRID
+UBXN1_HUMAN	51035	CUL1_HUMAN	8454	0.82	experiments:anti tag coimmunoprecipitation,affinity chromatography technology;pmids:18775313,28152074;sources:IntAct,BioGRID
+UBXN1_HUMAN	51035	BIRC2_HUMAN	329	0.82	experiments:anti tag coimmunoprecipitation,affinity chromatography technology;pmids:18775313,25681446;sources:IntAct,BioGRID
+UBXN1_HUMAN	51035	CUL2_HUMAN	8453	0.82	experiments:anti tag coimmunoprecipitation,affinity chromatography technology;pmids:18775313,21145461;sources:IntAct,BioGRID
+UBXN1_HUMAN	51035	DDB1_HUMAN	1642	0.72	experiments:anti tag coimmunoprecipitation,affinity chromatography technology;pmids:18775313;sources:IntAct,BioGRID
+UBXN1_HUMAN	51035	KBTB7_HUMAN	84078	0.72	experiments:anti tag coimmunoprecipitation,affinity chromatography technology;pmids:18775313;sources:IntAct,BioGRID
+UBXN1_HUMAN	51035	KLH22_HUMAN	84861	0.72	experiments:anti tag coimmunoprecipitation,affinity chromatography technology;pmids:18775313;sources:IntAct,BioGRID
+UBXN1_HUMAN	51035	HUWE1_HUMAN	10075	0.72	experiments:anti tag coimmunoprecipitation,affinity chromatography technology;pmids:18775313;sources:IntAct,BioGRID
+UBXN1_HUMAN	51035	UBE3A_HUMAN	7337	0.72	experiments:anti tag coimmunoprecipitation,affinity chromatography technology;pmids:18775313;sources:IntAct,BioGRID
+CYFP1_HUMAN	23191	IF4E_HUMAN	1977	0.56	experiments:pull down;pmids:18805096;sources:IntAct,STRING
+EGFR_HUMAN	1956	YES_HUMAN	7525	0.83	experiments:anti bait coimmunoprecipitation,affinity chromatography technology;pmids:15657067,23866081,24797263;sources:IntAct,I2D,BioGRID
+EGFR_HUMAN	1956	1433E_HUMAN	7531	0.63	experiments:anti bait coimmunoprecipitation;pmids:15657067;sources:IntAct,I2D
+EGFR_HUMAN	1956	CTNA1_HUMAN	1495	0.88	experiments:anti bait coimmunoprecipitation,tandem affinity purification,imaging technique,affinity chromatography technology;pmids:15657067,24189400,25241761;sources:IntAct,I2D,BioGRID
+EGFR_HUMAN	1956	IMB1_HUMAN	3837	0.83	experiments:anti bait coimmunoprecipitation,affinity chromatography technology;pmids:15657067,23956138,24797263;sources:IntAct,I2D,BioGRID
+EGFR_HUMAN	1956	PKP2_HUMAN	5318	0.63	experiments:anti bait coimmunoprecipitation;pmids:15657067;sources:IntAct,I2D
+EGFR_HUMAN	1956	EF1A1_HUMAN	1915	0.82	experiments:anti bait coimmunoprecipitation,affinity chromatography technology;pmids:15657067,23956138;sources:IntAct,I2D,BioGRID
+EGFR_HUMAN	1956	BCAR1_HUMAN	9564	0.63	experiments:anti bait coimmunoprecipitation;pmids:15657067;sources:IntAct,I2D
+EGFR_HUMAN	1956	TBRG4_HUMAN	9238	0.82	experiments:anti bait coimmunoprecipitation,affinity chromatography technology;pmids:15657067,23956138;sources:IntAct,I2D,BioGRID
+EGFR_HUMAN	1956	BCAR3_HUMAN	8412	0.63	experiments:anti bait coimmunoprecipitation;pmids:15657067;sources:IntAct,I2D
+EGFR_HUMAN	1956	PAXI_HUMAN	5829	0.63	experiments:anti bait coimmunoprecipitation;pmids:15657067;sources:IntAct,I2D
+FCERG_HUMAN	2207	BTK_HUMAN	695	0.63	experiments:anti bait coimmunoprecipitation;pmids:11788586;sources:IntAct,I2D
+HDAC1_HUMAN	3065	CIR1_HUMAN	9541	0.52	experiments:fluorescence microscopy;pmids:9874765;sources:IntAct,I2D
+TITIN_HUMAN	7273	TITIN_HUMAN	7273	0.9	experiments:Two-hybrid,x-ray crystallography,nuclear magnetic resonance,two hybrid fragment pooling approach,fluorescent resonance energy transfer,bimolecular fluorescence complementation;pmids:9804419,16962974,23414517,16407954;sources:IntAct,DIP,I2D
+ZHANG_HUMAN	58487	CREB3_HUMAN	10488	0.63	experiments:anti bait coimmunoprecipitation;pmids:15705566;sources:IntAct,I2D
+DYR1B_HUMAN	9149	PHS2_HUMAN	84105	0.72	experiments:Two-hybrid,anti bait coimmunoprecipitation;pmids:11980910;sources:IntAct,I2D
+SACA3_HUMAN	124912	A2MG_HUMAN	2	0.55	experiments:molecular sieving;pmids:2467766;sources:IntAct,I2D
+APOA1_HUMAN	335	A4_HUMAN	351	0.88	experiments:Two-hybrid,anti tag coimmunoprecipitation,far western blotting,enzyme linked immunosorbent assay,pull down;pmids:11297421,21832049;sources:IntAct,I2D,BioGRID
+PSB8_HUMAN	5696	PSB1_HUMAN	5689	0.89	experiments:Two-hybrid,affinity chromatography technology;pmids:14733938,17948026,17506986,22863883,22939629,26344197;species:Saccharomyces cerevisiae (Baker's yeast);sources:IntAct,HomoMINT,I2D,Ortho,BioGRID
+NEK1_HUMAN	4750	2A5D_HUMAN	5528	0.63	experiments:Two-hybrid;pmids:14690447;sources:IntAct,I2D
+HNF1A_HUMAN	6927	DYR1B_HUMAN	9149	0.82	experiments:pull down,protein kinase assay;pmids:11980910,14500717;sources:IntAct,I2D
+FBX5_HUMAN	26271	CDC27_HUMAN	996	0.85	experiments:anti bait coimmunoprecipitation,affinity chromatography technology,pull down;pmids:17719540,18662541,21454540,16921029,28514442,23708001;sources:IntAct,I2D,BioGRID
+MRCKA_HUMAN	8476	RHOQ_HUMAN	23433	0.63	experiments:far western blotting;pmids:15194684;sources:IntAct,I2D
+PSB9_HUMAN	5698	PSB7_HUMAN	5695	0.94	experiments:Two-hybrid,anti bait coimmunoprecipitation,affinity chromatography technology;pmids:14733938,20723761,16423992,17948026,26186194,28514442;species:Saccharomyces cerevisiae (Baker's yeast);sources:IntAct,HomoMINT,I2D,BioGRID
+PSB8_HUMAN	5696	PSB9_HUMAN	5698	0.8	experiments:Two-hybrid;pmids:14733938,17948026,17506986;species:Saccharomyces cerevisiae (Baker's yeast);sources:IntAct,HomoMINT,I2D,Ortho,BioGRID
+PSB9_HUMAN	5698	POMP_HUMAN	51371	0.83	experiments:Two-hybrid,affinity chromatography technology;pmids:14733938,17948026,17506986,26186194,28514442;sources:IntAct,I2D,BioGRID
+PSB3_HUMAN	5691	PSB10_HUMAN	5699	0.92	experiments:Two-hybrid,affinity chromatography technology;pmids:14733938,17948026,17506986,22939629,26344197,28514442;species:Caenorhabditis elegans,Saccharomyces cerevisiae (Baker's yeast);sources:IntAct,HomoMINT,I2D,Ortho,BioGRID
+PSB2_HUMAN	5690	PSB5_HUMAN	5693	0.89	experiments:Two-hybrid,affinity chromatography technology;pmids:14733938,17948026,22863883,22939629,26344197,28514442;species:Saccharomyces cerevisiae (Baker's yeast);sources:IntAct,HomoMINT,I2D,Ortho,BioGRID
+PSB8_HUMAN	5696	PSB7_HUMAN	5695	0.94	experiments:Two-hybrid,anti bait coimmunoprecipitation,affinity chromatography technology;pmids:14733938,20723761,16423992,17948026,22863883,22939629,26344197;species:Saccharomyces cerevisiae (Baker's yeast);sources:IntAct,HomoMINT,I2D,Ortho,BioGRID
+NEK1_HUMAN	4750	NEK1_HUMAN	4750	0.63	experiments:Two-hybrid;pmids:14690447;sources:IntAct,I2D
+CTNB1_HUMAN	1499	CUL1_HUMAN	8454	0.75	experiments:enzymatic study,affinity chromatography technology;pmids:18805092,10713156;sources:IntAct,BioGRID
+CTNB1_HUMAN	1499	RBX1_HUMAN	9978	0.62	experiments:enzymatic study;pmids:18805092,24129577;sources:IntAct,BioGRID,STRING
+CTNB1_HUMAN	1499	UB2D2_HUMAN	7322	0.52	experiments:enzymatic study;pmids:18805092;sources:IntAct
+CTNB1_HUMAN	1499	UBA1_HUMAN	7317	0.52	experiments:enzymatic study;pmids:18805092;sources:IntAct
+CUL1_HUMAN	8454	UBA3_HUMAN	9039	0.52	experiments:enzymatic study;pmids:18805092;sources:IntAct
+CUL1_HUMAN	8454	UBC12_HUMAN	9040	0.88	experiments:enzymatic study,affinity chromatography technology,x-ray crystallography;pmids:18805092,17914462,12565873,21247897,18826954,19245792,21946088,24949976,27591266,27348078,28581483,28475037;sources:IntAct,MINT,BioGRID
+CUL5_HUMAN	8065	UBA3_HUMAN	9039	0.52	experiments:enzymatic study;pmids:18805092;sources:IntAct
+CUL5_HUMAN	8065	UBC12_HUMAN	9040	0.75	experiments:enzymatic study,affinity chromatography technology;pmids:18805092,28581483;sources:IntAct,BioGRID
+CDN1B_HUMAN	1027	CUL1_HUMAN	8454	0.7	experiments:enzymatic study,pull down;pmids:18805092,10559916,22959436,11961546;sources:IntAct,BioGRID
+CDN1B_HUMAN	1027	RBX1_HUMAN	9978	0.52	experiments:enzymatic study;pmids:18805092;sources:IntAct,BioGRID
+CDN1B_HUMAN	1027	UBA1_HUMAN	7317	0.52	experiments:enzymatic study;pmids:18805092;sources:IntAct
+MRCKA_HUMAN	8476	CDC42_HUMAN	998	0.95	experiments:fluorescence microscopy,far western blotting,lambda phage display,Two-hybrid;pmids:9418861,15194684,20936779;species:Drosophila melanogaster (Fruit fly);sources:IntAct,I2D,BioGRID
+SH3G1_HUMAN	6455	SH3G2_HUMAN	6456	0.83	experiments:Two-hybrid,affinity chromatography technology;pmids:16115810,21900206,26186194,25416956,28514442;sources:IntAct,I2D,MINT,BioGRID
+CIR1_HUMAN	9541	U2AF1_HUMAN	7307	0.77	experiments:Two-hybrid,anti tag coimmunoprecipitation,pull down,affinity chromatography technology;pmids:15652350;sources:IntAct,I2D,BioGRID
+ML12A_HUMAN	10627	MRCKA_HUMAN	8476	0.68	experiments:protein kinase assay;pmids:11283256;sources:IntAct,I2D
+ACTA_HUMAN	59	ACTN2_HUMAN	88	0.55	experiments:cosedimentation;pmids:9501083;sources:IntAct,I2D
+ACTA_HUMAN	59	TITIN_HUMAN	7273	0.55	experiments:cosedimentation;pmids:9501083;sources:IntAct,I2D
+ARID2_HUMAN	196528	PB1_HUMAN	55193	0.87	experiments:anti bait coimmunoprecipitation,molecular sieving,anti tag coimmunoprecipitation,affinity chromatography technology;pmids:15985610,26344197;sources:IntAct,I2D,BioGRID
+SNF5_HUMAN	6598	ARID2_HUMAN	196528	0.86	experiments:anti tag coimmunoprecipitation,molecular sieving,affinity chromatography technology,pull down;pmids:15985610,30108113;sources:IntAct,I2D,BioGRID
+ARID2_HUMAN	196528	SMRC2_HUMAN	6601	0.83	experiments:anti tag coimmunoprecipitation,affinity chromatography technology;pmids:15985610,20305087,28514442;sources:IntAct,I2D,BioGRID
+ARID2_HUMAN	196528	SMRC1_HUMAN	6599	0.86	experiments:anti tag coimmunoprecipitation,affinity chromatography technology,anti bait coimmunoprecipitation;pmids:15985610,24421395;sources:IntAct,I2D,BioGRID
+EGFR_HUMAN	1956	TBB5_HUMAN	203068	0.82	experiments:anti bait coimmunoprecipitation,affinity chromatography technology;pmids:15657067,23956138;sources:IntAct,I2D,BioGRID
+EGFR_HUMAN	1956	XPO2_HUMAN	1434	0.83	experiments:anti bait coimmunoprecipitation,affinity chromatography technology;pmids:15657067,23956138,28065597;sources:IntAct,I2D,BioGRID
+EGFR_HUMAN	1956	MPCP_HUMAN	5250	0.82	experiments:anti bait coimmunoprecipitation,tandem affinity purification;pmids:15657067,24189400;sources:IntAct,I2D
+EGFR_HUMAN	1956	DNJA2_HUMAN	10294	0.87	experiments:anti bait coimmunoprecipitation,affinity chromatography technology,tandem affinity purification;pmids:15657067,23956138,24189400,24797263;sources:IntAct,I2D,BioGRID
+EGFR_HUMAN	1956	EPHB4_HUMAN	2050	0.63	experiments:anti bait coimmunoprecipitation;pmids:15657067;sources:IntAct,I2D
+EGFR_HUMAN	1956	XPOT_HUMAN	11260	0.83	experiments:anti bait coimmunoprecipitation,affinity chromatography technology;pmids:15657067,23956138,24797263;sources:IntAct,I2D,BioGRID
+EGFR_HUMAN	1956	ATPB_HUMAN	506	0.63	experiments:anti bait coimmunoprecipitation;pmids:15657067;sources:IntAct,I2D
+EGFR_HUMAN	1956	CDCP1_HUMAN	64866	0.63	experiments:anti bait coimmunoprecipitation;pmids:15657067;sources:IntAct,I2D
+EGFR_HUMAN	1956	LRC59_HUMAN	55379	0.63	experiments:anti bait coimmunoprecipitation;pmids:15657067;sources:IntAct,I2D
+EGFR_HUMAN	1956	TRI29_HUMAN	23650	0.63	experiments:anti bait coimmunoprecipitation;pmids:15657067;sources:IntAct,I2D
+EGFR_HUMAN	1956	ATX10_HUMAN	25814	0.82	experiments:anti bait coimmunoprecipitation,affinity chromatography technology;pmids:15657067,23956138;sources:IntAct,I2D,BioGRID
+EGFR_HUMAN	1956	CKAP4_HUMAN	10970	0.63	experiments:anti bait coimmunoprecipitation;pmids:15657067;sources:IntAct,I2D
+EGFR_HUMAN	1956	S10AB_HUMAN	6282	0.63	experiments:anti bait coimmunoprecipitation;pmids:15657067;sources:IntAct,I2D
+EGFR_HUMAN	1956	FHL2_HUMAN	2274	0.63	experiments:anti bait coimmunoprecipitation;pmids:15657067;sources:IntAct,I2D
+EGFR_HUMAN	1956	1433T_HUMAN	10971	0.9	experiments:anti bait coimmunoprecipitation,ubiquitin reconstruction,anti tag coimmunoprecipitation,tandem affinity purification,Two-hybrid,protein complementation assay;pmids:15657067,20029029,24189400,25402006,24658140;sources:IntAct,I2D,BioGRID
+EGFR_HUMAN	1956	HSPB1_HUMAN	3315	0.87	experiments:anti bait coimmunoprecipitation,tandem affinity purification,affinity chromatography technology;pmids:15657067,23397142,24189400;sources:IntAct,I2D,BioGRID
+EGFR_HUMAN	1956	AT2A2_HUMAN	488	0.87	experiments:anti bait coimmunoprecipitation,affinity chromatography technology,tandem affinity purification;pmids:15657067,23956138,24189400;sources:IntAct,I2D,BioGRID
+EGFR_HUMAN	1956	EFNB1_HUMAN	1947	0.63	experiments:anti bait coimmunoprecipitation;pmids:15657067;sources:IntAct,I2D
+EGFR_HUMAN	1956	K2C1_HUMAN	3848	0.82	experiments:anti bait coimmunoprecipitation,affinity chromatography technology;pmids:15657067,28065597;sources:IntAct,I2D,BioGRID
+EGFR_HUMAN	1956	HNRPF_HUMAN	3185	0.63	experiments:anti bait coimmunoprecipitation;pmids:15657067;sources:IntAct,I2D
+EGFR_HUMAN	1956	H2B1C_HUMAN	8339	0.63	experiments:anti bait coimmunoprecipitation;pmids:15657067;sources:IntAct,I2D
+EGFR_HUMAN	1956	H2B1C_HUMAN	8343	0.63	experiments:anti bait coimmunoprecipitation;pmids:15657067;sources:IntAct,I2D
+EGFR_HUMAN	1956	H2B1C_HUMAN	8344	0.63	experiments:anti bait coimmunoprecipitation;pmids:15657067;sources:IntAct,I2D
+EGFR_HUMAN	1956	H2B1C_HUMAN	8346	0.63	experiments:anti bait coimmunoprecipitation;pmids:15657067;sources:IntAct,I2D
+EGFR_HUMAN	1956	H2B1C_HUMAN	8347	0.63	experiments:anti bait coimmunoprecipitation;pmids:15657067;sources:IntAct,I2D
+EGFR_HUMAN	1956	THIO_HUMAN	7295	0.89	experiments:anti bait coimmunoprecipitation,ubiquitin reconstruction,anti tag coimmunoprecipitation,affinity chromatography technology,protein complementation assay;pmids:15657067,20029029,24658140;sources:IntAct,I2D,BioGRID
+EGFR_HUMAN	1956	K2C6A_HUMAN	3853	0.63	experiments:anti bait coimmunoprecipitation;pmids:15657067;sources:IntAct,I2D

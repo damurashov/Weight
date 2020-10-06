@@ -24,6 +24,7 @@
 #define DLLCLASS_H
 
 #include "Place.h"
+#include "VertexPlace.h"
 #include "Agent.h"
 #include <string>  // string
 #include <dlfcn.h> // dlopen dlsym dlclose
@@ -32,17 +33,26 @@ using namespace std;
 
 class DllClass {
 public:
+	//constructor 
+	DllClass(string className);
+	
 	void *stub;
-	instantiate_t *instantiate;
+	instantiate_t *instantiate;//MObject*
+	//Elias --> added for graph features 
+	instantiate_using_file *instantiate_from_file;
+	instantiate_using_globalId *instantiate_from_globalId;
+
 	destroy_t *destroy;
-	Place **places;          // an array of places
+	
+
+	Place **places;          // an array of place
 	Place **left_shadow;     // the shadow of the left neigbhor's boundary
 	Place **right_shadow;    // the shadown of the right neighbor's boundary
 	vector<Agent*> *agents;   // a bag of agents
 	vector<Agent*> *retBag;   // a temporary bag of agents
 	int agentCounter; // count # of unevaluated agents in vector<Agent*> *agents. Used in migrationHelperCollisionFree
 
-	DllClass(string className);
+	
 };
 
 #endif

@@ -21,6 +21,7 @@
  */
 
 #include "Places_base.h"
+
 #include <iostream>
 #include <set>
 #include <sstream>  // ostringstream
@@ -35,6 +36,107 @@ const bool printOutput = false;
 #else
 const bool printOutput = true;
 #endif
+
+
+/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+==================Elias -> added for graph features ==============================================================
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+
+/**
+ * Constructor for Places_base Objects. These Objects encompass the basic
+ * features that are found in all Places Objects, enabling MASS to be able to
+ * operate across all Places in a unified manner, regardless of each individual
+ * Place instantiation.
+ *
+ * @param handle          a unique identifer (int) that designates a group of
+ *                        places. Must be unique over all machines.
+ * @param className       name of the user-created Place classes to load
+ * @param boundary_width  width of the boundary to place between stripes
+ * @param argument        array of arguments to pass into each Place constructor
+ * @param argument_size   size of each argument (e.g. - sizeof( int ) )
+ * @param dimension       how many dimensions this simulation encompasses
+ * @param filemane        the name of the file(absolute path)
+ *@param types            the file type as enums(MATSim, HIPPIE, TXT etc...)
+ 
+ */
+Places_base::Places_base(int handle, std::string className,int boundary_width,int dimension, string filename,
+                     FILE_TYPE_ENUMS type, void* argument, int arg_size)
+                    :handle(handle),
+                     className(className),
+                     dimension(dimension), 
+                     boundary_width(boundary_width),
+                     fileType(type),
+                     filename(filename),
+                     numVertices(0){
+
+    ostringstream convert;
+    if (printOutput == true) {
+        convert << "Places_base handle = " << handle
+                << ", class = " << className
+                << ", argument = " << (char*)argument
+                << ", argument_size = " << arg_size
+                << ", dimension = " << dimension << ", boundary_width = " 
+                << boundary_width << endl;
+        MASS_base::log(convert.str());
+    }
+
+    init_all_graph(filename,type, argument);
+
+}
+
+/**
+ * Constructor for Places_base Objects. These Objects encompass the basic
+ * features that are found in all Places Objects, enabling MASS to be able to
+ * operate across all Places in a unified manner, regardless of each individual
+ * Place instantiation.
+ *
+ * @param handle          a unique identifer (int) that designates a group of
+ *                        places. Must be unique over all machines.
+ * @param className       name of the user-created Place classes to load
+ * @param boundary_width  width of the boundary to place between stripes
+ * @param argument        array of arguments to pass into each Place constructor
+ * @param argument_size   size of each argument (e.g. - sizeof( int ) )
+ * @param dimension       how many dimensions this simulation encompasses
+ *@param nVertices        number of vertices to be constructed
+ 
+ */
+Places_base::Places_base(int handle, string className, int boundary_width, int dimension,
+                        void* argument, int arg_size, int nVertices)
+                        :handle(handle),
+                         className(className),
+                         dimension(dimension),
+                         boundary_width(boundary_width),
+                         fileType(FILE_TYPE_ENUMS::HIPPIE), //this a default and dummy 
+                         filename("NOT_FROM_FILE_NAME"),
+                         numVertices(nVertices){
+
+    ostringstream convert;
+    if (printOutput) {
+        convert << "Places_base constructed: handle = " << handle
+            << ", class = " << className
+            << ", argument = " << (char*)argument
+            << ", argument_size = " << arg_size
+            << ", dimension = " << dimension << ", boundary_width = " << boundary_width << endl;
+        MASS_base::log(convert.str());
+    }
+    if(dimension >= 1){
+        this->size = new int[dimension];
+        for(int i = 0; i < dimension; i++){
+            size[i] = nVertices;
+        }
+    }
+    else{
+        this->size = new int [1];
+        this->size[0] = nVertices;
+    }
+
+    init_all(argument, arg_size);
+}
+
+/*-------------------------------------------------------------------------------------------------------
+ ++++++++++++++++++++++ End of graph feature constructors +++++++++++++++++++++++++++++++++++++++++++++++
+ ----------------------------------------------------------------------------------------------------------*/
+
 
 /**
  * Constructor for Places_base Objects. These Objects encompass the basic
@@ -57,7 +159,11 @@ Places_base::Places_base(int handle, string className, int boundary_width,
     : handle(handle),
       className(className),
       dimension(dim),
-      boundary_width(boundary_width) {
+      boundary_width(boundary_width),
+      //places_base_distributed_map(NULL),
+      fileType(FILE_TYPE_ENUMS::HIPPIE), //this a default and dummy 
+      filename("NOT_FROM_FILE_NAME"),
+      numVertices(0){
     ostringstream convert;
     if (printOutput == true) {
         convert << "Places_base handle = " << handle
@@ -78,13 +184,16 @@ Places_base::Places_base(int handle, string className, int boundary_width,
     init_all(argument, argument_size);
 }
 
+
+
+
 /**
  * Destructor for core Places_base Objects. Frees dynamic space set up to store
  * all Places in this stripe, in addition to any shadow Places that may have
  * been created at runtime for this stripe.
  */
 Places_base::~Places_base() {
-    // destroy( places ); to be debugged
+    //destroy( places ); to be debugged
     DllClass *dllclass = MASS_base::dllMap[handle];
     for (int i = 0; i < places_size; i++)
         dllclass->destroy(dllclass->places[i]);
@@ -98,6 +207,31 @@ Places_base::~Places_base() {
             dllclass->destroy(dllclass->right_shadow[i]);
 
     dlclose(dllclass->stub);
+  
+  //delete the distributed map on MASS_base
+    // auto myMap = MASS_base::getDistributedMap(handle);
+    // if(myMap != NULL){
+    //     delete myMap;
+    //     myMap = NULL;
+    // }
+
+    //the associated distributed map
+    if(places_base_distributed_map != NULL){
+        delete places_base_distributed_map;
+        places_base_distributed_map = NULL;
+    }
+
+    //delete placesVector
+    for(int i = 0; i < (int)placesVector.size(); i++){
+        std::vector<VertexPlace*> vecPlace = placesVector.at(i);
+        for(int j = 0; j < (int)vecPlace.size(); j++){
+            if(vecPlace.at(j) != NULL){
+                delete vecPlace.at(j);
+                vecPlace.at(j) = NULL;
+            }
+
+        }
+    }
 }
 
 /**
@@ -122,21 +256,11 @@ void Places_base::init_all(void *argument, int argument_size) {
         convert << endl;
         MASS_base::log(convert.str());
     }
-
-    // Print the current working directory
-    /*
-     char buf[200];
-     getcwd( buf, 200 );
-     convert.str( "" );
-     convert << buf << endl;
-     MASS_base::log( convert.str( ) );
-     */
-
     // load the construtor and destructor
     DllClass *dllclass = new DllClass(className);
-    MASS_base::dllMap.insert(
-        map<int, DllClass *>::value_type(handle, dllclass));
 
+    MASS_base::dllMap.insert(map<int, DllClass *>::value_type(handle, dllclass));
+  
     // calculate lower_boundary and upper_boundary
     int total = 1;
     for (int i = 0; i < dimension; i++) total *= size[i];
@@ -148,11 +272,10 @@ void Places_base::init_all(void *argument, int argument_size) {
                          : total - 1;
     places_size = upper_boundary - lower_boundary + 1;
 
-    // instantiate Places objects within dlclass
+    // instantiate_from_file Places objects within dlclass
     this->places_size = places_size;
     //  maintaining an entire set
     dllclass->places = new Place *[places_size];
-
     vector<int> index;
     index.reserve(dimension);
 
@@ -168,7 +291,6 @@ void Places_base::init_all(void *argument, int argument_size) {
     }
 
     // allocate the left/right shadows
-
     if (boundary_width <= 0) {
         // no shadow space.
         shadow_size = 0;
@@ -176,7 +298,6 @@ void Places_base::init_all(void *argument, int argument_size) {
         dllclass->right_shadow = NULL;
         return;
     }
-
     shadow_size =
         (dimension == 1) ? boundary_width : total / size[0] * boundary_width;
     if (printOutput == true) {
@@ -225,6 +346,9 @@ void Places_base::init_all(void *argument, int argument_size) {
             dllclass->right_shadow[i]->outMessage_size = 0;
             dllclass->right_shadow[i]->inMessage_size = 0;
         }
+    } 
+    if(printOutput){
+        MASS_base::log("Places_base:init_all finished and exit");
     }
 }
 
@@ -306,12 +430,12 @@ void Places_base::callAll(int functionId, void *argument, int tid) {
 
     // debugging
     ostringstream convert;
-    if (printOutput == true) {
+    //if (printOutput == true) {
         convert << "thread[" << tid << "] callAll functionId = " << functionId
                 << ", range[0] = " << range[0] << " range[1] = " << range[1]
                 << ", dllclass = " << (void *)dllclass;
         MASS_base::log(convert.str());
-    }
+	//}
 
     if (range[0] >= 0 && range[1] >= 0) {
         for (int i = range[0]; i <= range[1]; i++) {
@@ -483,6 +607,7 @@ void **Places_base::callSome(int functionId, void *argument, int arg_size,
  *              the last
  */
 void Places_base::getLocalRange(int range[], int tid) {
+  cerr << "getLocalRange: nThreads = " << MASS_base::threads.size( ) << ", tid = " << tid << endl;
     int nThreads = MASS_base::threads.size();
     int portion = places_size / nThreads;  // a range to be allocated per thread
     int remainder = places_size % nThreads;
@@ -1509,3 +1634,718 @@ int Places_base::getRankFromGlobalLinearIndex(int globalLinearIndex) {
 
     return (rank == MASS_base::systemSize) ? rank - 1 : rank;
 }
+
+
+
+/*Elias --->=========================================================================================
+ *@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+ *++++++++++++++++++++++++++ Added for Graph features ++++++++++++++++++++++++++++++++++++++++++++++++
+
+ *@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+ *====================================================================================================*/
+
+/**
+ * Constructor for Place Objects for remote nodes. These Objects encompass the basic
+ * features that are found in all Places Objects, enabling MASS to be able to
+ * operate across all Places in a unified manner, regardless of each individual
+ * Place instantiation.
+ *
+ *@filename                  the name of the file the vertices are rad from.
+ *@param filetypes           the file type as enums(MATSim, HIPPIE, TXT etc...)
+ *@argument                  the argument to instantiate the Place objects from.
+ 
+ */
+void Places_base::init_all_graph_for_worker_nodes(std::string filename, FILE_TYPE_ENUMS filetype, void* argument){
+
+
+    this->places_base_distributed_map = new std::unordered_map<string, int>();
+    places_base_distributed_map = MASS_base::getDistributedMap(handle);
+    
+    if(places_base_distributed_map->size() <= 0){
+        MASS_base::log(" size of  the distributed_map can not be zero");
+        exit(-1);
+    }
+    
+    if(printOutput){
+        string inputFileType = FileParser::fromEnumToString(fileType);
+        ostringstream convert;
+        convert << "Places_base::init_all_graph_for_worker_nodes method called:\n "
+        << "handle = " << handle << ", class name = " << className
+        << ", filename = " << filename << ", filetype = " << inputFileType 
+        << ", argument = " << (char*)argument << ", argument size = " << sizeof(argument)
+        << ", size of distributed_map = " << places_base_distributed_map->size() << endl;
+        MASS_base::log(convert.str());
+    }
+
+    size = new int[dimension];
+    for(int i = 0; i < dimension; i++) {
+        size[i] = places_base_distributed_map->size();
+    }
+     
+    int total = 1; 
+    //fold total for multiple dimenstion graph
+    for(int i = 0; i < dimension; i++){
+            total *= size[i];
+    }
+    // load the construtor and destructor
+    DllClass *dllclass = new DllClass(this->className);
+  
+    MASS_base::dllMap.insert(map<int, DllClass *>::value_type(handle, dllclass));  
+
+     // calculate lower_boundary and upper_boundary  
+    int stripeSize = total / MASS_base::systemSize;
+
+    // lower_boundary is the first place managed by this node
+    lower_boundary = stripeSize * MASS_base::myPid;
+
+    // upperBoundary is the last place managed by this node
+    upper_boundary = (MASS_base::myPid < MASS_base::systemSize - 1)
+                         ? lower_boundary + stripeSize - 1: total - 1;
+
+    this->places_size = upper_boundary - lower_boundary + 1;
+    //MASS_base::log("after places_size calculated -----------------------------");
+
+    if(places_size <= 0){
+
+        if(printOutput){
+            ostringstream convert;
+            convert << "Place_size <= 0, a minimum of 1 required for this node to continue." << endl;
+            MASS_base::log(convert.str());
+            exit(-1);
+        }
+    }
+
+    //  maintaining an entire set 
+    std::vector<int> indexVector;
+    indexVector.reserve(dimension);
+     dllclass->places = new Place *[places_size]; 
+
+    // initialize all Places objects
+    for (int i = 0; i < places_size; i++) {
+        // instanitate a new place         
+        indexVector = getGlobalArrayIndex(lower_boundary + i);   
+         //ostringstream convert;
+         //convert << " inside for loop iteration i = " << i << ", vertexPlace global Id = " << indexVector.at(0) << endl; 
+         //MASS_base::log(convert.str());
+        dllclass->places[i] = (Place *)(dllclass->instantiate_from_file(filename, filetype, 
+                               indexVector.at(0), argument,  places_base_distributed_map));
+        //MASS_base::log("inside the foor loop after instantiate_from_file factory  method ---------------");         
+        dllclass->places[i]->size.reserve(dimension);
+        for (int j = 0; j < dimension; j++)
+            // define size[] and index[]
+            dllclass->places[i]->size.push_back(size[j]);  
+         dllclass->places[i]->index =  indexVector;            
+    }
+
+    // allocate the left/right shadows
+    if (boundary_width <= 0) {
+        // no shadow space.
+        shadow_size = 0;
+        dllclass->left_shadow = NULL;
+        dllclass->right_shadow = NULL;
+        return;
+    }
+    shadow_size =(dimension == 1) ? boundary_width : total / size[0] * boundary_width;
+    if (printOutput == true) {
+        ostringstream convert;
+        convert << "Places_base.shadow_size = " << shadow_size;
+        MASS_base::log(convert.str());
+    }
+    dllclass->left_shadow =
+        (MASS_base::myPid == 0) ? NULL : new Place *[shadow_size];
+    dllclass->right_shadow = (MASS_base::myPid == MASS_base::systemSize - 1)
+                                 ? NULL
+                                 : new Place *[shadow_size];
+
+    // initialize the left/right shadows
+    std::vector<int> shadowIndex;
+    shadowIndex.reserve(dimension);
+    for (int i = 0; i < shadow_size; i++) {
+        // left shadow initialization
+        if (dllclass->left_shadow != NULL) {
+            // instanitate a new place
+            shadowIndex = getGlobalArrayIndex(lower_boundary - shadow_size + i);
+            dllclass->left_shadow[i] = (Place *)(dllclass->instantiate_from_file(filename, filetype,
+                                        shadowIndex.at(0), argument, places_base_distributed_map));
+            dllclass->left_shadow[i]->size.reserve(dimension);
+            for (int j = 0; j < dimension; j++) {
+                // define size[] and index[]
+                dllclass->left_shadow[i]->size.push_back(size[j]);
+            }
+            dllclass->left_shadow[i]->index =  shadowIndex;
+                
+            dllclass->left_shadow[i]->outMessage = NULL;
+            dllclass->left_shadow[i]->outMessage_size = 0;
+            dllclass->left_shadow[i]->inMessage_size = 0;
+        }
+
+        // right shadow initialization
+        std::vector<int> righShadowIndex;
+        righShadowIndex.reserve(dimension);
+        if (dllclass->right_shadow != NULL) {
+            // instanitate a new place
+            righShadowIndex = getGlobalArrayIndex(upper_boundary + i);
+            dllclass->right_shadow[i] =
+                (Place *)(dllclass->instantiate_from_file(filename, filetype, righShadowIndex.at(0),
+                                                         argument, places_base_distributed_map));
+            dllclass->right_shadow[i]->size.reserve(dimension);
+            for (int j = 0; j < dimension; j++) {
+                // define size[] and index[]
+                dllclass->right_shadow[i]->size.push_back(size[j]);
+            }
+            dllclass->right_shadow[i]->index = righShadowIndex;
+                
+            dllclass->right_shadow[i]->outMessage = NULL;
+            dllclass->right_shadow[i]->outMessage_size = 0;
+            dllclass->right_shadow[i]->inMessage_size = 0;
+        }
+
+    }
+    if(printOutput){
+        ostringstream convert;
+        convert << "Places_base: init_all_graph_for_worker_nodes furnished "
+        << "number of vertices read " << MASS_base::getDistributedMap(handle)->size()
+        << ", places_size " << places_size << endl;
+        MASS_base::log(convert.str());
+    }
+
+}
+
+
+
+/*Elias --->=========================================================================================
+                        ***** init_all_graph *****    
+ *====================================================================================================*/
+
+/**
+ * Constructor for Place Objects for reading vertices from the given filename
+ * and populate Place ojects into MASS_base's Place map,
+ *a features that are found in all Places Objects, enabling MASS to be able to
+ * operate across all Places in a unified manner, regardless of each individual
+ * Place instantiation.
+ *
+ *@filename                  the name of the file the vertices are rad from.
+ *@param filetypes           the file type as enums(MATSim, HIPPIE, TXT etc...)
+ *@argument                  the argument to instantiate the Place objects from.
+ 
+ */
+void Places_base::init_all_graph(std::string filename, FILE_TYPE_ENUMS filetype, void* argument){
+   
+    if(MASS_base::myPid != 0){
+        init_all_graph_for_worker_nodes(filename,filetype, argument);
+        return;
+     }
+
+    //only the master will read the vertices from file and populate the distributed map
+    places_base_distributed_map = new std::unordered_map<string, int>();
+    int totalVertex = FileParser::open(filename, filetype, this->places_base_distributed_map);
+    
+
+    MASS_base::distributed_map.insert({handle, places_base_distributed_map});
+    if (printOutput) {
+        ostringstream convert;  
+        string filetypeString = FileParser::fromEnumToString(filetype);
+
+        convert << "Places_base: init_all_graph() ---> handle = " << handle << ", class = " << className
+        << ", dimension = " << dimension <<", filetype enum = " << filetypeString << ", #vertices read = " 
+         << places_base_distributed_map->size() <<endl;        
+        MASS_base::log(convert.str());
+    }
+
+
+    if(totalVertex <= 0){
+        if(printOutput){
+            ostringstream convert;
+            convert << "graph initialization failed: unable to open and read Vertices into MASS::distributed_map."
+            <<" Make sure passing the full path of the correct file name" 
+            << " and the correct file type from the fileType enums." << endl;
+            MASS_base::log(convert.str());
+        }
+
+        exit(-1);
+   }
+    /** size --> Defines the size of each dimension in the simulation space. Intuitively,
+     * size[0], size[1], and size[2] correspond to the size of x, y, and z, or
+     * that of i, j, and k.*/
+    this->size = new int[dimension];
+     for (int i = 0; i < dimension; i++)
+          this->size[i] = totalVertex;
+
+    // load the construtor and destructor
+    DllClass *dllclass = new DllClass(this->className);
+  
+    MASS_base::dllMap.insert(map<int, DllClass *>::value_type(handle, dllclass));  
+   
+   int total = 1; 
+    //fold total for multiple dimenstion graph
+    for(int i = 0; i < dimension; i++){
+            total *= size[i];
+    }
+     // calculate lower_boundary and upper_boundary  
+    int stripeSize = total / MASS_base::systemSize;
+
+    // lower_boundary is the first place managed by this node
+    lower_boundary = stripeSize * MASS_base::myPid;
+
+    // upperBoundary is the last place managed by this node
+    upper_boundary = (MASS_base::myPid < MASS_base::systemSize - 1)
+                         ? lower_boundary + stripeSize - 1: total - 1;
+
+    this->places_size = upper_boundary - lower_boundary + 1;
+
+
+    if(places_size <= 0){
+
+        if(printOutput){
+            ostringstream convert;
+            convert << "Place_size <= 0, a minimum of 1 required for this node to continue." << endl;
+            MASS_base::log(convert.str());
+            exit(-1);
+        }
+    }
+
+    //  maintaining an entire set 
+     dllclass->places = new Place *[places_size];
+     vector<int> index;
+     index.reserve(dimension);
+     ostringstream convert;
+    // initialize all Places objects
+    for (int i = 0; i < places_size; i++) {
+        index = getGlobalArrayIndex(lower_boundary + i);
+
+        // instanitate a new place
+        dllclass->places[i] = (Place *)(dllclass->instantiate_from_file(filename, fileType, 
+                              index.at(0), argument, places_base_distributed_map));
+        dllclass->places[i]->size.reserve(dimension);
+        for (int j = 0; j < dimension; j++)
+            // define size[] and index[]
+            dllclass->places[i]->size.push_back(size[j]);
+        dllclass->places[i]->index = index;
+    }
+    // allocate the left/right shadows
+    if (boundary_width <= 0) {
+        // no shadow space.
+        shadow_size = 0;
+        dllclass->left_shadow = NULL;
+        dllclass->right_shadow = NULL;
+        return;
+    }
+    shadow_size =(dimension == 1) ? boundary_width : total / size[0] * boundary_width;
+    if (printOutput == true) {
+        ostringstream convert;
+        convert << "Places_base.shadow_size = " << shadow_size;
+        MASS_base::log(convert.str());
+    }
+    dllclass->left_shadow =
+        (MASS_base::myPid == 0) ? NULL : new Place *[shadow_size];
+    dllclass->right_shadow = (MASS_base::myPid == MASS_base::systemSize - 1)
+                                 ? NULL
+                                 : new Place *[shadow_size];
+    // initialize the left/right shadows                                 
+    std::vector<int> shadowIndex;
+    shadowIndex.reserve(dimension);
+    for (int i = 0; i < shadow_size; i++) {
+        // left shadow initialization
+        if (dllclass->left_shadow != NULL) {
+            // instanitate a new place
+            shadowIndex = getGlobalArrayIndex(lower_boundary - shadow_size + i);
+            dllclass->left_shadow[i] = (Place *)(dllclass->instantiate_from_file(filename, filetype,
+                                        shadowIndex.at(0), argument, places_base_distributed_map));
+            dllclass->left_shadow[i]->size.reserve(dimension);
+            for (int j = 0; j < dimension; j++) {
+                // define size[] and index[]
+                dllclass->left_shadow[i]->size.push_back(size[j]);
+            }
+            dllclass->left_shadow[i]->index =  shadowIndex;
+                
+            dllclass->left_shadow[i]->outMessage = NULL;
+            dllclass->left_shadow[i]->outMessage_size = 0;
+            dllclass->left_shadow[i]->inMessage_size = 0;
+        }
+        // right shadow initialization
+        std::vector<int> righShadowIndex;
+        righShadowIndex.reserve(dimension);
+        if (dllclass->right_shadow != NULL) {
+            // instanitate a new place
+            righShadowIndex = getGlobalArrayIndex(upper_boundary + i);
+            dllclass->right_shadow[i] =
+                (Place *)(dllclass->instantiate_from_file(filename, filetype, righShadowIndex.at(0),
+                                                         argument, places_base_distributed_map));
+            dllclass->right_shadow[i]->size.reserve(dimension);
+            for (int j = 0; j < dimension; j++) {
+                // define size[] and index[]
+                dllclass->right_shadow[i]->size.push_back(size[j]);
+            }
+            dllclass->right_shadow[i]->index = righShadowIndex;
+                
+            dllclass->right_shadow[i]->outMessage = NULL;
+            dllclass->right_shadow[i]->outMessage_size = 0;
+            dllclass->right_shadow[i]->inMessage_size = 0;
+        }
+
+    }
+    if(printOutput){
+        ostringstream convert;
+        convert << "Places_base: init_all_graph furnished "
+        << "number of vertices read " << places_base_distributed_map->size()
+        << ", places_size " << places_size << endl;
+        MASS_base::log(convert.str());
+    }
+}
+
+
+/**
+This method deletes Graph related data on the cluster.
+
+*/
+void Places_base::clearGraphOnTheCluster(){
+    MASS_base::reinitializeMap();//dump the Graph related info
+    places_size = 0;
+    //consider removing other Graph related data too(that lives in one of MASS_base containers )
+}
+
+/** 
+ *This method adds a vertex to the local machine.
+
+ *Given vertexId and argument along with size of argument to construct VertexPlace object,
+ *this method creates the object and inserts it to the simulation space
+ *@param vertexId           name of the vertex to be inserted
+ *@param argument           to construct VertexPlace obect
+ *@arg_size                 size of the argument
+ *@return                   positive number if inserted, -1 otherwise
+
+ */
+int Places_base::addPlaceLocally(string vertexId, void* argument, int arg_size){
+    int total = 1;
+    
+    for(int i = 0; i < dimension; i++){
+        total *= Places_base::size[i];
+    }
+    
+    //[0] ->nextPlaceIndex/total, [1] -> nextPlaceIndex % total
+    int* placesIndex = getPlacesIndex();
+     
+    int stripSize = total / MASS_base::systemSize;
+    int lowerBound = stripSize * MASS_base::myPid * placesIndex[0];
+    int upperBound = lowerBound + stripSize;
+
+    if((int)placesVector.size() == 0 || (int)placesVector.size() < placesIndex[0]){
+        std::vector<VertexPlace*>  v (stripSize);
+        placesVector.push_back(v);
+    }
+
+    else if(placesIndex[1] < lowerBound || placesIndex[1] >= upperBound){
+        ostringstream convert;      
+        convert << " GreaphPlaces--> AddPlaceLocally() --> unable to add vertex. out of bound error raised. " << endl;      
+        MASS_base::log(convert.str());
+        return -1;
+    }
+
+    // load the construtor and destructor
+    DllClass* dllclass = new DllClass(this->className);
+
+    VertexPlace * vertexPlace = (VertexPlace *)(dllclass->instantiate(argument));
+
+    vertexPlace->setVertexName(vertexId);
+    int globalIndex = total + stripSize * MASS_base::myPid + nextPlaceIndex;    
+    vertexPlace->setGlobalId(globalIndex);
+
+    
+    std::vector<VertexPlace*> &v  = placesVector.at(placesIndex[0]);
+    v.insert(v.begin() + placesIndex[1], vertexPlace);
+    places_base_distributed_map->insert({vertexId, globalIndex});
+    nextPlaceIndex++;
+
+    if(printOutput){
+        ostringstream convert;
+        convert << "GraphPlaces--> addPlaceLocally()-->Place object inserted into the simualtion space "
+        <<" with globalIndex of " << globalIndex << endl;
+        MASS_base::log(convert.str());
+    }
+    return globalIndex;
+}
+
+/**
+ * This method creates edges between two vertices
+
+ *create an edge between two vertex with the given weight on the local machine.
+
+ *@pama vertexId        The string representation of the vertex.
+ *@pama neighborId      the name of the neighbor
+ *@pama weight          the weight of the connection between the two vertices
+ *@return               true if edge formed, false otherwise
+
+ */
+bool Places_base::addEdgeLocally(string vertexId, string neighborId, double weight){
+    unordered_map<string, int>*my_disMap = getThisDistributedMap(handle);
+    auto it  = my_disMap->find(vertexId);
+    int globalIndex = it->second;
+    int total = 1;
+    for(int i = 0; i < dimension; i++){
+        total *= Places_base::size[i];
+    }
+
+    int strip = total / MASS_base::systemSize;
+    int placesIndex = globalIndex / total - 1;
+
+    //determine the position to insert the neighbor and the connection 
+    if(placesIndex >= 0 && (int)placesVector.size() >= 0 && (int)placesVector.size() > placesIndex){
+        int localPlaceIndex =globalIndex % strip;
+        VertexPlace *vplace = placesVector.at(placesIndex).at(localPlaceIndex);
+        vplace->addNeighbor(neighborId, weight);
+
+        if(printOutput){
+            ostringstream convert;
+            convert << "GraphPaces-->addEdgeLocally() ---> Edge formed between " << vertexId << " and "
+            << neighborId << " with weight = " << weight << endl;
+            MASS_base::log(convert.str());
+        }
+        return true;
+    }
+
+    if(printOutput){
+        ostringstream convert;
+        convert << "GraphPaces-->addEdgeLocally() ---> Edge cound not be formed between " << vertexId <<" and "
+        << neighborId << " !! " << endl;
+        MASS_base::log(convert.str());
+    }
+    return false;
+}
+
+
+/**
+ *this method removes the given vertex from the local machine
+
+ *if the given vertex found on the local machine, this method removes the vertex
+ *and returns true, false otherwise.
+ *@param vertexId            the unique name of the vertex
+ *@return                    true if the vertex found removed, false otherwise
+
+ */
+bool Places_base::removeVertexLocally(string vertexId){
+    auto it = places_base_distributed_map->find(vertexId);
+    if(it == places_base_distributed_map->end()){
+        if(printOutput){
+            ostringstream convert;
+            convert << "vertex required to be removed doesn't exist on the MASS::distributed_map." << endl;
+            MASS_base::log(convert.str());
+        }
+        return false;
+    }
+    
+    //get the global index 
+    int globalIndex = it->second;
+    VertexPlace *vrtxplace = nullptr;
+    // Remove this vertex and its neighbor from the simulation space on this node
+    for (int i = 0; i < (int)placesVector.size(); i++){ //std::vector<VertexPlace*> &places :placesVector) 
+        vector<VertexPlace*> &places = placesVector.at(i);
+        for (int j = 0; j < (int)places.size(); j++) {
+            VertexPlace *singlePlace  = nullptr;
+            singlePlace = places.at(j);
+
+            if (singlePlace != nullptr && singlePlace->getGlobalIndex() == globalIndex) {
+                vrtxplace = singlePlace;
+                //singlePlace->clearAllNeighborsAndWeight();
+            }
+            if(singlePlace)singlePlace->removeNeighbor(vertexId);
+        }         
+        //memory leak proof removal of VertexPlace pointers.
+        if (vrtxplace != nullptr) {
+            for(int k = 0 ; k < (int)places.size(); k++){
+
+                if(places.at(k)->getVertexName() == vrtxplace->getVertexName() ||
+                    places.at(k)->getGlobalIndex() == vrtxplace->getGlobalIndex()){
+                    
+                    if(places.at(k) != nullptr){
+                        delete places.at(k);
+                        places.at(k) = nullptr;
+                    }
+                    
+                }
+            }
+            auto iteratorBegin = std::remove(places.begin(), places.end(), nullptr);
+            places.erase(iteratorBegin, places.end());
+        }
+    }
+   
+    return true;
+}
+
+/**
+ *this method removes an edge between two neighbors on a local machine.
+
+ *The method finds the two vertices and remves the edge between them if exists and returns
+ *true, returns false othewise.
+ *@param vertexId           the principal vertex
+ *@param neighborId         the neighbor vertex
+ *@return                   true for successful removal of edge, false otheriwse.
+
+ */
+bool Places_base::removeEdgeLocally(string vertexId, string neighborId){
+    unordered_map<string, int> *dist_map = getThisDistributedMap(handle);
+    auto it = dist_map->find(vertexId);
+    int globalIndex = it->second;
+    int total = 1;
+
+    for(int i = 0; i < Places_base::dimension; i++){
+        total = Places_base::size[i];
+    }
+
+    int strip = total / MASS_base::systemSize;
+
+    int placesIndex = globalIndex / total - 1;
+
+    if(placesIndex >= 0 && (int)placesVector.size() >= 0 && (int)placesVector.size() > placesIndex){
+         int localPlaceIndex = globalIndex % strip;
+
+         VertexPlace *place = placesVector.at(placesIndex).at(localPlaceIndex);
+         place->removeNeighbor(neighborId);
+
+         if(printOutput){
+            ostringstream convert;
+            convert << "GraphPlaces-->removeEdgeLocally()--> edge  between " 
+            << vertexId << " and " << neighborId << " removed "<< endl;
+            MASS_base::log(convert.str());
+        }
+        return true;
+    }
+    else{
+        if(printOutput){
+            ostringstream convert;
+            convert << "GraphPlaces-->removeEdgeLocally()--> couldn't remove edge between " 
+            << vertexId << " and " << neighborId << endl;
+            MASS_base::log(convert.str());
+        }
+        return false;
+    }
+}
+
+/**
+ *This method helps neighbors to exchange info.
+
+ *given a function and the index of a particular Place object,
+ *this method returns the result of excecution of the method.
+ *@param functionId             the unuque ID of the function,
+ *@param neighbor               the vector of indices of a particular Place object.
+ *@param argument               a void pointer argument for the function
+ *@return                       void 
+
+ */
+void* Places_base::exchangeNeighbor(int functionId, vector<int> neighbor, void* argument){
+
+    int indexFound = -1;
+    VertexPlace* vertex;
+    for(int i = 0; i < (int)placesVector.size(); i++){
+        vector<VertexPlace*> vp = placesVector.at(i);
+        for(int j = 0; j < (int)vp.size(); j++){
+            VertexPlace* place = vp.at(j);
+            if(neighbor.at(0) == place->index.at(0)){
+                indexFound = 0;
+                vertex = place;
+                break;
+            }           
+        }
+    }
+    if(indexFound != -1){
+        return vertex->callMethod(functionId, argument);
+    }
+    return NULL;    
+}
+
+int* Places_base::getPlacesIndex(){
+    int total = 1;
+    if(this->dimension > 1){
+        for(int i = 0; i < this->dimension; i++){
+            total *= this->size[i]; 
+        }
+    }
+    else{
+        total = this->size[0];
+    }
+
+    int* array = new int[2];
+
+    array[0] = (nextPlaceIndex / total); 
+    array[1] = (nextPlaceIndex % total);
+
+    return array;
+}
+
+/**
+ *this method returns the distributed_map(storage of vertices) for a particular 
+ *GraphPlace instance, given the handle as an argument.
+
+ */
+unordered_map<string, int>* Places_base::getThisDistributedMap(int handle){
+    auto myMap = MASS_base::getDistributedMap(handle);
+    if(myMap == NULL){
+        return NULL;
+    }
+    return myMap;
+}
+
+
+/**
+ *given the vertex name as a string, this method returns the Place(VertexPlace pointer),
+ *The place might exist either in the master node or in one of remote nodes, the location
+ *of the vertex is hidden from the applciation view point
+
+ */
+VertexPlace* Places_base::getPlaceFromVertexName(string vertexname){
+
+    unordered_map<string, int> *myMap = getThisDistributedMap(handle);
+
+    //is the vertex name in the distributed map? if yes, find the place object on the 
+    //master node or on the remote nodes, otherwise return NULL.
+    std::unordered_map<std::string,int>::const_iterator found = myMap->find (vertexname);
+    DllClass * dllclass  = nullptr;
+    if(found != myMap->end()){
+        
+        auto it = MASS_base::dllMap.find(handle);
+
+        DllClass * dllclass = it->second;
+        
+        for(int i = 0; i < places_size; i++){
+            VertexPlace* place = (VertexPlace*)dllclass->places[i];
+            if(place->getVertexName() == vertexname){
+                return place;
+            }
+        }            
+    }
+    for(auto vecOfPlace:placesVector){
+        for(auto vertexPlace:vecOfPlace){
+            if(vertexPlace->getVertexName() == vertexname){
+                return vertexPlace;
+            }
+        }
+    }
+    //vertex cound't found in the cluster
+    return NULL;
+}
+
+
+//discar the current Places information 
+void Places_base::deleteAndRenitializeGraph() {
+    clearGraphOnTheCluster();
+    this->nextPlaceIndex = 0;
+    this->placesVector.clear();
+
+    //Send reinitialize message to all remote nodes
+    //Message(ACTION_TYPE action, int handle, int dummy);
+    
+    Message *message = new Message(Message::MAINTENANCE_REINITIALIZE, getHandle(), 0);
+    // send a MAINTENANCE_REINITIALIZE message to each worker node
+    // for (int i = 0; i < int(MASS::mNodes.size()); i++) {
+    //     MASS::mNodes[i]->sendMessage(message);
+
+    //     if (printOutput == true) {
+    //         cerr << "PLACES_INITIALIZE sent to rank " << MASS::mNodes[i]->getHostName() << endl;
+    //     }
+    // }
+    delete message;
+    // Synchronized with all slave processes
+   // MASS::barrier_all_slaves();
+
+}
+

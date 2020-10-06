@@ -27,7 +27,7 @@
 #include "Agents_base.h"
 #include "Message.h"
 #include "Places.h"
-
+#include "GraphPlaces.h"
 using namespace std;
 /**
  * Agents class

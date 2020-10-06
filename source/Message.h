@@ -1,3 +1,4 @@
+
 /*
  MASS C++ Software License
  © 2014-2015 University of Washington
@@ -27,13 +28,22 @@
 #include <string>
 #include <string.h>
 #include <vector>
+#include <iostream>
+#include <sstream>
+#include <unordered_map>
+
 #include "RemoteExchangeRequest.h"
 #include "AgentMigrationRequest.h"
 
+#include "FileParser.h"
+#include "GraphModel.h"
+
+
+
 using namespace std;
 
-class Message
-{
+class Message {
+
 public:
 
   /**
@@ -61,32 +71,95 @@ public:
     AGENTS_CALL_ALL_VOID_OBJECT, // 14
     AGENTS_CALL_ALL_RETURN_OBJECT, // 15
     AGENTS_MANAGE_ALL, // 16
-    AGENTS_MIGRATION_REMOTE_REQUEST // 17
+    AGENTS_MIGRATION_REMOTE_REQUEST, // 17
+
+    /*---------------------------------------------------------------------*
+     *+++++++++++ Elias--> Added for Graph features ++++++++++++++++++++++++
+     *----------------------------------------------------------------------*/
+    PLACES_INITIALIZE_GRAPH_FROM_FILE, //18
+    PLACES_INITIALIZE_GRAPH_FROM_EMPTY, //19
+    MAINTENANCE_REINITIALIZE, //20
+    MAINTENANCE_GET_PLACES, //21
+    MAINTENANCE_GET_PLACES_RESPONSE, //22
+    MAINTENANCE_ADD_EDGE, //23
+    MAINTENANCE_REMOVE_EDGE, //24
+    MAINTENANCE_ADD_PLACE, //25
+    MAINTENANCE_REMOVE_PLACE, //26
+    GRAPH_PLACES_EXCHANGE_ALL_REMOTE_RETURN_OBJECT, //27
+    GET_GRAPH_DISTRIBUTED_MAP,//28
+    GET_VERTEXPLACE_FROM_VERTEXNAME //29
   };
 
-  /**
-   * PLACES_INITIALIZE
-   * @param action          type of action this message is performing
+
+  /*----------------------------------------------------------------------------*
+   *=============================================================================*/
+
+/**Graph--->PLACES_INITIALIZE_GRAPH_FROM_FILE
+* @param action          //type of action this message is performing
+* @param size
+* @param handle         // unique identifer that designates a group of places.
+   *                        //Must be unique over all machines.
+* @param classname      // name of user-defined class message is targeting
+* @param argument
+* @param arg_size
+* @param boundary_width
+* @param hosts
+
+* @type
+* @filename
+* @map<string, int>
+*/
+Message (ACTION_TYPE action, vector<int> *size, int handle, string classname, 
+        void *argument,int arg_size, int boundary_width, vector<string> *hosts,
+        std::string type, string filename, std::unordered_map<std::string, int> *dist_map)   
+              
+        :action (action), size (size),
+         handle (handle), dest_handle (VOID_HANDLE),
+         functionId (0), classname (classname),
+         argument (argument), argument_size (arg_size), return_size (0),
+         argument_in_heap (false), hosts (hosts), destinations (NULL),
+         dimension (0), agent_population (-1), boundary_width (boundary_width),
+         exchangeReqList (NULL),
+         migrationReqList (NULL),
+         vertexId (""),
+         neighborId(""),
+         weight(0.0),
+         distributed_map(dist_map),
+         fileType (type),
+         filename(filename),
+         graphmodel(NULL)  { };
+
+    
+/* PLACES_INITIALIZE 
+  * @param action          //type of action this message is performing
    * @param size
-   * @param handle          unique identifer that designates a group of places.
-   *                        Must be unique over all machines.
-   * @param classname       name of user-defined class message is targeting
+   * @param handle         // unique identifer that designates a group of places.
+   *                        //Must be unique over all machines.
+   * @param classname      // name of user-defined class message is targeting
    * @param argument
    * @param arg_size
    * @param boundary_width
-   * @param hosts
-   */
+   * @param hosts */
+
   Message (ACTION_TYPE action,
-           vector<int> *size, int handle, string classname, void *argument,
-           int arg_size, int boundary_width, vector<string> *hosts) :
-  action (action), size (size),
-  handle (handle), dest_handle (VOID_HANDLE),
-  functionId (0), classname (classname),
-  argument (argument), argument_size (arg_size), return_size (0),
-  argument_in_heap (false), hosts (hosts), destinations (NULL),
-  dimension (0), agent_population (-1), boundary_width (boundary_width),
-  exchangeReqList (NULL),
-  migrationReqList (NULL) { };
+         vector<int> *size, int handle, string classname, void *argument,
+         int arg_size, int boundary_width, vector<string> *hosts)
+
+        :action (action), size (size),
+         handle (handle), dest_handle (VOID_HANDLE),
+         functionId (0), classname (classname),
+         argument (argument), argument_size (arg_size), return_size (0),
+         argument_in_heap (false), hosts (hosts), destinations (NULL),
+         dimension (0), agent_population (-1), boundary_width (boundary_width),
+         exchangeReqList (NULL),
+         migrationReqList (NULL),
+         vertexId (""),
+         neighborId(""),
+         weight(0.0),
+         distributed_map(NULL),
+         fileType (""),
+         filename(""),
+         graphmodel(NULL)  { };
 
   /**
    * PLACES_CALL_ALL_VOID_OBJECT,
@@ -100,16 +173,24 @@ public:
    * @param arg_size
    * @param ret_size
    */
-  Message (ACTION_TYPE action,
-           int handle, int functionId, void *argument, int arg_size,
-           int ret_size) :
-  action (action), size (0),
-  handle (handle), dest_handle (VOID_HANDLE),
-  functionId (functionId), classname (""),
-  argument (argument), argument_size (arg_size), return_size (ret_size),
-  argument_in_heap (false), hosts (NULL), destinations (NULL),
-  dimension (0), agent_population (-1), boundary_width (0),
-  exchangeReqList (NULL), migrationReqList (NULL) { };
+  Message (ACTION_TYPE action, int handle, int functionId, void *argument, 
+          int arg_size, int ret_size)
+
+         :action (action), size (0),
+          handle (handle), dest_handle (VOID_HANDLE),
+          functionId (functionId), classname (""),
+          argument (argument), argument_size (arg_size), return_size (ret_size),
+          argument_in_heap (false), hosts (NULL), destinations (NULL),
+          dimension (0), agent_population (-1), boundary_width (0),
+          exchangeReqList (NULL), migrationReqList (NULL),
+
+         vertexId (""),
+         neighborId(""),
+         weight(0.0),
+         distributed_map(NULL),
+         fileType (""),
+         filename(""),
+         graphmodel(NULL)  { };
 
   /**
    * PLACES_EXCHANGE_ALL
@@ -122,14 +203,23 @@ public:
    */
   Message (ACTION_TYPE action,
            int handle, int dest_handle, int functionId,
-           vector<int*> *destinations, int dimension) :
-  action (action), size (0),
-  handle (handle), dest_handle (dest_handle),
-  functionId (functionId), classname (""),
-  argument (NULL), argument_size (0), return_size (0),
-  argument_in_heap (false), hosts (NULL), destinations (NULL),
-  dimension (dimension), agent_population (-1), boundary_width (0),
-  exchangeReqList (NULL), migrationReqList (NULL) { };
+           vector<int*> *destinations, int dimension)
+           
+           :action (action), size (0),
+           handle (handle), dest_handle (dest_handle),
+           functionId (functionId), classname (""),
+           argument (NULL), argument_size (0), return_size (0),
+           argument_in_heap (false), hosts (NULL), destinations (NULL),
+           dimension (dimension), agent_population (-1), boundary_width (0),
+           exchangeReqList (NULL), migrationReqList (NULL),
+
+           vertexId (""),
+           neighborId(""),
+           weight(0.0),
+           distributed_map(NULL),
+           fileType (""),
+           filename(""),
+           graphmodel(NULL)  { };
 
   /**
    * PLACES_EXCHANGE_ALL_REMOTE_REQUEST
@@ -148,7 +238,15 @@ public:
   argument (NULL), argument_size (0), return_size (0),
   argument_in_heap (false), hosts (NULL), destinations (NULL),
   dimension (0), agent_population (-1), boundary_width (0),
-  exchangeReqList (exchangeReqList), migrationReqList (NULL) { };
+  exchangeReqList (exchangeReqList), migrationReqList (NULL),
+
+  vertexId (""),
+  neighborId(""),
+  weight(0.0),
+  distributed_map(NULL),
+  fileType (""),
+  filename(""),
+  graphmodel(NULL)  { };
 
   /**
    * PLACES_EXCHANGE_ALL_REMOTE_RETURN_OBJECT and 
@@ -157,17 +255,31 @@ public:
    * @param retVals
    * @param retValsSize
    */
-  Message (ACTION_TYPE action, char *retVals, int retValsSize) :
-  action (action), size (0),
-  handle (VOID_HANDLE), dest_handle (VOID_HANDLE),
-  functionId (0), classname (""),
-  argument (retVals), argument_size (retValsSize), return_size (0),
-  argument_in_heap (false), hosts (NULL), destinations (NULL),
-  dimension (0), agent_population (-1), boundary_width (0),
-  exchangeReqList (NULL), migrationReqList (NULL) { };
+  Message (ACTION_TYPE action, char *retVals, int retValsSize)
+   : action (action), size (0),
+    handle (VOID_HANDLE), dest_handle (VOID_HANDLE),
+    functionId (0), classname (""),
+    argument (retVals), argument_size (retValsSize), return_size (0),
+    argument_in_heap (false), hosts (NULL), destinations (NULL),
+    dimension (0), agent_population (-1), boundary_width (0),
+    exchangeReqList (NULL), migrationReqList (NULL),
 
-  /**
-   * AGENTS_INITIALIZE
+    vertexId (""),
+    neighborId(""),
+    weight(0.0),
+    distributed_map(NULL),
+    fileType(""),
+    filename(""),
+    graphmodel(NULL)  { };
+
+  /* +++++++++++++++++++++++ Graph Features ++++++++++++++++++++++++++++++++++++++++
+   *-------------------------------------------------------------------------------
+    *AGENTS_INITIALIZE
+
+    *MAINTENANCE_REMOVE_PLACE: (Action, handle,vertexId)
+    *GRAPH_PLACES_EXCHANGE_ALL_REMOTE_RETURN_OBJECT-->(Action, handle neighborKey);
+    *MAINTENANCE_ADD_PLACE(action, handle, vertex(classname), argument, arg_size)
+
    * @param action
    * @param initPopulation
    * @param handle
@@ -179,28 +291,45 @@ public:
   Message (ACTION_TYPE action, int initPopulation, int handle,
            int placeHandle, string className, void *argument,
            int argument_size) :
-  action (action), size (0),
-  handle (handle), dest_handle (placeHandle),
+  action (action), size (0), handle (handle), 
+  dest_handle (placeHandle),
   functionId (0), classname (className),
   argument (argument), argument_size (argument_size), return_size (0),
   argument_in_heap (false), hosts (NULL), destinations (NULL),
   dimension (0), agent_population (initPopulation), boundary_width (0),
-  exchangeReqList (NULL), migrationReqList (NULL) { };
+  exchangeReqList (NULL), migrationReqList (NULL),
+
+  vertexId (className),
+  neighborId(className),
+  weight(0.0),
+  distributed_map(NULL),
+  fileType(""),
+  filename(""),
+  graphmodel(NULL)  { };
 
   /**
-   * AGENTS_MANAGE_ALL and PLACES_EXCHANGE_BOUNDARY
+   * AGENTS_MANAGE_ALL, PLACES_EXCHANGE_BOUNDARY,
+   **Graph----> MAINTENANCE_GET_PLACES(handle, 0), MAINTENANCE_REINITIALIZE(action, handle, int dummy)
    * @param action
    * @param handle
    * @param dummy
    */
   Message (ACTION_TYPE action, int handle, int dummy) :
-  action (action), size (0),
-  handle (handle), dest_handle (handle),
-  functionId (0), classname (""),
-  argument (NULL), argument_size (0), return_size (0),
-  argument_in_heap (false), hosts (NULL), destinations (NULL),
-  dimension (0), agent_population (-1), boundary_width (0),
-  exchangeReqList (NULL), migrationReqList (NULL) { };
+        action (action), size (0),
+        handle (handle), dest_handle (handle),
+        functionId (0), classname (""), 
+        argument (NULL), argument_size (0), return_size (0),
+        argument_in_heap (false), hosts (NULL), destinations (NULL),
+        dimension (0), agent_population (-1), boundary_width (0),
+        exchangeReqList (NULL), migrationReqList (NULL),
+
+        vertexId (""),
+        neighborId(""),
+        weight(0.0),
+        distributed_map(NULL),
+        fileType (""),
+        filename(""),
+        graphmodel(NULL)  { };
 
   /**
    * AGENTS_MIGRATION_REMOTE_REQUEST
@@ -217,7 +346,15 @@ public:
   argument (NULL), argument_size (0), return_size (0),
   argument_in_heap (false), hosts (NULL), destinations (NULL),
   dimension (0), agent_population (-1), boundary_width (0),
-  exchangeReqList (NULL), migrationReqList (migrationReqList) { };
+  exchangeReqList (NULL), migrationReqList (migrationReqList),
+
+  vertexId (""),
+  neighborId(""),
+  weight(0.0),
+  distributed_map(NULL),
+  fileType (""),
+  filename(""),
+  graphmodel(NULL)  { };
 
   /**
    * FINISH
@@ -231,7 +368,15 @@ public:
   argument (NULL), argument_size (0), return_size (0),
   argument_in_heap (false), hosts (NULL), destinations (NULL),
   dimension (0), agent_population (-1), boundary_width (0),
-  exchangeReqList (NULL), migrationReqList (NULL) { };
+  exchangeReqList (NULL), migrationReqList (NULL),
+
+  vertexId (""),
+  neighborId(""),
+  weight(0.0),
+  distributed_map(NULL),
+  fileType(""),
+  filename(""),
+  graphmodel(NULL)  { };
 
   /**
    * ACK used for PLACES_CALL_ALL_RETURN_OBJECT
@@ -246,7 +391,15 @@ public:
   argument (argument), argument_size (arg_size), return_size (0),
   argument_in_heap (false), hosts (NULL), destinations (NULL),
   dimension (0), agent_population (-1), boundary_width (0),
-  exchangeReqList (NULL), migrationReqList (NULL) { };
+  exchangeReqList (NULL), migrationReqList (NULL),
+
+  vertexId (""),
+  neighborId(""),
+  weight(0.0),
+  distributed_map(NULL),
+  fileType(""),
+  filename(""),
+  graphmodel(NULL)  { };
 
 
   /**
@@ -256,14 +409,22 @@ public:
    * @param arg_size
    * @param localPopulation
    */
-  Message (ACTION_TYPE action, void *argument, int arg_size, int localPopulation) :
-  action (action), size (NULL),
-  handle (VOID_HANDLE), dest_handle (VOID_HANDLE),
-  functionId (0), classname (""),
-  argument (argument), argument_size (arg_size), return_size (0),
-  argument_in_heap (false), hosts (NULL), destinations (NULL),
-  dimension (0), agent_population (localPopulation), boundary_width (0),
-  exchangeReqList (NULL), migrationReqList (NULL) { };
+  Message (ACTION_TYPE action, void *argument, int arg_size, int localPopulation)
+   : action (action), size (NULL),
+    handle (VOID_HANDLE), dest_handle (VOID_HANDLE),
+    functionId (0), classname (""),
+    argument (argument), argument_size (arg_size), return_size (0),
+    argument_in_heap (false), hosts (NULL), destinations (NULL),
+    dimension (0), agent_population (localPopulation), boundary_width (0),
+    exchangeReqList (NULL), migrationReqList (NULL),
+
+    vertexId (""),
+    neighborId(""),
+    weight(0.0),
+    distributed_map(NULL),
+    fileType (""),
+    filename(""),
+    graphmodel(NULL)  { };
 
   /**
    * ACK used for AGENTS_INITIALIZE and AGENTS_CALL_ALL_VOID_OBJECT
@@ -277,7 +438,15 @@ public:
   argument (NULL), argument_size (0), return_size (0),
   argument_in_heap (false), hosts (NULL), destinations (NULL),
   dimension (0), agent_population (localPopulation), boundary_width (0),
-  exchangeReqList (NULL), migrationReqList (NULL) { };
+  exchangeReqList (NULL), migrationReqList (NULL),
+
+  vertexId (""),
+  neighborId(""),
+  weight(0.0),
+  distributed_map(NULL),
+  fileType (""),
+  filename(""),
+  graphmodel(NULL)  { };
 
   
   /**
@@ -290,22 +459,55 @@ public:
   argument (NULL), argument_size (0), return_size (0),
   argument_in_heap (false), hosts (NULL), destinations (NULL),
   dimension (0), agent_population (-1), boundary_width (0),
-  exchangeReqList (NULL), migrationReqList (NULL) { };
+  exchangeReqList (NULL), migrationReqList (NULL),
 
+  vertexId (""),
+  neighborId(""),
+  weight(0.0),
+  distributed_map(NULL),
+  fileType (""),
+  filename(""),
+  graphmodel(NULL)  { };
+
+  /**Graph----->
+    *MAINTENANCE_REMOVE_EDGE(Action, handle,vertexId, neighborId, -0.0)
+    *MAINTENANCE_ADD_EDGE(action,handle, vertexId, neighborId, weight)
+    @handle 
+    @vertexId
+    @neighborId
+    @weight
+    */
+  Message(ACTION_TYPE action, int handle, string vertexId, string neighborId, double weight):
+  action(action),size(NULL), handle(handle), 
+  dest_handle(VOID_HANDLE), functionId (0),
+  classname (""),  argument (NULL),  argument_size (0), 
+  return_size (0), argument_in_heap (false), 
+  hosts (NULL), destinations (NULL), dimension (0), 
+  agent_population (-1), boundary_width (0),
+  exchangeReqList (NULL),  migrationReqList (NULL),
+
+  vertexId (vertexId),
+  neighborId(neighborId),
+  weight(weight),
+  distributed_map(NULL),
+  fileType (""),
+  filename(""),
+  graphmodel(NULL) { };
+
+ 
   /**
    * 
    */
-  ~Message (); // delete argument and hosts.
+  virtual ~Message (); // delete argument and hosts.
 
-  char *serialize (int &size);
-  void deserialize (char *msg, int size);
+  virtual char *serialize (int &size);
+  virtual void deserialize (char *msg, int size);
 
   /**
    * Get the action
    * @return action
    */
-  ACTION_TYPE getAction ()
-  {
+  ACTION_TYPE getAction (){
     return action;
   };
 
@@ -452,7 +654,42 @@ public:
     return migrationReqList;
   };
 
+/*---------------------------------------------------------------------------
+ *+++++++++++++++++++++++++Added for graph features++++++++++++++++++++++++++++
+  *---------------------------------------------------------------------------*/
+  //name of the vertex
+  string getVertexId() {
+     return vertexId;
+  };
+
+  //name of the veighbor vertix
+  string getNeighborId(){
+    return neighborId;
+
+  };
+  //weight of the edge
+  double getweight(){
+    return weight;
+};
+
+std::unordered_map <string, int>* getDistributed_map(){
+  return distributed_map;
+};
+
+string getFileType(){
+  return fileType;
+};
+
+string getFilename(){
+  return filename;
+};
+
+GraphModel* getGraphModel(){
+  return graphmodel;
+};
+//------------------------------------------------------------------------------------------
 protected:
+  
   ACTION_TYPE action;
   vector<int> *size;
   int handle;
@@ -470,6 +707,15 @@ protected:
   int boundary_width;
   vector<RemoteExchangeRequest*> *exchangeReqList;
   vector<AgentMigrationRequest*> *migrationReqList;
+
+  //added for graph
+  string vertexId;
+  string neighborId;
+  double weight;
+  std::unordered_map<string, int> *distributed_map;
+  string fileType;
+  string filename;
+  GraphModel *graphmodel;
 };
 
 #endif

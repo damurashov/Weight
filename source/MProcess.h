@@ -28,6 +28,7 @@
 #include <map>
 #include "Message.h"
 
+
 using namespace std;
 
 /**
@@ -43,6 +44,7 @@ using namespace std;
  */
 class MProcess {
 public:
+	//friend class GraphPlaces
 	MProcess(char *hostName, int myPid, int nProc, int nThr, int port);
 	void start();
 private:
@@ -57,8 +59,7 @@ private:
 	void sendAck();
 	void sendAck(int localPopulation);
 	void sendReturnValues(void *argument, int nPlaces, int return_size);
-	void sendReturnValues(void *argument, int nAgents, int return_size,
-		int localPopulation);
+	void sendReturnValues(void *argument, int nAgents, int return_size,int localPopulation);
 	void sendMessage(Message *msg);
 	Message *receiveMessage();
 };

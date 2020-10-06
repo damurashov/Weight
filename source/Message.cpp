@@ -47,6 +47,7 @@ const bool printOutput = true;
  */
 Message::~Message() {
     if (argument_in_heap == true && argument != NULL) delete (char *)argument;
+    //if(distributed_map != NULL)delete distributed_map;
     if (hosts != NULL) delete hosts;
     if (argument_in_heap == true && destinations != NULL) delete destinations;
     if (exchangeReqList != NULL) {
@@ -111,10 +112,117 @@ char *Message::serialize(int &msg_size) {
             }
             break;
 
-        case PLACES_INITIALIZE:
+        
+
+        /*@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+         *++++++++++ Added by Elias --> for Graph feature +++++++++++++++++++++++++++++++++++++
+        
+         *@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+         *------------------------------------------------------------------------------------*/
+        case PLACES_INITIALIZE_GRAPH_FROM_FILE: /*Message::PLACES_INITIALIZE_GRAPH_FROM_FILE, size_vector,
+                                                    handle, this->className, argument, arg_size, boundary_width,
+                                                    tmp_hosts, fileType, filename, places_base_distributed_map*/
             // calculate msg_size
-            msg_size +=
-                (sizeof(int) * (size->size() + 1));  // vector<int> size;
+            msg_size += (sizeof(int) * (size->size() + 1));  // vector<int> size;
+            msg_size += sizeof(int);                 // int handle;
+            msg_size += sizeof(int);                 // classname.size( );
+            msg_size += classname.size();            // classname
+            msg_size += sizeof(int);                 // argument_size;
+            msg_size += argument_size;               // void *argument
+            msg_size += sizeof(int);                 // int boundary_width;
+            msg_size += hosts->size();               // hosts->size( );
+            for (int i = 0; i < (int)hosts->size(); i++) {
+                msg_size += sizeof(int);
+                msg_size += (*hosts)[i].size();  // hosts[i]
+            }
+
+            msg_size += sizeof(int);                  // fileType.size( );
+            msg_size += fileType.size();             // fileType
+            msg_size += sizeof(int);                // filename.size( );
+            msg_size += filename.size();            // filename
+            msg_size += distributed_map->size();   //size of the map
+            for(auto it = distributed_map->begin(); it != distributed_map->end(); it++){
+                msg_size += sizeof(int);         //key.size()
+                msg_size += (it->first).size();  // key
+                msg_size += sizeof(int);        //value                
+            }
+
+            // compose a msg
+            pos = msg = new char[msg_size];
+            *(ACTION_TYPE *)pos = action;  
+            //cerr<< *(ACTION_TYPE *)pos << endl;
+            pos += sizeof(ACTION_TYPE);  // action
+            *(int *)pos = size->size();  // cerr << *(int *)pos << endl;
+            pos += sizeof(int);          // size.size( );
+            for (int i = 0; i < (int)size->size(); i++) {
+                *(int *)pos = (*size)[i];
+                // cerr << *(int *)pos << endl;//
+                pos += sizeof(int);  // size[i]
+            }
+            *(int *)pos = handle;
+            //cerr << *(int *)pos << endl;//
+            pos += sizeof(int);  // handle
+            *(int *)pos = classname.size();
+            //cerr << *(int *)pos << endl;//
+            pos += sizeof(int);  // classname.size( )
+            strncpy(pos, classname.c_str(), classname.size());  // classname
+             //cerr << pos << endl;//
+            pos += classname.size();
+            *(int *)pos = argument_size;
+            // cerr << "argument_size = " << argument_size << endl;
+             //cerr << "*(int *)pos = " << *(int *)pos << endl;
+            pos += sizeof(int);                            // argument_size
+            memcpy((void *)pos, argument, argument_size);  // argument
+            pos += argument_size;
+            *(int *)pos = boundary_width;  // bounary_width
+            pos += sizeof(int);
+            *(int *)pos = hosts->size();
+            pos += sizeof(int);  // hosts->size( );
+            for (int i = 0; i < (int)hosts->size(); i++) {
+                *(int *)pos = (*hosts)[i].size();
+                pos += sizeof(int);  // hosts[i].size( )
+                strncpy(pos, (*hosts)[i].c_str(), (*hosts)[i].size());
+                pos += (*hosts)[i].size();
+            }
+
+            /*serialize fileType memebr data field*/
+            *(int *)pos = fileType.size();
+            pos += sizeof(int);  // fileType.size()
+            strncpy(pos, fileType.c_str(), fileType.size());  // fileType
+            pos += fileType.size();
+
+            /*serialize filename memebr data field*/
+            *(int *)pos = filename.size();
+            pos += sizeof(int);  // fileType.size()
+            strncpy(pos, filename.c_str(), filename.size());  // fileType
+            pos += filename.size();
+
+            /*serialize distributed_map<string, int> memebr data*/
+            *(int *)pos = distributed_map->size();
+            pos += sizeof(int);  //distributed_map->size()
+            for(auto it = distributed_map->begin(); it != distributed_map->end(); it++){
+                *(int *)pos = it->first.size();
+                pos += sizeof(int);  // key.size( )
+                strncpy(pos, it->first.c_str(), it->first.size()); //copy the key
+                pos += it->first.size(); //size of the key
+
+                *(int*)pos = it->second;//value
+                pos += sizeof(int); // 
+            }
+
+            break;
+
+
+        /*@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+         *++++++++++ Added by Elias --> for Graph feature +++++++++++++++++++++++++++++++++++++
+        
+         *@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+         *------------------------------------------------------------------------------------*/
+        case PLACES_INITIALIZE_GRAPH_FROM_EMPTY:
+             // calculate msg_size
+            msg_size += (sizeof(int) * (size->size() + 1));  // vector<int> size;
             msg_size += sizeof(int);                 // int handle;
             msg_size += sizeof(int);                 // classname.size( );
             msg_size += classname.size();            // classname
@@ -129,8 +237,7 @@ char *Message::serialize(int &msg_size) {
 
             // compose a msg
             pos = msg = new char[msg_size];
-            *(ACTION_TYPE *)pos =
-                action;                  // cerr<< *(ACTION_TYPE *)pos << endl;
+            *(ACTION_TYPE *)pos = action;  // cerr<< *(ACTION_TYPE *)pos << endl;
             pos += sizeof(ACTION_TYPE);  // action
             *(int *)pos = size->size();  // cerr << *(int *)pos << endl;
             pos += sizeof(int);          // size.size( );
@@ -166,6 +273,59 @@ char *Message::serialize(int &msg_size) {
             }
             break;
 
+        case PLACES_INITIALIZE:
+            //calculate msg_size
+            msg_size += (sizeof(int) * (size->size() + 1));  // vector<int> size;
+            msg_size += sizeof(int);                 // int handle;
+            msg_size += sizeof(int);                 // classname.size( );
+            msg_size += classname.size();            // classname
+            msg_size += sizeof(int);                 // argument_size;
+            msg_size += argument_size;               // void *argument
+            msg_size += sizeof(int);                 // int boundary_width;
+            msg_size += hosts->size();               // hosts->size( );
+            for (int i = 0; i < (int)hosts->size(); i++) {
+                msg_size += sizeof(int);
+                msg_size += (*hosts)[i].size();  // hosts[i]
+            }
+
+            // compose a msg
+            pos = msg = new char[msg_size];
+            *(ACTION_TYPE *)pos = action;  // cerr<< *(ACTION_TYPE *)pos << endl;
+            pos += sizeof(ACTION_TYPE);  // action
+            *(int *)pos = size->size();  // cerr << *(int *)pos << endl;
+            pos += sizeof(int);          // size.size( );
+            for (int i = 0; i < (int)size->size(); i++) {
+                *(int *)pos = (*size)[i];
+                // cerr << *(int *)pos << endl;
+                pos += sizeof(int);  // size[i]
+            }
+            *(int *)pos = handle;
+            // cerr << *(int *)pos << endl;
+            pos += sizeof(int);  // handle
+            *(int *)pos = classname.size();
+            // cerr << *(int *)pos << endl;
+            pos += sizeof(int);  // classname.size( )
+            strncpy(pos, classname.c_str(), classname.size());  // classname
+            // cerr << pos << endl;
+            pos += classname.size();
+            *(int *)pos = argument_size;
+            // cerr << "argument_size = " << argument_size << endl;
+            // cerr << "*(int *)pos = " << *(int *)pos << endl;
+            pos += sizeof(int);                            // argument_size
+            memcpy((void *)pos, argument, argument_size);  // argument
+            pos += argument_size;
+            *(int *)pos = boundary_width;  // bounary_width
+            pos += sizeof(int);
+            *(int *)pos = hosts->size();
+            pos += sizeof(int);  // hosts->size( );
+            for (int i = 0; i < (int)hosts->size(); i++) {
+                *(int *)pos = (*hosts)[i].size();
+                pos += sizeof(int);  // hosts[i].size( )
+                strncpy(pos, (*hosts)[i].c_str(), (*hosts)[i].size());
+                pos += (*hosts)[i].size();
+            }
+            break;
+       
         case PLACES_CALL_ALL_VOID_OBJECT:
         case PLACES_CALL_ALL_RETURN_OBJECT:
             // calculate msg_size
@@ -362,6 +522,46 @@ char *Message::serialize(int &msg_size) {
             memcpy(pos, argument, argument_size);  // argument
 
             break;
+        /*@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+         *++++++++++ Added by Elias --> for Graph feature +++++++++++++++++++++++++++++++++++++
+        
+         *@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+         *------------------------------------------------------------------------------------*/
+        case MAINTENANCE_ADD_PLACE:/*MAINTENANCE_ADD_PLACE, handle, vertex(classname), argument, arg_size)*/
+        case GRAPH_PLACES_EXCHANGE_ALL_REMOTE_RETURN_OBJECT:/* handle,neighborKey)*/
+        case MAINTENANCE_REMOVE_PLACE:/*MAINTENANCE_REMOVE_PLACE, handle,vertexId);*/
+             // calculate msg_size
+            msg_size += sizeof(int);       // int agent_population
+            msg_size += sizeof(int);       // int handle;
+            msg_size += sizeof(int);       // int dest_handle a.k.a. placeHandle
+            msg_size += sizeof(int);       // classname.size( );
+            msg_size += classname.size();  // classname
+            msg_size += sizeof(int);       // argument_size;
+            msg_size += argument_size;     // void *argument
+
+            // compose a msg
+            pos = msg = new char[msg_size];
+            *(ACTION_TYPE *)pos = action;
+            pos += sizeof(ACTION_TYPE);  // action
+            *(int *)pos = agent_population;
+            pos += sizeof(int);  // agent_population
+
+            *(int *)pos = handle;
+            pos += sizeof(int);  // handle
+            *(int *)pos = dest_handle;
+            pos += sizeof(int);  // placeHandle
+
+            *(int *)pos = classname.size();
+            pos += sizeof(int);  // classname.size( )
+            strncpy(pos, classname.c_str(), classname.size());  // classname
+            pos += classname.size();
+            *(int *)pos = argument_size;
+            pos += sizeof(int);                            // argument_size
+            memcpy((void *)pos, argument, argument_size);  // argument
+            break;
+
+        case GET_VERTEXPLACE_FROM_VERTEXNAME:
 
         case AGENTS_INITIALIZE:
             // calculate msg_size
@@ -379,10 +579,12 @@ char *Message::serialize(int &msg_size) {
             pos += sizeof(ACTION_TYPE);  // action
             *(int *)pos = agent_population;
             pos += sizeof(int);  // agent_population
+
             *(int *)pos = handle;
             pos += sizeof(int);  // handle
             *(int *)pos = dest_handle;
             pos += sizeof(int);  // placeHandle
+
             *(int *)pos = classname.size();
             pos += sizeof(int);  // classname.size( )
             strncpy(pos, classname.c_str(), classname.size());  // classname
@@ -390,7 +592,43 @@ char *Message::serialize(int &msg_size) {
             *(int *)pos = argument_size;
             pos += sizeof(int);                            // argument_size
             memcpy((void *)pos, argument, argument_size);  // argument
+            break;
+       
+        /*@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
+         *++++++++++ Added by Elias --> for Graph feature +++++++++++++++++++++++++++++++++++++
+        
+         *@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+         *------------------------------------------------------------------------------------*/
+        case MAINTENANCE_ADD_EDGE:/*MAINTENANCE_ADD_EDGE, handle, vertexId, neighborId, weight);*/
+        case MAINTENANCE_REMOVE_EDGE:/*MAINTENANCE_REMOVE_EDGE, handle,vertexId, neighborId, -0.0);*/
+             msg_size += sizeof(handle);//handle
+             msg_size += sizeof(int);//size for vertexId
+             msg_size += vertexId.size();//vertexId.size()
+             msg_size += sizeof(int);//size for neihborId
+             msg_size += neighborId.size();//neighborId.size()
+             msg_size += sizeof(int); //weight
+             
+             // compose a msg
+            pos = msg = new char[msg_size];
+
+            *(ACTION_TYPE *)pos = action;
+            pos += sizeof(ACTION_TYPE);  // action
+            *(int *)pos = handle;
+            pos += sizeof(int);  // handle
+
+            *(int *)pos = vertexId.size(); 
+            pos += sizeof(int);
+            strncpy(pos, vertexId.c_str(), vertexId.size());  // vertexId
+            pos += vertexId.size();
+
+            *(int *)pos = neighborId.size(); 
+            pos += sizeof(int);
+            strncpy(pos, neighborId.c_str(), neighborId.size());  // neighborId
+            pos += neighborId.size();
+
+            *(int *)pos = weight;
+            pos += sizeof(int);
             break;
 
         case AGENTS_CALL_ALL_VOID_OBJECT:
@@ -400,6 +638,11 @@ char *Message::serialize(int &msg_size) {
             msg_size += sizeof(int);    // argument_size
             msg_size += sizeof(int);    // return_size
             msg_size += argument_size;  // void *argument
+
+            // compose a msg
+            pos = msg = new char[msg_size];
+            *(ACTION_TYPE *)pos = action;
+            pos += sizeof(ACTION_TYPE);  // action
 
             pos = msg = new char[msg_size];
             *(ACTION_TYPE *)pos = action;
@@ -415,6 +658,15 @@ char *Message::serialize(int &msg_size) {
             memcpy((void *)pos, argument, argument_size);  // argument
 
             break;
+       /*@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+         *++++++++++ Added by Elias --> for Graph feature +++++++++++++++++++++++++++++++++++++
+        
+         *@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+         *------------------------------------------------------------------------------------*/
+        case MAINTENANCE_GET_PLACES://MAINTENANCE_GET_PLACES, handle, 0);   
+        case MAINTENANCE_REINITIALIZE: //MAINTENANCE_REINITIALIZE, handle, 0);
+
         case AGENTS_MANAGE_ALL:
         case PLACES_EXCHANGE_BOUNDARY:
             // calculate msg_size
@@ -437,7 +689,9 @@ char *Message::serialize(int &msg_size) {
             if (printOutput == true) cerr << "serialize: FINISH ended" << endl;
             break;
 
-        default:
+        case   MAINTENANCE_GET_PLACES_RESPONSE:/**/
+                        break;//TODO implement it
+       default:
             msg_size = 0;
             break;
     }
@@ -464,7 +718,14 @@ void Message::deserialize(char *msg, int msg_size) {
     char *cur = msg;
     int size_size = 0;
     int classname_size = 0;
+    int filename_size = 0;
+    int fileType_size = 0;
+    int vertexId_size = 0;
+    int neighborId_size = 0;
     int hosts_size = 0;
+    int key_size = 0;
+    //int map_size = 0;
+    int map_size_for_file = 0;
     int destinations_size = 0;
     int exchangeReqListSize = 0;
     int migrationReqListSize = 0;
@@ -517,6 +778,196 @@ void Message::deserialize(char *msg, int msg_size) {
                 cur += argument_size;
             }
             if (printOutput == true) cerr << "deserialize completed" << endl;
+            return;
+
+        
+        /*@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+         +++++++++Added by Elias --> for Graph feature support ++++++++++++++++++++++++++++++
+
+         *@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+         *------------------------------------------------------------------------------------*/
+
+        case MAINTENANCE_ADD_EDGE:/*MAINTENANCE_ADD_EDGE, handle, vertexId, neighborId, weight);*/
+        case MAINTENANCE_REMOVE_EDGE:/*MAINTENANCE_REMOVE_EDGE, handle,vertexId, neighborId, -0.0);*/
+            action = *(ACTION_TYPE *)cur;
+            cur += sizeof(ACTION_TYPE);  // action
+            handle = *(int *)cur;
+            cur += sizeof(int);  // handle
+
+            vertexId_size = *(int *)cur;
+            cur += sizeof(int);  // vertexId_size
+            vertexId = "";
+            vertexId.append(cur, vertexId_size);  // classname
+            cur += vertexId_size;
+
+            neighborId_size = *(int *)cur;
+            cur += sizeof(int);  // neighborId_size
+            neighborId = "";
+            neighborId.append(cur, neighborId_size);  // neighborId
+            cur += neighborId_size;
+            weight = *(int *)cur;
+            cur += sizeof(int);  // handle
+            return;
+        
+        /*ACTION_TYPE action, vector<int> *size, int handle, string classname, 
+          void *argument,int arg_size, int boundary_width, vector<string> *hosts,
+          string type, string filename, unordered_map<std::string, int> *dist_map)*/
+        case PLACES_INITIALIZE_GRAPH_FROM_FILE:
+            action = PLACES_INITIALIZE_GRAPH_FROM_FILE;
+            cur += sizeof(ACTION_TYPE);
+            size_size = *(int *)cur;
+            cur += sizeof(int);  // size.size( );
+            cerr << *(int*)cur;//********************************************************
+            
+            //convert.str( "" );convert << "size = " << size_size << endl;//****************************************
+            //MASS_base::log( convert.str( ) );//********************************************************
+            
+            size = new vector<int>;
+            for (int i = 0; i < size_size; i++) {
+                
+                //convert.str( "" ); convert << *(int *)cur << endl;//********************************************************
+                //MASS_base::log( convert.str( ) );//********************************************************
+                
+                size->push_back(*(int *)cur);
+                cur += sizeof(int);  // size[i];
+            }
+            handle = *(int *)cur;
+            cur += sizeof(int);  // handle
+            classname_size = *(int *)cur;
+            cur += sizeof(int);  // classname_size
+            classname = "";
+            classname.append(cur, classname_size);  // classname
+            MASS_base::log( classname.c_str( ) );
+
+            cur += classname_size;
+            argument_size = *(int *)cur;
+            cur += sizeof(int);  // argument_size
+            argument_in_heap = ((argument = new char[argument_size]) != NULL);
+            
+            //convert.str( "" ); //********************************************************
+            //convert << "argument_size = " << argument_size << //********************************************************
+            //endl; MASS_base::log( convert.str( ) );//********************************************************
+            
+            memcpy(argument, (void *)cur, argument_size);  // argument
+            cur += argument_size;
+            boundary_width = *(int *)cur;
+            cur += sizeof(int);  // boundary_width
+            hosts_size = *(int *)cur;
+            cur += sizeof(int);  // hosts.size( );
+            
+            //convert.str( "" ); //********************************************************
+            //convert << "host_size = " << hosts_size << endl;//********************************************************
+           // MASS_base::log( convert.str( ) );//********************************************************
+            
+            hosts = new vector<string>;
+            for (int i = 0; i < hosts_size; i++) {
+                int hostname_size = *(int *)cur;
+                cur += sizeof(int);  // hosts[i].size()
+                string hostname = "";
+                hostname.append(cur, hostname_size);
+                cur += hostname_size;
+                MASS_base::log( hostname );
+                hosts->push_back(hostname);  // hosts[i]
+            }
+
+            fileType_size = *(int *)cur;
+            cur += sizeof(int);  // fileType_size
+            fileType = "";
+            fileType.append(cur, fileType_size);  // fileType
+            cur += fileType_size;
+           // MASS_base::log(fileType); //********************************************************
+
+            filename_size = *(int *)cur;
+            cur += sizeof(int);  // filename_size
+            filename = "";
+            filename.append(cur, filename_size);  // filename
+            cur += filename_size;
+            //MASS_base::log(filename); //********************************************************
+            map_size_for_file = *(int *)cur;
+            cur += sizeof(int);  // distribted_map->size( );
+
+            distributed_map = new unordered_map<string, int>();
+            //convert << " map size "<< map_size_for_file << endl; //***********************************************
+            //MASS_base::log(convert.str()); //********************************************************
+            //MASS_base::log("key-protein        id "); //********************************************************
+            for(int i = 0; i < map_size_for_file; i++){
+                int key_size = *(int *)cur;
+                cur += sizeof(int);  // key.size()
+                string key = "";
+                key.append(cur, key_size);
+                cur += key_size;
+
+                int value = *(int*)cur;
+                cur += sizeof(int); //value
+               // convert << key << "        " <<  value << endl;//***********************************
+                //MASS_base::log(convert.str());//********************************************************
+
+                distributed_map->insert({key, value});
+            }
+            return;
+            
+         /*@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+         *++++++++++ Added by Elias --> for Graph feature +++++++++++++++++++++++++++++++++++++
+        
+         *@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+         *------------------------------------------------------------------------------------*/
+        case PLACES_INITIALIZE_GRAPH_FROM_EMPTY:
+             action = PLACES_INITIALIZE_GRAPH_FROM_EMPTY;
+            cur += sizeof(ACTION_TYPE);
+            size_size = *(int *)cur;
+            cur += sizeof(int);  // size.size( );
+            /*
+            convert.str( "" ); convert << "size = " << size_size << endl;
+            MASS_base::log( convert.str( ) );
+            */
+            size = new vector<int>;
+            for (int i = 0; i < size_size; i++) {
+                /*
+                convert.str( "" ); convert << *(int *)cur << endl;
+                MASS_base::log( convert.str( ) );
+                */
+                size->push_back(*(int *)cur);
+                cur += sizeof(int);  // size[i];
+            }
+            handle = *(int *)cur;
+            cur += sizeof(int);  // handle
+            classname_size = *(int *)cur;
+            cur += sizeof(int);  // classname_size
+            classname = "";
+            classname.append(cur, classname_size);  // classname
+            // MASS_base::log( classname.c_str( ) );
+
+            cur += classname_size;
+            argument_size = *(int *)cur;
+            cur += sizeof(int);  // argument_size
+            argument_in_heap = ((argument = new char[argument_size]) != NULL);
+            /*
+            convert.str( "" ); convert << "argument_size = " << argument_size <<
+            endl; MASS_base::log( convert.str( ) );
+            */
+            memcpy(argument, (void *)cur, argument_size);  // argument
+            cur += argument_size;
+            boundary_width = *(int *)cur;
+            cur += sizeof(int);  // boundary_width
+            hosts_size = *(int *)cur;
+            cur += sizeof(int);  // hosts.size( );
+            /*
+            convert.str( "" ); convert << "host_size = " << hosts_size << endl;
+            MASS_base::log( convert.str( ) );
+            */
+            hosts = new vector<string>;
+            for (int i = 0; i < hosts_size; i++) {
+                int hostname_size = *(int *)cur;
+                cur += sizeof(int);  // hosts[i].size()
+                string hostname = "";
+                hostname.append(cur, hostname_size);
+                cur += hostname_size;
+                // MASS_base::log( hostname );
+                hosts->push_back(hostname);  // hosts[i]
+            }
+            
             return;
 
         case PLACES_INITIALIZE:
@@ -575,6 +1026,13 @@ void Message::deserialize(char *msg, int msg_size) {
             }
             return;
 
+        /*@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+         *++++++++++ Added by Elias --> for Graph feature +++++++++++++++++++++++++++++++++++++
+        
+         *@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+         *------------------------------------------------------------------------------------*/
+        case MAINTENANCE_ADD_PLACE:
         case PLACES_CALL_ALL_VOID_OBJECT:
         case PLACES_CALL_ALL_RETURN_OBJECT:
             action = *(ACTION_TYPE *)cur;
@@ -798,6 +1256,73 @@ void Message::deserialize(char *msg, int msg_size) {
 
             return;
 
+        
+        case GRAPH_PLACES_EXCHANGE_ALL_REMOTE_RETURN_OBJECT: /*action, handle,vertexId, neighborId, weight*/
+              action = *(ACTION_TYPE *)cur;
+              cur += sizeof(ACTION_TYPE);  // action
+              handle = *(int *)cur;
+              cur += sizeof(int);  // handle
+              vertexId_size = *(int*)cur;
+              cur += sizeof(int);  // vertexId_size
+              vertexId = "";
+              vertexId.append(cur, vertexId_size);  // vertexId
+              cur += vertexId_size;
+              neighborId_size = *(int*)cur;
+              cur += sizeof(int);  // neighborId_size
+              neighborId = "";
+              neighborId.append(cur, neighborId_size);
+              cur += vertexId_size;
+              weight = *(int *)cur;
+              cur += sizeof(int);  // weight
+
+              if (printOutput == true) {
+                convert.str("");
+                convert << "handle = " << handle
+                        << " vertexId = " << vertexId
+                        << " neighborId = " << neighborId
+                        << " weight = " << weight;
+                MASS_base::log(convert.str());
+            }
+
+            return;
+            
+        /*@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+         *++++++++++ Added by Elias --> for Graph feature +++++++++++++++++++++++++++++++++++++
+        
+         *@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+         *------------------------------------------------------------------------------------*/
+        case MAINTENANCE_REMOVE_PLACE: /*action, handle,vertexId, neighborId, 0*/
+            action = *(ACTION_TYPE *)cur;
+            cur += sizeof(ACTION_TYPE);  // action
+            agent_population = *(int *)cur;
+            cur += sizeof(int);  // population
+            handle = *(int *)cur;
+            cur += sizeof(int);  // handle
+            dest_handle = *(int *)cur;
+            cur += sizeof(int);  // placesHandle
+            classname_size = *(int *)cur;
+            cur += sizeof(int);  // classname_size
+            classname = "";
+            classname.append(cur, classname_size);  // classname
+            cur += classname_size;
+            argument_size = *(int *)cur;
+            cur += sizeof(int);  // arg_size
+            argument_in_heap = ((argument = new char[argument_size]) != NULL);
+            memcpy(argument, (void *)cur, argument_size);  // argument
+
+            if (printOutput == true) {
+                convert.str("");
+                convert << "population = " << agent_population
+                        << " handle = " << handle
+                        << " placeHandle = " << dest_handle
+                        << " classname = " << classname
+                        << " argument_size = " << argument_size;
+                MASS_base::log(convert.str());
+            }
+
+            return;
+        case GET_VERTEXPLACE_FROM_VERTEXNAME:
         case AGENTS_INITIALIZE:
             action = *(ACTION_TYPE *)cur;
             cur += sizeof(ACTION_TYPE);  // action
@@ -846,6 +1371,16 @@ void Message::deserialize(char *msg, int msg_size) {
             return;
 
             return;
+
+        /*@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+         *++++++++++ Added by Elias --> for Graph feature +++++++++++++++++++++++++++++++++++++
+        
+         *@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+         *------------------------------------------------------------------------------------*/
+        case MAINTENANCE_GET_PLACES:
+        case MAINTENANCE_REINITIALIZE:
+
         case AGENTS_MANAGE_ALL:
         case PLACES_EXCHANGE_BOUNDARY:
             action = *(ACTION_TYPE *)cur;

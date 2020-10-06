@@ -33,6 +33,75 @@ const bool printOutput = false;
 #else
 const bool printOutput = true;
 #endif
+
+    /*Elias --> added for graph features of MASS +++++++++++++++++++++++++++++++++++++++++++++++++++++
+     *-------------------------------------------------------------------------------------------------*/
+    
+    /**
+     * Creates a Places Object that serves as a container Object for the
+     * neighborhood (collection) of each individual Place in a simulation, providing
+     * methods/functionality that corresponds with the entire simulation space.
+     *
+     * Instantiates a shared array with "size[]" from the "className" class by
+     * passing an argument to the "className" constructor. This array is
+     * associated with a user-given handle that must be unique over
+     * machines.
+     *
+     *@param    handle-->a unique id for this Places
+     *@param    className -->name of the class that Place objects will be instantiated from
+     *@param    boundary_width --->boundary between simulation segments
+     *@param    dimension -->dimention of the simulation
+     *@param    filename --->filename to read vertices from
+     *@param    type --->type of the file(HIPPIE, MATSim, txt etc...)
+     *@param    argument --->argumnet for the class constructor
+     *@param    arg_size -->argument size
+
+     */
+    Places::Places(int handle, string className,int boundary_width,int dimension, string filename,
+             FILE_TYPE_ENUMS type, void* argument, int arg_size)
+             :Places_base(handle, className, boundary_width, dimension, filename,type, argument, arg_size){
+          
+            this->filename = filename;
+            this->fileType = type;
+            //init_master_base(argument, arg_size, boundary_width);
+
+    }
+
+   /**
+     * Creates a Places Object that serves as a container Object for the
+     * neighborhood (collection) of each individual Place in a simulation, providing
+     * methods/functionality that corresponds with the entire simulation space.
+     *
+     * Instantiates a shared array with "size[]" from the "className" class by
+     * passing an argument to the "className" constructor. This array is
+     * associated with a user-given handle that must be unique over
+     * machines.
+     *
+     *@param    handle-->a unique id for this Places
+     *@param    className -->name of the class that Place objects will be instantiated from
+     *@param    boundary_width --->boundary between simulation segments
+     *@param    dimension -->dimention of the simulation
+     *@param    nVertices --> number of vertices for the graph to have
+     *@param    argument --->argumnet for the class constructor
+     *@param    arg_size -->argument size
+
+     */
+    Places::Places(int handle,string className,int boundary_width,int dimension,void* argument,int arg_size,
+                    int nVertices)
+                    :Places_base(handle, className, boundary_width, dimension,argument, arg_size, nVertices){
+                    
+                   
+                    //init_all(argument, arg_size );
+                    this->filename = "NOT_FROM_FILE_NAME";
+                   // init_master(argument, arg_size, boundary_width);
+                    //init_master_base(argument, arg_size, boundary_width);
+   }
+
+    /*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+     ----------------- End of constructors for graph features --------------------------------------------
+     +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+
+
 /**
  * Creates a Places Object that serves as a container Object for the
  * neighborhood (collection) of each individual Place in a simulation, providing
@@ -68,7 +137,7 @@ Places::Places(int handle, string className, void *argument, int argument_size,
         size[i] = va_arg(list, int);
     }
     va_end(list);
-
+    this->filename = "NOT_FROM_FILE_NAME";
     init_all(argument, argument_size);  // explicitly call Places_base.init_all
     init_master(argument, argument_size, 0);
 }
@@ -99,6 +168,8 @@ Places::Places(int handle, string className, void *argument, int argument_size,
 Places::Places(int handle, string className, void *argument, int argument_size,
                int dim, int size[])
     : Places_base(handle, className, 0, argument, argument_size, dim, size) {
+
+    this->filename = "NOT_FROM_FILE_NAME";
     // init_all called within Places_base
     init_master(argument, argument_size, 0);
 }
@@ -131,6 +202,7 @@ Places::Places(int handle, string className, int boundary_width, void *argument,
                int argument_size, int dim, ...)
     : Places_base(handle, className, boundary_width, argument, argument_size,
                   dim, NULL) {
+    this->filename = "NOT_FROM_FILE_NAME"; 
     size = new int[dim];
     // Extract each dimension's length
     va_list list;
@@ -173,6 +245,7 @@ Places::Places(int handle, string className, int boundary_width, void *argument,
                int argument_size, int dim, int size[])
     : Places_base(handle, className, boundary_width, argument, argument_size,
                   dim, size) {
+    this->filename = "NOT_FROM_FILE_NAME";
     // init_all called within Places_base
     init_master(argument, argument_size, boundary_width);
 }
@@ -198,7 +271,9 @@ void Places::init_master(void *argument, int argument_size,
     char localhost[100];
     bzero(localhost, 100);
     gethostname(localhost, 100);
+
     vector<string> hosts;
+
     hosts.push_back(*(new string(localhost)));
 
     // all the slave IP names
@@ -218,7 +293,7 @@ void Places::init_master(void *argument, int argument_size,
         MASS::mNodes[i]->sendMessage(m);
 
         if (printOutput == true) {
-            cerr << "PLACES_INITIALIZE sent to " << i << endl;
+            cerr << "PLACES_INITIALIZE sent to " << MASS::mNodes[i]->getHostName() << endl;
         }
     }
     delete m;
@@ -863,4 +938,117 @@ void Places::exchangeBoundary() {
 
     // Synchronized with all slave processes
     MASS::barrier_all_slaves();
+}
+
+
+/*===============================================================================================================
+ *@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+ *++++++++++++++ Elias-> Added for Graph features ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 
+ *@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+ *===============================================================================================================*/
+
+/**
+ *Broadcasting the <vertices, globalId> map to all remote nodes.
+
+ *After the master node read the vertices form the input file and populate a 
+ *unordered_map of <vertice:string, position based global Id:int>, this method propagates
+ *the map to all remote nodes so that remote nodes dont have to read the input file again
+ *to get the vertices.
+
+ *@param  agrument          the argument that the Place child class constructor needs
+ *@param  arg_size          the size of the argument
+ *@param  boundary_width    the boundary that the Place objects share in the simulation space
+ *@return                   void
+
+     */
+void Places::init_master_base(void*argument, int arg_size, int boundary_width){
+
+    vector<string> *hosts = this->getHosts();
+    std::vector<int> *size_vector = new vector<int>();
+
+    // create a new list of hosts for message
+    vector<string> *tmp_hosts = new vector<string>(*hosts);
+
+    for(int i = 0; i < dimension; i++){
+       size_vector->push_back(size[i]);
+    }
+    
+    string myFileType = FileParser::fromEnumToString(this->fileType);
+    if(this->filename == "NOT_FROM_FILE_NAME"){
+      myFileType = "";
+    }
+
+    
+    Message * m = NULL;
+
+    // send a :GET_GRAPH_DISTRIBUTED_MAP message to each worker 
+    if(this->filename != "NOT_FROM_FILE_NAME"){
+
+        m = new Message(Message::PLACES_INITIALIZE_GRAPH_FROM_FILE, size_vector,
+                       this->handle, this->className, argument, arg_size, boundary_width,
+                       tmp_hosts, myFileType, filename, places_base_distributed_map);
+
+       for (int i = 0; i < int(MASS::mNodes.size()); i++) {
+          MASS::mNodes[i]->sendMessage(m);
+
+          if (printOutput) {
+            ostringstream convert;
+            convert<< "Places::init_master_base: PLACES_INITIALIZE_GRAPH_FROM_FILE message sent to "
+            << MASS::mNodes[i]->getHostName() << endl;
+            MASS_base::log(convert.str());
+          } 
+        }         
+    }
+       
+    else{
+        m =  new Message(Message::PLACES_INITIALIZE_GRAPH_FROM_EMPTY, size_vector, handle, className,
+                    argument, arg_size, boundary_width, tmp_hosts);
+        for (int i = 0; i < int(MASS::mNodes.size()); i++) {
+          MASS::mNodes[i]->sendMessage(m);//send places instantiate message
+
+          if (printOutput) {
+            ostringstream convert;
+            convert<< "Places::init_master_base; PLACES_INITIALIZE_GRAPH_FROM_EMPTY message sent to "
+            << MASS::mNodes[i]->getHostName() << endl;
+            MASS_base::log(convert.str());
+          }
+        }
+    }
+
+    // establish all inter-node connections within setHosts( )
+    
+    MASS_base::setHosts(*hosts);
+    //register this places in the places hash map
+    //static map<int, Places_base *> placesMap;  // a collection of Places
+   MASS_base::placesMap.insert(map<int, Places_base *>::value_type(handle, this));
+
+    //Synchronized with all slave processes
+    MASS::barrier_all_slaves();
+   // clear up memory
+
+    if(m != NULL)delete m;
+  
+   if(printOutput) MASS_base::log("Places::init_master_base Finished successfully.\n");
+}
+
+/*create list of all nodes including the master node*/
+vector<string>* Places::getHosts(){
+
+    // create a list of all host names;
+    // the master IP name
+    char localhost[100];
+    bzero(localhost, 100);
+    gethostname(localhost, 100);
+
+    vector<string> *hosts = new std::vector<string>();
+
+    hosts->push_back(*(new string(localhost)));
+
+    // all the slave IP names
+    for (int i = 0; i < int(MASS::mNodes.size()); i++) {
+        hosts->push_back(MASS::mNodes[i]->getHostName());
+    }
+    return hosts;
 }

@@ -23,8 +23,17 @@
 #include "Place.h"
 #include <iostream>
 #include <sstream>  // ostringstream
+
 #include "MASS_base.h"
 #include "limits.h"
+#include "Places_base.h"
+
+// Used to toggle comments from Places.cpp
+#ifndef LOGGING
+const bool printOutput = true;
+#else
+const bool printOutput = true;
+#endif
 
 /**
  * Returns the size of the matrix that consists of application-specific
@@ -147,6 +156,7 @@ void Place::cleanNeighbors() {
     }
     neighbors.clear();
 }
+
 /**
  * replace neighbors completely using a vector of places
  */
@@ -295,3 +305,334 @@ vector<int *> Place::getMooreNeighbors3d() {
     result.push_back(_xy_z);
     return result;
 }
+
+/*@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+ *----Fucntionalities below this line are added to support Parallel IO feature --------------------------
+
+ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
+
+unordered_map<int, File*> Place::fileTable; 
+int Place::allPlaceFileDescriptor = -1;
+unordered_map<int, bool> Place::filesAttemptedToClose;
+File* Place::writeFile = NULL;     
+
+/**
+
+ *A single Place opens a file specified by the given filePath and ioType. If ioType is 0 then the file
+ * is opened for reading, if the ioType is 1 then the file is opened for writing (it is
+ * expected that the ioType is either 0 or 1; otherwise, -1 is returned). A file that is opened for reading
+ * will be opened in memory and added to the fileTable so that the file can be accessed by all Places. A
+ * file that is opened for writing will be opened on the disk and a temporary buffer to write to is added to the
+ * fileTable so that the temp buffer can be accessed by all Places. A successfully opened file is given a unique
+ * file descriptor (integer) and the file descriptor is returned. An unsuccessfully opened file will result in
+ * an exception being thrown
+ *
+ * @param filepath: the filepath of the file to be opened
+ * @param ioType: READ_OR_WRITE either READ for read or WRITE for write
+ * @return unique file descriptor for the newly opened file
+ 
+ */
+int Place::open(string filepath, READ_OR_WRITE ioType){
+    std::lock_guard <std::mutex> lock (this->fileMutex);
+    if(!fileTable.count(thisPlaceFileDescriptor)){
+        openFile(filepath, ioType);
+    }
+    else {
+        thisPlaceFileDescriptor++;
+    }
+
+    return allPlaceFileDescriptor;
+ }
+
+ //helper method of the 'open' method
+void Place::openFile(string filepath, READ_OR_WRITE ioType){
+
+    File *file = fileFactory(filepath);
+    std::ios::openmode mode;
+    if(file == NULL){
+        MASS_base::log("invalid file extension");
+        exit(-1);
+    }
+    if(ioType == READ_OR_WRITE::READ){
+        mode = std::ios::in;
+        file->open(mode); 
+    }
+
+    else{
+        mode = std::ios::out;
+        file->open(mode);
+    }
+    
+    incrementFileDescriptors();
+    fileTable.insert({allPlaceFileDescriptor, file});
+
+    if(printOutput){
+        ostringstream convert;
+        convert << "size = "<< size[0] <<  "index = " << index [0] << "openedile =  " << filepath
+        << "Node PID = " << MASS_base::myPid << endl;
+        MASS_base::log(convert.str());
+    }
+
+}
+
+
+//--------This method needs implementaion according to this specification--------------------.
+
+/**
+ * Reads a specific portion of the a NetCDF file's variable based on this place's order and returns the results
+ * as a 1 dimensional array (i.e. char[]). Each place reads only a portion of the file, but if
+ * each place calls this method, then the entire file will be read and parts of the data will be contained on
+ * each place involved in the computation.
+ *
+ * @param fileDescriptor specifies the NetCDF file to read from (must be in the fileTable)
+ * @param variableToRead specifies the NetCDF variable to read (must be in the NetCDF file)
+
+ * @return a 1 dimensional vector of doubles representing a portion of the NetCDF variable data read by this
+ * place - if an error occurs during the read process, then null is returned 
+
+ */
+vector<double> Place::read(int fileDescriptor, string variableToRead){
+    std::vector<double> v;
+    return v;//dummy return
+
+}
+
+/**
+* Gets the file descriptor from the file table
+ *@param fileDescriptor unique identifier for the file attribute to return
+ *@return the file object pointer corresponding to the given file descriptor
+
+ */
+File* Place::getFileFromFileTable(int fileDescriptor){
+
+    auto it = fileTable.find(fileDescriptor);
+    if(it == fileTable.end()){
+        if(printOutput){
+            MASS_base::log("file descriptor not found");
+        }
+        return NULL;
+    }
+
+    File* file = it->second;
+    return file;
+}
+
+//-------------Thsi method needs implementation according to the following specification-----------.
+
+/*
+ *Write a specific portion of the a NetCDF file's variable based on this place's order into a buffer
+ * @param dataToWrite data to be written
+ * @param variableName the NetCDF variable name to write
+ * @param shape shape of the netCDF data to be written
+
+ */
+void Place::write(int fileDescriptor, double dataToWrite [], string variableName, int shape []){
+
+
+}
+
+/**
+ * A single Place opens a file specified by the given filePath. If ioType is READ  then the file
+ * is opened for reading, if the ioType is WRITE then the file is opened for writing (it is
+ * expected that the ioType is either READ or WRITE; otherwise, -1 is returned). A file that is opened for reading
+ * will be opened in memory and added to the fileTable so that the file can be accessed by all Places. A
+ * file that is opened for writing will be opened on the disk and a temporary buffer to write to is added to the
+ * fileTable so that the temp buffer can be accessed by all Places. A successfully opened file is given a unique
+ * file descriptor (integer) and the file descriptor is returned. An unsuccessfully opened file will result in
+ * an exception being thrown
+ *
+ * @param filepath the filepath of the file to be opened
+ * @return unique file descriptor for the newly opened file 
+
+ */
+bool Place::openForWrite(string filepath, string variableName, int shape []){
+     std::lock_guard <std::mutex> lock (this->fileMutex);
+     if(writeFile == NULL){
+        openFileUsingOnePlaceForWrite(filepath, variableName, shape);
+     }
+     bool fileIsNull = writeFile == NULL;
+     return fileIsNull;
+}
+
+/*this method needs implementaion*/
+ void Place::openFileUsingOnePlaceForWrite(string filepath, string variableName, int shape []){
+
+ }
+
+
+
+/**
+ * Reads a specific portion of the a TXT file based on this place's order and returns the results
+ * as a char array. Each place reads only a portion of the TXT file, but if each place calls this method, then the
+ * entire file will be read and parts of the data will be contained on each place involved in the computation.
+ *
+ * @param fileDescriptor unique identifier for the file to read
+ * @return the portion of the file read by this place - if an error occurs then vector of null is returned
+
+ */
+ vector<char> Place::read(int fileDescriptor){
+    
+    File *file = getFileFromFileTable(fileDescriptor);
+    TxtFile *txtFile = (TxtFile*)file;
+    int placeOrder = getPlaceOrderPerNode();
+    return txtFile->read(placeOrder);
+
+}
+
+/**
+ * A single Place opens a file specified by the given filePath (TxtFile).
+ *
+ * @param filepath the filepath of the file to be opened
+ * @return unique file descriptor for the newly opened file 
+
+ */
+bool Place::openForWrite(string filepath, int size){
+    std::lock_guard <std::mutex> lock (this->fileMutex);
+    if(writeFile == NULL) {
+        openFileUsingOnePlaceForWrite(filepath, size);
+    }
+    bool isNull = writeFile != NULL;
+    return isNull;
+}
+
+
+/**
+ * Opens the file only if the file has not been opened and added to the fileTable
+ * @param filepath file to open for write 
+ *@return void
+
+ */
+void Place::openFileUsingOnePlaceForWrite(string filepath, int size){
+    IO_FILE_TYPE_ENUMS type = IO_FILE_TYPE_ENUMS::TXT;
+    writeFile = new TxtFile(filepath, type);
+    if(writeFile != NULL){
+        TxtFile *txtWriteFile = (TxtFile*)writeFile;
+        std::ios::openmode mode = std::ios::out;
+        txtWriteFile->open(mode);
+    }
+}
+
+/**
+ * Write a specific portion of the a Txt file's variable based on this place's order into a buffer
+ * @param dataToWrite data to be written
+
+ */
+void Place::write(int fileDescriptor, vector<char> dataToWrite){
+
+    TxtFile *txtfile = (TxtFile*)writeFile;
+    //void write(const std::vector<char> &vec, int &placeIndex);
+    int placeIndex = getPlaceOrderPerNode();
+    txtfile->write(dataToWrite, placeIndex);
+}
+
+/**
+ * @return this place's order number determined by its index
+ 
+ */
+int Place::getPlaceOrderPerNode(){
+    Places_base* pbase =  MASS_base::getCurrentPlaces();
+    int lower_boundary = pbase->getLowerBoundary();
+    int dimension = pbase->getDimension();
+    int index [dimension];
+    int size [dimension];
+    for(int i = 0; i < dimension; i++){
+        index[i] = this->index.at(i);
+        size[i] = this->size.at(i);
+    } 
+    
+    int globalIndex = pbase->getGlobalLinearIndexFromGlobalArrayIndex(index, size, dimension);
+    return globalIndex - lower_boundary;
+}
+  
+/**
+ *Closes the specified file descriptor and removes it from the file table
+ * @param fileDescriptor the file descriptor to close
+ * @return true if the file is successfully found in the file table, closed, and removed; otherwise false
+
+ */
+bool Place::close(int fileDescriptor){
+    std::lock_guard <std::mutex> lock (this->fileMutex);
+    auto it2 = filesAttemptedToClose.find(fileDescriptor);
+    if(writeFile != NULL) {
+        writeFile->close(); 
+    }
+    auto it = fileTable.find(fileDescriptor);
+    if(it != fileTable.end()){
+        it->second->close();
+        fileTable.erase(it);
+        filesAttemptedToClose.insert({fileDescriptor, false});
+        return true;
+    }
+    else if ( it2 != filesAttemptedToClose.end()) {
+        bool isClosed = it2->second;
+        return isClosed;
+    } 
+    else {
+        return false;
+    }
+
+}
+
+/**
+ *Increment the filedescripted counter
+
+ */
+void Place::incrementFileDescriptors(){
+    allPlaceFileDescriptor = thisPlaceFileDescriptor;
+    thisPlaceFileDescriptor++;
+}
+
+
+/**
+ *Given the filepath with a file name, this method returns the extension (.txt, .nc etc.)of the file
+
+*/
+std::string Place::getFileExtension(std::string filePath){
+    // Find the last position of '.' in given string
+    std::size_t pos = filePath.rfind('.');
+    // If last '.' is found
+    if (pos != std::string::npos) {
+        // return the substring
+        return filePath.substr(pos);
+    }
+    // In case of no extension return empty string
+    return "";
+}
+
+/**
+ *Depending on the file extension, this method creates the a pointer to 
+ *File object from  either TxtFile or Netcdf */
+File* Place::fileFactory(string filepath){
+    string extension = getFileExtension(filepath);
+    IO_FILE_TYPE_ENUMS type;
+    if(extension == ".txt"){
+        //const std::string &, const IO_FILE_TYPE_ENUMS &
+        type = IO_FILE_TYPE_ENUMS::TXT;
+        File * txt = (File*)new TxtFile(filepath, type);
+        return txt;
+    }
+    else if(extension == ".nc"){
+        //NetcdfFile(const std::string &filepath, const IO_FILE_TYPE_ENUMS & ioType)
+        type = IO_FILE_TYPE_ENUMS::NETCDF;
+        File *netcdf = (File*)new NetcdfFile(filepath, type);
+        return netcdf; 
+    }
+    return NULL;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

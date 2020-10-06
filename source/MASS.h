@@ -37,6 +37,7 @@
 #include "Ssh2Connection.h"
 #include "Utilities.h"
 #include "libssh2_config.h"
+#include "GraphPlaces.h"
 
 #define LIBSSH2_PORT 22
 
@@ -46,6 +47,7 @@
 class MASS : public MASS_base {
     friend class Places;
     friend class Agents;
+    friend class GraphPlaces;
 
    public:
     static void init(char *args[], int nProc, int nThr);

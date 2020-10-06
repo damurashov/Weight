@@ -1,0 +1,2 @@
+hermes02.uwb.edu
+hermes03.uwb.edu

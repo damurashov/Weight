@@ -105,20 +105,17 @@ Agents_base::Agents_base(int handle, string className, void *argument,
             }
             // agent instanstantiation and initialization
             Agent *newAgent = (Agent *)(agentsDllClass->instantiate(argument));
-
             if (printOutput == true) {
                 convert.str("");
                 convert << " newAgent[" << localPopulation
                         << "] = " << (void *)newAgent;
                 MASS_base::log(convert.str());
             }
-
             newAgent->agentsHandle = handle;
             newAgent->placesHandle = placesHandle;
             newAgent->agentId = currentAgentId++;
             newAgent->parentId = -1;  // no parent
             newAgent->place = curPlace;
-
             for (int index = 0; index < int(curPlace->index.size()); index++)
                 newAgent->index.push_back(curPlace->index[index]);
             newAgent->alive = true;
@@ -134,12 +131,14 @@ Agents_base::Agents_base(int handle, string className, void *argument,
             // newAgent.onArrival();
             addOne(curPlace);
         }
+	/*
         if (printOutput) {
             convert.str("");
             convert << "Current outmessage = " << *(int *)curPlace->outMessage
                     << std::endl;
             MASS_base::log(convert.str());
         }
+	*/
     }
     delete protoAgent;
 }

@@ -77,7 +77,6 @@ void MASS::init(char *args[], int nProc, int nThr) {
              << endl;
         exit(-1);
     }
-
     // For debugging
     if (printOutput == true) {
         for (int i = 0; i < int(hosts.size()); i++)
@@ -110,7 +109,7 @@ void MASS::init(char *args[], int nProc, int nThr) {
 
         // For debugging
         if (printOutput == true)
-            cerr << "curHostName = " << currHostName << endl;
+            cerr << "currHostName = " << currHostName << endl;
 
         // Establish an ssh2 channel to a given port
         Ssh2Connection *ssh2connection = util.establishConnection(
@@ -145,50 +144,40 @@ void MASS::init(char *args[], int nProc, int nThr) {
             ssh2connection->write((char *)&localhost_size, int(sizeof(int)));
             ssh2connection->write(localhost, localhost_size);
 
-            Socket socket(port);
+            Socket socket(port); // server socket for this mprocess
             int sd = socket.getServerSocket();
             // The corresponding MNode created
+	    cerr << "this sd = " << sd << endl;
             mNodes.push_back(new MNode(currHostName, pid, ssh2connection, sd));
         }
 
-        // Handle nProc
-        if (nProc < 0 || nProc > int(hosts.size()))
-            nProc = hosts.size() + 1;  // count the master node
-        systemSize = nProc;
-
-        // Synchronize with all slave processes
-        for (int i = 0; i < int(hosts.size()); i++) {
-            if (printOutput == true)
-                cerr << "init: wait for ack from " << mNodes[i]->getHostName()
-                     << endl;
-
-            Message *m = mNodes[i]->receiveMessage();
-            if (m->getAction() != Message::ACK) {
-                cerr << "init didn't receive ack from rank " << (i + 1)
-                     << " at " << mNodes[i]->getHostName() << endl;
-                exit(-1);
-            }
-
-            initializeThreads(nThr);
-            INITIALIZED = true;
-
-            // Synchronize with all slave processes
-            for (int i = 0; i < int(hosts.size()); i++) {
-                if (printOutput == true)
-                    cerr << "init: wait for ack from "
-                         << mNodes[i]->getHostName() << endl;
-
-                Message *m = mNodes[i]->receiveMessage();
-                if (m->getAction() != Message::ACK) {
-                    cerr << "init didn't receive ack from rank " << (i + 1)
-                         << " at " << mNodes[i]->getHostName() << endl;
-                    exit(-1);
-                }
-                delete m;
-            }
-            cerr << "MASS::init: done" << endl;
-        }
+	if (printOutput == true)
+	  cerr << "launchd mprocess at " << currHostName << endl;
     }
+
+    // Handle nProc
+    if (nProc < 0 || nProc > int(hosts.size()))
+      nProc = hosts.size() + 1;  // count the master node
+    systemSize = nProc;
+
+    initializeThreads(nThr);
+    INITIALIZED = true;
+
+    // Synchronize with all slave processes
+    for (int i = 0; i < int(hosts.size()); i++) {
+      if (printOutput == true)
+	cerr << "init: wait for ack from "
+	     << mNodes[i]->getHostName() << endl;
+      
+      Message *m = mNodes[i]->receiveMessage();
+      if (m->getAction() != Message::ACK) {
+	cerr << "init didn't receive ack from rank " << (i + 1)
+	     << " at " << mNodes[i]->getHostName() << endl;
+	exit(-1);
+      }
+      delete m;
+    }
+    cerr << "MASS::init: done" << endl;
 }
 
 /**

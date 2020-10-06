@@ -26,6 +26,7 @@
 #include <fstream>   // ofstream
 #include <iostream>  // cerr cout endl
 #include <map>
+#include <unordered_map>
 #include <string>  // string
 #include "Agents_base.h"
 #include "DllClass.h"
@@ -33,6 +34,7 @@
 #include "Message.h"
 #include "Mthread.h"  // pthread_t
 #include "Places_base.h"
+//#include "GraphPlaces.h"
 #include "RemoteExchangeRequest.h"
 #define CUR_SIZE 256
 #define MASS_LOGS "MASS_logs"
@@ -48,8 +50,17 @@ class MASS_base {
     friend class Agents_base;
     friend class Message;
     friend class Place;
+    friend class VertexPlace;
 
    public:
+    /*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+     *-----------Elias --> Added for Graph Fewatures ----------------------------------------*/
+    static void reinitializeMap();
+    static unordered_map<int, unordered_map<std::string,int>*> distributed_map; //collection of vertetices
+    static std::unordered_map<string, int>* getDistributedMap(int handle);
+    /*---------------------------------------------------------------------------------------
+     *+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+
     static void initMASS_base(const char *name, int myPid, int nProc, int port);
     static bool initializeThreads(int nThr);
     static void log(string msg);
@@ -72,22 +83,29 @@ class MASS_base {
     static void setHosts(vector<string> host_args);
     static void showHosts();
     static int requestCounter;
+  
+    //make public for convinience 
+    static int myPid; 
+    static int systemSize;
+    static vector<string> hosts;
+    static vector<string> getHosts(){return hosts;};
+    static string getMyHostName(){return hostName;};
+
 
    protected:
     static int MASS_PORT;
     static bool INITIALIZED;
     static char CUR_DIR[CUR_SIZE];
     static string hostName;                    // my local host name
-    static int myPid;                          // my pid or rank
-    static int systemSize;                     // # processes
+    //static int myPid;                          // my pid or rank
+    //static int systemSize;                     // # processes
     static ofstream logger;                    // logger
-    static vector<string> hosts;               // all host names
+    //static vector<string> hosts;               // all host names
     static map<int, Places_base *> placesMap;  // a collection of Places
     static map<int, Agents_base *> agentsMap;  // a collection of Agents
-    static map<int, DllClass *> dllMap;        // a collection of DllClasses
+    static map<int, DllClass *> dllMap;        // a collection of DllClasses/palce
     static vector<vector<RemoteExchangeRequest *> *> remoteRequests;
     static vector<vector<AgentMigrationRequest *> *> migrationRequests;
-
     static Places_base *currentPlaces;
     static Places_base *destinationPlaces;
     static int currentFunctionId;

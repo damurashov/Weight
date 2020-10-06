@@ -23,6 +23,9 @@
 #ifndef MASSOBJECT_H
 #define MASSOBJECT_H
 
+//#include <unordered_map>
+#include "FileParser.h"//ELias-->Added to suport VertexPlace constructors
+
 class MObject {
 public:
 	MObject() { };
@@ -31,6 +34,14 @@ public:
 };
 
 typedef MObject *instantiate_t(void *argument);
+
+typedef MObject *instantiate_using_file(std::string filepath, FILE_TYPE_ENUMS type,int globalIndex, 
+	                                   void*argument, std::unordered_map<string, int> *dist_map);
+
+typedef MObject *instantiate_using_globalId(void *argument, int globalIndex);
+
+
 typedef void destroy_t(MObject *);
+//typedef void destroy_vertexPlace(MObject*);
 
 #endif

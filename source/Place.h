@@ -24,18 +24,34 @@
 #define PLACE_H
 
 #include <iostream>
+#include <string>
 #include <set>
 #include <vector>
+#include<unordered_map>
+
 #include "MObject.h"
+#include "TxtFile.h"
+#include "NetcdfFile.h"
+
+
 
 using namespace std;
+
+enum READ_OR_WRITE{
+    READ, WRITE
+};
 
 class Place : MObject {
     friend class Places_base;
     friend class Agents_base;
     friend class Agent;
+    friend class GraphPlaces;
 
    public:
+
+    //Added for Parallel Io feature
+     READ_OR_WRITE ioType;
+
     /**
      * Is the default constructor. A contiguous space of arguments is passed
      * to the constructor.
@@ -95,6 +111,9 @@ class Place : MObject {
      * Defines the size of inMessage.
      */
     int inMessage_size;
+    void setSize(vector<int> vec){
+        size = vec;
+    }
 
     /** Includes all the agents residing locally on this place. */
     vector<MObject *> agents;
@@ -106,15 +125,64 @@ class Place : MObject {
    protected:
     void *getOutMessage(int handle, int index[]);
     void putInMessage(int handle, int index[], int position, void *value);
+    
+    /*@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+     
+     *Elias-->Added for Parallel Io support ****************************************************
+     
+     @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
+        
+        static unordered_map<int, File*> fileTable; 
+        static int allPlaceFileDescriptor;
+        int thisPlaceFileDescriptor = 0;
+        static  unordered_map<int, bool> filesAttemptedToClose;
+        static File* writeFile;
+        std::mutex fileMutex;
 
+        int open(string filepath, READ_OR_WRITE ioType);
+        vector<double> read(int fileDescriptor, string variableToRead);
+        void write(int fileDescriptor, double dataToWrite [], string variableName, int shape []);
+        bool openForWrite(string filepath, string variableName, int shape []);       
+        vector<char> read(int fileDescriptor);
+        bool openForWrite(string filepath, int size);               
+        void write(int fileDescriptor, std::vector<char> dataToWrite );
+        int getPlaceOrderPerNode();        
+        bool close(int fileDescriptor);
+
+   
    private:
+
+    string getFileExtension(std::string filePath);
+    File* fileFactory(string filePath);
+    void openFile(string filepath, READ_OR_WRITE ioType);
+    void incrementFileDescriptors();
+    File* getFileFromFileTable(int fileDescriptor);
+    void openFileUsingOnePlaceForWrite(string filepath, string variableName, int shape []); 
+    void openFileUsingOnePlaceForWrite(string filepath, int size);  
+
+    /*@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+     
+    *******************************************************************************************
+     
+    @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
+
     Place *findDstPlace(int handle, int index[]);
     friend class Places_base;
     friend class Agents_base;
     friend class Agent;
+    friend class GraphPlaces;
 
    public:
-    ~Place() { cleanNeighbors(); };
+    virtual ~Place() { 
+
+        for (unsigned int i = 0; i < neighbors.size(); i++) {
+            if (neighbors.at(i)) {
+                delete[](neighbors.at(i));
+            }
+        }
+        
+        neighbors.clear();
+     };
 
     enum neighborPattern {
         VON_NEUMANN2D,

@@ -27,7 +27,7 @@
 #ifndef LOGGING
 const bool printOutput = false;
 #else
-const bool printOutput = true;
+const bool printOutput = false;
 #endif
 /**
  *
@@ -130,21 +130,31 @@ Ssh2Connection *Utilities::establishConnection(const char host[],
 
     // Create a session instance
     LIBSSH2_SESSION *session = libssh2_session_init();
+    if ( !session ) {
+      cerr << "session not created" << endl;
+      exit( -1 );
+    }
+      
     libssh2_session_set_timeout(session, 2000);
     int return_code = 0;
+
+    /* This preference no longer works
     if ((return_code = libssh2_session_method_pref(
              session, LIBSSH2_METHOD_CRYPT_CS, "arcfour")) != 0) {
         cerr << "session method preference CS error" << endl;
         exit(-1);
     }
+    */
 
-    for (int i = 0; i < 5; i++) {
+    for (int i = 0; i < 10; i++) {
         if ((return_code = libssh2_session_handshake(session, sock)) == 0)
             break;
+	printErrorMessage( return_code );
         cerr << "session handshake: retry " << i << endl;
     }
     if (return_code) {
-        shutdown(socket, session, NULL, "failure stablishing SSH session\0");
+
+        shutdown(socket, session, NULL, "failure establishing SSH session\0");
         exit(-1);
     }
     cerr << "session created" << endl;
@@ -171,10 +181,12 @@ Ssh2Connection *Utilities::establishConnection(const char host[],
     if (auth_pw & 1) {  // Authenticate via password
 
         int retVal = 0;
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 10; i++) {
             int retVal = libssh2_userauth_password(session, username, password);
             if (retVal == 0) break;
-            cerr << "retry: " << (i + 1) << endl;
+
+	    printErrorMessage( retVal );
+            cerr << "userauth password: retry " << (i + 1) << endl;
             continue;
         }
         if (retVal != 0) {
@@ -198,7 +210,13 @@ Ssh2Connection *Utilities::establishConnection(const char host[],
 
     // Request a shell
     LIBSSH2_CHANNEL *channel = NULL;
-    if (!(channel = libssh2_channel_open_session(session))) {
+    for ( int i = 0; i < 10; i++ ) {
+      if (!(channel = libssh2_channel_open_session(session))) {
+	printErrorMessage( libssh2_session_last_errno( session ) );
+        cerr << "channel open: retry " << i << endl;	
+      }
+    }
+    if ( !channel ) {
         shutdown(socket, session, channel, "Unable to open a session");
         exit(-1);
     }
@@ -206,6 +224,65 @@ Ssh2Connection *Utilities::establishConnection(const char host[],
     Ssh2Connection *ssh2connection =
         new Ssh2Connection(socket, session, channel);
     return ssh2connection;
+}
+
+/**
+ * @param return_code
+ */
+void Utilities::printErrorMessage( int return_code ) {
+  switch( return_code ) {
+  case LIBSSH2_ERROR_SOCKET_NONE: cerr << "LIBSSH2_ERROR_SOCKET_NONE" << endl; break;
+  case LIBSSH2_ERROR_BANNER_RECV: cerr << "LIBSSH2_ERROR_BANNER_RECV" << endl; break;
+  case LIBSSH2_ERROR_BANNER_SEND: cerr << "LIBSSH2_ERROR_BANNER_SEND" << endl; break;
+  case LIBSSH2_ERROR_INVALID_MAC: cerr << "LIBSSH2_ERROR_INVALID_MAC" << endl; break;
+  case LIBSSH2_ERROR_KEX_FAILURE: cerr << "LIBSSH2_ERROR_KEX_FAILURE" << endl; break;
+  case LIBSSH2_ERROR_ALLOC: cerr << "LIBSSH2_ERROR_ALLOC" << endl; break;
+  case LIBSSH2_ERROR_SOCKET_SEND: cerr << "LIBSSH2_ERROR_SOCKET_SEND" << endl; break;
+  case LIBSSH2_ERROR_KEY_EXCHANGE_FAILURE: cerr << "LIBSSH2_ERROR_KEY_EXCHANGE_FAILURE" << endl; break;
+  case LIBSSH2_ERROR_TIMEOUT: cerr << "LIBSSH2_ERROR_TIMEOUT" << endl; break;
+  case LIBSSH2_ERROR_HOSTKEY_INIT: cerr << "LIBSSH2_ERROR_HOSTKEY_INIT" << endl; break;
+  case LIBSSH2_ERROR_HOSTKEY_SIGN: cerr << "LIBSSH2_ERROR_HOSTKEY_SIGN" << endl; break;
+  case LIBSSH2_ERROR_DECRYPT: cerr << "LIBSSH2_ERROR_DECRYPT" << endl; break;
+  case LIBSSH2_ERROR_SOCKET_DISCONNECT: cerr << "LIBSSH2_ERROR_SOCKET_DISCONNECT" << endl; break;
+  case LIBSSH2_ERROR_PROTO: cerr << "LIBSSH2_ERROR_PROTO" << endl; break;
+  case LIBSSH2_ERROR_PASSWORD_EXPIRED: cerr << "LIBSSH2_ERROR_PASSWORD_EXPIRED" << endl; break;
+  case LIBSSH2_ERROR_FILE: cerr << "LIBSSH2_ERROR_FILE" << endl; break;
+  case LIBSSH2_ERROR_METHOD_NONE: cerr << "LIBSSH2_ERROR_METHOD_NONE" << endl; break;
+  case LIBSSH2_ERROR_AUTHENTICATION_FAILED: 
+    cerr << "LIBSSH2_ERROR_AUTHENTICATION_FAILED" << endl;
+    cerr << "LIBSSH2_ERROR_PUBLICKEY_UNRECOGNIZED" << endl;
+    cerr << "LIBSSH2_ERROR_AUTHENTICATION_FAILED" << endl; break;
+  case LIBSSH2_ERROR_PUBLICKEY_UNVERIFIED: cerr << "LIBSSH2_ERROR_PUBLICKEY_UNVERIFIED" << endl; break;
+  case LIBSSH2_ERROR_CHANNEL_OUTOFORDER: cerr << "LIBSSH2_ERROR_CHANNEL_OUTOFORDER" << endl; break;
+  case LIBSSH2_ERROR_CHANNEL_FAILURE: cerr << "LIBSSH2_ERROR_CHANNEL_FAILURE" << endl; break;
+  case LIBSSH2_ERROR_CHANNEL_REQUEST_DENIED: cerr << "LIBSSH2_ERROR_CHANNEL_REQUEST_DENIED" << endl; break;
+  case LIBSSH2_ERROR_CHANNEL_UNKNOWN: cerr << "LIBSSH2_ERROR_CHANNEL_UNKNOWN" << endl; break;
+  case LIBSSH2_ERROR_CHANNEL_WINDOW_EXCEEDED: cerr << "LIBSSH2_ERROR_CHANNEL_WINDOW_EXCEEDED" << endl; break;
+  case LIBSSH2_ERROR_CHANNEL_PACKET_EXCEEDED: cerr << "LIBSSH2_ERROR_CHANNEL_PACKET_EXCEEDED" << endl; break;
+  case LIBSSH2_ERROR_CHANNEL_CLOSED: cerr << "LIBSSH2_ERROR_CHANNEL_CLOSED" << endl; break;
+  case LIBSSH2_ERROR_CHANNEL_EOF_SENT: cerr << "LIBSSH2_ERROR_CHANNEL_EOF_SENT" << endl; break;
+  case LIBSSH2_ERROR_SCP_PROTOCOL: cerr << "LIBSSH2_ERROR_SCP_PROTOCOL" << endl; break;
+  case LIBSSH2_ERROR_ZLIB: cerr << "LIBSSH2_ERROR_ZLIB" << endl; break;
+  case LIBSSH2_ERROR_SOCKET_TIMEOUT: cerr << "LIBSSH2_ERROR_SOCKET_TIMEOUT" << endl; break;
+  case LIBSSH2_ERROR_SFTP_PROTOCOL: cerr << "LIBSSH2_ERROR_SFTP_PROTOCOL" << endl; break;
+  case LIBSSH2_ERROR_REQUEST_DENIED: cerr << "LIBSSH2_ERROR_REQUEST_DENIED" << endl; break;
+  case LIBSSH2_ERROR_METHOD_NOT_SUPPORTED: cerr << "LIBSSH2_ERROR_METHOD_NOT_SUPPORTED" << endl; break;
+  case LIBSSH2_ERROR_INVAL: cerr << "LIBSSH2_ERROR_INVAL" << endl; break;
+  case LIBSSH2_ERROR_INVALID_POLL_TYPE: cerr << "LIBSSH2_ERROR_INVALID_POLL_TYPE" << endl; break;
+  case LIBSSH2_ERROR_PUBLICKEY_PROTOCOL: cerr << "LIBSSH2_ERROR_PUBLICKEY_PROTOCOL" << endl; break;
+  case LIBSSH2_ERROR_EAGAIN: cerr << "LIBSSH2_ERROR_EAGAIN" << endl; break;
+  case LIBSSH2_ERROR_BUFFER_TOO_SMALL: cerr << "LIBSSH2_ERROR_BUFFER_TOO_SMALL" << endl; break;
+  case LIBSSH2_ERROR_BAD_USE: cerr << "LIBSSH2_ERROR_BAD_USE" << endl; break;
+  case LIBSSH2_ERROR_COMPRESS: cerr << "LIBSSH2_ERROR_COMPRESS" << endl; break;
+  case LIBSSH2_ERROR_OUT_OF_BOUNDARY: cerr << "LIBSSH2_ERROR_OUT_OF_BOUNDARY" << endl; break;
+  case LIBSSH2_ERROR_AGENT_PROTOCOL: cerr << "LIBSSH2_ERROR_AGENT_PROTOCOL" << endl; break;
+  case LIBSSH2_ERROR_SOCKET_RECV: cerr << "LIBSSH2_ERROR_SOCKET_RECV" << endl; break;
+  case LIBSSH2_ERROR_ENCRYPT: cerr << "LIBSSH2_ERROR_ENCRYPT" << endl; break;
+  case LIBSSH2_ERROR_BAD_SOCKET: cerr << "LIBSSH2_ERROR_BAD_SOCKET" << endl; break;
+  case LIBSSH2_ERROR_KNOWN_HOSTS: cerr << "LIBSSH2_ERROR_KNOWN_HOSTS" << endl; break;
+  case LIBSSH2_ERROR_CHANNEL_WINDOW_FULL: cerr << "LIBSSH2_ERROR_CHANNEL_WINDOW_FULL" << endl; break;
+  case LIBSSH2_ERROR_KEYFILE_AUTH_FAILED: cerr << "LIBSSH2_ERROR_KEYFILE_AUTH_FAILED" << endl; break;
+  }
 }
 
 /**
@@ -219,16 +296,16 @@ bool Utilities::launchRemoteProcess(const Ssh2Connection *ssh2connection,
     cerr << "launch a remote process: " << cmd << endl;
     int return_code = 0;
     while ((return_code = libssh2_channel_exec(ssh2connection->channel, cmd)) ==
-           LIBSSH2_ERROR_EAGAIN) {
-        waitsocket(ssh2connection->socket->getDescriptor(),
-                   ssh2connection->session);
+	   LIBSSH2_ERROR_EAGAIN || return_code == LIBSSH2_ERROR_TIMEOUT ) {
+      waitsocket(ssh2connection->socket->getDescriptor(),
+		 ssh2connection->session);
+      printErrorMessage( return_code );
     }
-
     if (return_code != 0) {
+	printErrorMessage( return_code );
         shutdown(ssh2connection, "error in remote execution");
         return false;
     }
-
     return true;
 }
 

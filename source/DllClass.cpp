@@ -26,7 +26,7 @@
 
 // Used to toggle output for DllClass
 #ifndef LOGGING
-const bool printOutput = false;
+const bool printOutput = true;
 #else
 const bool printOutput = true;
 #endif
@@ -58,7 +58,12 @@ DllClass::DllClass(string className) {
         exit(-1);
     }
 
+
     // register the object instantiation/destroy functions
     instantiate = (instantiate_t *)dlsym(stub, "instantiate");
     destroy = (destroy_t *)dlsym(stub, "destroy");
+
+    //modified
+    instantiate_from_file= (instantiate_using_file *)dlsym(stub, "instantiate_from_file");   
+    instantiate_from_globalId = (instantiate_using_globalId *)dlsym(stub, "instantiate_from_globalId");
 }

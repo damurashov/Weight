@@ -61,6 +61,7 @@ private:
 	int waitsocket(int socket_fd, LIBSSH2_SESSION *session);
 	void shutdown(Socket *socket, LIBSSH2_SESSION *session,
 		LIBSSH2_CHANNEL *channel, const char msg[]);
+	void printErrorMessage( int return_code );
 };
 
 #endif
