@@ -169,9 +169,14 @@ Ssh2Connection *Utilities::establishConnection(const char host[],
     cout << endl;
 
     // Check what authentication methods are available.
-    char *userauthlist =
-        libssh2_userauth_list(session, username, strlen(username));
+    char *userauthlist = NULL;
+    for ( int i = 0; i < 10; i++ ) {
+      if ( ( userauthlist = libssh2_userauth_list(session, username, strlen(username)) ) != NULL )
+	break;
+      cerr << "authentication method retrieval: retry " << i << endl;
+    }
     cout << userauthlist << endl;
+
     int auth_pw = 0;
     if (strstr(userauthlist, "password") != NULL) auth_pw |= 1;
     if (strstr(userauthlist, "keyboard-interactive") != NULL) auth_pw |= 2;

@@ -53,3 +53,22 @@ work_source/*
 .cproject
 .project
 .settings/org.eclipse.core.resources.prefs
+
+# specific to this feature development
+source/MASS_logs/
+source/Test
+source/TestPlace
+source/bin/
+source/boost/
+source/boost_1_73_0/
+source/main
+source/share/
+ubuntu/s/
+ubuntu/ssh2/libssh2-1.9.0/
+ubuntu/ssh2/share/man/man3/libssh2_agent_get_identity_path.3
+ubuntu/ssh2/share/man/man3/libssh2_agent_set_identity_path.3
+ubuntu/ssh2/share/man/man3/libssh2_scp_recv2.3
+ubuntu/ssh2/share/man/man3/libssh2_session_handshake.3
+ubuntu/ssh2/share/man/man3/libssh2_session_set_last_error.3
+ubuntu/ssh2/share/man/man3/libssh2_sftp_fsync.3
+ubuntu/ssh2/share/man/man3/libssh2_userauth_publickey_frommemory.3

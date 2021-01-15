@@ -898,6 +898,7 @@ void Agents_base::migrationHelper(int tid, Agent *evaluationAgent,
         }
         if (oldIndex != -1) {
             oldPlace->agents.erase(oldPlace->agents.begin() + oldIndex);
+	    cerr << "agent_id: " << evaluationAgent->agentId << " removed from oldPlace[" << oldPlace->index[0] << "][" << oldPlace->index[1] << "]"<< endl;
             deleteOne(oldPlace);  // for collsion-free migration
         } else {
             // should NOT happen
@@ -947,6 +948,8 @@ void Agents_base::migrationHelper(int tid, Agent *evaluationAgent,
             pthread_mutex_lock(&MASS_base::request_lock);
             evaluationAgent->place->agents.push_back(
                 (MObject *)evaluationAgent);
+	    evaluationAgent->index = evaluationAgent->place->index; // newly inserted on 1/12/21
+	    cerr << "agent_id: " << evaluationAgent->agentId << " pushed into newPlace[" << evaluationAgent->place->index[0] << "][" << evaluationAgent->place->index[1] << "]"<< endl;
             addOne(evaluationAgent->place);  // for collision-free migration
 
             if (printOutput == true) {

@@ -62,20 +62,32 @@ void MASS::init(char *args[], int nProc, int nThr) {
     // Load any *.so dynamic linking files
     // TODO
 
-    // Read a given machine file
-    ifstream machinefile(machineFilePath, std::ifstream::in);
-    if (machinefile.is_open()) {
-        while (machinefile.good()) {
-            string machineName;
-            getline(machinefile, machineName);
-            if (machineName.size() > 0)  // skip a null string at the end
-                hosts.push_back(machineName);
-        }
+    // check if nProc <= 1. If so, don't read a machine file
+    if ( nProc > 1 ) {
+      // Read a given machine file
+      ifstream machinefile(machineFilePath, std::ifstream::in);
+      if (machinefile.is_open()) {
+	// read only nProc - 1.
+	int realnProc = 0; // there may be a discrepancy b/w
+	                   // nProc and IP names in the machine file
+	for ( realnProc = 1; realnProc < nProc; realnProc++ ) {
+	  if ( machinefile.good() ) {
+	    string machineName;
+	    getline(machinefile, machineName);
+	    if (machineName.size() > 0)  // skip a null string at the end
+	      hosts.push_back(machineName);
+	  }
+	}
+	nProc = realnProc; // if #IP names < nProc - 1
         machinefile.close();
-    } else {
+      } else {
         cerr << "machine file: " << machineFilePath << " could not open."
              << endl;
         exit(-1);
+      }
+    }
+    else {
+      nProc = 1;
     }
     // For debugging
     if (printOutput == true) {
@@ -83,9 +95,7 @@ void MASS::init(char *args[], int nProc, int nThr) {
             cerr << "rank " << (i + 1) << ": " << hosts[i] << endl;
     }
 
-    // Handle nProc
-    if (nProc < 0 || nProc > int(hosts.size()))
-        nProc = hosts.size() + 1;  // count the master node
+    // Now systemSize counts the actual number of cluster nodes
     systemSize = nProc;
 
     // Initialize MASS_base.constants and identify the CWD.

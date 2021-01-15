@@ -127,7 +127,6 @@ void MProcess::start() {
         DllClass * dllclass = NULL;
         VertexPlace* vp = NULL; 
         map<int, DllClass *>::iterator it;   
-        
     /*-----------------------------------------------------------------*/
 
         if (m != NULL) {

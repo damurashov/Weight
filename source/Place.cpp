@@ -173,7 +173,7 @@ void Place::addNeighbor(int *index, int dimension) {
     // for (int i = 0; i < neighbors.size(); i++) {
     //     if (neighbors.at(i)) {
     //     }
-    int tmp[dimension];
+    int *tmp = new int[dimension];
     for (int i = 0; i < dimension; i++) {
         tmp[i] = index[i];
     }
