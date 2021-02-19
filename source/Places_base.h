@@ -147,7 +147,7 @@ class Places_base{
     /*this member variable holds the last index taken by the place object.
     the next place should have an index after this one in the simulation space there for
     each places have a distict index in the global simulation space. */
-    int nextIndex [];//Note--> not used yet
+    // int nextIndex [];//Note--> not used yet
 
     /**
      * Function of the simulation size and the boundary_width defined. This
