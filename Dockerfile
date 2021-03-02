@@ -12,7 +12,6 @@ RUN make install
 
 # prepare mass
 WORKDIR /mass/ubuntu
-RUN ls
 RUN make
 
 # setup environment variable
