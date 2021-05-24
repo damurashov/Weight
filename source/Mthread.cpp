@@ -181,8 +181,10 @@ void *Mthread::run(void *param) {
                 destinationPlaces = MASS_base::getDestinationPlaces();
                 destinations = MASS_base::getCurrentDestinations();
 
-                places->exchangeAll(destinationPlaces, functionId, destinations,
-                                    tid);
+		if ( destinations != NULL )
+		  places->exchangeAll(destinationPlaces, functionId, destinations, tid);
+		else
+		  places->exchangeAll(destinationPlaces, functionId, tid);
                 break;
 
             case STATUS_AGENTSCALLALL:

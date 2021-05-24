@@ -65,10 +65,13 @@ Utilities::Utilities() : passphrase("") {
     if (homedir == NULL) {
         homedir = getpwuid(getuid())->pw_dir;
     }
+    keyfile1 = new char[150];
     keyfile2 = new char[150];
     strcpy(keyfile2, homedir);
     strcat(keyfile2, "/.ssh/id_rsa");
+    strcpy(keyfile1, keyfile2);
     strcat(keyfile2, "\0");
+    strcat(keyfile1, ".pub\0");
 }
 
 /**
@@ -174,52 +177,41 @@ Ssh2Connection *Utilities::establishConnection(const char host[],
     }
     cout << userauthlist << endl;
 
+    int auth_pw = 0;
+    if (strstr(userauthlist, "password") != NULL) auth_pw |= 1;
+    if (strstr(userauthlist, "keyboard-interactive") != NULL) auth_pw |= 2;
+    if (strstr(userauthlist, "publickey") != NULL) auth_pw |= 4;
+
     // Authenticate a user
-    bool auth_success = false;
-    if (strstr(userauthlist, "publickey") != NULL && !auth_success) {  // Or by public key
-        int retVal = libssh2_userauth_publickey_fromfile(session, username, NULL,
-                                                keyfile2, passphrase);
-        if (retVal != 0) {
-            cerr << "public-key authentication failed using "
-                << keyfile2 << "as private key" << endl;
-            printErrorMessage(retVal);
-        } else {
-            auth_success = true;
-            cout << "public-key authentication passed" << endl;
-        }
-    }
-    if (strstr(userauthlist, "password") != NULL && !auth_success) {  // Authenticate via password
+    if (auth_pw & 1) {  // Authenticate via password
+
         int retVal = 0;
         for (int i = 0; i < 10; i++) {
-            retVal = libssh2_userauth_password(session, username, password);
+            int retVal = libssh2_userauth_password(session, username, password);
             if (retVal == 0) break;
-	        printErrorMessage( retVal );
+
+	    printErrorMessage( retVal );
             cerr << "userauth password: retry " << (i + 1) << endl;
             continue;
         }
         if (retVal != 0) {
-            cerr << "password authentication failed" << endl;
-        } else {
-            auth_success = true;
-            cout << "password authentication passed" << endl;
+            shutdown(socket, session, NULL, "password authentication failed\0");
+            exit(-1);
+        }
+    } else if (auth_pw & 2) {  // Or via keyboard-interactive
+        if (libssh2_userauth_keyboard_interactive(session, username,
+                                                  &kbd_callback)) {
+            shutdown(socket, session, NULL,
+                     "keyboard-interactive authentication failed");
+            exit(-1);
+        }
+    } else if (auth_pw & 4) {  // Or by public key
+        if (libssh2_userauth_publickey_fromfile(session, username, keyfile1,
+                                                keyfile2, password)) {
+            shutdown(socket, session, NULL, "public-key authentication failed");
+            exit(-1);
         }
     }
-    if (strstr(userauthlist, "keyboard-interactive") != NULL && !auth_success) {  // Or via keyboard-interactive
-        int retVal = libssh2_userauth_keyboard_interactive(session, username,
-                                                  &kbd_callback);
-        if (retVal != 0) {
-            cerr << "public-key authentication failed" << endl;
-            printErrorMessage(retVal);
-        } else {
-            auth_success = true;
-            cout << "keyboard-interactive authentication passed" << endl;
-        }
-    }
-    if (!auth_success) {
-        shutdown(socket, session, NULL, "All authentication method(s) failed");
-        exit(-1);
-    }
-    cout << "Successfully access " << host << endl;
 
     // Request a shell
     LIBSSH2_CHANNEL *channel = NULL;

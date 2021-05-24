@@ -21,8 +21,8 @@ using namespace std;
 class GraphPlaces: public Places, public Graph{
 
 public:
-	friend class Place;
-	friend class VertexPlace;
+  //friend class Place;
+  //	friend class VertexPlace;
 	
 	GraphPlaces(int handle,string className,int boundary_width,int dimension, string filename,
                      FILE_TYPE_ENUMS type, void* argument, int arg_size);

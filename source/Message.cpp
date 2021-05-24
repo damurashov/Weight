@@ -26,6 +26,8 @@
 #include "MASS_base.h"
 
 // Used to toggle output in Messages
+#define LOGGING 10
+
 #ifndef LOGGING
 const bool printOutput = false;
 #else
@@ -355,14 +357,20 @@ char *Message::serialize(int &msg_size) {
 
         case PLACES_EXCHANGE_ALL:
             // calculate msg_size
+	  cerr << "PLACES_EXCHANGE_ALL: calculate msg_size" << endl;
             msg_size += sizeof(int);  // int handle,
             msg_size += sizeof(int);  // int dest_handle,
             msg_size += sizeof(int);  // int functionId
-            msg_size += sizeof(int);  // int dimension
-            msg_size += sizeof(int);  // destinations.size( );
-            msg_size += sizeof(int) * (dimension * destinations->size());
+	    msg_size += sizeof(int);  // int dimension
+
+	    if ( destinations != NULL ) {
+	      msg_size += sizeof(int);  // destinations.size( );
+	      cerr << "dimension = " << dimension << ", destinations = " << destinations << endl;
+	      msg_size += sizeof(int) * (dimension * destinations->size());
+	    }
 
             // compose a message
+	  cerr << "PLACES_EXCHANGE_ALL: compose a message" << endl;
             pos = msg = new char[msg_size];
             *(ACTION_TYPE *)pos = action;
             pos += sizeof(ACTION_TYPE);  // action
@@ -372,18 +380,23 @@ char *Message::serialize(int &msg_size) {
             pos += sizeof(int);  // dest_handle
             *(int *)pos = functionId;
             pos += sizeof(int);  // functionId
-            *(int *)pos = dimension;
-            pos += sizeof(int);  // dimension
-            *(int *)pos = destinations->size();
-            pos += sizeof(int);  // dest->size()
+	    *(int *)pos = ( destinations != NULL )? dimension : 0;
+	    pos += sizeof(int);  // dimension
 
-            for (int i = 0; i < int(destinations->size()); i++) {
-                int *dest = (*destinations)[i];
-                for (int j = 0; j < dimension; j++) {
-                    *(int *)pos = dest[j];
-                    pos += sizeof(int);  // destination[i][j]
-                }
-            }
+	    if ( destinations != NULL ) {
+	      *(int *)pos = destinations->size();
+	      pos += sizeof(int);  // dest->size()
+	      
+	      cerr << "PLACES_EXCHANGE_ALL: for loop" << endl;
+	      for (int i = 0; i < int(destinations->size()); i++) {
+		int *dest = (*destinations)[i];
+		for (int j = 0; j < dimension; j++) {
+		  *(int *)pos = dest[j];
+		  pos += sizeof(int);  // destination[i][j]
+		}
+	      }
+	    }
+	  cerr << "PLACES_EXCHANGE_ALL: break" << endl;
             break;
 
         case PLACES_EXCHANGE_ALL_REMOTE_REQUEST:
@@ -1062,19 +1075,22 @@ void Message::deserialize(char *msg, int msg_size) {
             cur += sizeof(int);  // functionId
             dimension = *(int *)cur;
             cur += sizeof(int);  // dimension
-            destinations_size = *(int *)cur;
-            cur += sizeof(int);  // dest->size()
-            destinations = new vector<int *>;
-            argument_in_heap = true;
 
-            for (int i = 0; i < destinations_size; i++) {
+	    if ( dimension > 0 ) { // destination is available
+	      destinations_size = *(int *)cur;
+	      cur += sizeof(int);  // dest->size()
+	      destinations = new vector<int *>;
+	      argument_in_heap = true;
+	      
+	      for (int i = 0; i < destinations_size; i++) {
                 int *dest = new int[dimension];
                 for (int j = 0; j < dimension; j++) {
-                    dest[j] = *(int *)cur;
-                    cur += sizeof(int);  // destination[i][j]
+		  dest[j] = *(int *)cur;
+		  cur += sizeof(int);  // destination[i][j]
                 }
                 destinations->push_back(dest);
-            }
+	      }
+	    }
             return;
 
         case PLACES_EXCHANGE_ALL_REMOTE_REQUEST:

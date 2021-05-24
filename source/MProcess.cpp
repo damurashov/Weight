@@ -27,6 +27,7 @@
 #include <sys/types.h>  // mkdir, opendir, closedir
 #include <unistd.h>     // chdir, sleep (just for debugging)
 #include <sstream>      // ostringstream
+#include <signal.h>     // signal
 #include "MASS_base.h"
 #include "Mthread.h"
 #include "FileParser.h"
@@ -34,6 +35,8 @@
 
 
 // Toggles output for MProcess
+#define LOGGING 10
+
 #ifndef LOGGING
 const bool printOutput = true;
 #else
@@ -267,7 +270,8 @@ void MProcess::start() {
                     MASS_base::currentPlaces = MASS_base::placesMap[m->getHandle()];
                     MASS_base::destinationPlaces = MASS_base::placesMap[m->getDestHandle()];
                     MASS_base::currentFunctionId = m->getFunctionId();
-                    MASS_base::currentDestinations = m->getDestinations();
+		    MASS_base::currentDestinations = 
+		      ( m->getDimension( ) > 0 ) ? m->getDestinations() : NULL;
 
                     // reset requestCounter by the main thread
                     MASS_base::requestCounter = 0;
@@ -279,10 +283,18 @@ void MProcess::start() {
                     Mthread::resumeThreads(Mthread::STATUS_EXCHANGEALL);
 
                     // exchangeall implementation
-                    MASS_base::currentPlaces->exchangeAll(
-                        MASS_base::destinationPlaces,
-                        MASS_base::currentFunctionId,
-                        MASS_base::currentDestinations, 0);
+		    if ( MASS_base::currentDestinations != NULL ) {
+		      MASS_base::currentPlaces->exchangeAll(
+							    MASS_base::destinationPlaces,
+							    MASS_base::currentFunctionId,
+							    MASS_base::currentDestinations, 0);
+		    }
+		    else {
+		      MASS_base::currentPlaces->exchangeAll(
+							    MASS_base::destinationPlaces,
+							    MASS_base::currentFunctionId,
+							    0);
+		    }
 
                     // confirm all threads are done with places.exchangeall.
                     Mthread::barrierThreads(0);
@@ -858,6 +870,13 @@ Message *MProcess::receiveMessage() {
     }
 }
 
+static void sigsegv_handler( int signo ) {
+  ostringstream convert;
+  convert << "segmentation fault occurred: " << signo << endl;
+  MASS_base::log( convert.str( ) );
+  exit( -2 );
+}
+
 int main(int argc, char *argv[]) {
     // receive all arguments
     char *cur_dir = argv[1];
@@ -869,6 +888,14 @@ int main(int argc, char *argv[]) {
 
     // set the current working directory to where the master node is running.
     chdir(cur_dir);
+
+    // let's catch a segmentation fault to make sure all messages printed out.
+    if ( signal( SIGSEGV, sigsegv_handler ) == SIG_ERR ) {
+      ostringstream convert;
+      convert << "signal( ) couldn't complete..." << endl;
+      MASS_base::log( convert.str( ) );
+      exit( -1 );
+    }
 
     // launch an MProcess at each slave node.
     MProcess process(hostName, myPid, nProc, nThr, port);

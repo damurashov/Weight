@@ -28,6 +28,8 @@
 #include "Mthread.h"
 
 // Used to toggle comments from Places.cpp
+#define LOGGING 10
+
 #ifndef LOGGING
 const bool printOutput = false;
 #else
@@ -772,7 +774,7 @@ void Places::exchangeAll(int dest_handle, int functionId,
                          vector<int *> *destinations) {
     // send a PLACES_EXCHANGE_ALL message to each slave
     Message *m = new Message(Message::PLACES_EXCHANGE_ALL, this->handle,
-                             dest_handle, functionId, 0, this->dimension);
+                             dest_handle, functionId, destinations, this->dimension); // desinations was 0
 
     if (printOutput == true) {
         cerr << "Places::exchangeAll ";

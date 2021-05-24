@@ -23,12 +23,6 @@
 #include "MASS_base.h"
 #include <sstream>  // ostringstream
 
-// the following headers are need for directly using unix file descriptors.
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <fcntl.h>
-#include <unistd.h>
-
 
 // Used to toggle output for MASS_base
 #ifndef LOGGING
@@ -65,7 +59,7 @@ int MASS_base::systemSize = 0;
 /**
  * Reference to a simple output stream logger
  */
-int MASS_base::logger_fd = -1;
+ofstream MASS_base::logger;
 /**
  * Collection of host names concurrently working on this simulation
  */
@@ -221,7 +215,6 @@ void MASS_base::initMASS_base(const char *name, int myPid, int nProc,
     // Get the current working directory
     bzero(MASS_base::CUR_DIR, CUR_SIZE);
     getcwd(MASS_base::CUR_DIR, CUR_SIZE);
-    MASS_base::log( "logger started\n" );
     if (strlen(MASS_base::CUR_DIR) == 0) {
         if (printOutput == true) cerr << "getcwd failed" << endl;
         exit(-1);
@@ -290,22 +283,16 @@ void MASS_base::log(string msg) {
         cerr << msg << endl;
     } else {
         // All the slave nodes prints out the message to CUR_DIR/MASS_logs/.
-      if ( MASS_base::logger_fd == -1 ) {
-	// if not open, then open a logger
-	ostringstream convert;
-	convert << MASS_LOGS << "/PID_" << myPid << "_" << hostName
-		<< "result.txt";
-	string filename = convert.str();	
-	MASS_base::logger_fd = creat( filename.c_str( ), S_IRUSR  |  S_IWUSR );
-
-	// cerr is also saved to logger
-	dup2( MASS_base::logger_fd, 2 );
-      }
-      // write a message to logger and flush it.
-      if ( msg.c_str( )[msg.size( ) - 1] != '\n' )
-	msg += "\n";
-      write( MASS_base::logger_fd, msg.c_str( ), msg.size( ) );
-      fsync( MASS_base::logger_fd );
+        if (!logger.is_open()) {
+            // if not open, then open a logger.
+            ostringstream convert;
+            convert << MASS_LOGS << "/PID_" << myPid << "_" << hostName
+                    << "result.txt";
+            string filename = convert.str();
+            logger.open(filename.c_str(), ofstream::out);
+        }
+        logger << msg << endl;
+	logger.flush();
     }
     pthread_mutex_unlock(&log_lock);
 }

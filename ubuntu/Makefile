@@ -13,7 +13,7 @@ includedir=$(prefix)/include
 SOURCE=../source
 
 # define options, currently only LOGGING=1
-# LOGGING=1
+LOGGING=1
 ifeq ($(LOGGING), 1)
 OPTIONS = -DLOGGING
 endif

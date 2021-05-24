@@ -25,6 +25,8 @@
 #include "MASS_base.h"
 
 // Used to toggle output for MNode
+#define LOGGING 10
+
 #ifndef LOGGING
 const bool printOutput = false;
 #else

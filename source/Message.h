@@ -628,6 +628,15 @@ Message (ACTION_TYPE action, vector<int> *size, int handle, string classname,
   };
 
   /**
+   * Get the dimension
+   * @return dimension
+   */
+  int getDimension ()
+  {
+    return dimension;
+  };
+
+  /**
    * Get the destinations
    * @return destinations
    */

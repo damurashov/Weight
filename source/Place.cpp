@@ -207,49 +207,77 @@ void Place::addNeighbors(neighborPattern pattern) {
 }
 
 vector<int *> Place::getVNNeighbors2d() {
-    vector<int *> result;
-    // 4 neighbors for Mead
+  vector<int *> result;
+  // 4 neighbors for Mead
+  if ( index[0] + 1 < size[0] ) {
     int *x = new int[2]{1, 0};
     result.push_back(x);
+  }
+  if ( index[1] + 1 < size[1] ) { 
     int *y = new int[2]{0, 1};
     result.push_back(y);
+  }
+  if ( index[0] - 1 >= 0 ) {
     int *_x = new int[2]{-1, 0};
     result.push_back(_x);
+  }
+  if ( index[1] - 1 >= 0 ) {
     int *_y = new int[2]{0, -1};
     result.push_back(_y);
-    return result;
+  }
+  return result;
 }
 vector<int *> Place::getMooreNeighbors2d() {
-    vector<int *> result;
+  vector<int *> result;
     // 4 vectors covers all neighbors in 3d
     // 4 more neighbors for Moore
     result = getVNNeighbors2d();
     // 4 more for von neumann
-    int *_xy = new int[2]{-1, 1};
-    result.push_back(_xy);
-    int *xy = new int[2]{1, 1};
-    result.push_back(xy);
-    int *_x_y = new int[2]{-1, -1};
-    result.push_back(_x_y);
-    int *x_y = new int[2]{1, -1};
-    result.push_back(x_y);
+    if ( index[0] - 1 >= 0 && index[1] + 1 < size[1] ) {
+      int *_xy = new int[2]{-1, 1};
+      result.push_back(_xy);
+    }
+    if ( index[0] + 1 < size[0] && index[1] + 1 < size[1] ) {
+      int *xy = new int[2]{1, 1};
+      result.push_back(xy);
+    }
+    if ( index[0] - 1 >= 0 && index[1] - 1 >= 0) {
+      int *_x_y = new int[2]{-1, -1};
+      result.push_back(_x_y);
+    }
+    if ( index[0] + 1 < size[0] && index[1] -  1 >= 0) {
+      int *x_y = new int[2]{1, -1};
+      result.push_back(x_y);
+    }
     return result;
 }
 vector<int *> Place::getVNNeighbors3d() {
     vector<int *> result;
     // unit vectors only
-    int *x = new int[3]{1, 0, 0};
-    result.push_back(x);
-    int *y = new int[3]{0, 1, 0};
-    result.push_back(y);
-    int *z = new int[3]{0, 0, 1};
-    result.push_back(z);
-    int *_x = new int[3]{-1, 0, 0};
-    result.push_back(_x);
-    int *_y = new int[3]{0, -1, 0};
-    result.push_back(_y);
-    int *_z = new int[3]{0, 0, -1};
-    result.push_back(_z);
+    if ( index[0] + 1 < size[0] ) {
+      int *x = new int[3]{1, 0, 0};
+      result.push_back(x);
+    }
+    if ( index[1] + 1 < size[1] ) {
+      int *y = new int[3]{0, 1, 0};
+      result.push_back(y);
+    }
+    if ( index[2] + 1 < size[2] ) {
+      int *z = new int[3]{0, 0, 1};
+      result.push_back(z);
+    }
+    if ( index[0] - 1 >= 0 ) {
+      int *_x = new int[3]{-1, 0, 0};
+      result.push_back(_x);
+    }
+    if ( index[1] - 1 >= 0 ) {
+      int *_y = new int[3]{0, -1, 0};
+      result.push_back(_y);
+    }
+    if ( index[2] - 1 >= 0 ) {
+      int *_z = new int[3]{0, 0, -1};
+      result.push_back(_z);
+    }
     return result;
 }
 vector<int *> Place::getMooreNeighbors3d() {
@@ -258,51 +286,91 @@ vector<int *> Place::getMooreNeighbors3d() {
     // unit vectors
     result = getMooreNeighbors2d();
     // x and y
-    int *xy = new int[3]{1, 1, 0};
-    result.push_back(xy);
-    int *_x_y = new int[3]{-1, -1, 0};
-    result.push_back(_x_y);
-    int *_xy = new int[3]{-1, 1, 0};
-    result.push_back(_xy);
-    int *x_y = new int[3]{1, -1, 0};
-    result.push_back(x_y);
+    if ( index[0] + 1 < size[0] && index[1] + 1 < size[1] ) {
+      int *xy = new int[3]{1, 1, 0};
+      result.push_back(xy);
+    }
+    if ( index[0] - 1 >= 0 && index[1] - 1 >= 0 ) {
+      int *_x_y = new int[3]{-1, -1, 0};
+      result.push_back(_x_y);
+    }
+    if ( index[0] - 1 >= 0 && index[1] + 1 < size[1] ) {
+      int *_xy = new int[3]{-1, 1, 0};
+      result.push_back(_xy);
+    }
+    if ( index[0] + 1 < size[0] && index[1] - 1 >= 0 ) {
+      int *x_y = new int[3]{1, -1, 0};
+      result.push_back(x_y);
+    }
     // y and z
-    int *yz = new int[3]{0, 1, 1};
-    result.push_back(yz);
-    int *_y_z = new int[3]{0, -1, -1};
-    result.push_back(_y_z);
-    int *_yz = new int[3]{0, -1, 1};
-    result.push_back(_yz);
-    int *y_z = new int[3]{0, 1, -1};
-    result.push_back(y_z);
+    if ( index[1] + 1 < size[1] && index[2] + 1 < size[2] ) {
+      int *yz = new int[3]{0, 1, 1};
+      result.push_back(yz);
+    }
+    if ( index[1] - 1 >= 0 && index[2] - 1 >= 0 ) {
+      int *_y_z = new int[3]{0, -1, -1};
+      result.push_back(_y_z);
+    }
+    if ( index[1] - 1 >= 0 && index[2] + 1 < size[2] ) {
+      int *_yz = new int[3]{0, -1, 1};
+      result.push_back(_yz);
+    }
+    if ( index[1] + 1 < size[1] && index[2] - 1 >= 0 ) {
+      int *y_z = new int[3]{0, 1, -1};
+      result.push_back(y_z);
+    }
     // x and z
-    int *xz = new int[3]{1, 0, 1};
-    result.push_back(xz);
-    int *_x_z = new int[3]{-1, 0, -1};
-    result.push_back(_x_z);
-    int *_xz = new int[3]{-1, 0, 1};
-    result.push_back(_xz);
-    int *x_z = new int[3]{1, 0, -1};
-    result.push_back(x_z);
+    if ( index[0] + 1 < size[0] && index[2] + 1 < size[2] ) {
+      int *xz = new int[3]{1, 0, 1};
+      result.push_back(xz);
+    }
+    if ( index[0] - 1 >= 0 && index[2] - 1 >= 0 ) {
+      int *_x_z = new int[3]{-1, 0, -1};
+      result.push_back(_x_z);
+    }
+    if ( index[0] - 1 >= 0 && index[2] + 1 < size[2] ) {
+      int *_xz = new int[3]{-1, 0, 1};
+      result.push_back(_xz);
+    }
+    if ( index[0] + 1 < size[0] && index[2] - 1 >= 0 ) {
+      int *x_z = new int[3]{1, 0, -1};
+      result.push_back(x_z);
+    }
     // all none zero
-    int *xyz = new int[3]{1, 1, 1};
-    result.push_back(xyz);
-    int *_x_y_z = new int[3]{-1, -1, -1};
-    result.push_back(_x_y_z);
+    if ( index[0] + 1 < size[0] && index[1] + 1 < size[1] && index[2] + 1 < size[2] ) {
+      int *xyz = new int[3]{1, 1, 1};
+      result.push_back(xyz);
+    }
+    if ( index[0] - 1 >= 0 && index[1] - 1 >= 0 && index[2] - 1 >= 0 ) {
+      int *_x_y_z = new int[3]{-1, -1, -1};
+      result.push_back(_x_y_z);
+    }
     // single negative
-    int *_xyz = new int[3]{-1, 1, 1};
-    result.push_back(_xyz);
-    int *x_yz = new int[3]{1, -1, 1};
-    result.push_back(x_yz);
-    int *xy_z = new int[3]{1, 1, -1};
-    result.push_back(xy_z);
+    if ( index[0] - 1 >= 0 && index[1] + 1 < size[1] && index[2] + 1 < size[2] ) {
+      int *_xyz = new int[3]{-1, 1, 1};
+      result.push_back(_xyz);
+    }
+    if ( index[0] + 1 < size[0] && index[1] - 1 >= 0 && index[2] + 1 < size[2] ) {
+      int *x_yz = new int[3]{1, -1, 1};
+      result.push_back(x_yz);
+    }
+    if ( index[0] + 1 < size[0] && index[1] + 1 < size[1] && index[2] - 1 >= 0 ) {
+      int *xy_z = new int[3]{1, 1, -1};
+      result.push_back(xy_z);
+    }
     // two negative
-    int *_x_yz = new int[3]{-1, -1, 1};
-    result.push_back(_x_yz);
-    int *x_y_z = new int[3]{1, -1, -1};
-    result.push_back(x_y_z);
-    int *_xy_z = new int[3]{-1, 1, -1};
-    result.push_back(_xy_z);
+    if ( index[0] - 1 >= 0 && index[1] - 1 >= 0 && index[2] + 1 < size[2] ) {
+      int *_x_yz = new int[3]{-1, -1, 1};
+      result.push_back(_x_yz);
+    }
+    if ( index[0] + 1 < size[0] && index[1] - 1 >= 0 && index[2] - 1 >= 0 ) {
+      int *x_y_z = new int[3]{1, -1, -1};
+      result.push_back(x_y_z);
+    }
+    if ( index[0] - 1 >= 0 && index[1] + 1 < size[1] && index[2] - 1 >= 0 ) {
+      int *_xy_z = new int[3]{-1, 1, -1};
+      result.push_back(_xy_z);
+    }
     return result;
 }
 

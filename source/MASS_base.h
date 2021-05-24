@@ -99,7 +99,7 @@ class MASS_base {
     static string hostName;                    // my local host name
     //static int myPid;                          // my pid or rank
     //static int systemSize;                     // # processes
-    static ofstream logger;                    // logger
+    static int logger_fd;                      // logger
     //static vector<string> hosts;               // all host names
     static map<int, Places_base *> placesMap;  // a collection of Places
     static map<int, Agents_base *> agentsMap;  // a collection of Agents

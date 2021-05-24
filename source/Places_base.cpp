@@ -1,6 +1,6 @@
 /*
  MASS C++ Software License
- © 2014-2015 University of Washington
+ © 2014-2021 University of Washington
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
  in the Software without restriction, including without limitation the rights
@@ -31,6 +31,8 @@
 #include "limits.h"
 
 // Used to enable or disable output in places
+#define LOGGING 10
+
 #ifndef LOGGING
 const bool printOutput = false;
 #else
@@ -112,7 +114,7 @@ Places_base::Places_base(int handle, string className, int boundary_width, int d
 
     ostringstream convert;
     if (printOutput) {
-        convert << "Places_base constructed: handle = " << handle
+        convert << "Places_base 1st constructor: handle = " << handle
             << ", class = " << className
             << ", argument = " << (char*)argument
             << ", argument_size = " << arg_size
@@ -160,13 +162,12 @@ Places_base::Places_base(int handle, string className, int boundary_width,
       className(className),
       dimension(dim),
       boundary_width(boundary_width),
-      //places_base_distributed_map(NULL),
       fileType(FILE_TYPE_ENUMS::HIPPIE), //this a default and dummy 
       filename("NOT_FROM_FILE_NAME"),
       numVertices(0){
     ostringstream convert;
     if (printOutput == true) {
-        convert << "Places_base handle = " << handle
+        convert << "Places_base 2nd constructor: handle = " << handle
                 << ", class = " << className
                 << ", argument_size = " << argument_size
                 << ", argument = " << (char *)argument
@@ -208,13 +209,6 @@ Places_base::~Places_base() {
 
     dlclose(dllclass->stub);
   
-  //delete the distributed map on MASS_base
-    // auto myMap = MASS_base::getDistributedMap(handle);
-    // if(myMap != NULL){
-    //     delete myMap;
-    //     myMap = NULL;
-    // }
-
     //the associated distributed map
     if(places_base_distributed_map != NULL){
         delete places_base_distributed_map;
@@ -276,18 +270,26 @@ void Places_base::init_all(void *argument, int argument_size) {
     this->places_size = places_size;
     //  maintaining an entire set
     dllclass->places = new Place *[places_size];
-    vector<int> index;
-    index.reserve(dimension);
 
     // initialize all Places objects
     for (int i = 0; i < places_size; i++) {
         // instanitate a new place
         dllclass->places[i] = (Place *)(dllclass->instantiate(argument));
         dllclass->places[i]->size.reserve(dimension);
-        for (int j = 0; j < dimension; j++)
+        for (int j = 0; j < dimension; j++) 
             // define size[] and index[]
             dllclass->places[i]->size.push_back(size[j]);
         dllclass->places[i]->index = getGlobalArrayIndex(lower_boundary + i);
+	/*
+	{
+	  ostringstream convert;
+	  convert << "Places_base:init_all:" << " global linear index = " << ( lower_boundary + i ) << ", array index[";
+	  for ( int k = 0; k < dllclass->places[i]->index.size( ); k++ )
+	    convert << dllclass->places[i]->index[k] << ", ";
+	  convert << endl;
+	  MASS_base::log( convert.str( ) );
+	}
+	*/
     }
 
     // allocate the left/right shadows
@@ -302,7 +304,7 @@ void Places_base::init_all(void *argument, int argument_size) {
         (dimension == 1) ? boundary_width : total / size[0] * boundary_width;
     if (printOutput == true) {
         ostringstream convert;
-        convert << "Places_base.shadow_size = " << shadow_size;
+        convert << "Places_base.shadow_size = " << shadow_size << endl;
         MASS_base::log(convert.str());
     }
     dllclass->left_shadow =
@@ -353,61 +355,23 @@ void Places_base::init_all(void *argument, int argument_size) {
 }
 
 /**
- * Converts a given plain single index into a multi-dimensional index. This
- * allows absolute index values that would correspond to a single Place within
- * the global simulation space (ordering in a one dimensional array) to be
- * referenced by the actual index, according to the number of dimensions and
- * size of each dimension in the simulation space.
+ * Converts a given linear index into a multi-dimensional index.
  *
- * @param singleIndex an index in a plain single dimension that will be
- *                    converted to a multi-dimensional index.
- * @return            a multi-dimensional index
+ * @param lineaerIndex an index in a plain single dimension that will be
+ *                     converted to a multi-dimensional index.
+ * @return             a multi-dimensional index
  */
-vector<int> Places_base::getGlobalArrayIndex(int singleIndex) {
-    return getGlobalArrayIndex(singleIndex, 0);  // x-axis based ordering
-}
+vector<int> Places_base::getGlobalArrayIndex(int linearIndex) {
+  vector<int> index;         // a multi-dimensional index
+  index.resize( dimension ); // must match size of dimension in model
 
-/**
- * Converts a given plain single index into a multi-dimensional index. This
- * allows absolute index values that would correspond to a single Place within
- * the global simulation space (ordering in a one dimensional array) to be
- * referenced by the actual index, according to the number of dimensions and
- * size of each dimension in the simulation space.
- *
- * While the other Places_base::getGlobalArrayIndex( int singleIndex) method
- * assumes that the starting index is based on a flattening algorithm that
- * assumes first dimension-priority in the global array (e.g. - 'x' dimension is
- * evaluated first, then 'y' dimension, so that the singleIndex of 4 would
- * correspond to {4, 0} in a two dimensional array), this method allows the
- * user to specify the dimension that should take priority.
- *
- * @param index       an index into a single dimension ordering of places that
- *                    will be converted to a multi-dimensional coordinate index
- * @param dim         the dimension that will take priority in the resulting
- *                    indexing algorithm. Since dimension numbering is
- *                    zero-based ('x' dimension is 0), the value of dim should
- *                    be less than the number of dimensions
- *                    (Places_base::dimension) in the simulation space. Large
- *                    values will wrap around, so no out of bounds exception
- *                    will be thrown, but the result will not match with
- *                    expectations at runtime (unpredictable)
- * @return            a multi-dimensional index
- */
-vector<int> Places_base::getGlobalArrayIndex(int index, int dim) {
-    vector<int> coords;        // a multi-dimensional coordinate (index)
-    coords.resize(dimension);  // must match size of dimensions in model
+  // calculate starting with "rightmost" dimension
+  for ( int i = dimension - 1; i >= 0; i-- ) {
+    index[i] = linearIndex % size[i];
+    linearIndex /= size[i];
+  }
 
-    // start at dimension user has indicated and proceed around loop to stop
-    // at dimension value just before the starting point
-    for (int i = dim; i < dim + (dimension - 1); i++) {
-        // calculate from designated dimension
-        coords[i % dimension] = index % size[i % dimension];
-        index /= size[i % dimension];
-    }
-    // assign remainder to dimension value just before the starting point...
-    coords[dim + (dimension - 1) % dimension] = index;
-
-    return coords;
+  return index;
 }
 
 /**
@@ -430,24 +394,23 @@ void Places_base::callAll(int functionId, void *argument, int tid) {
 
     // debugging
     ostringstream convert;
-    //if (printOutput == true) {
+    if (printOutput == true) {
         convert << "thread[" << tid << "] callAll functionId = " << functionId
                 << ", range[0] = " << range[0] << " range[1] = " << range[1]
                 << ", dllclass = " << (void *)dllclass;
         MASS_base::log(convert.str());
-	//}
+    }
 
     if (range[0] >= 0 && range[1] >= 0) {
         for (int i = range[0]; i <= range[1]; i++) {
-            if (printOutput == true) {
+	  if (printOutput == true) {
                 convert.str("");
                 convert << "thread[" << tid << "]: places[" << i
                         << "] = " << dllclass->places[i]
                         << ", vptr = " << *(int **)(dllclass->places[i]);
                 MASS_base::log(convert.str());
-            }
-            dllclass->places[i]->callMethod(functionId,
-                                            argument);  // <-- seg fault
+	  }
+	  dllclass->places[i]->callMethod(functionId, argument);
         }
     }
 }
@@ -607,7 +570,6 @@ void **Places_base::callSome(int functionId, void *argument, int arg_size,
  *              the last
  */
 void Places_base::getLocalRange(int range[], int tid) {
-  cerr << "getLocalRange: nThreads = " << MASS_base::threads.size( ) << ", tid = " << tid << endl;
     int nThreads = MASS_base::threads.size();
     int portion = places_size / nThreads;  // a range to be allocated per thread
     int remainder = places_size % nThreads;
@@ -689,6 +651,7 @@ void Places_base::exchangeAll(Places_base *dstPlaces, int functionId,
                             << neighborCoord[1] << "]"
                             << " dstPlaces->size[" << dstPlaces->size[0] << "]["
                             << dstPlaces->size[1] << "]";
+		    MASS_base::log(convert.str());
                 }
                 if (neighborCoord[0] != -1) {
                     // destination valid
@@ -701,6 +664,7 @@ void Places_base::exchangeAll(Places_base *dstPlaces, int functionId,
                                 << " lower = " << dstPlaces->lower_boundary
                                 << " upper = " << dstPlaces->upper_boundary
                                 << ")";
+			MASS_base::log(convert.str());
                     }
 
                     if (globalLinearIndex >= dstPlaces->lower_boundary &&
@@ -716,6 +680,7 @@ void Places_base::exchangeAll(Places_base *dstPlaces, int functionId,
                         if (printOutput == true) {
                             convert << " to [" << dstPlace->index[0] << "]["
                                     << dstPlace->index[1] << "]";
+                            MASS_base::log(convert.str());
                         }
                         // call the destination function
                         void *inMessage = dstPlace->callMethod(
@@ -730,6 +695,7 @@ void Places_base::exchangeAll(Places_base *dstPlaces, int functionId,
                         if (printOutput == true) {
                             convert << " inMessage = "
                                     << *(int *)(srcPlace->inMessages.back());
+                            MASS_base::log(convert.str());
                         }
                     } else {
                         // remote destination
@@ -940,6 +906,7 @@ void Places_base::exchangeAll(Places_base *dstPlaces, int functionId, int tid) {
                             << neighborCoord[1] << "]"
                             << " dstPlaces->size[" << dstPlaces->size[0] << "]["
                             << dstPlaces->size[1] << "]";
+		    MASS_base::log(convert.str());
                 }
                 if (neighborCoord[0] != -1) {
                     // destination valid
@@ -952,6 +919,7 @@ void Places_base::exchangeAll(Places_base *dstPlaces, int functionId, int tid) {
                                 << " lower = " << dstPlaces->lower_boundary
                                 << " upper = " << dstPlaces->upper_boundary
                                 << ")";
+			MASS_base::log(convert.str());
                     }
 
                     if (globalLinearIndex >= dstPlaces->lower_boundary &&
@@ -967,7 +935,9 @@ void Places_base::exchangeAll(Places_base *dstPlaces, int functionId, int tid) {
                         if (printOutput == true) {
                             convert << " to [" << dstPlace->index[0] << "]["
                                     << dstPlace->index[1] << "]";
+			    MASS_base::log(convert.str());
                         }
+
                         // call the destination function
                         void *inMessage = dstPlace->callMethod(
                             functionId, srcPlace->outMessage);
@@ -981,9 +951,31 @@ void Places_base::exchangeAll(Places_base *dstPlaces, int functionId, int tid) {
                         if (printOutput == true) {
                             convert << " inMessage = "
                                     << *(int *)(srcPlace->inMessages.back());
+			    MASS_base::log(convert.str());
                         }
                     } else {
                         // remote destination
+		      if ( printOutput == true ) {
+			convert.str("");
+			convert
+			  << "globalLinearIndex = " << globalLinearIndex 
+			  << " destRank = " <<  getRankFromGlobalLinearIndex(globalLinearIndex)
+			  << " srcPlace = " << srcPlace
+			  << " size = " << size
+			  << " dimension = " << dimension;
+			MASS_base::log(convert.str());
+
+			convert.str("");
+			convert
+			  << "size[0] = " << size[0]
+			  << "size[1] = " << size[1];
+			MASS_base::log(convert.str());
+
+			convert.str("");
+			convert
+			  << "srcPlace->index[0] = " << srcPlace->index[0];
+			MASS_base::log(convert.str());
+		      }
 
                         // find the destination node
                         int destRank =
@@ -993,6 +985,16 @@ void Places_base::exchangeAll(Places_base *dstPlaces, int functionId, int tid) {
                         int orgGlobalLinearIndex =
                             getGlobalLinearIndexFromGlobalArrayIndex(
                                 &(srcPlace->index[0]), size, dimension);
+
+		      if ( printOutput == true ) {
+			convert.str("");
+			convert
+			  << "remote destination:" 
+			  << " destRank = " << destRank
+			  << " orgGlobalLinearIndex = " << orgGlobalLinearIndex;
+			MASS_base::log(convert.str());
+		      }
+
                         RemoteExchangeRequest *request =
                             new RemoteExchangeRequest(
                                 globalLinearIndex, orgGlobalLinearIndex,
@@ -1290,18 +1292,24 @@ void *Places_base::processRemoteExchangeRequest(void *param) {
     }
 
     for (int i = 0; i < int(orgRequest->size()); i++) {
+      cerr << "i = " << i << " where orgRequest->size( ) = " << orgRequest->size( ) << endl;
         // local source
         int orgLocalLinearIndex =
             (*orgRequest)[i]->orgGlobalLinearIndex - my_lower_boundary;
 
         // locate a local place
+	cerr << "check A: orgLocalLinearIndex = " << orgLocalLinearIndex << endl;
         Place *srcPlace = (Place *)(src_dllclass->places[orgLocalLinearIndex]);
 
+	cerr << "srcPlace = " << srcPlace << endl;
+	cerr << "check B: srcPlace->inMessage_size = " << srcPlace->inMessage_size << endl;
         // store a return value to it
         char *inMessage = new char[srcPlace->inMessage_size];
+	cerr << "check C inMessage = " << inMessage << ", argument = " << argument << endl;
         memcpy(inMessage, argument + pos, srcPlace->inMessage_size);
         pos += srcPlace->inMessage_size;
 
+	cerr << "check D" << endl;
         // insert an item at inMessageIndex or just append it.
         if (int(srcPlace->inMessages.size()) > (*orgRequest)[i]->inMessageIndex)
             srcPlace->inMessages.insert(
@@ -1318,10 +1326,13 @@ void *Places_base::processRemoteExchangeRequest(void *param) {
             MASS_base::log(convert.str());
         }
     }
+    cerr << "check a" << endl;
     delete messageToDest;  // messageToDest->orgReuqest is no longer used.
                            // delete it.
+    cerr << "check b" << endl;
     delete messageFromDest;
 
+    cerr << "processRemoteExchangeRequest( ) completed" << endl;
     return NULL;
 }
 
@@ -1583,28 +1594,41 @@ void Places_base::getGlobalNeighborArrayIndex(vector<int> src_index,
  * (single dimensional) collection of Places for a simulation.
  *
  * @param index     multi-dimensional indexes to a specific Place within
- * your Places collection
+ *                  your Places collection
  * @param size      sizes for each dimension in your simulation
- * @param dimension the number of dimensions in your simulation
+ * @param dime      the number of dimensions in your simulation
  * @return          the global linear index (single dimensional index) to a
  *                  Place - or, INT_MIN if location does not exist (out of
  *                  bounds, etc)
  */
 int Places_base::getGlobalLinearIndexFromGlobalArrayIndex(int index[],
                                                           int size[],
-                                                          int dimension) {
-    int retVal = 0;
+                                                          int dim) {
+  // bounds checks
+  if ( size == NULL || index == NULL ) return INT_MIN;
+  if ( this->dimension != dim ) return INT_MIN;
+  
+  // single dimension bounds check
+  if ( dim == 1 && index[ 0 ] > size[ 0 ] - 1 ) return INT_MIN;
+  
+  int linearIndex = 0;
+  int columnWeight = 1;
+  
+  // determine last "column" (leftmost) weight (all column sizes except for rightmost)
+  for ( int i = dimension - 1; i > 0; i-- ) {
+    columnWeight *= size[ i ];
+  }
 
-    for (int i = 0; i < dimension; i++) {
-        if (size[i] <= 0) continue;
-        if (index[i] >= 0 && index[i] < size[i]) {
-            retVal = retVal * size[i];
-            retVal += index[i];
-        } else
-            return INT_MIN;  // out of space
-    }
+  for ( int i = 0; i < dimension; i++ ) {
 
-    return retVal;
+    // invalid index or size at this position?
+    if ( size[i] <= 0 || index[ i ] < 0 || ( index[i] > size[ i ] - 1 ) ) return INT_MIN;
+
+    linearIndex += columnWeight * index[i];
+    columnWeight /= ( i < dimension - 1 ) ? size[i + 1] : 1;
+  }
+           
+  return linearIndex;
 }
 
 /**
@@ -2253,6 +2277,11 @@ void* Places_base::exchangeNeighbor(int functionId, vector<int> neighbor, void* 
     return NULL;    
 }
 
+/**
+ * This method is used for graphs only
+ * #param return      int[2] where int[0] = nextPlaceIndex / total 
+ *                             and int[1] = nextPlaceIndex % total
+ */
 int* Places_base::getPlacesIndex(){
     int total = 1;
     if(this->dimension > 1){
