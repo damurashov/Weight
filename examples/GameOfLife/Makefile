@@ -1,5 +1,5 @@
 DIR_MASS:=../..
-DIR_INCLUDE_SSH:=$(DIR_MASS)/libs/ssh2/include
+DIR_INCLUDE_SSH:=$(DIR_MASS)/lib/ssh2/include
 
 GEN_MAIN:=main
 GEN_LIFE:=Life
@@ -12,4 +12,4 @@ all:
 
 
 clean:
-	rm $(GEN)
+	rm -f $(GEN)
