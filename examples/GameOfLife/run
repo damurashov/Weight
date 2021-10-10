@@ -1,0 +1,24 @@
+#!/bin/bash
+
+# add directory for libmass.so
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/CSSDIV/research/dslab/mass_cpp/mass_final/dev/mass_cpp/mass_cpp_core/ubuntu
+
+echo "Number of nodes? {1, 2, 4, 8, 16}: "
+read NUMNODES
+echo "Number of threads? {1, 2, 4}: "
+read NUMTHREADS
+echo "Number of turns? "
+read NUMTURNS
+echo "X size? "
+read XSIZE
+echo "Y size? "
+read YSIZE
+echo "Password? "
+read -s PASSWORD
+
+PORT=28061
+
+cat /home/NETID/dslab/users/agent_simulation_benchmarking/host_master_list | head -$(($NUMNODES-1)) > .tempmachinefile.txt
+./main $USER $PASSWORD .tempmachinefile.txt $PORT $NUMNODES $NUMTHREADS $NUMTURNS $XSIZE $YSIZE
+
+rm .tempmachinefile.txt
