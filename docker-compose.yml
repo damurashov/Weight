@@ -1,8 +1,0 @@
-version: '3.4'
-
-services:
-  mass_cpp_core:
-    image: dslabcss/mass_cpp_core
-    build:
-      context: .
-      dockerfile: ./Dockerfile
