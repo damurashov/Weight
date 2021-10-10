@@ -18,10 +18,15 @@ ifeq ($(LOGGING), 1)
 	OPTIONS = -DLOGGING
 endif
 
-#TODO: auto detect rehl vs ubuntu
-all:  $(TARGET) $(LIBMASS) $(MPROCESS) $(WAVE2D) $(NOMAD)
-	rm -f *.o
+all:
+	mkdir -p build &&\
+		cd build &&\
+		cmake .. &&\
+		cmake --build . --parallel $(shell nproc)
 
+#TODO: auto detect rehl vs ubuntu
+all_deprecated:  $(TARGET) $(LIBMASS) $(MPROCESS) $(WAVE2D) $(NOMAD)
+	rm -f *.o
 
 $(LIBMASS): $(MASS_OBJS)
 	$(CC) $(OPTIONS) $(MASS_OBJS) -fPIC -lssh2 -lpthread -rdynamic -ldl -shared -o $@ #libmass.so
@@ -31,6 +36,7 @@ $(MPROCESS): MProcess.o $(COMMON)
 
 clean:
 	rm -f *.o $(TARGET) $(LIBMASS) $(MPROCESS) $(WAVE2D) $(NOMAD)
+	rm -rf build
 
 %.o : $(SOURCE)/%.cpp
 	$(CC) $(OPTIONS) -Wall -I$(includedir) -fPIC -c $<
