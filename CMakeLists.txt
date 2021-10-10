@@ -55,3 +55,5 @@ if(OPT_LIB_MASS_LOGGING)
 	target_compile_definitions(${SHARED_LIB_MASS} PRIVATE LOGGING)
 	target_compile_definitions(${STATIC_LIB_MASS} PRIVATE LOGGING)
 endif()
+
+install(TARGETS ${SHARED_LIB_MASS} DESTINATION ${CMAKE_SOURCE_DIR})

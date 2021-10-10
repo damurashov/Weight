@@ -23,6 +23,7 @@ all:
 		cd build &&\
 		cmake .. &&\
 		cmake --build . --parallel $(shell nproc)
+	cmake --install build
 
 #TODO: auto detect rehl vs ubuntu
 all_deprecated:  $(TARGET) $(LIBMASS) $(MPROCESS) $(WAVE2D) $(NOMAD)
